@@ -18,3 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/settings', 'AppSettingsController@show')->name('settings.show');
+Route::post('/settings/branch', 'AppSettingsController@storeBranch');
+Route::post('/settings/position', 'AppSettingsController@storePosition');

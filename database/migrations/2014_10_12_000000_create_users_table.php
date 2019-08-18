@@ -16,6 +16,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('position_id')->nullable();
+            $table->unsignedBigInteger('branch_id')->nullable();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
@@ -25,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
 
             $table->index('position_id');
+            $table->index('branch_id');
         });
     }
 
