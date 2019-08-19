@@ -49,6 +49,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    public function accounts(){
+        return $this->hasMany(Account::class);
+    }
+
     /**
      * @param string|array $roles
      * @return bool
