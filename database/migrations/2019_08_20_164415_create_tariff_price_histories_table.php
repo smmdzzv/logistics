@@ -26,8 +26,8 @@ class CreateTariffPriceHistoriesTable extends Migration
             $table->double('agreedPricePerKg');
             $table->double('pricePerExtraKg');
             $table->integer('maxWeightPerCube');
-            $table->integer('totalWeight');
-            $table->integer('totalCubage');
+            $table->integer('maxWeight');
+            $table->integer('maxCubage');
             $table->timestamps();
         });
     }

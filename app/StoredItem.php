@@ -27,4 +27,12 @@ class StoredItem extends Model
     public function branch(){
         return$this->belongsTo(Branch::class);
     }
+
+    public function order(){
+        return $this->belongsTo(Order::class);
+    }
+
+    public function billingInfo(){
+        return $this->belongsTo(BillingInfo::class);
+    }
 }

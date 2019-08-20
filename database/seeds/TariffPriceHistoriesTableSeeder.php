@@ -24,8 +24,8 @@ class TariffPriceHistoriesTableSeeder extends Seeder
         $newPrice->agreedPricePerKg = 0.47;
         $newPrice->pricePerExtraKg = 0.7;
         $newPrice->maxWeightPerCube = 250;
-        $newPrice->totalCubage = 180;
-        $newPrice->totalWeight = 30000;
+        $newPrice->maxCubage = 180;
+        $newPrice->maxWeight = 30000;
         $newPrice->branch_id = Branch::first()->id;
         $newPrice->tariff_id = Tariff::first()->id;
         $newPrice->save();

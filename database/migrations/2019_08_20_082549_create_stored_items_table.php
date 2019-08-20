@@ -18,6 +18,8 @@ class CreateStoredItemsTable extends Migration
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('owner_id');
             $table->unsignedBigInteger('branch_id');
+            $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('billingInfo_id');
             $table->double('weight');
             $table->double('height');
             $table->double('width');
@@ -28,6 +30,7 @@ class CreateStoredItemsTable extends Migration
             $table->index('item_id');
             $table->index('owner_id');
             $table->index('branch_id');
+            $table->index('order_id');
         });
     }
 

@@ -19,6 +19,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/order/create', 'OrdersController@create')->name('order.create');
+
 Route::get('/settings', 'AppSettingsController@show')->name('settings.show');
 Route::post('/settings/branch', 'AppSettingsController@storeBranch');
 Route::post('/settings/position', 'AppSettingsController@storePosition');

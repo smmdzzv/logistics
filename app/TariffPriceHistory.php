@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property double agreedPricePerKg
  * @property double pricePerExtraKg
  * @property int maxWeightPerCube
- * @property int totalCubage
- * @property int totalWeight
+ * @property int maxCubage
+ * @property int maxWeight
  * @property int tariff_id
  * @property int branch_id
  */
@@ -23,5 +23,9 @@ class TariffPriceHistory extends Model
 {
     public function branch(){
         return $this->belongsTo(Branch::class);
+    }
+
+    public function billingInfos(){
+        return $this->hasMany(BillingInfo::class);
     }
 }
