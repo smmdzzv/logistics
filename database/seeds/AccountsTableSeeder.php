@@ -17,7 +17,7 @@ class AccountsTableSeeder extends Seeder
         $account = new Account();
         $account->balance = 0;
         $account->currency_id = Currency::first()->id;
-        $account->user_id = User::first()->id;
+        $account->owner_id= User::first()->id;
         $account->save();
     }
 }

@@ -53,6 +53,10 @@ class User extends Authenticatable
         return $this->hasMany(Account::class);
     }
 
+    public function storedItems(){
+        return $this->hasMany(StoredItem::class);
+    }
+
     /**
      * @param string|array $roles
      * @return bool

@@ -15,11 +15,13 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->unsignedInteger('tariff');
+            $table->unsignedInteger('tariff_id');
+            $table->string('name', 255);
+            $table->string('unit', 15);
+            $table->boolean('isPriceCustom')->default(false);
             $table->timestamps();
 
-            $table->index('tariff');
+            $table->index('tariff_id');
         });
     }
 

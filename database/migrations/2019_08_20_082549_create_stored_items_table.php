@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAccountsTable extends Migration
+class CreateStoredItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,21 @@ class CreateAccountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('stored_items', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('owner_id');
-            $table->unsignedBigInteger('currency_id');
-            $table->unsignedDecimal('balance', 15, 5);
+            $table->unsignedBigInteger('branch_id');
+            $table->double('weight');
+            $table->double('height');
+            $table->double('width');
+            $table->double('length');
+            $table->integer('count');
             $table->timestamps();
 
+            $table->index('item_id');
             $table->index('owner_id');
-            $table->index('currency_id');
+            $table->index('branch_id');
         });
     }
 
@@ -32,6 +38,6 @@ class CreateAccountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('stored_items');
     }
 }
