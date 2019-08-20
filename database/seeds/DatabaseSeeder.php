@@ -24,5 +24,6 @@ class DatabaseSeeder extends Seeder
 
          $this->call(CarsTableSeeder::class);
          $this->call(FuelConsumptionsTableSeeder::class);
+         $this->call(TariffPriceHistoriesTableSeeder::class);
     }
 }

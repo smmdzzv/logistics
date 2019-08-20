@@ -15,7 +15,15 @@ class Branch extends Model
         return $this->hasMany(User::class );
     }
 
+    public function director(){
+        return $this->belongsTo(User::class);
+    }
+
     public function storedItems(){
         return $this->hasMany(StoredItem::class);
+    }
+
+    public function tariffPriceHistories(){
+        return $this->hasMany(TariffPriceHistory::class);
     }
 }
