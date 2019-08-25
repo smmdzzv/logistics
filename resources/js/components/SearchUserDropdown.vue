@@ -9,7 +9,7 @@
                    v-model="userInfo"
                    v-on:click.stop.prevent.capture="findUser"
                    @input="findUser"
-                   @keyup.enter.exact="selectActive"
+                   @keyup.enter="onInputEnter"
                    type="text"
                    name="userInfo"
                    autocomplete="userInfo" autofocus
@@ -36,7 +36,6 @@
 <script>
     export default {
         mounted() {
-            console.log('Component mounted.')
         },
         data(){
             return{
@@ -50,15 +49,15 @@
         },
         methods:{
             findUser(event){
-                console.log('findUser');
+                console.log("find user" + event);
                 if(this.userInfo.length > 0){
-                axios.get(`/search/user/`+ this.userInfo)
-                    .then(result => {
-                        if(result){
-                            this.setUsers(result.data);
-                            this.userInFocus = result.data[0];
-                        }
-                    });
+                    axios.get(`/search/user/`+ this.userInfo)
+                        .then(result => {
+                            if(result){
+                                this.setUsers(result.data);
+                                this.userInFocus = result.data[0];
+                            }
+                        });
                 }
                 else{
                     this.setUsers();
@@ -81,9 +80,9 @@
               this.selectedUserDisplayInfo = user.code + ' ' + user.name;
               this.userInfo = user.name;
               this.isEditMode = false;
+              this.$emit('userSelected', this.selectedUser)
             },
             toggleDropdown(){
-                console.log('toggleDropdown');
                 if(this.users.length > 0){
                     //in case of dropdown('show')  dropdown appears at wrong position
                     return $("#userInfo").dropdown('toggle');
@@ -91,23 +90,24 @@
                 return $('#usersDropdown').dropdown('hide');
             },
             selectActive(user){
-                console.log('selectActive');
+                console.log('select active');
                 if(user){
                     this.userInFocus = user;
                     this.setSelectedUser(user);
+                    $('#usersDropdown').dropdown('hide');
                 }
-                else{
-                    this.setSelectedUser(this.users[0]);
-                }
+            },
+            onInputEnter(){
+                this.setSelectedUser(this.users[0]);
                 $('#usersDropdown').dropdown('hide');
             },
             editUserInfo(){
                 this.isEditMode = true;
                 let input = $("#userInfo");
                 setTimeout(function () {
-                    input.focus()
-                    input.click()
+                    input.focus();
                 }, 1);
+                this.findUser();
             }
         }
     }
