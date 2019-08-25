@@ -4,14 +4,21 @@
         <div class="col-md-12 dropdown">
             <input id="userInfo"
                    class="form-control"
+                   v-bind:property="isEditMode"
+                   :class="{'d-none': !isEditMode}"
                    v-model="userInfo"
-                   v-on:click.stop.prevent.capture
+                   v-on:click.stop.prevent.capture="findUser"
                    @input="findUser"
                    @keyup.enter.exact="selectActive"
                    type="text"
                    name="userInfo"
                    autocomplete="userInfo" autofocus
                    placeholder="Введите код или ФИО клиента">
+            <input id="userInfoDummy"
+                   class="form-control"
+                   :class="{'d-none': isEditMode}"
+                   v-model:property="selectedUserDisplayInfo"
+                   @click.stop.prevent.capture="editUserInfo">
             <div id="usersDropdown" class="dropdown-menu">
                 <div v-bind:property="users"
                      v-on:click.stop.prevent
@@ -36,7 +43,9 @@
                 userInfo:"",
                 users:[],
                 userInFocus: null,
-                selectedUser: null
+                selectedUser: null,
+                selectedUserDisplayInfo:'',
+                isEditMode: true
             }
         },
         methods:{
@@ -67,6 +76,12 @@
                     this.users = [];
                 this.toggleDropdown()
             },
+            setSelectedUser(user){
+              this.selectedUser = user;
+              this.selectedUserDisplayInfo = user.code + ' ' + user.name;
+              this.userInfo = user.name;
+              this.isEditMode = false;
+            },
             toggleDropdown(){
                 console.log('toggleDropdown');
                 if(this.users.length > 0){
@@ -79,12 +94,20 @@
                 console.log('selectActive');
                 if(user){
                     this.userInFocus = user;
-                    this.selectedUser = user;
+                    this.setSelectedUser(user);
                 }
                 else{
-                    this.selectedUser = this.users[0];
+                    this.setSelectedUser(this.users[0]);
                 }
                 $('#usersDropdown').dropdown('hide');
+            },
+            editUserInfo(){
+                this.isEditMode = true;
+                let input = $("#userInfo");
+                setTimeout(function () {
+                    input.focus()
+                    input.click()
+                }, 1);
             }
         }
     }

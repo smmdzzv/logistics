@@ -1725,6 +1725,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted.');
@@ -1734,7 +1741,9 @@ __webpack_require__.r(__webpack_exports__);
       userInfo: "",
       users: [],
       userInFocus: null,
-      selectedUser: null
+      selectedUser: null,
+      selectedUserDisplayInfo: '',
+      isEditMode: true
     };
   },
   methods: {
@@ -1766,6 +1775,12 @@ __webpack_require__.r(__webpack_exports__);
 
       this.toggleDropdown();
     },
+    setSelectedUser: function setSelectedUser(user) {
+      this.selectedUser = user;
+      this.selectedUserDisplayInfo = user.code + ' ' + user.name;
+      this.userInfo = user.name;
+      this.isEditMode = false;
+    },
     toggleDropdown: function toggleDropdown() {
       console.log('toggleDropdown');
 
@@ -1781,12 +1796,20 @@ __webpack_require__.r(__webpack_exports__);
 
       if (user) {
         this.userInFocus = user;
-        this.selectedUser = user;
+        this.setSelectedUser(user);
       } else {
-        this.selectedUser = this.users[0];
+        this.setSelectedUser(this.users[0]);
       }
 
       $('#usersDropdown').dropdown('hide');
+    },
+    editUserInfo: function editUserInfo() {
+      this.isEditMode = true;
+      var input = $("#userInfo");
+      setTimeout(function () {
+        input.focus();
+        input.click();
+      }, 1);
     }
   }
 });
@@ -37108,8 +37131,10 @@ var render = function() {
           }
         ],
         staticClass: "form-control",
+        class: { "d-none": !_vm.isEditMode },
         attrs: {
           id: "userInfo",
+          property: _vm.isEditMode,
           type: "text",
           name: "userInfo",
           autocomplete: "userInfo",
@@ -37121,6 +37146,7 @@ var render = function() {
           "!click": function($event) {
             $event.stopPropagation()
             $event.preventDefault()
+            return _vm.findUser($event)
           },
           input: [
             function($event) {
@@ -37147,6 +37173,35 @@ var render = function() {
               return null
             }
             return _vm.selectActive($event)
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model:property",
+            value: _vm.selectedUserDisplayInfo,
+            expression: "selectedUserDisplayInfo",
+            arg: "property"
+          }
+        ],
+        staticClass: "form-control",
+        class: { "d-none": _vm.isEditMode },
+        attrs: { id: "userInfoDummy" },
+        domProps: { value: _vm.selectedUserDisplayInfo },
+        on: {
+          "!click": function($event) {
+            $event.stopPropagation()
+            $event.preventDefault()
+            return _vm.editUserInfo($event)
+          },
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.selectedUserDisplayInfo = $event.target.value
           }
         }
       }),
