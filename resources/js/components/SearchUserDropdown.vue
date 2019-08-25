@@ -5,14 +5,20 @@
             <input id="userInfo"
                    class="form-control"
                    v-model="userInfo"
-                   v-on:click.stop.prevent
-                   @keyup="findUser"
+                   v-on:click.stop.prevent.capture
+                   @input="findUser"
+                   @keyup.enter.exact="selectActive"
                    type="text"
                    name="userInfo"
                    autocomplete="userInfo" autofocus
                    placeholder="Введите код или ФИО клиента">
             <div id="usersDropdown" class="dropdown-menu">
-                <div v-bind:property="users" v-for="user in users" class="dropdown-item">
+                <div v-bind:property="users"
+                     v-on:click.stop.prevent
+                     @click="selectActive(user)"
+                     v-for="user in users"
+                     class="dropdown-item"
+                     :class="{active: user === userInFocus}" >
                     {{user.code}}  {{user.name}}
                 </div>
             </div>
@@ -28,16 +34,20 @@
         data(){
             return{
                 userInfo:"",
-                users:[]
+                users:[],
+                userInFocus: null,
+                selectedUser: null
             }
         },
         methods:{
-            findUser(){
+            findUser(event){
+                console.log('findUser');
                 if(this.userInfo.length > 0){
                 axios.get(`/search/user/`+ this.userInfo)
                     .then(result => {
                         if(result){
-                           this.setUsers(result.data);
+                            this.setUsers(result.data);
+                            this.userInFocus = result.data[0];
                         }
                     });
                 }
@@ -58,13 +68,24 @@
                 this.toggleDropdown()
             },
             toggleDropdown(){
+                console.log('toggleDropdown');
                 if(this.users.length > 0){
                     //in case of dropdown('show')  dropdown appears at wrong position
                     return $("#userInfo").dropdown('toggle');
                 }
                 return $('#usersDropdown').dropdown('hide');
+            },
+            selectActive(user){
+                console.log('selectActive');
+                if(user){
+                    this.userInFocus = user;
+                    this.selectedUser = user;
+                }
+                else{
+                    this.selectedUser = this.users[0];
+                }
+                $('#usersDropdown').dropdown('hide');
             }
-
         }
     }
 </script>

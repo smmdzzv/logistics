@@ -13,7 +13,7 @@ class SearchController extends Controller
         $users = User::whereRaw("name LIKE '%$userInfo%' OR code LIKE '%$userInfo%'")->get();
 
         $users = $users->filter(function ($user){
-            return count($user->clientRole) !== 0;
+            return count($user->roles) !== 0;
         });
 
         return array_values($users->all());

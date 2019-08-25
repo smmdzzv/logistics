@@ -1719,6 +1719,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted.');
@@ -1726,17 +1732,23 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       userInfo: "",
-      users: []
+      users: [],
+      userInFocus: null,
+      selectedUser: null
     };
   },
   methods: {
-    findUser: function findUser() {
+    findUser: function findUser(event) {
       var _this = this;
+
+      console.log('findUser');
 
       if (this.userInfo.length > 0) {
         axios.get("/search/user/" + this.userInfo).then(function (result) {
           if (result) {
             _this.setUsers(result.data);
+
+            _this.userInFocus = result.data[0];
           }
         });
       } else {
@@ -1755,12 +1767,26 @@ __webpack_require__.r(__webpack_exports__);
       this.toggleDropdown();
     },
     toggleDropdown: function toggleDropdown() {
+      console.log('toggleDropdown');
+
       if (this.users.length > 0) {
         //in case of dropdown('show')  dropdown appears at wrong position
         return $("#userInfo").dropdown('toggle');
       }
 
       return $('#usersDropdown').dropdown('hide');
+    },
+    selectActive: function selectActive(user) {
+      console.log('selectActive');
+
+      if (user) {
+        this.userInFocus = user;
+        this.selectedUser = user;
+      } else {
+        this.selectedUser = this.users[0];
+      }
+
+      $('#usersDropdown').dropdown('hide');
     }
   }
 });
@@ -37092,16 +37118,35 @@ var render = function() {
         },
         domProps: { value: _vm.userInfo },
         on: {
-          click: function($event) {
+          "!click": function($event) {
             $event.stopPropagation()
             $event.preventDefault()
           },
-          keyup: _vm.findUser,
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+          input: [
+            function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.userInfo = $event.target.value
+            },
+            _vm.findUser
+          ],
+          keyup: function($event) {
+            if (
+              !$event.type.indexOf("key") &&
+              _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+            ) {
+              return null
             }
-            _vm.userInfo = $event.target.value
+            if (
+              $event.ctrlKey ||
+              $event.shiftKey ||
+              $event.altKey ||
+              $event.metaKey
+            ) {
+              return null
+            }
+            return _vm.selectActive($event)
           }
         }
       }),
@@ -37112,7 +37157,22 @@ var render = function() {
         _vm._l(_vm.users, function(user) {
           return _c(
             "div",
-            { staticClass: "dropdown-item", attrs: { property: _vm.users } },
+            {
+              staticClass: "dropdown-item",
+              class: { active: user === _vm.userInFocus },
+              attrs: { property: _vm.users },
+              on: {
+                click: [
+                  function($event) {
+                    $event.stopPropagation()
+                    $event.preventDefault()
+                  },
+                  function($event) {
+                    return _vm.selectActive(user)
+                  }
+                ]
+              }
+            },
             [
               _vm._v(
                 "\n                " +
