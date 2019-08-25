@@ -1,5 +1,9 @@
 <template>
-    <search-user-dropdown v-on:userSelected="onUserSelected"></search-user-dropdown>
+    <div>
+        <search-user-dropdown v-on:userSelected="onUserSelected"></search-user-dropdown>
+        <order-items-box></order-items-box>
+        <stored-item-box></stored-item-box>
+    </div>
 </template>
 
 <script>
@@ -16,7 +20,9 @@
             }
         },
         components:{
-            'search-user-dropdown': require('./SearchUserDropdown.vue').default
+            'SearchUserDropdown': require('./SearchUserDropdown.vue').default,
+            'OrderItemsBox': require('./OrderItemsBox').default,
+            'StoredItemBox': require('./StoredItemBox').default
         }
     }
 </script>

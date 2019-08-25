@@ -1,5 +1,6 @@
 <template>
-    <div class="form-group row">
+    <div class="container">
+        <div class="form-group row">
         <label for="userInfo" class="col-form-label text-md-right pl-md-4">Клиент</label>
         <div class="col-md-12 dropdown">
             <input id="userInfo"
@@ -30,6 +31,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </template>
 
