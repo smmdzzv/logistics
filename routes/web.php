@@ -24,3 +24,5 @@ Route::get('/order/create', 'OrdersController@create')->name('order.create');
 Route::get('/settings', 'AppSettingsController@show')->name('settings.show');
 Route::post('/settings/branch', 'AppSettingsController@storeBranch');
 Route::post('/settings/position', 'AppSettingsController@storePosition');
+
+Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo');

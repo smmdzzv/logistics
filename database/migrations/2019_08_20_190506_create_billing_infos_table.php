@@ -16,8 +16,8 @@ class CreateBillingInfosTable extends Migration
         Schema::create('billing_infos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('tariffPrice_id');
-            $table->integer('placesCount');
-            $table->double('cubes');
+                $table->integer('placesCount');
+            $table->double('cubage');
             $table->double('totalWeight');
             $table->double('weightPerCube');
             $table->double('totalPrice');

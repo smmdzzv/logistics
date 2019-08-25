@@ -21,9 +21,22 @@ class UsersTableSeeder extends Seeder
             'name'=>'Султоназар Мамадазизов',
             'position_id' => $positionId,
             'password' => Hash::make('asdf1234'),
-            'email' => 'test@test.com'
+            'email' => 'test@test.com',
+            'code'=>'12345'
         ]);
 
         $user->roles()->attach($roleAdmin);
+
+        $roleClient = Role::where('name', 'client')->first();
+
+
+        $client = User::create([
+            'name'=>'Рахматшох Бахтиеров',
+            'password' => Hash::make('asdf1234'),
+            'email' => 'test2@test.com',
+            'code'=>'1345'
+        ]);
+
+        $client->roles()->attach($roleClient);
     }
 }

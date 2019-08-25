@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('position_id')->nullable();
             $table->unsignedBigInteger('branch_id')->nullable();
             $table->string('name');
+            $table->string('code')->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
@@ -27,6 +28,7 @@ class CreateUsersTable extends Migration
 
             $table->index('position_id');
             $table->index('branch_id');
+            $table->index(['name, code']);
         });
     }
 

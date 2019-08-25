@@ -17,6 +17,9 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('client_id');
             $table->string('status');
+            $table->double('totalWeight');
+            $table->double('totalCubage');
+            $table->double('totalPrice');
             $table->timestamps();
 
             $table->index('client_id');

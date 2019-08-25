@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">Оформить заказ</div>
                 <div class="card-body">
-
+                    <search-user-dropdown></search-user-dropdown>
                 </div>
             </div>
         </div>
