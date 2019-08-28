@@ -26,3 +26,7 @@ Route::post('/settings/branch', 'AppSettingsController@storeBranch');
 Route::post('/settings/position', 'AppSettingsController@storePosition');
 
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo');
+
+Route::get('/items', 'ItemsController@all');
+
+Route::get('/branches', "BranchesController@all");

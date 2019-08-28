@@ -2,36 +2,36 @@
     <div class="container">
         <div class="form-group row">
         <label for="userInfo" class="col-form-label text-md-right pl-md-4">Клиент</label>
-        <div class="col-md-12 dropdown">
-            <input id="userInfo"
-                   class="form-control"
-                   v-bind:property="isEditMode"
-                   :class="{'d-none': !isEditMode}"
-                   v-model="userInfo"
-                   v-on:click.stop.prevent.capture="findUser"
-                   @input="findUser"
-                   @keyup.enter="onInputEnter"
-                   type="text"
-                   name="userInfo"
-                   autocomplete="userInfo" autofocus
-                   placeholder="Введите код или ФИО клиента">
-            <input id="userInfoDummy"
-                   class="form-control"
-                   :class="{'d-none': isEditMode}"
-                   v-model:property="selectedUserDisplayInfo"
-                   @click.stop.prevent.capture="editUserInfo">
-            <div id="usersDropdown" class="dropdown-menu">
-                <div v-bind:property="users"
-                     v-on:click.stop.prevent
-                     @click="selectActive(user)"
-                     v-for="user in users"
-                     class="dropdown-item"
-                     :class="{active: user === userInFocus}" >
-                    {{user.code}}  {{user.name}}
+            <div class="col-md-12 dropdown">
+                <input id="userInfo"
+                       class="form-control"
+                       v-bind:property="isEditMode"
+                       :class="{'d-none': !isEditMode}"
+                       v-model="userInfo"
+                       v-on:click.stop.prevent.capture="findUser"
+                       @input="findUser"
+                       @keyup.enter="onInputEnter"
+                       type="text"
+                       name="userInfo"
+                       autocomplete="userInfo" autofocus
+                       placeholder="Введите код или ФИО клиента">
+                <input id="userInfoDummy"
+                       class="form-control"
+                       :class="{'d-none': isEditMode}"
+                       v-model:property="selectedUserDisplayInfo"
+                       @click.stop.prevent.capture="editUserInfo">
+                <div id="usersDropdown" class="dropdown-menu">
+                    <div v-bind:property="users"
+                         v-on:click.stop.prevent
+                         @click="selectActive(user)"
+                         v-for="user in users"
+                         class="dropdown-item"
+                         :class="{active: user === userInFocus}" >
+                        {{user.code}}  {{user.name}}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </template>
 
@@ -51,7 +51,6 @@
         },
         methods:{
             findUser(event){
-                console.log("find user" + event);
                 if(this.userInfo.length > 0){
                     axios.get(`/search/user/`+ this.userInfo)
                         .then(result => {
