@@ -12,7 +12,7 @@ class AppSettingsController extends Controller
     }
 
 
-
+//Todo move to diff controllers
     public function storeBranch(){
         $data = request()->validate([
             'name' => ['required', 'string', 'max:255', 'unique:branches'],

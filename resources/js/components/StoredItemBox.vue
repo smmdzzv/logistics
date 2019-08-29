@@ -75,12 +75,12 @@
                 })
                 console.log(this.searchOptions)
             },
-            onItemSelected(itemId){
-                console.log(itemId)
+            onItemSelected(item){
+                console.log(item)
             }
         },
         components:{
-            SuggestionsInput: require('./SuggestionsInput').default
+            SuggestionsInput: require('./SuggestionInput').default
         }
     }
 </script>
