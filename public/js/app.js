@@ -1968,10 +1968,9 @@ __webpack_require__.r(__webpack_exports__);
       this.searchOptions = this.branches.filter(function (value) {
         return value.name.startsWith(query);
       });
-      console.log(this.searchOptions);
     },
     onItemSelected: function onItemSelected(item) {
-      console.log(item);
+      console.log(item.name);
     }
   },
   components: {
@@ -1990,6 +1989,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -2042,14 +2044,59 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       query: '',
-      optionInFocus: null
+      activeOptionIndex: 0
     };
   },
   methods: {
+    onInputChanged: function onInputChanged() {
+      this.$props.onItemSearchInputChange(this.query);
+      this.activeOptionIndex = 0;
+    },
     onOptionSelected: function onOptionSelected(option) {
+      var _this = this;
+
       this.hideOptions();
+
+      if (option === null) {
+        option = this.$props.options.find(function (item, index) {
+          return index === _this.activeOptionIndex;
+        });
+      }
+
+      if (option === 'undefined') option = this.$props.options[0];
       this.query = option[this.$props.displayPropertyName];
       this.$props.onSelected(option);
+      this.$props.onItemSearchInputChange(this.query);
+      $('#query').blur();
+    },
+    onKeyDown: function onKeyDown(e) {
+      switch (e.keyCode) {
+        case 40:
+          e.preventDefault();
+          this.setActiveItem('down');
+          break;
+
+        case 38:
+          e.preventDefault();
+          this.setActiveItem('up');
+          break;
+
+        case 13:
+          //enter
+          e.preventDefault();
+          this.onOptionSelected(null);
+          break;
+
+        default:
+          return true;
+      }
+    },
+    setActiveItem: function setActiveItem(direction) {
+      var newActiveIndex = this.activeOptionIndex;
+      if (direction === 'down') newActiveIndex++;else newActiveIndex--;
+      if (newActiveIndex < 0) newActiveIndex = this.$props.options.length - 1;
+      if (newActiveIndex >= this.$props.options.length) newActiveIndex = 0;
+      this.activeOptionIndex = newActiveIndex;
     },
     //Options view state control
     toggleDropdown: function toggleDropdown() {
@@ -37831,15 +37878,15 @@ var render = function() {
               }
               _vm.query = $event.target.value
             },
-            function($event) {
-              return _vm.onItemSearchInputChange(_vm.query)
-            }
+            _vm.onInputChanged
           ],
           "!click": function($event) {
             $event.stopPropagation()
             $event.preventDefault()
-            return _vm.showOptions($event)
-          }
+          },
+          focus: _vm.showOptions,
+          blur: _vm.hideOptions,
+          keydown: _vm.onKeyDown
         }
       }),
       _vm._v(" "),
@@ -37855,7 +37902,7 @@ var render = function() {
             "div",
             {
               staticClass: "dropdown-item",
-              class: { active: index === 0 && _vm.optionInFocus == null },
+              class: { active: index === _vm.activeOptionIndex },
               attrs: { property: option },
               on: {
                 click: [

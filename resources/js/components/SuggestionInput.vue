@@ -3,11 +3,14 @@
         <div class="form-group row dropdown">
             <label for="query" class="col-form-label text-md-right" v-text="title"></label>
             <input id="query"
-                   v-on:input="onItemSearchInputChange(query)"
+                   v-on:input="onInputChanged"
                    class="form-control col-md-12"
                    data-toggle="dropdown"
                    v-model="query"
-                   @click.stop.prevent.capture="showOptions"
+                   @click.stop.prevent.capture
+                   v-on:focus="showOptions"
+                   v-on:blur="hideOptions"
+                   @keydown="onKeyDown"
                    type="text"
                    name="query"
                    autocomplete="query" autofocus
@@ -20,7 +23,7 @@
                      class="dropdown-item"
                      @click="onOptionSelected(option)"
                      v-for="(option, index) in options"
-                     :class="{active: index === 0 && optionInFocus == null}">
+                     :class="{active: index === activeOptionIndex}">
                     {{option[displayPropertyName]}}
                 </div>
             </div>
@@ -51,15 +54,58 @@
         data() {
             return {
                 query: '',
-                optionInFocus: null
+                activeOptionIndex: 0
             }
         },
         methods: {
+            onInputChanged(){
+                this.$props.onItemSearchInputChange(this.query);
+                this.activeOptionIndex = 0
+            },
             onOptionSelected(option){
                 this.hideOptions();
-                this.query = option[this.$props.displayPropertyName];
+                if(option === null){
+                  option =  this.$props.options.find((item, index) => {
+                        return index === this.activeOptionIndex
+                    })
+                }
+                if(option === 'undefined')
+                    option = this.$props.options[0];
 
-                this.$props.onSelected(option)
+                this.query = option[this.$props.displayPropertyName];
+                this.$props.onSelected(option);
+                this.$props.onItemSearchInputChange(this.query);
+                $('#query').blur();
+            },
+            onKeyDown(e){
+                    switch (e.keyCode) {
+                        case 40:
+                            e.preventDefault();
+                            this.setActiveItem('down');
+                            break;
+                        case 38:
+                            e.preventDefault();
+                            this.setActiveItem('up');
+                            break;
+                        case 13: //enter
+                            e.preventDefault();
+                            this.onOptionSelected(null)
+                            break;
+                        default:
+                            return true
+                    }
+            },
+
+            setActiveItem(direction){
+                let newActiveIndex = this.activeOptionIndex;
+                if(direction === 'down') newActiveIndex++;
+                else newActiveIndex--;
+
+                if(newActiveIndex < 0)
+                    newActiveIndex = this.$props.options.length - 1;
+                if(newActiveIndex >= this.$props.options.length)
+                    newActiveIndex = 0;
+                this.activeOptionIndex = newActiveIndex
             },
 
             //Options view state control

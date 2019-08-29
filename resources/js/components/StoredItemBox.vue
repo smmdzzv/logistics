@@ -72,11 +72,10 @@
             onItemSearchInputChange(query){
                 this.searchOptions = this.branches.filter(value => {
                     return value.name.startsWith(query)
-                })
-                console.log(this.searchOptions)
+                });
             },
             onItemSelected(item){
-                console.log(item)
+                console.log(item.name)
             }
         },
         components:{
