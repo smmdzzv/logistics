@@ -24,8 +24,15 @@
      </div>
      <div class="form-row">
          <div class="form-group col-md-8">
-             <label for="item" class="col-form-label text-md-right">Наимнование товара</label>
-             <input id="item" class="form-control">
+<!--             <label for="item" class="col-form-label text-md-right"></label>-->
+<!--             <input id="item" class="form-control">-->
+             <suggestions-input title="Наимнование товара"
+                                placeholder="Введите название товара"
+                                keyPropertyName = "id"
+                                displayPropertyName = "name"
+                                :onItemSearchInputChange="onItemSearchInputChange"
+                                :onSelected="onItemSelected"
+                                v-bind:options="filteredItems"/>
          </div>
          <div class="form-group col-md-2">
              <label for="count" class="col-form-label text-md-right">Количество</label>
@@ -41,13 +48,6 @@
              </select>
          </div>
      </div>
-     <suggestions-input title="Поисковик"
-                        placeholder="Введите название товара"
-                        keyPropertyName = "id"
-                        displayPropertyName = "name"
-                        :onItemSearchInputChange="onItemSearchInputChange"
-                        :onSelected="onItemSelected"
-                        v-bind:options="searchOptions"></suggestions-input>
  </div>
 </template>
 
@@ -61,21 +61,31 @@
                         this.branches = result.data;
                     }
                 });
+            axios.get('/items')
+                .then(result =>{
+                    if(result){
+                        this.items = result.data;
+                    }
+                })
         },
         data(){
             return{
                 branches:[],
-                searchOptions:[]
+                items:[],
+                filteredItems:[],
+                selectedItem: null
             }
         },
         methods:{
             onItemSearchInputChange(query){
-                this.searchOptions = this.branches.filter(value => {
-                    return value.name.startsWith(query)
+                if(query === "")
+                    return this.filteredItems = [];
+                this.filteredItems = this.items.filter(value => {
+                    return value.name.toLowerCase().includes(query.toLowerCase())
                 });
             },
             onItemSelected(item){
-                console.log(item.name)
+                this.selectedItem = item;
             }
         },
         components:{

@@ -1956,21 +1956,29 @@ __webpack_require__.r(__webpack_exports__);
         _this.branches = result.data;
       }
     });
+    axios.get('/items').then(function (result) {
+      if (result) {
+        _this.items = result.data;
+      }
+    });
   },
   data: function data() {
     return {
       branches: [],
-      searchOptions: []
+      items: [],
+      filteredItems: [],
+      selectedItem: null
     };
   },
   methods: {
     onItemSearchInputChange: function onItemSearchInputChange(query) {
-      this.searchOptions = this.branches.filter(function (value) {
-        return value.name.startsWith(query);
+      if (query === "") return this.filteredItems = [];
+      this.filteredItems = this.items.filter(function (value) {
+        return value.name.toLowerCase().includes(query.toLowerCase());
       });
     },
     onItemSelected: function onItemSelected(item) {
-      console.log(item.name);
+      this.selectedItem = item;
     }
   },
   components: {
@@ -37652,67 +37660,67 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "container pt-4" },
-    [
-      _vm._m(0),
+  return _c("div", { staticClass: "container pt-4" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-row" }, [
+      _c(
+        "div",
+        { staticClass: "form-group col-md-8" },
+        [
+          _c("suggestions-input", {
+            attrs: {
+              title: "Наимнование товара",
+              placeholder: "Введите название товара",
+              keyPropertyName: "id",
+              displayPropertyName: "name",
+              onItemSearchInputChange: _vm.onItemSearchInputChange,
+              onSelected: _vm.onItemSelected,
+              options: _vm.filteredItems
+            }
+          })
+        ],
+        1
+      ),
       _vm._v(" "),
-      _c("div", { staticClass: "form-row" }, [
-        _vm._m(1),
-        _vm._v(" "),
-        _vm._m(2),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group col-md-2" }, [
-          _c(
-            "label",
-            {
-              staticClass: "col-form-label text-md-right",
-              attrs: { for: "branch" }
-            },
-            [_vm._v("Филиал")]
-          ),
-          _vm._v(" "),
-          _c(
-            "select",
-            {
-              staticClass: "form-control custom-select",
-              attrs: { id: "branch" }
-            },
-            _vm._l(_vm.branches, function(branch) {
-              return _c(
-                "option",
-                {
-                  model: {
-                    value: _vm.branches,
-                    callback: function($$v) {
-                      _vm.branches = $$v
-                    },
-                    expression: "branches"
-                  }
-                },
-                [_vm._v(_vm._s(branch.name))]
-              )
-            }),
-            0
-          )
-        ])
-      ]),
+      _vm._m(1),
       _vm._v(" "),
-      _c("suggestions-input", {
-        attrs: {
-          title: "Поисковик",
-          placeholder: "Введите название товара",
-          keyPropertyName: "id",
-          displayPropertyName: "name",
-          onItemSearchInputChange: _vm.onItemSearchInputChange,
-          onSelected: _vm.onItemSelected,
-          options: _vm.searchOptions
-        }
-      })
-    ],
-    1
-  )
+      _c("div", { staticClass: "form-group col-md-2" }, [
+        _c(
+          "label",
+          {
+            staticClass: "col-form-label text-md-right",
+            attrs: { for: "branch" }
+          },
+          [_vm._v("Филиал")]
+        ),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            staticClass: "form-control custom-select",
+            attrs: { id: "branch" }
+          },
+          _vm._l(_vm.branches, function(branch) {
+            return _c(
+              "option",
+              {
+                model: {
+                  value: _vm.branches,
+                  callback: function($$v) {
+                    _vm.branches = $$v
+                  },
+                  expression: "branches"
+                }
+              },
+              [_vm._v(_vm._s(branch.name))]
+            )
+          }),
+          0
+        )
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
@@ -37783,20 +37791,6 @@ var staticRenderFns = [
           attrs: { id: "weight", placeholder: "в кг" }
         })
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group col-md-8" }, [
-      _c(
-        "label",
-        { staticClass: "col-form-label text-md-right", attrs: { for: "item" } },
-        [_vm._v("Наимнование товара")]
-      ),
-      _vm._v(" "),
-      _c("input", { staticClass: "form-control", attrs: { id: "item" } })
     ])
   },
   function() {
