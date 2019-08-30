@@ -2020,8 +2020,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     options: Array,
@@ -2064,6 +2062,7 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       if (option === 'undefined') option = this.$props.options[0];
+      this.activeOptionIndex = 0;
       this.query = option[this.$props.displayPropertyName];
       this.$props.onSelected(option);
       this.$props.onItemSearchInputChange(this.query);
@@ -37871,6 +37870,10 @@ var render = function() {
         },
         domProps: { value: _vm.query },
         on: {
+          "!click": function($event) {
+            $event.stopPropagation()
+            $event.preventDefault()
+          },
           input: [
             function($event) {
               if ($event.target.composing) {
@@ -37880,12 +37883,7 @@ var render = function() {
             },
             _vm.onInputChanged
           ],
-          "!click": function($event) {
-            $event.stopPropagation()
-            $event.preventDefault()
-          },
           focus: _vm.showOptions,
-          blur: _vm.hideOptions,
           keydown: _vm.onKeyDown
         }
       }),
@@ -37905,15 +37903,11 @@ var render = function() {
               class: { active: index === _vm.activeOptionIndex },
               attrs: { property: option },
               on: {
-                click: [
-                  function($event) {
-                    $event.stopPropagation()
-                    $event.preventDefault()
-                  },
-                  function($event) {
-                    return _vm.onOptionSelected(option)
-                  }
-                ]
+                click: function($event) {
+                  $event.stopPropagation()
+                  $event.preventDefault()
+                  return _vm.onOptionSelected(option)
+                }
               }
             },
             [

@@ -3,13 +3,12 @@
         <div class="form-group row dropdown">
             <label for="query" class="col-form-label text-md-right" v-text="title"></label>
             <input id="query"
-                   v-on:input="onInputChanged"
                    class="form-control col-md-12"
                    data-toggle="dropdown"
                    v-model="query"
                    @click.stop.prevent.capture
+                   v-on:input="onInputChanged"
                    v-on:focus="showOptions"
-                   v-on:blur="hideOptions"
                    @keydown="onKeyDown"
                    type="text"
                    name="query"
@@ -19,9 +18,8 @@
                  class="dropdown-menu"
                  :class="{show: options.length > 0}">
                 <div v-bind:property="option"
-                     v-on:click.stop.prevent
                      class="dropdown-item"
-                     @click="onOptionSelected(option)"
+                     @click.stop.prevent="onOptionSelected(option)"
                      v-for="(option, index) in options"
                      :class="{active: index === activeOptionIndex}">
                     {{option[displayPropertyName]}}
@@ -71,6 +69,8 @@
                 }
                 if(option === 'undefined')
                     option = this.$props.options[0];
+
+                this.activeOptionIndex = 0;
 
                 this.query = option[this.$props.displayPropertyName];
                 this.$props.onSelected(option);
