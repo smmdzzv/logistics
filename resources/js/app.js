@@ -6,9 +6,11 @@
 
 require('./bootstrap');
 let BootstrapVue = require('bootstrap-vue').default;
+let Vuelidate = require('vuelidate').default;
 
 window.Vue = require('vue');
 window.Vue.use(BootstrapVue);
+window.Vue.use(Vuelidate);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
