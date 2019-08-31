@@ -28,5 +28,6 @@ Route::post('/settings/position', 'AppSettingsController@storePosition');
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo');
 
 Route::get('/items', 'ItemsController@all');
+Route::get('/item/validator', 'ItemsController@validator');
 
 Route::get('/branches', "BranchesController@all");
