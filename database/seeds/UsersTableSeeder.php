@@ -17,9 +17,12 @@ class UsersTableSeeder extends Seeder
 
         $positionId = \App\Position::where('name', 'Администратор')->first()->id;
 
+        $branchId = \App\Branch::first()->id;
+
         $user = User::create([
             'name'=>'Султоназар Мамадазизов',
             'position_id' => $positionId,
+            'branch_id' => $branchId,
             'password' => Hash::make('asdf1234'),
             'email' => 'test@test.com',
             'code'=>'12345'
@@ -32,6 +35,7 @@ class UsersTableSeeder extends Seeder
 
         $client = User::create([
             'name'=>'Рахматшох Бахтиеров',
+            'branch_id' => $branchId,
             'password' => Hash::make('asdf1234'),
             'email' => 'test2@test.com',
             'code'=>'1345'

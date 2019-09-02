@@ -9,9 +9,9 @@
                  cancel-title="Отменить"
                  @close="clearForm"
                  @cancel="clearForm"
-                 @ok="onAdded">
+                 @ok.prevent="onAdded">
             <form id="addItemForm">
-                <div class="d-block" @keydown.esc="clearForm">
+                <div class="d-block">
                     <div class="container pt-4">
                         <div class="row">
                             <div class="form-group col-md-3">
@@ -19,7 +19,7 @@
                                 <input v-model.number="storedItem.width"
                                        name="width"
                                        @blur="$v.storedItem.width.$touch()"
-                                       maxlength="3"
+                                       maxlength="6"
                                        class="form-control"
                                        id="width"
                                        placeholder="в метрах"
@@ -38,7 +38,7 @@
                                 <input v-model="storedItem.height"
                                        name="height"
                                        @blur="$v.storedItem.height.$touch()"
-                                       maxlength="3"
+                                       maxlength="6"
                                        class="form-control"
                                        id="height"
                                        placeholder="в метрах" required>
@@ -57,7 +57,7 @@
                                 <input v-model="storedItem.length"
                                        name="length"
                                        @blur="$v.storedItem.length.$touch()"
-                                       maxlength="3"
+                                       maxlength="6"
                                        class="form-control"
                                        id="length"
                                        placeholder="в метрах" required>
@@ -126,14 +126,18 @@
                                     triggers="null"/>
                             </div>
 
+<!--                            <div class="form-group col-md-2">-->
+<!--                                <label for="branch" class="col-form-label text-md-right">Филиал</label>-->
+<!--                                <select id="branch"-->
+<!--                                        class="form-control custom-select" required>-->
+<!--                                    <option v-model="branches"-->
+<!--                                            v-for="branch in branches">{{branch.name}}-->
+<!--                                    </option>-->
+<!--                                </select>-->
+<!--                            </div>-->
                             <div class="form-group col-md-2">
                                 <label for="branch" class="col-form-label text-md-right">Филиал</label>
-                                <select id="branch"
-                                        class="form-control custom-select" required>
-                                    <option v-model="branches"
-                                            v-for="branch in branches">{{branch.name}}
-                                    </option>
-                                </select>
+                                <input class="form-control" v-model="branch.name" name="branch" id="branch" disabled>
                             </div>
                         </div>
                     </div>
@@ -150,18 +154,19 @@
     export default {
         name: "StoredItemBox",
         props:{
+            branch: null,
             onStoredItemAdded: {
                 type: Function,
                 required: true
             }
         },
         mounted() {
-            axios.get(`/branches`)
-                .then(result => {
-                    if (result) {
-                        this.branches = result.data;
-                    }
-                });
+            // axios.get(`/branches`)
+            //     .then(result => {
+            //         if (result) {
+            //             this.branches = result.data;
+            //         }
+            //     });
             axios.get('/items')
                 .then(result => {
                     if (result) {
@@ -171,7 +176,6 @@
         },
         data() {
             return {
-                branches: [],
                 items: [],
                 filteredItems: [],
                 storedItem: {
@@ -180,7 +184,7 @@
                     length: null,
                     weight: null,
                     count: null,
-                    branch: null,
+                    branch: this.$props.branch,
                     item: null
                 }
             }
@@ -195,9 +199,11 @@
             },
             onItemSelected(item){
                 this.storedItem.item = item;
+                console.log('on item selected/ item-.'+ this.storedItem.item.name)
             },
             clearForm(e){
-                e.preventDefault();
+                console.log('onclear')
+                if(e) e.preventDefault();
                 this.storedItem.weight = '';
                 this.storedItem.height = '';
                 this.storedItem.length = '';
@@ -205,17 +211,24 @@
                 this.storedItem.count = '';
                 this.storedItem.item = null;
                 this.storedItem.branch = null;
+                this.filteredItems = [];
                 this.$nextTick(()=>{
                     this.$v.$reset();
                     this.$refs.modal.hide()
                 })
             },
             onAdded(e){
-                e.preventDefault();
+                if(e) e.preventDefault();
+
                 if(this.$v.$invalid)
-                    this.$v.$touch()
-                else
-                    this.onStoredItemAdded(this.storedItem)
+                    this.$v.$touch();
+                else{
+                    let _item = $.extend(true, {}, this.storedItem);
+
+                    this.onStoredItemAdded(_item);
+                    this.clearForm(null);
+
+                }
             }
         },
         components: {
@@ -226,17 +239,17 @@
                     width: {
                         required,
                         decimal,
-                        maxLength: maxLength(3)
+                        maxLength: maxLength(6)
                     },
                     height: {
                         required,
                         decimal,
-                        maxLength: maxLength(3)
+                        maxLength: maxLength(6)
                     },
                     length: {
                         required,
                         decimal,
-                        maxLength: maxLength(3)
+                        maxLength: maxLength(6)
                     },
                     weight: {
                         required,
@@ -246,7 +259,7 @@
                     count: {
                         required,
                         integer,
-                        maxLength: maxLength(3)
+                        maxLength: maxLength(6)
                     },
                 item:{
                         required

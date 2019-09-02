@@ -8,17 +8,24 @@
             </div>
         </div>
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">Жесть</li>
-            <li class="list-group-item">Бампер</li>
+            <li class="list-group-item"
+                v-model="storedItems"
+                v-for="stored in storedItems">
+                {{stored.item.name}}
+            </li>
+            <li class="list-group-item" v-if="storedItems.length === 0">Для приема товара необходимо нажать кнопку добавить</li>
         </ul>
     </div>
-    <stored-item-box :onStoredItemAdded="onStoredItemAdded"></stored-item-box>
+    <stored-item-box :onStoredItemAdded="onStoredItemAdded" :branch="user.branch"></stored-item-box>
 </div>
 </template>
 
 <script>
     export default {
         name: "OrderItemsBox",
+        props:{
+            user: null
+        },
         data(){
             return{
                 storedItems:[]

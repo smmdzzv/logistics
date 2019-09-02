@@ -62,7 +62,7 @@
             },
             onOptionSelected(option){
                 this.hideOptions();
-                if(option === null){
+                if(!option){
                   option =  this.$props.options.find((item, index) => {
                         return index === this.activeOptionIndex
                     })
@@ -71,7 +71,6 @@
                     option = this.$props.options[0];
 
                 this.activeOptionIndex = 0;
-
                 this.query = option[this.$props.displayPropertyName];
                 this.$props.onSelected(option);
                 this.$props.onItemSearchInputChange(this.query);

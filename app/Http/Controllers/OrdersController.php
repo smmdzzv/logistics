@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 class OrdersController extends Controller
 {
     public function create(){
-        return view('orders.create');
+        $user = auth()->user();
+        auth()->user()->branch;
+        return view('orders.create', compact('user'));
     }
 }

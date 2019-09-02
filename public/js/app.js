@@ -1706,6 +1706,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Order",
+  mounted: function mounted() {
+    console.log(this.user);
+  },
+  props: {
+    user: null
+  },
   data: function data() {
     return {
       client: null
@@ -1751,8 +1757,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "OrderItemsBox",
+  props: {
+    user: null
+  },
   data: function data() {
     return {
       storedItems: []
@@ -2056,10 +2069,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "StoredItemBox",
   props: {
+    branch: null,
     onStoredItemAdded: {
       type: Function,
       required: true
@@ -2068,11 +2086,12 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    axios.get("/branches").then(function (result) {
-      if (result) {
-        _this.branches = result.data;
-      }
-    });
+    // axios.get(`/branches`)
+    //     .then(result => {
+    //         if (result) {
+    //             this.branches = result.data;
+    //         }
+    //     });
     axios.get('/items').then(function (result) {
       if (result) {
         _this.items = result.data;
@@ -2081,7 +2100,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      branches: [],
       items: [],
       filteredItems: [],
       storedItem: {
@@ -2090,7 +2108,7 @@ __webpack_require__.r(__webpack_exports__);
         length: null,
         weight: null,
         count: null,
-        branch: null,
+        branch: this.$props.branch,
         item: null
       }
     };
@@ -2104,11 +2122,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     onItemSelected: function onItemSelected(item) {
       this.storedItem.item = item;
+      console.log('on item selected/ item-.' + this.storedItem.item.name);
     },
     clearForm: function clearForm(e) {
       var _this2 = this;
 
-      e.preventDefault();
+      console.log('onclear');
+      if (e) e.preventDefault();
       this.storedItem.weight = '';
       this.storedItem.height = '';
       this.storedItem.length = '';
@@ -2116,6 +2136,7 @@ __webpack_require__.r(__webpack_exports__);
       this.storedItem.count = '';
       this.storedItem.item = null;
       this.storedItem.branch = null;
+      this.filteredItems = [];
       this.$nextTick(function () {
         _this2.$v.$reset();
 
@@ -2123,8 +2144,13 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onAdded: function onAdded(e) {
-      e.preventDefault();
-      if (this.$v.$invalid) this.$v.$touch();else this.onStoredItemAdded(this.storedItem);
+      if (e) e.preventDefault();
+      if (this.$v.$invalid) this.$v.$touch();else {
+        var _item = $.extend(true, {}, this.storedItem);
+
+        this.onStoredItemAdded(_item);
+        this.clearForm(null);
+      }
     }
   },
   components: {
@@ -2135,17 +2161,17 @@ __webpack_require__.r(__webpack_exports__);
       width: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
         decimal: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["decimal"],
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(3)
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(6)
       },
       height: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
         decimal: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["decimal"],
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(3)
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(6)
       },
       length: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
         decimal: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["decimal"],
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(3)
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(6)
       },
       weight: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
@@ -2155,7 +2181,7 @@ __webpack_require__.r(__webpack_exports__);
       count: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
         integer: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["integer"],
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(3)
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(6)
       },
       item: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
@@ -2241,7 +2267,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.hideOptions();
 
-      if (option === null) {
+      if (!option) {
         option = this.$props.options.find(function (item, index) {
           return index === _this.activeOptionIndex;
         });
@@ -66264,7 +66290,7 @@ var render = function() {
     [
       _c("search-user-dropdown", { on: { userSelected: _vm.onUserSelected } }),
       _vm._v(" "),
-      _c("order-items-box")
+      _c("order-items-box", { attrs: { user: _vm.user } })
     ],
     1
   )
@@ -66314,28 +66340,54 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _vm._m(0)
+        _c(
+          "ul",
+          { staticClass: "list-group list-group-flush" },
+          [
+            _vm._l(_vm.storedItems, function(stored) {
+              return _c(
+                "li",
+                {
+                  staticClass: "list-group-item",
+                  model: {
+                    value: _vm.storedItems,
+                    callback: function($$v) {
+                      _vm.storedItems = $$v
+                    },
+                    expression: "storedItems"
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s(stored.item.name) +
+                      "\n            "
+                  )
+                ]
+              )
+            }),
+            _vm._v(" "),
+            _vm.storedItems.length === 0
+              ? _c("li", { staticClass: "list-group-item" }, [
+                  _vm._v("Для приема товара необходимо нажать кнопку добавить")
+                ])
+              : _vm._e()
+          ],
+          2
+        )
       ]),
       _vm._v(" "),
       _c("stored-item-box", {
-        attrs: { onStoredItemAdded: _vm.onStoredItemAdded }
+        attrs: {
+          onStoredItemAdded: _vm.onStoredItemAdded,
+          branch: _vm.user.branch
+        }
       })
     ],
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("ul", { staticClass: "list-group list-group-flush" }, [
-      _c("li", { staticClass: "list-group-item" }, [_vm._v("Жесть")]),
-      _vm._v(" "),
-      _c("li", { staticClass: "list-group-item" }, [_vm._v("Бампер")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -66522,480 +66574,459 @@ var render = function() {
             "ok-title": "Добавить",
             "cancel-title": "Отменить"
           },
-          on: { close: _vm.clearForm, cancel: _vm.clearForm, ok: _vm.onAdded }
+          on: {
+            close: _vm.clearForm,
+            cancel: _vm.clearForm,
+            ok: function($event) {
+              $event.preventDefault()
+              return _vm.onAdded($event)
+            }
+          }
         },
         [
           _c("form", { attrs: { id: "addItemForm" } }, [
-            _c(
-              "div",
-              {
-                staticClass: "d-block",
-                on: {
-                  keydown: function($event) {
-                    if (
-                      !$event.type.indexOf("key") &&
-                      _vm._k($event.keyCode, "esc", 27, $event.key, [
-                        "Esc",
-                        "Escape"
-                      ])
-                    ) {
-                      return null
-                    }
-                    return _vm.clearForm($event)
-                  }
-                }
-              },
-              [
-                _c("div", { staticClass: "container pt-4" }, [
-                  _c("div", { staticClass: "row" }, [
-                    _c(
-                      "div",
-                      { staticClass: "form-group col-md-3" },
-                      [
-                        _c(
-                          "label",
-                          {
-                            staticClass: "col-form-label text-md-right",
-                            attrs: { for: "width" }
-                          },
-                          [_vm._v("Ширина")]
-                        ),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model.number",
-                              value: _vm.storedItem.width,
-                              expression: "storedItem.width",
-                              modifiers: { number: true }
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            name: "width",
-                            maxlength: "3",
-                            id: "width",
-                            placeholder: "в метрах",
-                            required: ""
-                          },
-                          domProps: { value: _vm.storedItem.width },
-                          on: {
-                            blur: [
-                              function($event) {
-                                return _vm.$v.storedItem.width.$touch()
-                              },
-                              function($event) {
-                                return _vm.$forceUpdate()
-                              }
-                            ],
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.storedItem,
-                                "width",
-                                _vm._n($event.target.value)
-                              )
-                            }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("b-popover", {
-                          attrs: {
-                            show: _vm.$v.storedItem.width.$error,
-                            variant: "danger",
-                            target: "width",
-                            placement: "bottom",
-                            content: "Введите ширину в метрах",
-                            triggers: "null"
-                          },
-                          on: {
-                            "update:show": function($event) {
-                              return _vm.$set(
-                                _vm.$v.storedItem.width,
-                                "$error",
-                                $event
-                              )
-                            }
-                          }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "form-group col-md-3" },
-                      [
-                        _c(
-                          "label",
-                          {
-                            staticClass: "col-form-label text-md-right",
-                            attrs: { for: "height" }
-                          },
-                          [_vm._v("Высота")]
-                        ),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.storedItem.height,
-                              expression: "storedItem.height"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            name: "height",
-                            maxlength: "3",
-                            id: "height",
-                            placeholder: "в метрах",
-                            required: ""
-                          },
-                          domProps: { value: _vm.storedItem.height },
-                          on: {
-                            blur: function($event) {
-                              return _vm.$v.storedItem.height.$touch()
-                            },
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.storedItem,
-                                "height",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("b-popover", {
-                          attrs: {
-                            show: _vm.$v.storedItem.height.$error,
-                            variant: "danger",
-                            target: "height",
-                            placement: "bottom",
-                            content: "Введите высоту в метрах",
-                            triggers: "null"
-                          },
-                          on: {
-                            "update:show": function($event) {
-                              return _vm.$set(
-                                _vm.$v.storedItem.height,
-                                "$error",
-                                $event
-                              )
-                            }
-                          }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "form-group col-md-3" },
-                      [
-                        _c(
-                          "label",
-                          {
-                            staticClass: "col-form-label text-md-right",
-                            attrs: { for: "length" }
-                          },
-                          [_vm._v("Длина")]
-                        ),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.storedItem.length,
-                              expression: "storedItem.length"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            name: "length",
-                            maxlength: "3",
-                            id: "length",
-                            placeholder: "в метрах",
-                            required: ""
-                          },
-                          domProps: { value: _vm.storedItem.length },
-                          on: {
-                            blur: function($event) {
-                              return _vm.$v.storedItem.length.$touch()
-                            },
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.storedItem,
-                                "length",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("b-popover", {
-                          attrs: {
-                            show: _vm.$v.storedItem.length.$error,
-                            variant: "danger",
-                            target: "length",
-                            placement: "bottom",
-                            content: "Введите длину в метрах",
-                            triggers: "null"
-                          },
-                          on: {
-                            "update:show": function($event) {
-                              return _vm.$set(
-                                _vm.$v.storedItem.length,
-                                "$error",
-                                $event
-                              )
-                            }
-                          }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "form-group col-md-3" },
-                      [
-                        _c(
-                          "label",
-                          {
-                            staticClass: "col-form-label text-md-right",
-                            attrs: { for: "weight" }
-                          },
-                          [_vm._v("Вес")]
-                        ),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.storedItem.weight,
-                              expression: "storedItem.weight"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            name: "weight",
-                            maxlength: "6",
-                            id: "weight",
-                            placeholder: "в кг",
-                            required: ""
-                          },
-                          domProps: { value: _vm.storedItem.weight },
-                          on: {
-                            blur: function($event) {
-                              return _vm.$v.storedItem.weight.$touch()
-                            },
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.storedItem,
-                                "weight",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("b-popover", {
-                          attrs: {
-                            show: _vm.$v.storedItem.weight.$error,
-                            variant: "danger",
-                            target: "weight",
-                            placement: "bottom",
-                            content: "Введите вес в килограммах",
-                            triggers: "null"
-                          },
-                          on: {
-                            "update:show": function($event) {
-                              return _vm.$set(
-                                _vm.$v.storedItem.weight,
-                                "$error",
-                                $event
-                              )
-                            }
-                          }
-                        })
-                      ],
-                      1
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-row" }, [
-                    _c(
-                      "div",
-                      { staticClass: "form-group col-md-8" },
-                      [
-                        _c("suggestions-input", {
-                          attrs: {
-                            id: "item",
-                            title: "Наимнование товара",
-                            placeholder: "Введите название товара",
-                            keyPropertyName: "id",
-                            displayPropertyName: "name",
-                            onItemSearchInputChange:
-                              _vm.onItemSearchInputChange,
-                            onSelected: _vm.onItemSelected,
-                            options: _vm.filteredItems,
-                            required: ""
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("b-popover", {
-                          attrs: {
-                            show: _vm.$v.storedItem.item.$error,
-                            variant: "danger",
-                            target: "item",
-                            placement: "bottom",
-                            content: "Найдите товар по имени",
-                            triggers: "null"
-                          },
-                          on: {
-                            "update:show": function($event) {
-                              return _vm.$set(
-                                _vm.$v.storedItem.item,
-                                "$error",
-                                $event
-                              )
-                            }
-                          }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "form-group col-md-2" },
-                      [
-                        _c(
-                          "label",
-                          {
-                            staticClass: "col-form-label text-md-right",
-                            attrs: { for: "count" }
-                          },
-                          [_vm._v("Количество")]
-                        ),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.storedItem.count,
-                              expression: "storedItem.count"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          attrs: {
-                            id: "count",
-                            maxlength: "4",
-                            name: "count",
-                            placeholder: "в шт",
-                            required: ""
-                          },
-                          domProps: { value: _vm.storedItem.count },
-                          on: {
-                            blur: function($event) {
-                              return _vm.$v.storedItem.count.$touch()
-                            },
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.storedItem,
-                                "count",
-                                $event.target.value
-                              )
-                            }
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("b-popover", {
-                          attrs: {
-                            show: _vm.$v.storedItem.count.$error,
-                            variant: "danger",
-                            target: "count",
-                            placement: "bottom",
-                            content: "Определите количество товаров",
-                            triggers: "null"
-                          },
-                          on: {
-                            "update:show": function($event) {
-                              return _vm.$set(
-                                _vm.$v.storedItem.count,
-                                "$error",
-                                $event
-                              )
-                            }
-                          }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "form-group col-md-2" }, [
+            _c("div", { staticClass: "d-block" }, [
+              _c("div", { staticClass: "container pt-4" }, [
+                _c("div", { staticClass: "row" }, [
+                  _c(
+                    "div",
+                    { staticClass: "form-group col-md-3" },
+                    [
                       _c(
                         "label",
                         {
                           staticClass: "col-form-label text-md-right",
-                          attrs: { for: "branch" }
+                          attrs: { for: "width" }
                         },
-                        [_vm._v("Филиал")]
+                        [_vm._v("Ширина")]
                       ),
                       _vm._v(" "),
-                      _c(
-                        "select",
-                        {
-                          staticClass: "form-control custom-select",
-                          attrs: { id: "branch", required: "" }
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model.number",
+                            value: _vm.storedItem.width,
+                            expression: "storedItem.width",
+                            modifiers: { number: true }
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          name: "width",
+                          maxlength: "6",
+                          id: "width",
+                          placeholder: "в метрах",
+                          required: ""
                         },
-                        _vm._l(_vm.branches, function(branch) {
-                          return _c(
-                            "option",
-                            {
-                              model: {
-                                value: _vm.branches,
-                                callback: function($$v) {
-                                  _vm.branches = $$v
-                                },
-                                expression: "branches"
-                              }
+                        domProps: { value: _vm.storedItem.width },
+                        on: {
+                          blur: [
+                            function($event) {
+                              return _vm.$v.storedItem.width.$touch()
                             },
-                            [
-                              _vm._v(
-                                _vm._s(branch.name) +
-                                  "\n                                "
-                              )
-                            ]
-                          )
-                        }),
-                        0
-                      )
-                    ])
+                            function($event) {
+                              return _vm.$forceUpdate()
+                            }
+                          ],
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.storedItem,
+                              "width",
+                              _vm._n($event.target.value)
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("b-popover", {
+                        attrs: {
+                          show: _vm.$v.storedItem.width.$error,
+                          variant: "danger",
+                          target: "width",
+                          placement: "bottom",
+                          content: "Введите ширину в метрах",
+                          triggers: "null"
+                        },
+                        on: {
+                          "update:show": function($event) {
+                            return _vm.$set(
+                              _vm.$v.storedItem.width,
+                              "$error",
+                              $event
+                            )
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-group col-md-3" },
+                    [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-form-label text-md-right",
+                          attrs: { for: "height" }
+                        },
+                        [_vm._v("Высота")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.storedItem.height,
+                            expression: "storedItem.height"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          name: "height",
+                          maxlength: "6",
+                          id: "height",
+                          placeholder: "в метрах",
+                          required: ""
+                        },
+                        domProps: { value: _vm.storedItem.height },
+                        on: {
+                          blur: function($event) {
+                            return _vm.$v.storedItem.height.$touch()
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.storedItem,
+                              "height",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("b-popover", {
+                        attrs: {
+                          show: _vm.$v.storedItem.height.$error,
+                          variant: "danger",
+                          target: "height",
+                          placement: "bottom",
+                          content: "Введите высоту в метрах",
+                          triggers: "null"
+                        },
+                        on: {
+                          "update:show": function($event) {
+                            return _vm.$set(
+                              _vm.$v.storedItem.height,
+                              "$error",
+                              $event
+                            )
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-group col-md-3" },
+                    [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-form-label text-md-right",
+                          attrs: { for: "length" }
+                        },
+                        [_vm._v("Длина")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.storedItem.length,
+                            expression: "storedItem.length"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          name: "length",
+                          maxlength: "6",
+                          id: "length",
+                          placeholder: "в метрах",
+                          required: ""
+                        },
+                        domProps: { value: _vm.storedItem.length },
+                        on: {
+                          blur: function($event) {
+                            return _vm.$v.storedItem.length.$touch()
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.storedItem,
+                              "length",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("b-popover", {
+                        attrs: {
+                          show: _vm.$v.storedItem.length.$error,
+                          variant: "danger",
+                          target: "length",
+                          placement: "bottom",
+                          content: "Введите длину в метрах",
+                          triggers: "null"
+                        },
+                        on: {
+                          "update:show": function($event) {
+                            return _vm.$set(
+                              _vm.$v.storedItem.length,
+                              "$error",
+                              $event
+                            )
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-group col-md-3" },
+                    [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-form-label text-md-right",
+                          attrs: { for: "weight" }
+                        },
+                        [_vm._v("Вес")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.storedItem.weight,
+                            expression: "storedItem.weight"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          name: "weight",
+                          maxlength: "6",
+                          id: "weight",
+                          placeholder: "в кг",
+                          required: ""
+                        },
+                        domProps: { value: _vm.storedItem.weight },
+                        on: {
+                          blur: function($event) {
+                            return _vm.$v.storedItem.weight.$touch()
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.storedItem,
+                              "weight",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("b-popover", {
+                        attrs: {
+                          show: _vm.$v.storedItem.weight.$error,
+                          variant: "danger",
+                          target: "weight",
+                          placement: "bottom",
+                          content: "Введите вес в килограммах",
+                          triggers: "null"
+                        },
+                        on: {
+                          "update:show": function($event) {
+                            return _vm.$set(
+                              _vm.$v.storedItem.weight,
+                              "$error",
+                              $event
+                            )
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-row" }, [
+                  _c(
+                    "div",
+                    { staticClass: "form-group col-md-8" },
+                    [
+                      _c("suggestions-input", {
+                        attrs: {
+                          id: "item",
+                          title: "Наимнование товара",
+                          placeholder: "Введите название товара",
+                          keyPropertyName: "id",
+                          displayPropertyName: "name",
+                          onItemSearchInputChange: _vm.onItemSearchInputChange,
+                          onSelected: _vm.onItemSelected,
+                          options: _vm.filteredItems,
+                          required: ""
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("b-popover", {
+                        attrs: {
+                          show: _vm.$v.storedItem.item.$error,
+                          variant: "danger",
+                          target: "item",
+                          placement: "bottom",
+                          content: "Найдите товар по имени",
+                          triggers: "null"
+                        },
+                        on: {
+                          "update:show": function($event) {
+                            return _vm.$set(
+                              _vm.$v.storedItem.item,
+                              "$error",
+                              $event
+                            )
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-group col-md-2" },
+                    [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-form-label text-md-right",
+                          attrs: { for: "count" }
+                        },
+                        [_vm._v("Количество")]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.storedItem.count,
+                            expression: "storedItem.count"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          id: "count",
+                          maxlength: "4",
+                          name: "count",
+                          placeholder: "в шт",
+                          required: ""
+                        },
+                        domProps: { value: _vm.storedItem.count },
+                        on: {
+                          blur: function($event) {
+                            return _vm.$v.storedItem.count.$touch()
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.storedItem,
+                              "count",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("b-popover", {
+                        attrs: {
+                          show: _vm.$v.storedItem.count.$error,
+                          variant: "danger",
+                          target: "count",
+                          placement: "bottom",
+                          content: "Определите количество товаров",
+                          triggers: "null"
+                        },
+                        on: {
+                          "update:show": function($event) {
+                            return _vm.$set(
+                              _vm.$v.storedItem.count,
+                              "$error",
+                              $event
+                            )
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group col-md-2" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-form-label text-md-right",
+                        attrs: { for: "branch" }
+                      },
+                      [_vm._v("Филиал")]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.branch.name,
+                          expression: "branch.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { name: "branch", id: "branch", disabled: "" },
+                      domProps: { value: _vm.branch.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.branch, "name", $event.target.value)
+                        }
+                      }
+                    })
                   ])
                 ])
-              ]
-            )
+              ])
+            ])
           ])
         ]
       )
