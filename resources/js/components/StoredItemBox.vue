@@ -2,11 +2,14 @@
     <div>
         <b-modal id="addItemModal"
                  ref="modal"
-                 size="xl" hide-footer
+                 size="xl"
                  no-close-on-esc
                  title="Добавить новый товар"
+                 ok-title="Добавить"
+                 cancel-title="Отменить"
                  @close="clearForm"
-                 @cancel="clearForm">
+                 @cancel="clearForm"
+                 @ok="onAdded">
             <form id="addItemForm">
                 <div class="d-block" @keydown.esc="clearForm">
                     <div class="container pt-4">
@@ -146,6 +149,12 @@
 
     export default {
         name: "StoredItemBox",
+        props:{
+            onStoredItemAdded: {
+                type: Function,
+                required: true
+            }
+        },
         mounted() {
             axios.get(`/branches`)
                 .then(result => {
@@ -184,10 +193,11 @@
                     return value.name.toLowerCase().includes(query.toLowerCase())
                 });
             },
-            onItemSelected(item) {
+            onItemSelected(item){
                 this.storedItem.item = item;
             },
             clearForm(e){
+                e.preventDefault();
                 this.storedItem.weight = '';
                 this.storedItem.height = '';
                 this.storedItem.length = '';
@@ -195,11 +205,17 @@
                 this.storedItem.count = '';
                 this.storedItem.item = null;
                 this.storedItem.branch = null;
-                e.preventDefault();
                 this.$nextTick(()=>{
                     this.$v.$reset();
                     this.$refs.modal.hide()
                 })
+            },
+            onAdded(e){
+                e.preventDefault();
+                if(this.$v.$invalid)
+                    this.$v.$touch()
+                else
+                    this.onStoredItemAdded(this.storedItem)
             }
         },
         components: {
@@ -233,8 +249,7 @@
                         maxLength: maxLength(3)
                     },
                 item:{
-                        required,
-                        not:not(null)
+                        required
                 }
             }
         }

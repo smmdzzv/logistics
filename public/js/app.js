@@ -1762,8 +1762,8 @@ __webpack_require__.r(__webpack_exports__);
     showModal: function showModal() {
       this.$bvModal.show('addItemModal');
     },
-    onItemAdded: function onItemAdded(item) {
-      this.storedItems.push(item);
+    onStoredItemAdded: function onStoredItemAdded(storedItem) {
+      this.storedItems.push(storedItem);
     }
   },
   components: {
@@ -2053,9 +2053,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "StoredItemBox",
+  props: {
+    onStoredItemAdded: {
+      type: Function,
+      required: true
+    }
+  },
   mounted: function mounted() {
     var _this = this;
 
@@ -2099,6 +2108,7 @@ __webpack_require__.r(__webpack_exports__);
     clearForm: function clearForm(e) {
       var _this2 = this;
 
+      e.preventDefault();
       this.storedItem.weight = '';
       this.storedItem.height = '';
       this.storedItem.length = '';
@@ -2106,12 +2116,15 @@ __webpack_require__.r(__webpack_exports__);
       this.storedItem.count = '';
       this.storedItem.item = null;
       this.storedItem.branch = null;
-      e.preventDefault();
       this.$nextTick(function () {
         _this2.$v.$reset();
 
         _this2.$refs.modal.hide();
       });
+    },
+    onAdded: function onAdded(e) {
+      e.preventDefault();
+      if (this.$v.$invalid) this.$v.$touch();else this.onStoredItemAdded(this.storedItem);
     }
   },
   components: {
@@ -2145,8 +2158,7 @@ __webpack_require__.r(__webpack_exports__);
         maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(3)
       },
       item: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        not: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["not"])(null)
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
       }
     }
   }
@@ -66305,7 +66317,9 @@ var render = function() {
         _vm._m(0)
       ]),
       _vm._v(" "),
-      _c("stored-item-box", { attrs: { onItemAdded: _vm.onItemAdded } })
+      _c("stored-item-box", {
+        attrs: { onStoredItemAdded: _vm.onStoredItemAdded }
+      })
     ],
     1
   )
@@ -66503,11 +66517,12 @@ var render = function() {
           attrs: {
             id: "addItemModal",
             size: "xl",
-            "hide-footer": "",
             "no-close-on-esc": "",
-            title: "Добавить новый товар"
+            title: "Добавить новый товар",
+            "ok-title": "Добавить",
+            "cancel-title": "Отменить"
           },
-          on: { close: _vm.clearForm, cancel: _vm.clearForm }
+          on: { close: _vm.clearForm, cancel: _vm.clearForm, ok: _vm.onAdded }
         },
         [
           _c("form", { attrs: { id: "addItemForm" } }, [

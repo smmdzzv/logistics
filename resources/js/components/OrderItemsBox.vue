@@ -12,7 +12,7 @@
             <li class="list-group-item">Бампер</li>
         </ul>
     </div>
-    <stored-item-box :onItemAdded="onItemAdded"></stored-item-box>
+    <stored-item-box :onStoredItemAdded="onStoredItemAdded"></stored-item-box>
 </div>
 </template>
 
@@ -28,8 +28,8 @@
             showModal(){
                 this.$bvModal.show('addItemModal');
             },
-            onItemAdded(item){
-                this.storedItems.push(item)
+            onStoredItemAdded(storedItem){
+                this.storedItems.push(storedItem)
             }
         },
         components: {
