@@ -210,7 +210,6 @@
                 this.storedItem.width = '';
                 this.storedItem.count = '';
                 this.storedItem.item = null;
-                this.storedItem.branch = null;
                 this.filteredItems = [];
                 this.$nextTick(()=>{
                     this.$v.$reset();
@@ -227,7 +226,6 @@
 
                     this.onStoredItemAdded(_item);
                     this.clearForm(null);
-
                 }
             }
         },

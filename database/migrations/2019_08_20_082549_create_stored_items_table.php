@@ -25,6 +25,8 @@ class CreateStoredItemsTable extends Migration
             $table->double('width');
             $table->double('length');
             $table->integer('count');
+            $table->double('totalWeight');
+            $table->double('totalCubage');
             $table->timestamps();
 
             $table->index('item_id');
