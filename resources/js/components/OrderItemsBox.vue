@@ -39,7 +39,7 @@
                 </li>
             </ul>
         </div>
-        <stored-item-box :onStoredItemAdded="onStoredItemAdded" :branch="user.branch"></stored-item-box>
+        <stored-item-box :onStoredItemAdded="onStoredItemAdded" :branch="user.branch" :tariffs="tariffs"></stored-item-box>
     </div>
 </template>
 
@@ -47,7 +47,8 @@
     export default {
         name: "OrderItemsBox",
         props: {
-            user: null
+            user: null,
+            tariffs: Array
         },
         data() {
             return {

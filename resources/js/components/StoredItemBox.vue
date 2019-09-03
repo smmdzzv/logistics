@@ -35,7 +35,7 @@
 
                             <div class="form-group col-md-3">
                                 <label for="height" class="col-form-label text-md-right">Высота</label>
-                                <input v-model="storedItem.height"
+                                <input v-model.number="storedItem.height"
                                        name="height"
                                        @blur="$v.storedItem.height.$touch()"
                                        maxlength="6"
@@ -54,7 +54,7 @@
 
                             <div class="form-group col-md-3">
                                 <label for="length" class="col-form-label text-md-right">Длина</label>
-                                <input v-model="storedItem.length"
+                                <input v-model.number="storedItem.length"
                                        name="length"
                                        @blur="$v.storedItem.length.$touch()"
                                        maxlength="6"
@@ -72,7 +72,7 @@
 
                             <div class="form-group col-md-3">
                                 <label for="weight" class="col-form-label text-md-right">Вес</label>
-                                <input v-model="storedItem.weight"
+                                <input v-model.number="storedItem.weight"
                                        name="weight"
                                        @blur="$v.storedItem.weight.$touch()"
                                        maxlength="6"
@@ -90,7 +90,7 @@
                             </div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-8">
+                            <div class="form-group col-md-6">
                                 <suggestions-input id="item"
                                                    title="Наимнование товара"
                                                    placeholder="Введите название товара"
@@ -108,10 +108,30 @@
                                     content="Найдите товар по имени"
                                     triggers="null"/>
                             </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="tariff" class="col-form-label text-md-right">Тариф</label>
+                                <select id="tariff"
+                                        v-model="tariff"
+                                        class="form-control custom-select" required>
+                                    <option v-model="tariffs"
+                                            v-for="tariff in tariffs"
+                                    :value="tariff">{{tariff.name}}
+                                    </option>
+                                </select>
+                                <b-popover
+                                    :show.sync="$v.tariff.$error"
+                                    variant="danger"
+                                    target="tariff"
+                                    placement="bottom"
+                                    content="Выберите тариф из списка"
+                                    triggers="null"/>
+                            </div>
+
                             <div class="form-group col-md-2">
                                 <label for="count" class="col-form-label text-md-right">Количество</label>
                                 <input class="form-control"
-                                       v-model="storedItem.count"
+                                       v-model.number="storedItem.count"
                                        @blur="$v.storedItem.count.$touch()"
                                        id="count"
                                        maxlength="4"
@@ -126,15 +146,6 @@
                                     triggers="null"/>
                             </div>
 
-                            <!--                            <div class="form-group col-md-2">-->
-                            <!--                                <label for="branch" class="col-form-label text-md-right">Филиал</label>-->
-                            <!--                                <select id="branch"-->
-                            <!--                                        class="form-control custom-select" required>-->
-                            <!--                                    <option v-model="branches"-->
-                            <!--                                            v-for="branch in branches">{{branch.name}}-->
-                            <!--                                    </option>-->
-                            <!--                                </select>-->
-                            <!--                            </div>-->
                             <div class="form-group col-md-2">
                                 <label for="branch" class="col-form-label text-md-right">Филиал</label>
                                 <input class="form-control" v-model="branch.name" name="branch" id="branch" disabled>
@@ -155,6 +166,7 @@
         name: "StoredItemBox",
         props: {
             branch: null,
+            tariffs:Array,
             onStoredItemAdded: {
                 type: Function,
                 required: true
@@ -186,7 +198,8 @@
                     count: null,
                     branch: this.$props.branch,
                     item: null
-                }
+                },
+                tariff: null
             }
         },
         methods: {
@@ -201,7 +214,6 @@
                 this.storedItem.item = item;
             },
             clearForm(e) {
-                console.log("clear form")
                 if (e) e.preventDefault();
                 this.storedItem.weight = '';
                 this.storedItem.height = '';
@@ -210,6 +222,7 @@
                 this.storedItem.count = '';
                 this.storedItem.item = null;
                 this.filteredItems = [];
+                this.tariff = null;
                 this.$nextTick(() => {
                     this.$v.$reset();
                     this.$refs.modal.hide()
@@ -223,7 +236,7 @@
                 else {
                     let stored = $.extend(true, {}, this.storedItem);
 
-                    axios.get('/tariff-price-history/' + stored.item.tariff_id)
+                    axios.get('/tariff-price-history/' + this.tariff.id)
                         .then(result => {
                             stored.tariffPricing = result.data;
                         })
@@ -267,6 +280,10 @@
                 item: {
                     required
                 }
+            },
+            tariff: {
+                required,
+                integer
             }
         }
     }

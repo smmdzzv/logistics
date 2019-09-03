@@ -1710,7 +1710,8 @@ __webpack_require__.r(__webpack_exports__);
     console.log(this.user);
   },
   props: {
-    user: null
+    user: null,
+    tariffs: Array
   },
   data: function data() {
     return {
@@ -1787,7 +1788,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "OrderItemsBox",
   props: {
-    user: null
+    user: null,
+    tariffs: Array
   },
   data: function data() {
     return {
@@ -2129,11 +2131,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "StoredItemBox",
   props: {
     branch: null,
+    tariffs: Array,
     onStoredItemAdded: {
       type: Function,
       required: true
@@ -2166,7 +2180,8 @@ __webpack_require__.r(__webpack_exports__);
         count: null,
         branch: this.$props.branch,
         item: null
-      }
+      },
+      tariff: null
     };
   },
   methods: {
@@ -2182,7 +2197,6 @@ __webpack_require__.r(__webpack_exports__);
     clearForm: function clearForm(e) {
       var _this2 = this;
 
-      console.log("clear form");
       if (e) e.preventDefault();
       this.storedItem.weight = '';
       this.storedItem.height = '';
@@ -2191,6 +2205,7 @@ __webpack_require__.r(__webpack_exports__);
       this.storedItem.count = '';
       this.storedItem.item = null;
       this.filteredItems = [];
+      this.tariff = null;
       this.$nextTick(function () {
         _this2.$v.$reset();
 
@@ -2203,7 +2218,7 @@ __webpack_require__.r(__webpack_exports__);
       if (e) e.preventDefault();
       if (this.$v.$invalid) this.$v.$touch();else {
         var stored = $.extend(true, {}, this.storedItem);
-        axios.get('/tariff-price-history/' + stored.item.tariff_id).then(function (result) {
+        axios.get('/tariff-price-history/' + this.tariff.id).then(function (result) {
           stored.tariffPricing = result.data;
         }).then(function (result) {
           _this3.onStoredItemAdded(stored);
@@ -2246,6 +2261,10 @@ __webpack_require__.r(__webpack_exports__);
       item: {
         required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
       }
+    },
+    tariff: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      integer: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["integer"]
     }
   }
 });
@@ -66995,7 +67014,7 @@ var render = function() {
     [
       _c("search-user-dropdown", { on: { userSelected: _vm.onUserSelected } }),
       _vm._v(" "),
-      _c("order-items-box", { attrs: { user: _vm.user } })
+      _c("order-items-box", { attrs: { user: _vm.user, tariffs: _vm.tariffs } })
     ],
     1
   )
@@ -67138,7 +67157,8 @@ var render = function() {
       _c("stored-item-box", {
         attrs: {
           onStoredItemAdded: _vm.onStoredItemAdded,
-          branch: _vm.user.branch
+          branch: _vm.user.branch,
+          tariffs: _vm.tariffs
         }
       })
     ],
@@ -67450,9 +67470,10 @@ var render = function() {
                         directives: [
                           {
                             name: "model",
-                            rawName: "v-model",
+                            rawName: "v-model.number",
                             value: _vm.storedItem.height,
-                            expression: "storedItem.height"
+                            expression: "storedItem.height",
+                            modifiers: { number: true }
                           }
                         ],
                         staticClass: "form-control",
@@ -67465,9 +67486,14 @@ var render = function() {
                         },
                         domProps: { value: _vm.storedItem.height },
                         on: {
-                          blur: function($event) {
-                            return _vm.$v.storedItem.height.$touch()
-                          },
+                          blur: [
+                            function($event) {
+                              return _vm.$v.storedItem.height.$touch()
+                            },
+                            function($event) {
+                              return _vm.$forceUpdate()
+                            }
+                          ],
                           input: function($event) {
                             if ($event.target.composing) {
                               return
@@ -67475,7 +67501,7 @@ var render = function() {
                             _vm.$set(
                               _vm.storedItem,
                               "height",
-                              $event.target.value
+                              _vm._n($event.target.value)
                             )
                           }
                         }
@@ -67521,9 +67547,10 @@ var render = function() {
                         directives: [
                           {
                             name: "model",
-                            rawName: "v-model",
+                            rawName: "v-model.number",
                             value: _vm.storedItem.length,
-                            expression: "storedItem.length"
+                            expression: "storedItem.length",
+                            modifiers: { number: true }
                           }
                         ],
                         staticClass: "form-control",
@@ -67536,9 +67563,14 @@ var render = function() {
                         },
                         domProps: { value: _vm.storedItem.length },
                         on: {
-                          blur: function($event) {
-                            return _vm.$v.storedItem.length.$touch()
-                          },
+                          blur: [
+                            function($event) {
+                              return _vm.$v.storedItem.length.$touch()
+                            },
+                            function($event) {
+                              return _vm.$forceUpdate()
+                            }
+                          ],
                           input: function($event) {
                             if ($event.target.composing) {
                               return
@@ -67546,7 +67578,7 @@ var render = function() {
                             _vm.$set(
                               _vm.storedItem,
                               "length",
-                              $event.target.value
+                              _vm._n($event.target.value)
                             )
                           }
                         }
@@ -67592,9 +67624,10 @@ var render = function() {
                         directives: [
                           {
                             name: "model",
-                            rawName: "v-model",
+                            rawName: "v-model.number",
                             value: _vm.storedItem.weight,
-                            expression: "storedItem.weight"
+                            expression: "storedItem.weight",
+                            modifiers: { number: true }
                           }
                         ],
                         staticClass: "form-control",
@@ -67607,9 +67640,14 @@ var render = function() {
                         },
                         domProps: { value: _vm.storedItem.weight },
                         on: {
-                          blur: function($event) {
-                            return _vm.$v.storedItem.weight.$touch()
-                          },
+                          blur: [
+                            function($event) {
+                              return _vm.$v.storedItem.weight.$touch()
+                            },
+                            function($event) {
+                              return _vm.$forceUpdate()
+                            }
+                          ],
                           input: function($event) {
                             if ($event.target.composing) {
                               return
@@ -67617,7 +67655,7 @@ var render = function() {
                             _vm.$set(
                               _vm.storedItem,
                               "weight",
-                              $event.target.value
+                              _vm._n($event.target.value)
                             )
                           }
                         }
@@ -67650,7 +67688,7 @@ var render = function() {
                 _c("div", { staticClass: "form-row" }, [
                   _c(
                     "div",
-                    { staticClass: "form-group col-md-8" },
+                    { staticClass: "form-group col-md-6" },
                     [
                       _c("suggestions-input", {
                         attrs: {
@@ -67697,6 +67735,91 @@ var render = function() {
                         "label",
                         {
                           staticClass: "col-form-label text-md-right",
+                          attrs: { for: "tariff" }
+                        },
+                        [_vm._v("Тариф")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.tariff,
+                              expression: "tariff"
+                            }
+                          ],
+                          staticClass: "form-control custom-select",
+                          attrs: { id: "tariff", required: "" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.tariff = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        _vm._l(_vm.tariffs, function(tariff) {
+                          return _c(
+                            "option",
+                            {
+                              domProps: { value: tariff },
+                              model: {
+                                value: _vm.tariffs,
+                                callback: function($$v) {
+                                  _vm.tariffs = $$v
+                                },
+                                expression: "tariffs"
+                              }
+                            },
+                            [
+                              _vm._v(
+                                _vm._s(tariff.name) +
+                                  "\n                                "
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      ),
+                      _vm._v(" "),
+                      _c("b-popover", {
+                        attrs: {
+                          show: _vm.$v.tariff.$error,
+                          variant: "danger",
+                          target: "tariff",
+                          placement: "bottom",
+                          content: "Выберите тариф из списка",
+                          triggers: "null"
+                        },
+                        on: {
+                          "update:show": function($event) {
+                            return _vm.$set(_vm.$v.tariff, "$error", $event)
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-group col-md-2" },
+                    [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-form-label text-md-right",
                           attrs: { for: "count" }
                         },
                         [_vm._v("Количество")]
@@ -67706,9 +67829,10 @@ var render = function() {
                         directives: [
                           {
                             name: "model",
-                            rawName: "v-model",
+                            rawName: "v-model.number",
                             value: _vm.storedItem.count,
-                            expression: "storedItem.count"
+                            expression: "storedItem.count",
+                            modifiers: { number: true }
                           }
                         ],
                         staticClass: "form-control",
@@ -67721,9 +67845,14 @@ var render = function() {
                         },
                         domProps: { value: _vm.storedItem.count },
                         on: {
-                          blur: function($event) {
-                            return _vm.$v.storedItem.count.$touch()
-                          },
+                          blur: [
+                            function($event) {
+                              return _vm.$v.storedItem.count.$touch()
+                            },
+                            function($event) {
+                              return _vm.$forceUpdate()
+                            }
+                          ],
                           input: function($event) {
                             if ($event.target.composing) {
                               return
@@ -67731,7 +67860,7 @@ var render = function() {
                             _vm.$set(
                               _vm.storedItem,
                               "count",
-                              $event.target.value
+                              _vm._n($event.target.value)
                             )
                           }
                         }

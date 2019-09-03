@@ -1,7 +1,7 @@
 <template>
     <div>
         <search-user-dropdown v-on:userSelected="onUserSelected"></search-user-dropdown>
-        <order-items-box :user="user"></order-items-box>
+        <order-items-box :user="user" :tariffs = "tariffs"></order-items-box>
     </div>
 </template>
 
@@ -12,7 +12,8 @@
             console.log(this.user)
         },
         props:{
-            user: null
+            user: null,
+            tariffs:Array
         },
         data(){
             return{
