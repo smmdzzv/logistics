@@ -5,22 +5,36 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int lowerLimit
- * @property int mediumLimit
- * @property int upperLimit
+ * @property double lowerLimit
+ * @property double mediumLimit
+ * @property double upperLimit
  * @property double discountForLowerLimit
  * @property double discountForMediumLimit
  * @property double pricePerCube
  * @property double agreedPricePerKg
  * @property double pricePerExtraKg
- * @property int maxWeightPerCube
- * @property int maxCubage
- * @property int maxWeight
+ * @property double maxWeightPerCube
+ * @property double maxCubage
+ * @property double maxWeight
  * @property int tariff_id
  * @property int branch_id
  */
 class TariffPriceHistory extends Model
 {
+    protected $casts = [
+        'lowerLimit' => 'double',
+        'mediumLimit' => 'double',
+        'upperLimit' => 'double',
+        'discountForLowerLimit' => 'double',
+        'discountForMediumLimit' => 'double',
+        'pricePerCube' => 'double',
+        'agreedPricePerKg' => 'double',
+        'pricePerExtraKg' => 'double',
+        'maxWeightPerCube' => 'double',
+        'maxCubage' => 'double',
+        'maxWeight' => 'double'
+    ];
+
     public function branch(){
         return $this->belongsTo(Branch::class);
     }

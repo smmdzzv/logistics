@@ -126,15 +126,15 @@
                                     triggers="null"/>
                             </div>
 
-<!--                            <div class="form-group col-md-2">-->
-<!--                                <label for="branch" class="col-form-label text-md-right">Филиал</label>-->
-<!--                                <select id="branch"-->
-<!--                                        class="form-control custom-select" required>-->
-<!--                                    <option v-model="branches"-->
-<!--                                            v-for="branch in branches">{{branch.name}}-->
-<!--                                    </option>-->
-<!--                                </select>-->
-<!--                            </div>-->
+                            <!--                            <div class="form-group col-md-2">-->
+                            <!--                                <label for="branch" class="col-form-label text-md-right">Филиал</label>-->
+                            <!--                                <select id="branch"-->
+                            <!--                                        class="form-control custom-select" required>-->
+                            <!--                                    <option v-model="branches"-->
+                            <!--                                            v-for="branch in branches">{{branch.name}}-->
+                            <!--                                    </option>-->
+                            <!--                                </select>-->
+                            <!--                            </div>-->
                             <div class="form-group col-md-2">
                                 <label for="branch" class="col-form-label text-md-right">Филиал</label>
                                 <input class="form-control" v-model="branch.name" name="branch" id="branch" disabled>
@@ -153,7 +153,7 @@
 
     export default {
         name: "StoredItemBox",
-        props:{
+        props: {
             branch: null,
             onStoredItemAdded: {
                 type: Function,
@@ -197,13 +197,12 @@
                     return value.name.toLowerCase().includes(query.toLowerCase())
                 });
             },
-            onItemSelected(item){
+            onItemSelected(item) {
                 this.storedItem.item = item;
-                console.log('on item selected/ item-.'+ this.storedItem.item.name)
             },
-            clearForm(e){
-                console.log('onclear')
-                if(e) e.preventDefault();
+            clearForm(e) {
+                console.log("clear form")
+                if (e) e.preventDefault();
                 this.storedItem.weight = '';
                 this.storedItem.height = '';
                 this.storedItem.length = '';
@@ -211,56 +210,62 @@
                 this.storedItem.count = '';
                 this.storedItem.item = null;
                 this.filteredItems = [];
-                this.$nextTick(()=>{
+                this.$nextTick(() => {
                     this.$v.$reset();
                     this.$refs.modal.hide()
                 })
             },
-            onAdded(e){
-                if(e) e.preventDefault();
+            onAdded(e) {
+                if (e) e.preventDefault();
 
-                if(this.$v.$invalid)
+                if (this.$v.$invalid)
                     this.$v.$touch();
-                else{
-                    let _item = $.extend(true, {}, this.storedItem);
+                else {
+                    let stored = $.extend(true, {}, this.storedItem);
 
-                    this.onStoredItemAdded(_item);
-                    this.clearForm(null);
+                    axios.get('/tariff-price-history/' + stored.item.tariff_id)
+                        .then(result => {
+                            stored.tariffPricing = result.data;
+                        })
+                        .then(result=>{
+                            this.onStoredItemAdded(stored);
+                            this.clearForm(null);
+                        });
                 }
             }
         },
         components: {
             SuggestionsInput: require('./SuggestionInput').default
         },
-        validations:{
-            storedItem:{
-                    width: {
-                        required,
-                        decimal,
-                        maxLength: maxLength(6)
-                    },
-                    height: {
-                        required,
-                        decimal,
-                        maxLength: maxLength(6)
-                    },
-                    length: {
-                        required,
-                        decimal,
-                        maxLength: maxLength(6)
-                    },
-                    weight: {
-                        required,
-                        decimal,
-                        maxLength: maxLength(6)
-                    },
-                    count: {
-                        required,
-                        integer,
-                        maxLength: maxLength(6)
-                    },
-                item:{
-                        required
+        validations: {
+            storedItem: {
+                width: {
+                    required,
+                    decimal,
+                    maxLength: maxLength(6)
+                },
+                height: {
+                    required,
+                    decimal,
+                    maxLength: maxLength(6)
+                },
+                length: {
+                    required,
+                    decimal,
+                    maxLength: maxLength(6)
+                },
+                weight: {
+                    required,
+                    decimal,
+                    maxLength: maxLength(6)
+                },
+                count: {
+                    required,
+                    integer,
+                    maxLength: maxLength(6)
+                },
+                item: {
+                    required
                 }
             }
         }

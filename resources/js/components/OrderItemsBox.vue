@@ -25,11 +25,11 @@
                 </li>
                 <li class="list-group-item">
                     <div class="row">
-                        <div class="col-md-4">Большой амортизатор</div>
-                        <div class="col-md-2">12,5 м<sup>3</sup></div>
-                        <div class="col-md-2">150 кг</div>
-                        <div class="col-md-2">{{this.getTotalPrice()}} $</div>
-                        <div class="col-md-2">
+                        <div class="col-sm-4 col-md-6">Большой амортизатор</div>
+                        <div class="col-sm-3 col-md-2">12,5 м<sup>3</sup></div>
+                        <div class="col-sm-3 col-md-2">150 кг</div>
+
+                        <div class="col-sm-2 col-md-2">
                             <img class="icon-btn-sm" src="/svg/delete.svg" alt="delete-item" @click="removeFromList()">
                         </div>
                     </div>
@@ -61,24 +61,52 @@
             onStoredItemAdded(storedItem) {
                 this.storedItems.push(storedItem)
             },
-            getTotalWeight(item) {
-                if (!item)
+            getTotalWeight(stored) {
+                if (!stored)
                     return null;
-                return item.weight * item.count;
+                let weight = stored.totalWeight = stored.weight * stored.count;
+                return weight.toFixed(2)
             },
-            getTotalCubage(item) {
-                if (!item)
+            getTotalCubage(stored) {
+                if (!stored)
                     return null;
-                return item.width * item.length * item.height * item.count;
+                let cubage = stored.totalCubage = stored.width * stored.length * stored.height * stored.count;
+                return cubage.toFixed(2);
             },
-            getTotalPrice() {
-                return 0
-            },
-            removeFromList(item) {
+            removeFromList(stored) {
                 this.storedItems = jQuery.grep(this.storedItems, function (value) {
-                    return value !== item;
+                    return value !== stored;
                 })
-            }
+            },
+
+            //tariffPricing is attached to storedItem in @StoredItemBox.vue onAdded
+            //tariffPricing properties are same as server version
+            getTotalPrice(stored) {
+                if(!stored)
+                    return null;
+                let sum = 0;
+
+                let tariff = stored.tariffPricing;
+
+                let weightPerCube = stored.totalWeight / stored.totalCubage;
+
+                if(weightPerCube >= tariff.maxWeightPerCube){
+                    sum = tariff.agreedPricePerKg * stored.totalWeight;
+                    return sum.toFixed(2);
+                }
+
+                let price = tariff.pricePerCube;
+                if(tariff.lowerLimit > 0 && weightPerCube <= tariff.lowerLimit)
+                    price = price - tariff.discountForLowerLimit;
+                else if(tariff.mediumLimit > 0 &&  weightPerCube <= tariff.mediumLimit)
+                    price = price - tariff.discountForMediumLimit;
+                else if(weightPerCube > tariff.upperLimit)
+                    price = price +(weightPerCube - tariff.upperLimit) * tariff.pricePerExtraKg;
+
+
+                sum = (price * stored.totalCubage);
+                return sum.toFixed(2);
+            },
         },
         components: {
             'StoredItemBox': require('./StoredItemBox').default

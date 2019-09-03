@@ -1801,21 +1801,38 @@ __webpack_require__.r(__webpack_exports__);
     onStoredItemAdded: function onStoredItemAdded(storedItem) {
       this.storedItems.push(storedItem);
     },
-    getTotalWeight: function getTotalWeight(item) {
-      if (!item) return null;
-      return item.weight * item.count;
+    getTotalWeight: function getTotalWeight(stored) {
+      if (!stored) return null;
+      var weight = stored.totalWeight = stored.weight * stored.count;
+      return weight.toFixed(2);
     },
-    getTotalCubage: function getTotalCubage(item) {
-      if (!item) return null;
-      return item.width * item.length * item.height * item.count;
+    getTotalCubage: function getTotalCubage(stored) {
+      if (!stored) return null;
+      var cubage = stored.totalCubage = stored.width * stored.length * stored.height * stored.count;
+      return cubage.toFixed(2);
     },
-    getTotalPrice: function getTotalPrice() {
-      return 0;
-    },
-    removeFromList: function removeFromList(item) {
+    removeFromList: function removeFromList(stored) {
       this.storedItems = jQuery.grep(this.storedItems, function (value) {
-        return value !== item;
+        return value !== stored;
       });
+    },
+    //tariffPricing is attached to storedItem in @StoredItemBox.vue onAdded
+    //tariffPricing properties are same as server version
+    getTotalPrice: function getTotalPrice(stored) {
+      if (!stored) return null;
+      var sum = 0;
+      var tariff = stored.tariffPricing;
+      var weightPerCube = stored.totalWeight / stored.totalCubage;
+
+      if (weightPerCube >= tariff.maxWeightPerCube) {
+        sum = tariff.agreedPricePerKg * stored.totalWeight;
+        return sum.toFixed(2);
+      }
+
+      var price = tariff.pricePerCube;
+      if (tariff.lowerLimit > 0 && weightPerCube <= tariff.lowerLimit) price = price - tariff.discountForLowerLimit;else if (tariff.mediumLimit > 0 && weightPerCube <= tariff.mediumLimit) price = price - tariff.discountForMediumLimit;else if (weightPerCube > tariff.upperLimit) price = price + (weightPerCube - tariff.upperLimit) * tariff.pricePerExtraKg;
+      sum = price * stored.totalCubage;
+      return sum.toFixed(2);
     }
   },
   components: {
@@ -2161,12 +2178,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     onItemSelected: function onItemSelected(item) {
       this.storedItem.item = item;
-      console.log('on item selected/ item-.' + this.storedItem.item.name);
     },
     clearForm: function clearForm(e) {
       var _this2 = this;
 
-      console.log('onclear');
+      console.log("clear form");
       if (e) e.preventDefault();
       this.storedItem.weight = '';
       this.storedItem.height = '';
@@ -2182,12 +2198,18 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     onAdded: function onAdded(e) {
+      var _this3 = this;
+
       if (e) e.preventDefault();
       if (this.$v.$invalid) this.$v.$touch();else {
-        var _item = $.extend(true, {}, this.storedItem);
+        var stored = $.extend(true, {}, this.storedItem);
+        axios.get('/tariff-price-history/' + stored.item.tariff_id).then(function (result) {
+          stored.tariffPricing = result.data;
+        }).then(function (result) {
+          _this3.onStoredItemAdded(stored);
 
-        this.onStoredItemAdded(_item);
-        this.clearForm(null);
+          _this3.clearForm(null);
+        });
       }
     }
   },
@@ -67077,19 +67099,17 @@ var render = function() {
             _vm._v(" "),
             _c("li", { staticClass: "list-group-item" }, [
               _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-md-4" }, [
+                _c("div", { staticClass: "col-sm-4 col-md-6" }, [
                   _vm._v("Большой амортизатор")
                 ]),
                 _vm._v(" "),
                 _vm._m(0),
                 _vm._v(" "),
-                _c("div", { staticClass: "col-md-2" }, [_vm._v("150 кг")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-md-2" }, [
-                  _vm._v(_vm._s(this.getTotalPrice()) + " $")
+                _c("div", { staticClass: "col-sm-3 col-md-2" }, [
+                  _vm._v("150 кг")
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "col-md-2" }, [
+                _c("div", { staticClass: "col-sm-2 col-md-2" }, [
                   _c("img", {
                     staticClass: "icon-btn-sm",
                     attrs: { src: "/svg/delete.svg", alt: "delete-item" },
@@ -67130,7 +67150,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-2" }, [
+    return _c("div", { staticClass: "col-sm-3 col-md-2" }, [
       _vm._v("12,5 м"),
       _c("sup", [_vm._v("3")])
     ])

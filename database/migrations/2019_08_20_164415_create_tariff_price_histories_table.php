@@ -17,17 +17,17 @@ class CreateTariffPriceHistoriesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('tariff_id');
             $table->unsignedBigInteger('branch_id');
-            $table->integer('lowerLimit');
-            $table->integer('mediumLimit');
-            $table->integer('upperLimit');
+            $table->double('lowerLimit');
+            $table->double('mediumLimit');
+            $table->double('upperLimit');
             $table->double('discountForLowerLimit');
             $table->double('discountForMediumLimit');
             $table->double('pricePerCube');
             $table->double('agreedPricePerKg');
             $table->double('pricePerExtraKg');
-            $table->integer('maxWeightPerCube');
-            $table->integer('maxWeight');
-            $table->integer('maxCubage');
+            $table->double('maxWeightPerCube');
+            $table->double('maxWeight');
+            $table->double('maxCubage');
             $table->timestamps();
         });
     }
