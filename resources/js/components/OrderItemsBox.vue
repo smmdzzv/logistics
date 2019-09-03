@@ -8,36 +8,58 @@
                     </button>
                 </div>
             </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item"
-                    v-model="storedItems"
-                    v-for="stored in storedItems">
-                    <div class="row" :key="stored.id">
-                        <div class="col-md-4"> {{stored.item.name}}</div>
-                        <div class="col-md-2"> {{getTotalCubage(stored)}} м<sup>3</sup></div>
-                        <div class="col-md-2"> {{getTotalWeight(stored)}} кг</div>
-                        <div class="col-md-2"> {{getTotalPrice(stored)}} $</div>
-                        <div class="col-md-2">
-                            <img class="icon-btn-sm" src="/svg/delete.svg" alt="delete-item"
-                                 @click="removeFromList(stored)">
+            <div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"
+                        v-model="storedItems"
+                        v-for="stored in storedItems">
+                        <div class="row" :key="stored.id">
+                            <div class="col-md-4"> {{stored.item.name}}</div>
+                            <div class="col-md-2"> {{getCubage(stored, true)}} м<sup>3</sup></div>
+                            <div class="col-md-2"> {{getWeight(stored, true)}} кг</div>
+                            <div class="col-md-2"> {{getPrice(stored, true)}} $</div>
+                            <div class="col-md-2">
+                                <img class="icon-btn-sm" src="/svg/delete.svg" alt="delete-item"
+                                     @click="removeFromList(stored)">
+                            </div>
                         </div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="row">
-                        <div class="col-sm-4 col-md-6">Большой амортизатор</div>
-                        <div class="col-sm-3 col-md-2">12,5 м<sup>3</sup></div>
-                        <div class="col-sm-3 col-md-2">150 кг</div>
+                    </li>
 
-                        <div class="col-sm-2 col-md-2">
-                            <img class="icon-btn-sm" src="/svg/delete.svg" alt="delete-item" @click="removeFromList()">
-                        </div>
-                    </div>
-                </li>
-                <li class="list-group-item" v-if="storedItems.length === 0">Для приема товара необходимо нажать кнопку
-                    добавить
-                </li>
-            </ul>
+                    <li class="list-group-item" v-if="storedItems.length === 0">Для приема товара необходимо нажать кнопку
+                        добавить
+                    </li>
+
+<!--                    <li class="list-group-item" >-->
+<!--                        <div class="row" >-->
+<!--                            <div class="col-md-5"> Мешок</div>-->
+<!--                            <div class="col-md-2"> 2 м<sup>3</sup></div>-->
+<!--                            <div class="col-md-2"> 100 кг</div>-->
+<!--                            <div class="col-md-2"> 1500 $</div>-->
+<!--                            <div class="col-md-1">-->
+<!--                                <img class="icon-btn-sm" src="/svg/delete.svg" alt="delete-item"-->
+<!--                                     @click="removeFromList(stored)">-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </li>-->
+
+                </ul>
+            </div>
+            <div class="card-footer" v-if="storedItems.length > 0">
+<!--                <div class="row">-->
+<!--                    <div class="col-md-5"> Итого</div>-->
+<!--                    <div class="col-md-2">8 м<sup>3</sup> </div>-->
+<!--                    <div class="col-md-2"> 100 кг</div>-->
+<!--                    <div class="col-md-2">12000 $ </div>-->
+<!--                    <div class="col-md-1"> </div>-->
+<!--                </div>-->
+                <div class="row" >
+                    <div class="col-md-4"> Итого</div>
+                    <div class="col-md-2" :property="storedItems">{{getTotalCubage()}} м<sup>3</sup> </div>
+                    <div class="col-md-2" :property="storedItems"> {{getTotalWeight()}} кг</div>
+                    <div class="col-md-2" :property="storedItems">{{getTotalPrice()}} $</div>
+                    <div class="col-md-2"> </div>
+                </div>
+            </div>
         </div>
         <stored-item-box :onStoredItemAdded="onStoredItemAdded" :branch="user.branch" :tariffs="tariffs"></stored-item-box>
     </div>
@@ -62,17 +84,17 @@
             onStoredItemAdded(storedItem) {
                 this.storedItems.push(storedItem)
             },
-            getTotalWeight(stored) {
+            getWeight(stored, fixedResult) {
                 if (!stored)
                     return null;
                 let weight = stored.totalWeight = stored.weight * stored.count;
-                return weight.toFixed(2)
+                return fixedResult? weight.toFixed(2) : weight;
             },
-            getTotalCubage(stored) {
+            getCubage(stored, fixedResult) {
                 if (!stored)
                     return null;
                 let cubage = stored.totalCubage = stored.width * stored.length * stored.height * stored.count;
-                return cubage.toFixed(2);
+                return fixedResult? cubage.toFixed(2) : cubage;
             },
             removeFromList(stored) {
                 this.storedItems = jQuery.grep(this.storedItems, function (value) {
@@ -82,18 +104,17 @@
 
             //tariffPricing is attached to storedItem in @StoredItemBox.vue onAdded
             //tariffPricing properties are same as server version
-            getTotalPrice(stored) {
+            getPrice(stored, fixedResult) {
                 if(!stored)
                     return null;
-                let sum = 0;
-
                 let tariff = stored.tariffPricing;
 
                 let weightPerCube = stored.totalWeight / stored.totalCubage;
 
                 if(weightPerCube >= tariff.maxWeightPerCube){
-                    sum = tariff.agreedPricePerKg * stored.totalWeight;
-                    return sum.toFixed(2);
+                    stored.price = tariff.agreedPricePerKg * stored.totalWeight;
+                    stored.price = Math.round(stored.price*10000)/10000;
+                    return fixedResult? stored.price.toFixed(2) : stored.price;
                 }
 
                 let price = tariff.pricePerCube;
@@ -105,9 +126,37 @@
                     price = price +(weightPerCube - tariff.upperLimit) * tariff.pricePerExtraKg;
 
 
-                sum = (price * stored.totalCubage);
+                stored.price = price * stored.totalCubage;
+                stored.price = Math.round(stored.price*10000)/10000;
+                return fixedResult? stored.price.toFixed(2) : stored.price;
+            },
+            getTotalPrice(){
+                let sum = 0;
+                for(let stored of this.storedItems){
+                    let price = stored.price;
+                    if(price)
+                        sum += price;
+                    else
+                        sum += this.getPrice(stored, false);
+                }
                 return sum.toFixed(2);
             },
+            getTotalWeight(){
+                let totalWeight = 0;
+                for(let stored of this.storedItems){
+                    let weight = this.getWeight(stored, false);
+                    totalWeight += weight;
+                }
+                return totalWeight.toFixed(2);
+            },
+            getTotalCubage(){
+                let totalCubage = 0;
+                for(let stored of this.storedItems){
+                    let cubage = this.getCubage(stored, false);
+                    totalCubage += cubage;
+                }
+                return totalCubage.toFixed(2);
+            }
         },
         components: {
             'StoredItemBox': require('./StoredItemBox').default

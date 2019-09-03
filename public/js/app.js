@@ -1785,6 +1785,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "OrderItemsBox",
   props: {
@@ -1803,15 +1825,15 @@ __webpack_require__.r(__webpack_exports__);
     onStoredItemAdded: function onStoredItemAdded(storedItem) {
       this.storedItems.push(storedItem);
     },
-    getTotalWeight: function getTotalWeight(stored) {
+    getWeight: function getWeight(stored, fixedResult) {
       if (!stored) return null;
       var weight = stored.totalWeight = stored.weight * stored.count;
-      return weight.toFixed(2);
+      return fixedResult ? weight.toFixed(2) : weight;
     },
-    getTotalCubage: function getTotalCubage(stored) {
+    getCubage: function getCubage(stored, fixedResult) {
       if (!stored) return null;
       var cubage = stored.totalCubage = stored.width * stored.length * stored.height * stored.count;
-      return cubage.toFixed(2);
+      return fixedResult ? cubage.toFixed(2) : cubage;
     },
     removeFromList: function removeFromList(stored) {
       this.storedItems = jQuery.grep(this.storedItems, function (value) {
@@ -1820,21 +1842,109 @@ __webpack_require__.r(__webpack_exports__);
     },
     //tariffPricing is attached to storedItem in @StoredItemBox.vue onAdded
     //tariffPricing properties are same as server version
-    getTotalPrice: function getTotalPrice(stored) {
+    getPrice: function getPrice(stored, fixedResult) {
       if (!stored) return null;
-      var sum = 0;
       var tariff = stored.tariffPricing;
       var weightPerCube = stored.totalWeight / stored.totalCubage;
 
       if (weightPerCube >= tariff.maxWeightPerCube) {
-        sum = tariff.agreedPricePerKg * stored.totalWeight;
-        return sum.toFixed(2);
+        stored.price = tariff.agreedPricePerKg * stored.totalWeight;
+        stored.price = Math.round(stored.price * 10000) / 10000;
+        return fixedResult ? stored.price.toFixed(2) : stored.price;
       }
 
       var price = tariff.pricePerCube;
       if (tariff.lowerLimit > 0 && weightPerCube <= tariff.lowerLimit) price = price - tariff.discountForLowerLimit;else if (tariff.mediumLimit > 0 && weightPerCube <= tariff.mediumLimit) price = price - tariff.discountForMediumLimit;else if (weightPerCube > tariff.upperLimit) price = price + (weightPerCube - tariff.upperLimit) * tariff.pricePerExtraKg;
-      sum = price * stored.totalCubage;
+      stored.price = price * stored.totalCubage;
+      stored.price = Math.round(stored.price * 10000) / 10000;
+      return fixedResult ? stored.price.toFixed(2) : stored.price;
+    },
+    getTotalPrice: function getTotalPrice() {
+      var sum = 0;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.storedItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var stored = _step.value;
+          var price = stored.price;
+          if (price) sum += price;else sum += this.getPrice(stored, false);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
       return sum.toFixed(2);
+    },
+    getTotalWeight: function getTotalWeight() {
+      var totalWeight = 0;
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = this.storedItems[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var stored = _step2.value;
+          var weight = this.getWeight(stored, false);
+          totalWeight += weight;
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+            _iterator2["return"]();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+
+      return totalWeight.toFixed(2);
+    },
+    getTotalCubage: function getTotalCubage() {
+      var totalCubage = 0;
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
+
+      try {
+        for (var _iterator3 = this.storedItems[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var stored = _step3.value;
+          var cubage = this.getCubage(stored, false);
+          totalCubage += cubage;
+        }
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+            _iterator3["return"]();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
+          }
+        }
+      }
+
+      return totalCubage.toFixed(2);
     }
   },
   components: {
@@ -67058,99 +67168,119 @@ var render = function() {
                   "btn btn-light offset-sm-4 offset-md-5  offset-lg-6",
                 on: { click: _vm.showModal }
               },
-              [_vm._v("Добавить\n                ")]
+              [_vm._v("Добавить\n                    ")]
             )
           ])
         ]),
         _vm._v(" "),
-        _c(
-          "ul",
-          { staticClass: "list-group list-group-flush" },
-          [
-            _vm._l(_vm.storedItems, function(stored) {
-              return _c(
-                "li",
-                {
-                  staticClass: "list-group-item",
-                  model: {
-                    value: _vm.storedItems,
-                    callback: function($$v) {
-                      _vm.storedItems = $$v
-                    },
-                    expression: "storedItems"
-                  }
-                },
-                [
-                  _c("div", { key: stored.id, staticClass: "row" }, [
-                    _c("div", { staticClass: "col-md-4" }, [
-                      _vm._v(" " + _vm._s(stored.item.name))
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-md-2" }, [
-                      _vm._v(" " + _vm._s(_vm.getTotalCubage(stored)) + " м"),
-                      _c("sup", [_vm._v("3")])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-md-2" }, [
-                      _vm._v(" " + _vm._s(_vm.getTotalWeight(stored)) + " кг")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-md-2" }, [
-                      _vm._v(" " + _vm._s(_vm.getTotalPrice(stored)) + " $")
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-md-2" }, [
-                      _c("img", {
-                        staticClass: "icon-btn-sm",
-                        attrs: { src: "/svg/delete.svg", alt: "delete-item" },
-                        on: {
-                          click: function($event) {
-                            return _vm.removeFromList(stored)
-                          }
-                        }
-                      })
-                    ])
-                  ])
-                ]
-              )
-            }),
-            _vm._v(" "),
-            _c("li", { staticClass: "list-group-item" }, [
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-sm-4 col-md-6" }, [
-                  _vm._v("Большой амортизатор")
-                ]),
-                _vm._v(" "),
-                _vm._m(0),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-sm-3 col-md-2" }, [
-                  _vm._v("150 кг")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-sm-2 col-md-2" }, [
-                  _c("img", {
-                    staticClass: "icon-btn-sm",
-                    attrs: { src: "/svg/delete.svg", alt: "delete-item" },
-                    on: {
-                      click: function($event) {
-                        return _vm.removeFromList()
-                      }
+        _c("div", [
+          _c(
+            "ul",
+            { staticClass: "list-group list-group-flush" },
+            [
+              _vm._l(_vm.storedItems, function(stored) {
+                return _c(
+                  "li",
+                  {
+                    staticClass: "list-group-item",
+                    model: {
+                      value: _vm.storedItems,
+                      callback: function($$v) {
+                        _vm.storedItems = $$v
+                      },
+                      expression: "storedItems"
                     }
-                  })
-                ])
+                  },
+                  [
+                    _c("div", { key: stored.id, staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-4" }, [
+                        _vm._v(" " + _vm._s(stored.item.name))
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-2" }, [
+                        _vm._v(
+                          " " + _vm._s(_vm.getCubage(stored, true)) + " м"
+                        ),
+                        _c("sup", [_vm._v("3")])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-2" }, [
+                        _vm._v(
+                          " " + _vm._s(_vm.getWeight(stored, true)) + " кг"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-2" }, [
+                        _vm._v(" " + _vm._s(_vm.getPrice(stored, true)) + " $")
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-2" }, [
+                        _c("img", {
+                          staticClass: "icon-btn-sm",
+                          attrs: { src: "/svg/delete.svg", alt: "delete-item" },
+                          on: {
+                            click: function($event) {
+                              return _vm.removeFromList(stored)
+                            }
+                          }
+                        })
+                      ])
+                    ])
+                  ]
+                )
+              }),
+              _vm._v(" "),
+              _vm.storedItems.length === 0
+                ? _c("li", { staticClass: "list-group-item" }, [
+                    _vm._v(
+                      "Для приема товара необходимо нажать кнопку\n                        добавить\n                    "
+                    )
+                  ])
+                : _vm._e()
+            ],
+            2
+          )
+        ]),
+        _vm._v(" "),
+        _vm.storedItems.length > 0
+          ? _c("div", { staticClass: "card-footer" }, [
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-md-4" }, [_vm._v(" Итого")]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "col-md-2",
+                    attrs: { property: _vm.storedItems }
+                  },
+                  [
+                    _vm._v(_vm._s(_vm.getTotalCubage()) + " м"),
+                    _c("sup", [_vm._v("3")])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "col-md-2",
+                    attrs: { property: _vm.storedItems }
+                  },
+                  [_vm._v(" " + _vm._s(_vm.getTotalWeight()) + " кг")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "col-md-2",
+                    attrs: { property: _vm.storedItems }
+                  },
+                  [_vm._v(_vm._s(_vm.getTotalPrice()) + " $")]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-2" })
               ])
-            ]),
-            _vm._v(" "),
-            _vm.storedItems.length === 0
-              ? _c("li", { staticClass: "list-group-item" }, [
-                  _vm._v(
-                    "Для приема товара необходимо нажать кнопку\n                добавить\n            "
-                  )
-                ])
-              : _vm._e()
-          ],
-          2
-        )
+            ])
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c("stored-item-box", {
@@ -67164,17 +67294,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-sm-3 col-md-2" }, [
-      _vm._v("12,5 м"),
-      _c("sup", [_vm._v("3")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
