@@ -2263,8 +2263,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     tariff: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-      integer: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["integer"]
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
     }
   }
 });

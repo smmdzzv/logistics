@@ -15,19 +15,21 @@ class TariffPriceHistoriesTableSeeder extends Seeder
     public function run()
     {
         $newPrice = new TariffPriceHistory();
-        $newPrice->lowerLimit = 100;
-        $newPrice->mediumLimit = 120;
-        $newPrice->upperLimit = 160;
+        $newPrice->lowerLimit = 110;
+        $newPrice->mediumLimit = 170;
+        $newPrice->upperLimit = 200;
         $newPrice->discountForLowerLimit = 10;
         $newPrice->discountForMediumLimit = 5;
-        $newPrice->pricePerCube = 165;
-        $newPrice->agreedPricePerKg = 0.47;
-        $newPrice->pricePerExtraKg = 0.7;
+        $newPrice->pricePerCube = 175;
+        $newPrice->agreedPricePerKg = 0.77;
+        $newPrice->pricePerExtraKg = 0.35;
         $newPrice->maxWeightPerCube = 250;
-        $newPrice->maxCubage = 180;
-        $newPrice->maxWeight = 30000;
+        $newPrice->maxCubage = 108;
+        $newPrice->maxWeight = 27000;
         $newPrice->branch_id = Branch::first()->id;
         $newPrice->tariff_id = Tariff::first()->id;
         $newPrice->save();
     }
+
+
 }

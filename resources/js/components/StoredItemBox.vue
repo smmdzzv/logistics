@@ -282,8 +282,7 @@
                 }
             },
             tariff: {
-                required,
-                integer
+                required
             }
         }
     }
