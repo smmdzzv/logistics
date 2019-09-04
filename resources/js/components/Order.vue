@@ -2,6 +2,13 @@
     <div>
         <search-user-dropdown v-on:userSelected="onUserSelected"></search-user-dropdown>
         <order-items-box :user="user" :tariffs = "tariffs"></order-items-box>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-right pt-4">
+                    <button class="btn btn-primary" @click="submitData()">Оформить заказ</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

@@ -156,6 +156,13 @@
                     totalCubage += cubage;
                 }
                 return totalCubage.toFixed(2);
+            },
+            submitData(){
+                if(this.storedItems.length > 0){
+                    axios.post('/order/store', {
+                        storedItems: this.storedItems
+                    })
+                }
             }
         },
         components: {

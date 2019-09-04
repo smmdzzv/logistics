@@ -14,6 +14,8 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $roleAdmin = Role::where('name', 'admin')->first();
+        $roleClient = Role::where('name', 'client')->first();
+        $roleEmployee = Role::where('name', 'employee')->first();
 
         $positionId = \App\Position::where('name', 'Администратор')->first()->id;
 
@@ -29,9 +31,7 @@ class UsersTableSeeder extends Seeder
         ]);
 
         $user->roles()->attach($roleAdmin);
-
-        $roleClient = Role::where('name', 'client')->first();
-
+        $user->roles()->attach($roleEmployee);
 
         $client = User::create([
             'name'=>'Рахматшох Бахтиеров',

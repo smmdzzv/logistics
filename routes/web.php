@@ -22,7 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 //Order
 Route::get('/order/create', 'OrdersController@create')->name('order.create');
-
+Route::post('/order/store', 'OrdersController@store');
 
 //Settings
 Route::get('/settings', 'AppSettingsController@show')->name('settings.show');

@@ -1704,6 +1704,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Order",
   mounted: function mounted() {
@@ -1945,6 +1952,13 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return totalCubage.toFixed(2);
+    },
+    submitData: function submitData() {
+      if (this.storedItems.length > 0) {
+        axios.post('/order/store', {
+          storedItems: this.storedItems
+        });
+      }
     }
   },
   components: {
@@ -67123,7 +67137,28 @@ var render = function() {
     [
       _c("search-user-dropdown", { on: { userSelected: _vm.onUserSelected } }),
       _vm._v(" "),
-      _c("order-items-box", { attrs: { user: _vm.user, tariffs: _vm.tariffs } })
+      _c("order-items-box", {
+        attrs: { user: _vm.user, tariffs: _vm.tariffs }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-12 text-right pt-4" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                on: {
+                  click: function($event) {
+                    return _vm.submitData()
+                  }
+                }
+              },
+              [_vm._v("Оформить заказ")]
+            )
+          ])
+        ])
+      ])
     ],
     1
   )
