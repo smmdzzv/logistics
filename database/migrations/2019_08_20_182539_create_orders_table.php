@@ -16,13 +16,16 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('client_id');
-            $table->string('status');
+            $table->unsignedBigInteger('registeredBy');
+            $table->string('status')->default('accepted');
             $table->double('totalWeight');
             $table->double('totalCubage');
             $table->double('totalPrice');
+            $table->double('totalDiscount');
             $table->timestamps();
 
             $table->index('client_id');
+            $table->index('registeredBy');
         });
     }
 

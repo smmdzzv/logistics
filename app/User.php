@@ -58,7 +58,7 @@ class User extends Authenticatable
     }
 
     public function storedItems(){
-        return $this->hasMany(StoredItem::class);
+        return $this->hasMany(StoredItem::class, 'owner_id');
     }
 
     /**
@@ -81,5 +81,9 @@ class User extends Authenticatable
 
     public function hasRole($role){
         return null !== $this->roles()->where('name', $role) -> first();
+    }
+
+    public function registeredOrders(){
+        return $this->hasMany(Order::class, 'registeredBy');
     }
 }

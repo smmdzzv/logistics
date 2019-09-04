@@ -35,7 +35,8 @@
             submitData(){
                 if(this.storedItems.length > 0){
                     axios.post('/order/store', {
-                        storedItems: this.storedItems
+                        storedItems: this.storedItems,
+                        clientId: this.client.id
                     })
                 }
             },

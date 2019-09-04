@@ -38,8 +38,9 @@ class StoredItem extends Model
 
     /**
      * @param $tariffId
+     * @return BillingInfo
      */
-    public function setPrice($tariffId){
+    public function getBillingInfo($tariffId){
         $tariffPricing = TariffPriceHistory::findOrFail($tariffId);
         $billingInfo = new BillingInfo();
         $billingInfo->tariffPricing();
@@ -70,7 +71,6 @@ class StoredItem extends Model
         $tariffPricing->billingInfos()->save($billingInfo);
         $this->billingInfo_id = $billingInfo->id;
 
-        //TODO remove
         return $billingInfo;
     }
 }

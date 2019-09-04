@@ -1733,7 +1733,8 @@ __webpack_require__.r(__webpack_exports__);
     submitData: function submitData() {
       if (this.storedItems.length > 0) {
         axios.post('/order/store', {
-          storedItems: this.storedItems
+          storedItems: this.storedItems,
+          clientId: this.client.id
         });
       }
     },

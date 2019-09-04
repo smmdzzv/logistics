@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Branch;
 use App\Http\Requests\StoreOrderRequest;
+use App\Order;
 use App\StoredItem;
 use App\Tariff;
+use App\User;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
@@ -18,6 +21,16 @@ class OrdersController extends Controller
 
     public function store(StoreOrderRequest $request){
         $storedItems = $request->get('storedItems');
+        $clientId =  $request->get('clientId');
+        $user = User::findOrFail($clientId);
+
+        $order = new Order();
+        $order->client_id = $clientId;
+        $order->totalCubage = 0;
+        $order->totalWeight = 0;
+        $order->totalPrice = 0;
+        $order->totalDiscount = 0;
+        auth()->user()->registeredOrders()->save($order);
 
         foreach ($storedItems as $itemData){
             $stored = new StoredItem();
@@ -26,8 +39,21 @@ class OrdersController extends Controller
             $stored->length = $itemData['length'];
             $stored->weight = $itemData['weight'];
             $stored->count = $itemData['count'];
-            return $stored->setPrice($itemData['tariffPricing']['id']);
-            return $stored;
+            $stored->item_id = $itemData['item']['id'];
+            $stored->branch_id = $itemData['branch']['id'];
+            $stored->order_id = $order->id;
+
+            $billing = $stored->getBillingInfo($itemData['tariffPricing']['id']);
+
+            $user->storedItems()->save($stored);
+
+            $order->totalCubage += $billing->totalCubage;
+            $order->totalWeight += $billing->totalWeight;
+            $order->totalPrice += $billing->totalPrice;
+            $order->totalDiscount += $billing->totalDiscount;
         }
+
+         $order->save();
+        return $order;
     }
 }

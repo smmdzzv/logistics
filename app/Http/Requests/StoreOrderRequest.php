@@ -29,6 +29,8 @@ class StoreOrderRequest extends FormRequest
     {
         $rules =['storedItems' =>'required|array'];
         foreach ($this->request->get('storedItems') as $key => $value){
+            $rules['clientId'] = 'required|exists:users,id';
+
             $rules['storedItems.'.$key.'.width'] = 'required|numeric';
             $rules['storedItems.'.$key.'.height'] = 'required|numeric';
             $rules['storedItems.'.$key.'.length'] = 'required|numeric';
