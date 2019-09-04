@@ -15,9 +15,9 @@
                         v-for="stored in storedItems">
                         <div class="row" :key="stored.id">
                             <div class="col-md-4"> {{stored.item.name}}</div>
-                            <div class="col-md-2"> {{getCubage(stored, true)}} м<sup>3</sup></div>
-                            <div class="col-md-2"> {{getWeight(stored, true)}} кг</div>
-                            <div class="col-md-2"> {{getPrice(stored, true)}} $</div>
+                            <div class="col-md-2"> {{getCubage(stored)}} м<sup>3</sup></div>
+                            <div class="col-md-2"> {{getWeight(stored)}} кг</div>
+                            <div class="col-md-2"> {{getPrice(stored)}} $</div>
                             <div class="col-md-2">
                                 <img class="icon-btn-sm" src="/svg/delete.svg" alt="delete-item"
                                      @click="removeFromList(stored)">
@@ -82,7 +82,8 @@
                 this.$bvModal.show('addItemModal');
             },
             onStoredItemAdded(storedItem) {
-                this.storedItems.push(storedItem)
+                this.storedItems.push(storedItem);
+                this.$emit('onStoredItemsChange', this.storedItems)
             },
             getWeight(stored, fixedResult) {
                 if (!stored)
@@ -99,12 +100,13 @@
             removeFromList(stored) {
                 this.storedItems = jQuery.grep(this.storedItems, function (value) {
                     return value !== stored;
-                })
+                });
+                this.$emit('onStoredItemsChange', this.storedItems);
             },
 
             //tariffPricing is attached to storedItem in @StoredItemBox.vue onAdded
             //tariffPricing properties are same as server version
-            getPrice(stored, fixedResult) {
+            getPrice(stored) {
                 if(!stored)
                     return null;
                 let tariff = stored.tariffPricing;
@@ -113,8 +115,8 @@
 
                 if(weightPerCube >= tariff.maxWeightPerCube){
                     stored.price = tariff.agreedPricePerKg * stored.totalWeight;
-                    stored.price = Math.round(stored.price*10000)/10000;
-                    return fixedResult? stored.price.toFixed(2) : stored.price;
+                    stored.price = Math.round(stored.price*100)/100;
+                    return stored.price
                 }
 
                 let price = tariff.pricePerCube;
@@ -127,8 +129,8 @@
 
 
                 stored.price = price * stored.totalCubage;
-                stored.price = Math.round(stored.price*10000)/10000;
-                return fixedResult? stored.price.toFixed(2) : stored.price;
+                stored.price = Math.round(stored.price*100)/100;
+                return stored.price;
             },
             getTotalPrice(){
                 let sum = 0;
@@ -137,7 +139,7 @@
                     if(price)
                         sum += price;
                     else
-                        sum += this.getPrice(stored, false);
+                        sum += this.getPrice(stored);
                 }
                 return sum.toFixed(2);
             },
@@ -156,13 +158,6 @@
                     totalCubage += cubage;
                 }
                 return totalCubage.toFixed(2);
-            },
-            submitData(){
-                if(this.storedItems.length > 0){
-                    axios.post('/order/store', {
-                        storedItems: this.storedItems
-                    })
-                }
             }
         },
         components: {

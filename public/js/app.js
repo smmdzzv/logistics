@@ -1722,12 +1722,23 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      client: null
+      client: null,
+      storedItems: []
     };
   },
   methods: {
     onUserSelected: function onUserSelected(user) {
       this.client = user;
+    },
+    submitData: function submitData() {
+      if (this.storedItems.length > 0) {
+        axios.post('/order/store', {
+          storedItems: this.storedItems
+        });
+      }
+    },
+    onStoredItemsChange: function onStoredItemsChange(items) {
+      if (items) this.storedItems = items;
     }
   },
   components: {
@@ -1831,6 +1842,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     onStoredItemAdded: function onStoredItemAdded(storedItem) {
       this.storedItems.push(storedItem);
+      this.$emit('onStoredItemsChange', this.storedItems);
     },
     getWeight: function getWeight(stored, fixedResult) {
       if (!stored) return null;
@@ -1846,25 +1858,26 @@ __webpack_require__.r(__webpack_exports__);
       this.storedItems = jQuery.grep(this.storedItems, function (value) {
         return value !== stored;
       });
+      this.$emit('onStoredItemsChange', this.storedItems);
     },
     //tariffPricing is attached to storedItem in @StoredItemBox.vue onAdded
     //tariffPricing properties are same as server version
-    getPrice: function getPrice(stored, fixedResult) {
+    getPrice: function getPrice(stored) {
       if (!stored) return null;
       var tariff = stored.tariffPricing;
       var weightPerCube = stored.totalWeight / stored.totalCubage;
 
       if (weightPerCube >= tariff.maxWeightPerCube) {
         stored.price = tariff.agreedPricePerKg * stored.totalWeight;
-        stored.price = Math.round(stored.price * 10000) / 10000;
-        return fixedResult ? stored.price.toFixed(2) : stored.price;
+        stored.price = Math.round(stored.price * 100) / 100;
+        return stored.price;
       }
 
       var price = tariff.pricePerCube;
       if (tariff.lowerLimit > 0 && weightPerCube <= tariff.lowerLimit) price = price - tariff.discountForLowerLimit;else if (tariff.mediumLimit > 0 && weightPerCube <= tariff.mediumLimit) price = price - tariff.discountForMediumLimit;else if (weightPerCube > tariff.upperLimit) price = price + (weightPerCube - tariff.upperLimit) * tariff.pricePerExtraKg;
       stored.price = price * stored.totalCubage;
-      stored.price = Math.round(stored.price * 10000) / 10000;
-      return fixedResult ? stored.price.toFixed(2) : stored.price;
+      stored.price = Math.round(stored.price * 100) / 100;
+      return stored.price;
     },
     getTotalPrice: function getTotalPrice() {
       var sum = 0;
@@ -1876,7 +1889,7 @@ __webpack_require__.r(__webpack_exports__);
         for (var _iterator = this.storedItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var stored = _step.value;
           var price = stored.price;
-          if (price) sum += price;else sum += this.getPrice(stored, false);
+          if (price) sum += price;else sum += this.getPrice(stored);
         }
       } catch (err) {
         _didIteratorError = true;
@@ -1952,13 +1965,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return totalCubage.toFixed(2);
-    },
-    submitData: function submitData() {
-      if (this.storedItems.length > 0) {
-        axios.post('/order/store', {
-          storedItems: this.storedItems
-        });
-      }
     }
   },
   components: {
@@ -67138,25 +67144,28 @@ var render = function() {
       _c("search-user-dropdown", { on: { userSelected: _vm.onUserSelected } }),
       _vm._v(" "),
       _c("order-items-box", {
-        attrs: { user: _vm.user, tariffs: _vm.tariffs }
+        attrs: { user: _vm.user, tariffs: _vm.tariffs },
+        on: { onStoredItemsChange: _vm.onStoredItemsChange }
       }),
       _vm._v(" "),
       _c("div", { staticClass: "container" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-md-12 text-right pt-4" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary",
-                on: {
-                  click: function($event) {
-                    return _vm.submitData()
-                  }
-                }
-              },
-              [_vm._v("Оформить заказ")]
-            )
-          ])
+          _vm.storedItems.length > 0
+            ? _c("div", { staticClass: "col-md-12 text-right pt-4" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    on: {
+                      click: function($event) {
+                        return _vm.submitData()
+                      }
+                    }
+                  },
+                  [_vm._v("Оформить заказ")]
+                )
+              ])
+            : _vm._e()
         ])
       ])
     ],
@@ -67233,20 +67242,16 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-md-2" }, [
-                        _vm._v(
-                          " " + _vm._s(_vm.getCubage(stored, true)) + " м"
-                        ),
+                        _vm._v(" " + _vm._s(_vm.getCubage(stored)) + " м"),
                         _c("sup", [_vm._v("3")])
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-md-2" }, [
-                        _vm._v(
-                          " " + _vm._s(_vm.getWeight(stored, true)) + " кг"
-                        )
+                        _vm._v(" " + _vm._s(_vm.getWeight(stored)) + " кг")
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-md-2" }, [
-                        _vm._v(" " + _vm._s(_vm.getPrice(stored, true)) + " $")
+                        _vm._v(" " + _vm._s(_vm.getPrice(stored)) + " $")
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-md-2" }, [

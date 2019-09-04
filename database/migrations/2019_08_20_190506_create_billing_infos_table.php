@@ -15,12 +15,15 @@ class CreateBillingInfosTable extends Migration
     {
         Schema::create('billing_infos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('tariffPrice_id');
-                $table->integer('placesCount');
-            $table->double('cubage');
+            $table->unsignedBigInteger('tariff_price_history_id');
+//            $table->integer('placesCount');
+            $table->double('totalCubage');
             $table->double('totalWeight');
             $table->double('weightPerCube');
+            $table->double('pricePerItem');
             $table->double('totalPrice');
+            $table->double('discountPerCube');
+            $table->double('totalDiscount');
             $table->timestamps();
         });
     }
