@@ -75,6 +75,18 @@
         <main class="py-4">
             @yield('content')
         </main>
+        <b-modal
+            no-close-on-esc
+            no-close-on-backdrop
+            hide-footer
+            hide-header
+            centered
+            content-class="bg-transparent border-0"
+            id="busyModal">
+            <div class="d-block text-center">
+                <b-spinner variant="light" label="Busy" style="width: 6rem; height: 6rem"/>
+            </div>
+        </b-modal>
     </div>
 </body>
 </html>
