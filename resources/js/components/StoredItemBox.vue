@@ -160,7 +160,7 @@
 </template>
 
 <script>
-    import {required, maxLength, decimal, integer, not} from 'vuelidate/lib/validators';
+    import {required, maxLength, decimal, integer} from 'vuelidate/lib/validators';
 
     export default {
         name: "StoredItemBox",

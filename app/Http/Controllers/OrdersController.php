@@ -12,6 +12,18 @@ use Illuminate\Http\Request;
 
 class OrdersController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
+    public function index(){
+
+    }
+
+    public function show(Order $order){
+        return $order;
+    }
+
     public function create(){
         $user = auth()->user();
         auth()->user()->branch;
@@ -55,5 +67,9 @@ class OrdersController extends Controller
 
          $order->save();
         return $order;
+    }
+
+    public function update(StoreOrderRequest $request){
+
     }
 }
