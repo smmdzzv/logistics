@@ -12914,3 +12914,7 @@ input[type=color].form-control:disabled {
   background-color: #343a40;
 }
 
+.icon-btn-sm {
+  width: 18px;
+}
+

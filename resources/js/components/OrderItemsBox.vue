@@ -167,7 +167,5 @@
 </script>
 
 <style scoped>
-    .icon-btn-sm {
-        width: 18px;
-    }
+
 </style>

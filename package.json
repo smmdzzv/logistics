@@ -20,13 +20,13 @@
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",
-        "vue": "^2.6.10",
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "@chenfengyuan/vue-qrcode": "^1.0.1",
         "@xkeshi/vue-barcode": "github:xkeshi/vue-barcode",
-        "@xkeshi/vue-qrcode": "^1.0.0",
         "bootstrap-vue": "^2.0.0-rc.28",
+        "vue": "^2.6.10",
         "vuelidate": "^0.7.4"
     }
 }

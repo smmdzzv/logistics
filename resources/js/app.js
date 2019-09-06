@@ -24,7 +24,8 @@ window.Vue.use(Vuelidate);
 
 Vue.component('OrderEditor', require('./components/OrderEditor.vue').default);
 Vue.component('OrderViewer', require('./components/OrderViewer.vue').default);
-
+Vue.component('Barcode', require('@xkeshi/vue-barcode').default);
+Vue.component('QrCode', require('@chenfengyuan/vue-qrcode').default);
 //Vue.component('search-user-dropdown', require('./components/SearchUserDropdown.vue').default);
 
 /**
