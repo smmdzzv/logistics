@@ -33,7 +33,7 @@ class StoredItem extends Model
     }
 
     public function billingInfo(){
-        return $this->belongsTo(BillingInfo::class);
+        return $this->hasOne(BillingInfo::class);
     }
 
     /**
@@ -68,8 +68,9 @@ class StoredItem extends Model
         $billingInfo->totalDiscount = $billingInfo->discountPerCube * $this->count;
         $billingInfo->totalPrice = $billingInfo->pricePerItem * $billingInfo->totalCubage;
 
-        $tariffPricing->billingInfos()->save($billingInfo);
-        $this->billingInfo_id = $billingInfo->id;
+        $billingInfo->tariff_price_history_id = $tariffPricing->id;
+//        $tariffPricing->billingInfos()->save($billingInfo);
+//        $this->billingInfo_id = $billingInfo->id;
 
         return $billingInfo;
     }

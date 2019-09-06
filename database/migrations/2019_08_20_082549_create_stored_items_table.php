@@ -19,7 +19,7 @@ class CreateStoredItemsTable extends Migration
             $table->unsignedBigInteger('owner_id');
             $table->unsignedBigInteger('branch_id');
             $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('billingInfo_id');
+//            $table->unsignedBigInteger('billingInfo_id');
             $table->double('weight');
             $table->double('height');
             $table->double('width');

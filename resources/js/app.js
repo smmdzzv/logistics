@@ -22,7 +22,8 @@ window.Vue.use(Vuelidate);
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('order', require('./components/Order.vue').default);
+Vue.component('OrderEditor', require('./components/OrderEditor.vue').default);
+Vue.component('OrderViewer', require('./components/OrderViewer.vue').default);
 
 //Vue.component('search-user-dropdown', require('./components/SearchUserDropdown.vue').default);
 

@@ -18,6 +18,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('client_id');
             $table->unsignedBigInteger('registeredBy');
             $table->string('status')->default('accepted');
+            $table->double('totalCount');
             $table->double('totalWeight');
             $table->double('totalCubage');
             $table->double('totalPrice');

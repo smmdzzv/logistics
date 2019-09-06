@@ -18,4 +18,8 @@ class BillingInfo extends Model
     public function tariffPricing(){
         return $this->belongsTo(TariffPriceHistory::class);
     }
+
+    public function storedItem(){
+        return $this->belongsTo(StoredItem::class);
+    }
 }

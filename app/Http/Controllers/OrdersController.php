@@ -21,7 +21,8 @@ class OrdersController extends Controller
     }
 
     public function show(Order $order){
-        return $order;
+        $order->load(['storedItems.billingInfo', 'storedItems.item']);
+        return view('orders.show', compact('order'));
     }
 
     public function create(){
@@ -42,6 +43,8 @@ class OrdersController extends Controller
         $order->totalWeight = 0;
         $order->totalPrice = 0;
         $order->totalDiscount = 0;
+        $order->totalCount = 0;
+
         auth()->user()->registeredOrders()->save($order);
 
         foreach ($storedItems as $itemData){
@@ -55,14 +58,18 @@ class OrdersController extends Controller
             $stored->branch_id = $itemData['branch']['id'];
             $stored->order_id = $order->id;
 
+            $user->storedItems()->save($stored);
+
             $billing = $stored->getBillingInfo($itemData['tariffPricing']['id']);
 
-            $user->storedItems()->save($stored);
+            $billing->storedItem()->associate($stored);
+            $billing->save();
 
             $order->totalCubage += $billing->totalCubage;
             $order->totalWeight += $billing->totalWeight;
             $order->totalPrice += $billing->totalPrice;
             $order->totalDiscount += $billing->totalDiscount;
+            $order->totalCount += $itemData['count'];
         }
 
          $order->save();
