@@ -20,7 +20,7 @@ class RoleMiddleware
         if(in_array("guest", (array)$roles) || $user !== null && $user->hasRole('admin'))
             return $next($request);
 
-        foreach($roles as $role) {
+        foreach((array)$roles as $role) {
             if($user->hasRole($role))
                 return $next($request);
         };

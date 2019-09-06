@@ -17,7 +17,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+Route::get('/home', 'HomeController@index')->name('home');
+
+//Registration
+Route::get('user/create', 'UsersController@create')->middleware('role:employee');
+Route::post('user/store', 'UsersController@store')->middleware('role:employee')->name('register-manual');
 
 //Order
 Route::get('/order', 'OrdersController@index');

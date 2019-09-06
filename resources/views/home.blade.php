@@ -9,8 +9,9 @@
 
                 <div class="card-body">
                     <ul>
-                        <li><a href="/settings">Settings</a></li>
-                        <li><a href="/order/create">Create Order</a></li>
+                        <li><a href="/settings">Настройки</a></li>
+                        <li><a href="/user/create">Регистрация пользователей</a></li>
+                        <li><a href="/order/create">Оформить заказ</a></li>
                     </ul>
                 </div>
             </div>

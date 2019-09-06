@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('content')
@@ -9,7 +8,12 @@
                 <div class="card-header">{{ __('Register') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    @auth
+                        <form method="POST" action="{{ route('register-manual') }}">
+                    @endauth
+                    @guest
+                        <form method="POST" action="{{ route('register') }}">
+                    @endguest
                         @csrf
 
                         <div class="form-group row">
@@ -41,25 +45,6 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="position-name" class="col-md-4 col-form-label text-md-right">Должность</label>
-
-                            <div class="col-md-6">
-                                <input id="position-name"
-                                       type="text"
-                                       class="form-control @error('position') is-invalid @enderror"
-                                       name="position-name"
-                                       value="{{ old('position') }}"
-                                       autocomplete="position-name">
-
-                                @error('position')
-                                <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">Пароль</label>
 
                             <div class="col-md-6">
@@ -81,10 +66,80 @@
                             </div>
                         </div>
 
+                        @auth
+                            <div class="form-group row">
+                                <label for="position-name" class="col-md-4 col-form-label text-md-right">Должность</label>
+
+                                <div class="col-md-6">
+                                    <input id="position-name"
+                                           type="text"
+                                           class="form-control @error('position') is-invalid @enderror"
+                                           name="position-name"
+                                           value="{{ old('position') }}"
+                                           autocomplete="position-name" required>
+
+                                    @error('position')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        @isset($branches)
+                            <div class="form-group row">
+                                <label for="branch" class="col-md-4 col-form-label text-md-right">Филиал</label>
+
+                                <div class="col-md-6">
+                                    <select id="branch"
+                                           type="text"
+                                           class="form-control custom-select @error('branch') is-invalid @enderror"
+                                           name="branch"
+                                           value="{{ old('branch') }}"
+                                           autocomplete="branch" required>
+
+                                        @foreach($branches as $branch)
+                                            <option value="{{$branch->id}}">{{$branch->name}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('position')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            @endisset
+
+                            @isset($roles)
+                                <div class="form-group row">
+                                    <label for="roles" class="col-md-4 col-form-label text-md-right">Роли</label>
+
+                                    <div class="col-md-6">
+                                        <select id="roles"
+                                                class="form-control custom-select @error('roles') is-invalid @enderror"
+                                                name="roles[]"
+                                                multiple="multiple"
+                                                value="{{ old('roles') }}"
+                                                autocomplete="roles" required>
+
+                                            @foreach($roles as $role)
+                                                <option value="{{$role->id}}">{{$role->title}}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('position')
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            @endisset
+                        @endauth
+
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
+                                    {{ __('Регистрация') }}
                                 </button>
                             </div>
                         </div>
