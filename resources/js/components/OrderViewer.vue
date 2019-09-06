@@ -18,6 +18,9 @@
             <template slot="FOOT[billing_info.totalWeight]" slot-scope="data">
                 <span>{{order.totalWeight}}</span>
             </template>
+            <template slot="HEAD[billing_info.totalCubage]" slot-scope="data">
+                <span>Общая кубатура, м<sup>3</sup></span>
+            </template>
             <template slot="FOOT[billing_info.totalCubage]" slot-scope="data">
                 <span>{{order.totalCubage}}</span>
             </template>

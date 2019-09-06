@@ -53,7 +53,9 @@
                         const response = await axios.post('/order/store', {
                             storedItems: this.storedItems,
                             clientId: this.client.id
-                        })
+                        });
+
+                        window.location.href = '/order/' + response.data.id;
                     } catch (e) {
                         //TODO
                     }

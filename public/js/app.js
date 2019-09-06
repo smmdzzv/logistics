@@ -1771,7 +1771,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 if (!(this.client && this.storedItems.length > 0)) {
-                  _context.next = 12;
+                  _context.next = 13;
                   break;
                 }
 
@@ -1785,29 +1785,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 5:
                 response = _context.sent;
-                _context.next = 10;
+                window.location.href = '/order/' + response.data.id;
+                _context.next = 11;
                 break;
 
-              case 8:
-                _context.prev = 8;
+              case 9:
+                _context.prev = 9;
                 _context.t0 = _context["catch"](2);
 
-              case 10:
-                _context.next = 13;
+              case 11:
+                _context.next = 14;
                 break;
 
-              case 12:
+              case 13:
                 if (!this.client) this.clientError = true;
 
-              case 13:
+              case 14:
                 this.$bvModal.hide('busyModal');
 
-              case 14:
+              case 15:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[2, 8]]);
+        }, _callee, this, [[2, 9]]);
       }));
 
       function submitData() {
@@ -2062,6 +2063,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -68162,12 +68166,16 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-md-2" }, [
-                        _vm._v(" " + _vm._s(_vm.getCubage(stored)) + " м"),
+                        _vm._v(
+                          " " + _vm._s(_vm.getCubage(stored, true)) + " м"
+                        ),
                         _c("sup", [_vm._v("3")])
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-md-2" }, [
-                        _vm._v(" " + _vm._s(_vm.getWeight(stored)) + " кг")
+                        _vm._v(
+                          " " + _vm._s(_vm.getWeight(stored, true)) + " кг"
+                        )
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-md-2" }, [
@@ -68310,6 +68318,17 @@ var render = function() {
             key: "FOOT[billing_info.totalWeight]",
             fn: function(data) {
               return [_c("span", [_vm._v(_vm._s(_vm.order.totalWeight))])]
+            }
+          },
+          {
+            key: "HEAD[billing_info.totalCubage]",
+            fn: function(data) {
+              return [
+                _c("span", [
+                  _vm._v("Общая кубатура, м"),
+                  _c("sup", [_vm._v("3")])
+                ])
+              ]
             }
           },
           {

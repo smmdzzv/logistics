@@ -15,8 +15,8 @@
                         v-for="stored in storedItems">
                         <div class="row" :key="stored.id">
                             <div class="col-md-4"> {{stored.item.name}}</div>
-                            <div class="col-md-2"> {{getCubage(stored)}} м<sup>3</sup></div>
-                            <div class="col-md-2"> {{getWeight(stored)}} кг</div>
+                            <div class="col-md-2"> {{getCubage(stored, true)}} м<sup>3</sup></div>
+                            <div class="col-md-2"> {{getWeight(stored, true)}} кг</div>
                             <div class="col-md-2"> {{getPrice(stored)}} $</div>
                             <div class="col-md-2">
                                 <img class="icon-btn-sm" src="/svg/delete.svg" alt="delete-item"
