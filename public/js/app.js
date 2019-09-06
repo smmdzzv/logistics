@@ -8175,6 +8175,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "OrderViewer",
   props: {
@@ -73923,7 +73926,9 @@ var render = function() {
             id: "shortItemInfoModal",
             size: "sm",
             "no-close-on-esc": "",
-            title: "Распечатать бирки"
+            title: "Распечатать бирки?",
+            "ok-title": "Да",
+            "cancel-title": "Отменить"
           },
           on: {
             hidden: function($event) {

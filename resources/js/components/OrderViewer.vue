@@ -66,7 +66,10 @@
         <b-modal id="shortItemInfoModal"
                  size="sm"
                  no-close-on-esc
-                 title="Распечатать бирки" @hidden="onModalHidden()">
+                 title="Распечатать бирки?"
+                 ok-title="Да"
+                 cancel-title="Отменить"
+                 @hidden="onModalHidden()">
             <stored-item-short-info v-for="item in itemsToShow" :storedItem="item" :key="item.id"></stored-item-short-info>
         </b-modal>
     </div>
