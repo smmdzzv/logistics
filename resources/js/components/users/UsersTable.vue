@@ -41,8 +41,10 @@
             title: function () {
                 if (this.type === 'clients')
                     return 'Список клиентов';
-                else
+                if(this.type === 'stuff')
                     return 'Список сотрдуников';
+                else
+                    return 'Список пользователйе';
             }
         },
         data() {
