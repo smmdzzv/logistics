@@ -13,6 +13,8 @@
                         <li><a href="/user/create">Регистрация пользователей</a></li>
                         <li><a href="/order/create">Оформить заказ</a></li>
                         <li><a href="/tariff/create">Редактирование тарифов</a></li>
+                        <li><a href="/tariff-price-history/create">Редактирование тарифных планов</a></li>
+                        <li><a href="/tariff-price-history">Список историй тарифных планов</a></li>
                     </ul>
                 </div>
             </div>

@@ -40,7 +40,11 @@ Route::get('/tariff/create', "TariffsController@create")->middleware('role:admin
 Route::post('/tariff/store', "TariffsController@store")->middleware('role:admin')->name('store-tariff');
 Route::delete('/tariff/{tariff}', "TariffsController@delete")->middleware('role:admin');
 
-Route::get('/tariff-price-history/{tariff}', "TariffsController@lastByTariff")->middleware('role:employee');
+//Tariff price histories
+Route::get('/tariff-price-history/', 'TariffPriceHistoriesController@index')->middleware('role:admin');
+Route::get('/tariff-price-history/create', 'TariffPriceHistoriesController@create')->middleware('role:admin');
+Route::post('/tariff-price-history/store', 'TariffPriceHistoriesController@store')->middleware('role:admin')->name('store-pricing-history');
+Route::get('/tariff-price-history/{tariff}', "TariffPriceHistoriesController@lastByTariff")->middleware('role:employee');
 
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo')->middleware('role:employee');
 

@@ -26,6 +26,7 @@ Vue.component('OrderEditor', require('./components/OrderEditor.vue').default);
 Vue.component('OrderViewer', require('./components/OrderViewer.vue').default);
 
 Vue.component('TariffEditor', require('./components/tariffs/TariffEditor.vue').default);
+Vue.component('TariffHistoriesViewer', require('./components/tariffs/TariffHistoriesViewer.vue').default);
 
 Vue.component('Barcode', require('@xkeshi/vue-barcode').default);
 Vue.component('QrCode', require('@chenfengyuan/vue-qrcode').default);

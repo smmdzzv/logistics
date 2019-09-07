@@ -61,6 +61,14 @@ class User extends Authenticatable
         return $this->hasMany(StoredItem::class, 'owner_id');
     }
 
+    public function orders(){
+        return $this->hasMany(Order::class, 'owner_id');
+    }
+
+    public function registeredOrders(){
+        return $this->hasMany(Order::class, 'registeredBy');
+    }
+
     /**
      * @param string|array $roles
      * @return bool
@@ -81,9 +89,5 @@ class User extends Authenticatable
 
     public function hasRole($role){
         return null !== $this->roles()->where('name', $role) -> first();
-    }
-
-    public function registeredOrders(){
-        return $this->hasMany(Order::class, 'registeredBy');
     }
 }

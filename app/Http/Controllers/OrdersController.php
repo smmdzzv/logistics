@@ -21,7 +21,7 @@ class OrdersController extends Controller
     }
 
     public function show(Order $order){
-        $order->load(['storedItems.billingInfo', 'storedItems.item']);
+        $order->load(['storedItems.billingInfo', 'storedItems.item', 'owner']);
         return view('orders.show', compact('order'));
     }
 
@@ -38,7 +38,7 @@ class OrdersController extends Controller
         $user = User::findOrFail($clientId);
 
         $order = new Order();
-        $order->client_id = $clientId;
+        $order->owner_id = $clientId;
         $order->totalCubage = 0;
         $order->totalWeight = 0;
         $order->totalPrice = 0;

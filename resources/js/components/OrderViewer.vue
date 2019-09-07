@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-8">
                 <p>
-                    Клиент: <span class="font-weight-bold">Султоназар Мамадазизов</span>
+                    Клиент: <span class="font-weight-bold">{{order.owner.name}}</span>
                 </p>
             </div>
             <div class="col-md-4 text-right">
@@ -79,8 +79,7 @@
     export default {
         name: "OrderViewer",
         props: {
-            order: Object,
-            owner: Object
+            order: Object
         },
         computed: {
             orderUrl: function () {

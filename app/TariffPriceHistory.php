@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TariffPriceHistory extends Model
 {
+    protected $guarded = [];
+
     protected $casts = [
         'lowerLimit' => 'double',
         'mediumLimit' => 'double',
@@ -41,5 +43,9 @@ class TariffPriceHistory extends Model
 
     public function billingInfos(){
         return $this->hasMany(BillingInfo::class);
+    }
+
+    public function tariff(){
+        return $this->belongsTo(Tariff::class);
     }
 }

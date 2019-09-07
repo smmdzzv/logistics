@@ -12,21 +12,6 @@ class TariffsController extends Controller
         $this->middleware('auth');
     }
 
-//    protected function validator(array $data)
-//    {
-//        return Validator::make($data, [
-//            'name' => 'required|string|max:255',
-//            'description' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-//            'password' => ['required', 'string', 'min:8', 'confirmed'],
-//            'roles' => ['required', 'array'],
-//            'branch' => ['required', 'exists:branches,id']
-//        ]);
-//    }
-
-    public function lastByTariff(Tariff $tariff){
-        return $tariff->lastPriceHistory();
-    }
-
     public function create(){
         $tariffs = Tariff::all();
         return view('tariffs.create', compact('tariffs'));

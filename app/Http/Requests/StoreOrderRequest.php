@@ -10,17 +10,6 @@ class StoreOrderRequest extends FormRequest
     use SanitizesInput;
 
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        //TODO employee
-        return $this->user()->hasRole('employee');
-    }
-
-    /**
      *  Validation rules to be applied to the input.
      *
      *  @return array
