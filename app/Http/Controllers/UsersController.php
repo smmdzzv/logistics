@@ -8,9 +8,21 @@ use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'roles' => ['required', 'array'],
+            'branch' => ['required', 'exists:branches,id']
+        ]);
+    }
+
     public function create(){
         $branches = Branch::all();
         $roles = $this->getRoles();
@@ -20,7 +32,7 @@ class UsersController extends Controller
 
     //TODO validation
     public function store(){
-        $data = request()->all();
+        $data = $this->validator(request()->all());
         $positionId = $data['position-name']? Position::firstOrCreate(['name'=> $data['position-name']]) -> id : null;
 
         $user = User::create([
