@@ -57,8 +57,16 @@ class UsersController extends Controller
         return redirect(route('home'));
     }
 
-    private function attachRoles($user){
+    public function clients(){
+        $users = Role::where('name', 'client')->first()->users;
+        $users->load(['position', 'roles']);
+        return view('users.index', compact('users'));
+    }
 
+    public function stuff(){
+        $users = Role::where('name', 'employee')->first()->users;
+        $users->load(['position', 'roles']);
+        return view('users.index', compact('users'));
     }
 
     private function getRoles(){

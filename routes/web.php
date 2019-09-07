@@ -23,6 +23,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('user/create', 'UsersController@create')->middleware('role:employee');
 Route::post('user/store', 'UsersController@store')->middleware('role:employee')->name('register-manual');
 
+//Users
+Route::get('clients', 'UsersController@clients')->middleware('role:admin');
+Route::get('stuff', 'UsersController@stuff')->middleware('role:admin');
+
 //Order
 Route::get('/order', 'OrdersController@index');
 Route::get('/order/create', 'OrdersController@create')->middleware('role:employee');
