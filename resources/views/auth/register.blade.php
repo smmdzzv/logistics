@@ -76,7 +76,7 @@
                                            class="form-control @error('position') is-invalid @enderror"
                                            name="position-name"
                                            value="{{ old('position') }}"
-                                           autocomplete="position-name" required>
+                                           autocomplete="position-name">
 
                                     @error('position')
                                     <span class="invalid-feedback" role="alert">

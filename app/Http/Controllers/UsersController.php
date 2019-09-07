@@ -23,7 +23,8 @@ class UsersController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'roles' => ['required', 'array'],
-            'branch' => ['required', 'exists:branches,id']
+            'branch' => ['required', 'exists:branches,id'],
+            'position-name' => 'nullable|string'
         ]);
     }
 
@@ -36,7 +37,7 @@ class UsersController extends Controller
 
     //TODO validation
     public function store(){
-        $data = $this->validator(request()->all());
+        $data = $this->validator(request()->all())->validate();
         $positionId = $data['position-name']? Position::firstOrCreate(['name'=> $data['position-name']]) -> id : null;
 
         $user = User::create([
@@ -53,7 +54,7 @@ class UsersController extends Controller
                 $role->users()->attach($user);
         }
 
-        return route('home');
+        return redirect(route('home'));
     }
 
     private function attachRoles($user){
