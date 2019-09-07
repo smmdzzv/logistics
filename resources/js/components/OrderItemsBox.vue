@@ -29,29 +29,9 @@
                         добавить
                     </li>
 
-<!--                    <li class="list-group-item" >-->
-<!--                        <div class="row" >-->
-<!--                            <div class="col-md-5"> Мешок</div>-->
-<!--                            <div class="col-md-2"> 2 м<sup>3</sup></div>-->
-<!--                            <div class="col-md-2"> 100 кг</div>-->
-<!--                            <div class="col-md-2"> 1500 $</div>-->
-<!--                            <div class="col-md-1">-->
-<!--                                <img class="icon-btn-sm" src="/svg/delete.svg" alt="delete-item"-->
-<!--                                     @click="removeFromList(stored)">-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </li>-->
-
                 </ul>
             </div>
             <div class="card-footer" v-if="storedItems.length > 0">
-<!--                <div class="row">-->
-<!--                    <div class="col-md-5"> Итого</div>-->
-<!--                    <div class="col-md-2">8 м<sup>3</sup> </div>-->
-<!--                    <div class="col-md-2"> 100 кг</div>-->
-<!--                    <div class="col-md-2">12000 $ </div>-->
-<!--                    <div class="col-md-1"> </div>-->
-<!--                </div>-->
                 <div class="row" >
                     <div class="col-md-4"> Итого</div>
                     <div class="col-md-2" :property="storedItems">{{getTotalCubage()}} м<sup>3</sup> </div>

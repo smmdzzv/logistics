@@ -9,6 +9,10 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class SearchController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
     public function findUsersByInfo($userInfo){
         $users = User::whereRaw("name LIKE '%$userInfo%' OR code LIKE '%$userInfo%'")->get();
 

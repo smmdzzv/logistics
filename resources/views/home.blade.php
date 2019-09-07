@@ -12,6 +12,7 @@
                         <li><a href="/settings">Настройки</a></li>
                         <li><a href="/user/create">Регистрация пользователей</a></li>
                         <li><a href="/order/create">Оформить заказ</a></li>
+                        <li><a href="/tariff/create">Редактирование тарифов</a></li>
                     </ul>
                 </div>
             </div>

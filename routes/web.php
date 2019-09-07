@@ -35,10 +35,17 @@ Route::get('/settings', 'AppSettingsController@show')->middleware('role:admin');
 Route::post('/settings/branch', 'AppSettingsController@storeBranch')->middleware('role:admin');
 Route::post('/settings/position', 'AppSettingsController@storePosition')->middleware('role:admin');
 
+//Tariffs
+Route::get('/tariff/create', "TariffsController@create")->middleware('role:admin')->name('create-tariff');
+Route::post('/tariff/store', "TariffsController@store")->middleware('role:admin')->name('store-tariff');
+Route::delete('/tariff/{tariff}', "TariffsController@delete")->middleware('role:admin');
+
+Route::get('/tariff-price-history/{tariff}', "TariffsController@lastByTariff")->middleware('role:employee');
+
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo')->middleware('role:employee');
 
 Route::get('/items', 'ItemsController@all')->middleware('role:employee');
 
 Route::get('/branches', "BranchesController@all")->middleware('role:employee');;
 
-Route::get('/tariff-price-history/{tariff}', "TariffPriceHistoriesController@lastByTariff")->middleware('role:employee');
+

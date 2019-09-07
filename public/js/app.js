@@ -7923,26 +7923,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "OrderItemsBox",
   props: {
@@ -8848,6 +8828,306 @@ __webpack_require__.r(__webpack_exports__);
     storedItem: {
       type: Object,
       required: true
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tariffs/TariffEditor.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/tariffs/TariffEditor.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuelidate_lib_validators___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuelidate/lib/validators/ */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuelidate_lib_validators___WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators___WEBPACK_IMPORTED_MODULE_1__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "TariffEditor",
+  props: {
+    data: {
+      type: Array,
+      required: true
+    }
+  },
+  data: function data() {
+    return {
+      tariff: {
+        name: '',
+        description: ''
+      },
+      tariffs: this.data,
+      showAddTariffErrorModal: false,
+      isSubmitting: false
+    };
+  },
+  methods: {
+    postTariff: function () {
+      var _postTariff = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var _this = this;
+
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                this.setBusy();
+
+                if (!this.$v.$invalid) {
+                  _context.next = 5;
+                  break;
+                }
+
+                this.$v.$touch();
+                _context.next = 15;
+                break;
+
+              case 5:
+                _context.prev = 5;
+                _context.next = 8;
+                return axios.post('/tariff/store', {
+                  name: this.tariff.name,
+                  description: this.tariff.description
+                });
+
+              case 8:
+                response = _context.sent;
+
+                if (response.data) {
+                  this.tariffs.push(response.data);
+                  this.resetForm();
+                } else this.showAddTariffErrorModal = true;
+
+                _context.next = 15;
+                break;
+
+              case 12:
+                _context.prev = 12;
+                _context.t0 = _context["catch"](5);
+                this.showAddTariffErrorModal = true;
+
+              case 15:
+                this.$nextTick(function () {
+                  _this.hideBusy();
+                });
+
+              case 16:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[5, 12]]);
+      }));
+
+      function postTariff() {
+        return _postTariff.apply(this, arguments);
+      }
+
+      return postTariff;
+    }(),
+    setBusy: function setBusy() {
+      this.isSubmitting = true;
+      this.$bvModal.show('busyModal');
+    },
+    hideBusy: function hideBusy() {
+      this.isSubmitting = false;
+      this.$bvModal.hide('busyModal');
+    },
+    resetForm: function resetForm() {
+      var _this2 = this;
+
+      this.showAddTariffErrorModal = false;
+      this.tariff.name = '';
+      this.tariff.description = '';
+      this.$nextTick(function () {
+        _this2.$v.$reset();
+      });
+    },
+    removeFromList: function () {
+      var _removeFromList = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(tariff) {
+        var confirmed;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return this.$bvModal.msgBoxConfirm("\u0412\u044B \u0443\u0432\u0435\u0440\u0435\u043D\u044B \u0447\u0442\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u0442\u0430\u0440\u0438\u0444 ".concat(tariff.name, "?"), {
+                  centered: true,
+                  okTitle: 'Да',
+                  cancelTitle: 'Отменить',
+                  footerClass: 'border-0',
+                  title: 'Подтверждение удаления'
+                });
+
+              case 2:
+                confirmed = _context2.sent;
+
+                if (confirmed) {
+                  _context2.next = 5;
+                  break;
+                }
+
+                return _context2.abrupt("return");
+
+              case 5:
+                this.setBusy();
+                _context2.prev = 6;
+                _context2.next = 9;
+                return axios["delete"]('/tariff/' + tariff.id);
+
+              case 9:
+                this.tariffs = jQuery.grep(this.tariffs, function (value) {
+                  return value !== tariff;
+                });
+                _context2.next = 14;
+                break;
+
+              case 12:
+                _context2.prev = 12;
+                _context2.t0 = _context2["catch"](6);
+
+              case 14:
+                this.hideBusy();
+
+              case 15:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[6, 12]]);
+      }));
+
+      function removeFromList(_x) {
+        return _removeFromList.apply(this, arguments);
+      }
+
+      return removeFromList;
+    }()
+  },
+  validations: {
+    tariff: {
+      name: {
+        required: vuelidate_lib_validators___WEBPACK_IMPORTED_MODULE_1__["required"],
+        maxLength: Object(vuelidate_lib_validators___WEBPACK_IMPORTED_MODULE_1__["maxLength"])(255)
+      },
+      description: {
+        maxLength: Object(vuelidate_lib_validators___WEBPACK_IMPORTED_MODULE_1__["maxLength"])(255)
+      }
     }
   }
 });
@@ -29322,7 +29602,7 @@ var VBTooltip = {
 /*!*************************************************!*\
   !*** ./node_modules/bootstrap-vue/esm/index.js ***!
   \*************************************************/
-/*! exports provided: install, NAME, BVConfigPlugin, BVConfig, BootstrapVue, default, componentsPlugin, BVModalPlugin, BVToastPlugin, AlertPlugin, BAlert, BadgePlugin, BBadge, BreadcrumbPlugin, BBreadcrumb, BBreadcrumbItem, ButtonPlugin, BButton, BButtonClose, ButtonGroupPlugin, BButtonGroup, ButtonToolbarPlugin, BButtonToolbar, CardPlugin, BCard, BCardBody, BCardFooter, BCardGroup, BCardHeader, BCardImg, BCardImgLazy, BCardSubTitle, BCardText, BCardTitle, CarouselPlugin, BCarousel, BCarouselSlide, CollapsePlugin, BCollapse, DropdownPlugin, BDropdown, BDropdownItem, BDropdownItemButton, BDropdownDivider, BDropdownForm, BDropdownGroup, BDropdownHeader, BDropdownText, EmbedPlugin, BEmbed, FormPlugin, BForm, BFormDatalist, BFormText, BFormInvalidFeedback, BFormValidFeedback, FormCheckboxPlugin, BFormCheckbox, BFormCheckboxGroup, FormFilePlugin, BFormFile, FormGroupPlugin, BFormGroup, FormInputPlugin, BFormInput, FormRadioPlugin, BFormRadio, BFormRadioGroup, FormSelectPlugin, BFormSelect, FormTextareaPlugin, BFormTextarea, ImagePlugin, BImg, BImgLazy, InputGroupPlugin, BInputGroup, BInputGroupAddon, BInputGroupAppend, BInputGroupPrepend, BInputGroupText, JumbotronPlugin, BJumbotron, LayoutPlugin, BContainer, BRow, BCol, BFormRow, LinkPlugin, BLink, ListGroupPlugin, BListGroup, BListGroupItem, MediaPlugin, BMedia, BMediaAside, BMediaBody, ModalPlugin, BModal, NavPlugin, BNav, BNavForm, BNavItem, BNavItemDropdown, BNavText, NavbarPlugin, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle, PaginationPlugin, BPagination, PaginationNavPlugin, BPaginationNav, PopoverPlugin, BPopover, ProgressPlugin, BProgress, BProgressBar, SpinnerPlugin, BSpinner, TablePlugin, TableLitePlugin, TableSimplePlugin, BTable, BTableLite, BTableSimple, BTbody, BThead, BTfoot, BTr, BTh, BTd, TabsPlugin, BTabs, BTab, ToastPlugin, BToast, BToaster, TooltipPlugin, BTooltip, directivesPlugin, VBModalPlugin, VBModal, VBPopoverPlugin, VBPopover, VBScrollspyPlugin, VBScrollspy, VBTogglePlugin, VBToggle, VBTooltipPlugin, VBTooltip */
+/*! exports provided: componentsPlugin, BVModalPlugin, BVToastPlugin, AlertPlugin, BAlert, BadgePlugin, BBadge, BreadcrumbPlugin, BBreadcrumb, BBreadcrumbItem, ButtonPlugin, BButton, BButtonClose, ButtonGroupPlugin, BButtonGroup, ButtonToolbarPlugin, BButtonToolbar, CardPlugin, BCard, BCardBody, BCardFooter, BCardGroup, BCardHeader, BCardImg, BCardImgLazy, BCardSubTitle, BCardText, BCardTitle, CarouselPlugin, BCarousel, BCarouselSlide, CollapsePlugin, BCollapse, DropdownPlugin, BDropdown, BDropdownItem, BDropdownItemButton, BDropdownDivider, BDropdownForm, BDropdownGroup, BDropdownHeader, BDropdownText, EmbedPlugin, BEmbed, FormPlugin, BForm, BFormDatalist, BFormText, BFormInvalidFeedback, BFormValidFeedback, FormCheckboxPlugin, BFormCheckbox, BFormCheckboxGroup, FormFilePlugin, BFormFile, FormGroupPlugin, BFormGroup, FormInputPlugin, BFormInput, FormRadioPlugin, BFormRadio, BFormRadioGroup, FormSelectPlugin, BFormSelect, FormTextareaPlugin, BFormTextarea, ImagePlugin, BImg, BImgLazy, InputGroupPlugin, BInputGroup, BInputGroupAddon, BInputGroupAppend, BInputGroupPrepend, BInputGroupText, JumbotronPlugin, BJumbotron, LayoutPlugin, BContainer, BRow, BCol, BFormRow, LinkPlugin, BLink, ListGroupPlugin, BListGroup, BListGroupItem, MediaPlugin, BMedia, BMediaAside, BMediaBody, ModalPlugin, BModal, NavPlugin, BNav, BNavForm, BNavItem, BNavItemDropdown, BNavText, NavbarPlugin, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle, PaginationPlugin, BPagination, PaginationNavPlugin, BPaginationNav, PopoverPlugin, BPopover, ProgressPlugin, BProgress, BProgressBar, SpinnerPlugin, BSpinner, TablePlugin, TableLitePlugin, TableSimplePlugin, BTable, BTableLite, BTableSimple, BTbody, BThead, BTfoot, BTr, BTh, BTd, TabsPlugin, BTabs, BTab, ToastPlugin, BToast, BToaster, TooltipPlugin, BTooltip, directivesPlugin, VBModalPlugin, VBModal, VBPopoverPlugin, VBPopover, VBScrollspyPlugin, VBScrollspy, VBTogglePlugin, VBToggle, VBTooltipPlugin, VBTooltip, install, NAME, BVConfigPlugin, BVConfig, BootstrapVue, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -73643,7 +73923,7 @@ var render = function() {
                   "btn btn-light offset-sm-4 offset-md-5  offset-lg-6",
                 on: { click: _vm.showModal }
               },
-              [_vm._v("Добавить\n                    ")]
+              [_vm._v("Добавить\n                ")]
             )
           ])
         ]),
@@ -73708,7 +73988,7 @@ var render = function() {
               _vm.storedItems.length === 0
                 ? _c("li", { staticClass: "list-group-item" }, [
                     _vm._v(
-                      "Для приема товара необходимо нажать кнопку\n                        добавить\n                    "
+                      "Для приема товара необходимо нажать кнопку\n                    добавить\n                "
                     )
                   ])
                 : _vm._e()
@@ -74881,6 +75161,292 @@ var render = function() {
   )
 }
 var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tariffs/TariffEditor.vue?vue&type=template&id=af9a8b48&scoped=true&":
+/*!***********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/tariffs/TariffEditor.vue?vue&type=template&id=af9a8b48&scoped=true& ***!
+  \***********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-8" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [_vm._v("Тарифы")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("section", { staticClass: "pb-5" }, [
+              _c(
+                "form",
+                {
+                  attrs: { id: "addTariffForm" },
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.postTariff($event)
+                    }
+                  }
+                },
+                [
+                  _c("h4", { staticClass: "offset-5 pb-4 col-6" }, [
+                    _vm._v("Создать тариф")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "b-alert",
+                    {
+                      staticClass: "text-center",
+                      attrs: {
+                        show: _vm.showAddTariffErrorModal,
+                        id: "addTariffErrorAlert",
+                        variant: "danger"
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                                Не удалось добавить тариф. Повторите добавление тарифа после перезагрузки страницы.\n                            "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group row" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-md-4 col-form-label text-md-right",
+                        attrs: { for: "name" }
+                      },
+                      [_vm._v("Название")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-md-6" },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.tariff.name,
+                              expression: "tariff.name"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            autocomplete: "name",
+                            autofocus: "",
+                            id: "name",
+                            maxlength: "255",
+                            name: "name",
+                            type: "text"
+                          },
+                          domProps: { value: _vm.tariff.name },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.tariff, "name", $event.target.value)
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("b-popover", {
+                          attrs: {
+                            show: _vm.$v.tariff.name.$error,
+                            content: "Введите название тарифа",
+                            placement: "bottom",
+                            target: "name",
+                            triggers: "null",
+                            variant: "danger"
+                          },
+                          on: {
+                            "update:show": function($event) {
+                              return _vm.$set(
+                                _vm.$v.tariff.name,
+                                "$error",
+                                $event
+                              )
+                            }
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group row" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-md-4 col-form-label text-md-right",
+                        attrs: { for: "description" }
+                      },
+                      [_vm._v("Описание")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "col-md-6" },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.tariff.description,
+                              expression: "tariff.description"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: {
+                            autocomplete: "description",
+                            autofocus: "",
+                            id: "description",
+                            maxlength: "255",
+                            name: "description",
+                            type: "text"
+                          },
+                          domProps: { value: _vm.tariff.description },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.tariff,
+                                "description",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("b-popover", {
+                          attrs: {
+                            show: _vm.$v.tariff.description.$error,
+                            content:
+                              "Максимально допустимая длина описания 255 символов",
+                            placement: "bottom",
+                            target: "description",
+                            triggers: "null",
+                            variant: "danger"
+                          },
+                          on: {
+                            "update:show": function($event) {
+                              return _vm.$set(
+                                _vm.$v.tariff.description,
+                                "$error",
+                                $event
+                              )
+                            }
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group row mb-0" }, [
+                    _c("div", { staticClass: "col-md-6 offset-md-4" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "submit", disabled: _vm.isSubmitting }
+                        },
+                        [
+                          _vm._v(
+                            "\n                                        Сохранить\n                                    "
+                          )
+                        ]
+                      )
+                    ])
+                  ])
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _c("section", [
+              _c("div", { staticClass: "card" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", [
+                  _c(
+                    "ul",
+                    { staticClass: "list-group list-group-flush" },
+                    _vm._l(_vm.tariffs, function(tariff) {
+                      return _c(
+                        "li",
+                        {
+                          staticClass: "list-group-item",
+                          attrs: { property: _vm.tariffs }
+                        },
+                        [
+                          _c("div", { key: tariff.id, staticClass: "row" }, [
+                            _c("div", { staticClass: "col-md-3" }, [
+                              _vm._v(" " + _vm._s(tariff.name))
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-md-8" }, [
+                              _vm._v(" " + _vm._s(tariff.description))
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-md-1" }, [
+                              _c("img", {
+                                staticClass: "icon-btn-sm",
+                                attrs: {
+                                  alt: "delete-item",
+                                  src: "/svg/delete.svg"
+                                },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.removeFromList(tariff)
+                                  }
+                                }
+                              })
+                            ])
+                          ])
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header bg-secondary" }, [
+      _c("div", { staticClass: "text-light p-1" }, [_vm._v("Список тарифов")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -88982,6 +89548,7 @@ window.Vue.use(Vuelidate);
 
 Vue.component('OrderEditor', __webpack_require__(/*! ./components/OrderEditor.vue */ "./resources/js/components/OrderEditor.vue")["default"]);
 Vue.component('OrderViewer', __webpack_require__(/*! ./components/OrderViewer.vue */ "./resources/js/components/OrderViewer.vue")["default"]);
+Vue.component('TariffEditor', __webpack_require__(/*! ./components/tariffs/TariffEditor.vue */ "./resources/js/components/tariffs/TariffEditor.vue")["default"]);
 Vue.component('Barcode', __webpack_require__(/*! @xkeshi/vue-barcode */ "./node_modules/@xkeshi/vue-barcode/dist/vue-barcode.esm.js")["default"]);
 Vue.component('QrCode', __webpack_require__(/*! @chenfengyuan/vue-qrcode */ "./node_modules/@chenfengyuan/vue-qrcode/dist/vue-qrcode.esm.js")["default"]); //Vue.component('search-user-dropdown', require('./components/SearchUserDropdown.vue').default);
 
@@ -89533,6 +90100,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_StoredItemShortInfo_vue_vue_type_template_id_3d3f476a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_StoredItemShortInfo_vue_vue_type_template_id_3d3f476a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/tariffs/TariffEditor.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/tariffs/TariffEditor.vue ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TariffEditor_vue_vue_type_template_id_af9a8b48_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TariffEditor.vue?vue&type=template&id=af9a8b48&scoped=true& */ "./resources/js/components/tariffs/TariffEditor.vue?vue&type=template&id=af9a8b48&scoped=true&");
+/* harmony import */ var _TariffEditor_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TariffEditor.vue?vue&type=script&lang=js& */ "./resources/js/components/tariffs/TariffEditor.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _TariffEditor_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _TariffEditor_vue_vue_type_template_id_af9a8b48_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _TariffEditor_vue_vue_type_template_id_af9a8b48_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "af9a8b48",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/tariffs/TariffEditor.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/tariffs/TariffEditor.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/tariffs/TariffEditor.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TariffEditor_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./TariffEditor.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tariffs/TariffEditor.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TariffEditor_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/tariffs/TariffEditor.vue?vue&type=template&id=af9a8b48&scoped=true&":
+/*!*****************************************************************************************************!*\
+  !*** ./resources/js/components/tariffs/TariffEditor.vue?vue&type=template&id=af9a8b48&scoped=true& ***!
+  \*****************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TariffEditor_vue_vue_type_template_id_af9a8b48_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./TariffEditor.vue?vue&type=template&id=af9a8b48&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tariffs/TariffEditor.vue?vue&type=template&id=af9a8b48&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TariffEditor_vue_vue_type_template_id_af9a8b48_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TariffEditor_vue_vue_type_template_id_af9a8b48_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
