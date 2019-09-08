@@ -18,6 +18,9 @@
                         </select>
                         <span v-if="data.item.roles.length === 0">Нет ролей</span>
                     </template>
+                    <template slot="id" slot-scope="data">
+                        <a :href="getEditUrl(data.item)" class="btn btn-outline-secondary">Изменить</a>
+                    </template>
                 </b-table>
             </div>
         </div>
@@ -47,6 +50,12 @@
                     return 'Список пользователйе';
             }
         },
+        methods:{
+            getEditUrl(item){
+                console.log(item.id);
+                return `/user/${item.id}/edit`;
+            }
+        },
         data() {
             return {
                 fields: {
@@ -73,6 +82,9 @@
                     'roles': {
                         label: 'Роли',
                         sortable: true
+                    },
+                    id:{
+                        label:'Редактировать'
                     }
                 }
             }

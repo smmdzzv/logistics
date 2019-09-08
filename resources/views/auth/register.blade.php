@@ -5,15 +5,13 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+                <div class="card-header">Регистрация</div>
 
                 <div class="card-body">
-                    @auth
-                        <form method="POST" action="{{ route('register-manual') }}">
-                    @endauth
-                    @guest
-                        <form method="POST" action="{{ route('register') }}">
-                    @endguest
+
+                        <form method="POST"   @auth action="{{ route('user.store') }}"  @endauth
+                        @guest action="{{ route('register') }}" @endguest
+                        >
                         @csrf
 
                         <div class="form-group row">
@@ -45,6 +43,34 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="code" class="col-md-4 col-form-label text-md-right">Код</label>
+
+                            <div class="col-md-6">
+                                <input id="code" type="text" class="form-control @error('name') is-invalid @enderror" name="code" value="{{ old('code') }}" autocomplete="code" autofocus>
+
+                                @error('code')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="phone" class="col-md-4 col-form-label text-md-right">Телефон</label>
+
+                            <div class="col-md-6">
+                                <input id="phone" type="text" class="form-control @error('name') is-invalid @enderror" name="phone" value="{{ old('phone') }}" autocomplete="phone" autofocus>
+
+                                @error('phone')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">Пароль</label>
 
                             <div class="col-md-6">
@@ -68,15 +94,15 @@
 
                         @auth
                             <div class="form-group row">
-                                <label for="position-name" class="col-md-4 col-form-label text-md-right">Должность</label>
+                                <label for="position" class="col-md-4 col-form-label text-md-right">Должность</label>
 
                                 <div class="col-md-6">
-                                    <input id="position-name"
+                                    <input id="position"
                                            type="text"
                                            class="form-control @error('position') is-invalid @enderror"
-                                           name="position-name"
+                                           name="position"
                                            value="{{ old('position') }}"
-                                           autocomplete="position-name">
+                                           autocomplete="position">
 
                                     @error('position')
                                     <span class="invalid-feedback" role="alert">
@@ -119,14 +145,13 @@
                                                 class="form-control custom-select @error('roles') is-invalid @enderror"
                                                 name="roles[]"
                                                 multiple="multiple"
-                                                value="{{ old('roles') }}"
-                                                autocomplete="roles" required>
-
+                                                required>
                                             @foreach($roles as $role)
-                                                <option value="{{$role->id}}">{{$role->title}}</option>
+                                                <option value="{{(String)$role->id}}">{{$role->title}}</option>
                                             @endforeach
                                         </select>
-                                        @error('position')
+
+                                        @error('roles')
                                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
