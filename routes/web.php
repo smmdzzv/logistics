@@ -25,9 +25,10 @@ Route::post('user/store', 'UsersController@store')->middleware('role:employee')-
 Route::get('user/{user}/edit', 'UsersController@edit')->middleware('role:employee')->name('user.edit');
 Route::patch('user/{user}', 'UsersController@update')->middleware('role:employee')->name('user.update');
 
-//Users
+//Users TODO remove clients and stuff
 Route::get('clients', 'UsersController@clients')->middleware('role:admin')->name('user.clients');
-Route::get('stuff', 'UsersController@stuff')->middleware('role:admin')->name('user.stuff');
+Route::get('employees', 'UsersController@employees')->middleware('role:admin')->name('user.employees');
+Route::get('user/{role}/only', 'UsersController@filtered')->middleware('role:admin')->name('user.filtered');
 
 //Order
 Route::get('/order', 'OrdersController@index')->middleware('role:employee')->name('order.index');

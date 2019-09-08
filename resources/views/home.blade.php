@@ -12,7 +12,7 @@
                         <hr>
                             <li><a href="/user/create">Регистрация пользователей</a></li>
                             <li><a href="/clients">Список клиентов</a></li>
-                            <li><a href="/stuff">Список сотрудников</a></li>
+                            <li><a href="/employees">Список сотрудников</a></li>
                         <hr>
                         <li><a href="/settings">Настройки</a></li>
 

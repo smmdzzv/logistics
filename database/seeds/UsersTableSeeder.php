@@ -42,5 +42,38 @@ class UsersTableSeeder extends Seeder
         ]);
 
         $client->roles()->attach($roleClient);
+
+        $user = User::create([
+            'name'=>'Давлатмуродов Мурод',
+            'branch_id' => $branchId,
+            'phone' => '53183421',
+            'password' => Hash::make('asdf1234'),
+            'email' => 'test3@test.com',
+            'code'=>'1332'
+        ]);
+
+        $user->roles()->attach($roleEmployee);
+
+        $user = User::create([
+            'name'=>'Ширинбеков Ширин',
+            'branch_id' => $branchId,
+            'phone' => '25138483',
+            'password' => Hash::make('asdf1234'),
+            'email' => 'test4@test.com',
+            'code'=>'2552'
+        ]);
+
+        $user->roles()->attach($roleClient);
+
+        $user = User::create([
+            'name'=>'Саломатшоев Некруз',
+            'branch_id' => $branchId,
+            'phone' => '5138432',
+            'password' => Hash::make('asdf1234'),
+            'email' => 'test5@test.com',
+            'code'=>'3255'
+        ]);
+
+        $user->roles()->attach($roleClient);
     }
 }

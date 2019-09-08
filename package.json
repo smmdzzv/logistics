@@ -26,6 +26,7 @@
         "@chenfengyuan/vue-qrcode": "^1.0.1",
         "@xkeshi/vue-barcode": "github:xkeshi/vue-barcode",
         "bootstrap-vue": "^2.0.0-rc.28",
+        "laravel-vue-pagination": "^2.3.0",
         "vue": "^2.6.10",
         "vuelidate": "^0.7.4"
     }

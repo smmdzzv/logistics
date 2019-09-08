@@ -4,17 +4,24 @@
             <div class="card-header">
                 {{title}}
             </div>
-            <div class="card-body">
                 <b-table :fields="fields"
+                         id="usersTable"
                          :items="users"
-                         hover
-                         outlined
+                         :busy="isBusy"
+                         striped
+                         borderless
                          primary-key="id"
                          responsive
-                         striped>
+                          >
+                    <template v-slot:table-busy>
+                        <div class="text-center text-info my-2">
+                            <b-spinner class="align-middle"></b-spinner>
+                        </div>
+                    </template>
+
                     <template slot="roles" slot-scope="data">
-                        <select class="form-control" v-if="data.item.roles.length > 0">
-                            <option v-for="role in data.item.roles">{{role.title}}</option>
+                        <select class="form-control" v-if="data.item.roles.length > 0" aria-label="Роли пользователя">
+                            <option v-for="(role, index) in data.item.roles" :key="index + data.item.id">{{role.title}}</option>
                         </select>
                         <span v-if="data.item.roles.length === 0">Нет ролей</span>
                     </template>
@@ -22,6 +29,9 @@
                         <a :href="getEditUrl(data.item)" class="btn btn-outline-secondary">Изменить</a>
                     </template>
                 </b-table>
+
+            <div class="card-footer">
+                <pagination :data="pagination" @pagination-change-page="getUsers"></pagination>
             </div>
         </div>
     </div>
@@ -30,11 +40,10 @@
 <script>
     export default {
         name: "UsersTable",
+        mounted(){
+            this.getUsers();
+        },
         props: {
-            users: {
-                type: Array,
-                required: true
-            },
             type: {
                 type: String,
                 required: true
@@ -42,9 +51,9 @@
         },
         computed: {
             title: function () {
-                if (this.type === 'clients')
+                if (this.type === 'client')
                     return 'Список клиентов';
-                if(this.type === 'stuff')
+                if(this.type === 'employee')
                     return 'Список сотрдуников';
                 else
                     return 'Список пользователйе';
@@ -52,12 +61,26 @@
         },
         methods:{
             getEditUrl(item){
-                console.log(item.id);
                 return `/user/${item.id}/edit`;
+            },
+            getUsers(page = 1){
+                this.isBusy = true;
+                axios.get('user/'+ this.type +'/only?page=' + page)
+                    .then(response=>{
+                        this.pagination = response.data;
+                        this.users = response.data.data;
+                        console.log(this.pagination.data[0].name);
+                        this.$nextTick(()=>{
+                            this.isBusy = false;
+                        })
+                    });
             }
         },
         data() {
             return {
+                pagination:{},
+                users:{},
+                isBusy:false,
                 fields: {
                     name: {
                         label: 'Имя',
@@ -88,10 +111,9 @@
                     }
                 }
             }
+        },
+        components:{
+            'Pagination': require('laravel-vue-pagination')
         }
     }
 </script>
-
-<style scoped>
-
-</style>

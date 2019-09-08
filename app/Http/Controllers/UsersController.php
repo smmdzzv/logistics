@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
+
     public function __construct(){
         $this->middleware('auth');
     }
@@ -101,16 +102,20 @@ class UsersController extends Controller
         return redirect(route('home'));
     }
 
-    public function clients(){
-        $users = Role::where('name', 'client')->first()->users;
-        $users->load(['position', 'roles']);
-        return view('users.index', compact('users'));
+    public function employees(){
+        return view('users.index', ['type' => 'employee']);
     }
 
-    public function stuff(){
-        $users = Role::where('name', 'employee')->first()->users;
+    public function clients(){
+        return view('users.index', ['type' => 'client']);
+    }
+
+    public function filtered($role){
+//        $role = Role::where('name',$role)->first();
+//        $users = $role->users()->simplePaginate(5);
+        $users = Role::where('name',$role)->first() ->users()->paginate(10);
         $users->load(['position', 'roles']);
-        return view('users.index', compact('users'));
+        return $users;
     }
 
     private function getRoles(){
