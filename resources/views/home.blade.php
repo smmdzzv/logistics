@@ -21,6 +21,8 @@
                         <li><a href="/tariff/create">Редактирование тарифов</a></li>
                         <li><a href="/tariff-price-history/create">Редактирование тарифных планов</a></li>
                         <li><a href="/tariff-price-history">Список историй тарифных планов</a></li>
+                        <hr>
+                        <li><a href="{{route('stored.index')}}">Список принятых товаров</a></li>
                     </ul>
                 </div>
             </div>

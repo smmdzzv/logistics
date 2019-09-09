@@ -37,6 +37,11 @@ Route::post('/order/store', 'OrdersController@store')->middleware('role:employee
 Route::patch('/order/update', 'OrdersController@update')->middleware('role:employee')->name('order.update');
 Route::get('/order/{order}', 'OrdersController@show')->middleware('role:client, employee')->name('order.show');
 
+//StoredItems
+Route::get('/stored','StoredItemsController@index')->middleware('role:employee')->name('stored.index');
+Route::get('/stored/all','StoredItemsController@all')->middleware('role:employee')->name('stored.all');
+Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch')->middleware('role:employee');
+
 //Settings
 Route::get('/settings', 'AppSettingsController@show')->middleware('role:admin');
 Route::post('/settings/branch', 'AppSettingsController@storeBranch')->middleware('role:admin');
