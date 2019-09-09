@@ -15,8 +15,9 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('owner_id');
+            $table->unsignedBigInteger('owner');
             $table->unsignedBigInteger('registeredBy');
+            $table->unsignedBigInteger('branch');
             $table->string('status')->default('accepted');
             $table->double('totalCount');
             $table->double('totalWeight');
@@ -25,8 +26,9 @@ class CreateOrdersTable extends Migration
             $table->double('totalDiscount');
             $table->timestamps();
 
-            $table->index('owner_id');
+            $table->index('owner');
             $table->index('registeredBy');
+            $table->index('branch');
         });
     }
 

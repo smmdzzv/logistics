@@ -11,10 +11,14 @@ class Order extends Model
     }
 
     public function owner(){
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(User::class, 'owner');
     }
 
     public function registeredBy(){
         return $this->belongsTo(User::class, 'registeredBy');
+    }
+
+    public function branch(){
+        return $this->belongsTo(Branch::class, 'branch');
     }
 }

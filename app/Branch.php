@@ -26,4 +26,8 @@ class Branch extends Model
     public function tariffPriceHistories(){
         return $this->hasMany(TariffPriceHistory::class);
     }
+
+    public function orders(){
+        return $this->hasMany(Order::class, 'branch');
+    }
 }

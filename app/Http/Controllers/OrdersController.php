@@ -17,7 +17,8 @@ class OrdersController extends Controller
     }
 
     public function index(){
-
+        $branches = Branch::all();
+        return view('orders.index', compact('branches'));
     }
 
     public function show(Order $order){
@@ -38,12 +39,13 @@ class OrdersController extends Controller
         $user = User::findOrFail($clientId);
 
         $order = new Order();
-        $order->owner_id = $clientId;
+        $order->owner = $clientId;
         $order->totalCubage = 0;
         $order->totalWeight = 0;
         $order->totalPrice = 0;
         $order->totalDiscount = 0;
         $order->totalCount = 0;
+        $order->branch = auth()->user()->branch->id;
 
         auth()->user()->registeredOrders()->save($order);
 
@@ -78,5 +80,16 @@ class OrdersController extends Controller
 
     public function update(StoreOrderRequest $request){
 
+    }
+
+    public function all(){
+        return Order::with(['owner','registeredBy'])->paginate(10);
+    }
+
+    public function filteredByBranch(Branch $branch){
+        if(isset($branch)){
+            return $branch->orders()->with(['owner','registeredBy'])->paginate(10);
+        }
+        else abort(404, 'Филиал не найден');
     }
 }

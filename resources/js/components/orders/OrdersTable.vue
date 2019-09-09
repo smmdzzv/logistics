@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="row align-items-baseline">
-                    <div class="col-md-6"> Принятые товары</div>
+                    <div class="col-md-6">Принятые заказы</div>
                     <label class="col-md-4 text-right" for="branch">Филиал</label>
                     <div class="col-md-2">
                         <select id="branch" class="form-control custom-select" v-model="selectedBranch">
@@ -12,23 +12,23 @@
                     </div>
                 </div>
             </div>
-                <b-table :fields="fields"
-                         id="usersTable"
-                         :items="storedItems"
-                         :busy="isBusy"
-                         striped
-                         borderless
-                         primary-key="id"
-                         responsive>
-                    <template v-slot:table-busy>
-                        <div class="text-center text-info my-2">
-                            <b-spinner class="align-middle"></b-spinner>
-                        </div>
-                    </template>
-                </b-table>
+            <b-table :fields="fields"
+                     id="usersTable"
+                     :items="orders"
+                     :busy="isBusy"
+                     striped
+                     borderless
+                     primary-key="id"
+                     responsive>
+                <template v-slot:table-busy>
+                    <div class="text-center text-info my-2">
+                        <b-spinner class="align-middle"></b-spinner>
+                    </div>
+                </template>
+            </b-table>
 
             <div class="card-footer">
-                <pagination :data="pagination" @pagination-change-page="getStoredItems"></pagination>
+                <pagination :data="pagination" @pagination-change-page="getOrders"></pagination>
             </div>
         </div>
     </div>
@@ -36,9 +36,9 @@
 
 <script>
     export default {
-        name: "StoredTable",
+        name: "OrdersTable",
         mounted(){
-            this.getStoredItems();
+            this.getOrders();
         },
         props:{
             branches:{
@@ -47,15 +47,15 @@
             }
         },
         methods:{
-            getStoredItems(page = 1){
+            getOrders(page = 1){
                 this.isBusy = true;
-                let action = 'stored/all';
+                let action = 'order/all';
                 if(this.selectedBranch)
-                    action = `/${this.selectedBranch.id}/stored`;
+                    action = `/${this.selectedBranch.id}/orders`;
                 axios.get(action)
                     .then(response=>{
                         this.pagination = response.data;
-                        this.storedItems = response.data.data;
+                        this.orders = response.data.data;
                         this.$nextTick(()=>{
                             this.isBusy = false;
                         })
@@ -69,38 +69,42 @@
         },
         watch:{
             selectedBranch: function () {
-                this.getStoredItems(this.currentPage);
+                this.getOrders(this.currentPage);
             }
         },
         data() {
             return {
                 selectedBranch: null,
                 pagination:{},
-                storedItems: null,
+                orders: null,
                 isBusy:false,
                 fields: {
-                    'item.name': {
-                        label: 'Имя',
+                    totalWeight: {
+                        label: 'Вес',
                         sortable: true
                     },
-                    width: {
-                        label: 'Ширина',
+                    totalCubage: {
+                        label: 'Кубатура',
                         sortable: true
                     },
-                    height: {
-                        label: 'Высота',
+                    totalDiscount: {
+                        label: 'Скидка',
                         sortable: true
                     },
-                    length: {
-                        label: 'Длина',
+                    totalPrice: {
+                        label: 'Цена',
                         sortable: true
                     },
-                    count:{
-                        label:'Кол-во',
+                    'registered_by.name':{
+                        label:'Принял',
                         sortable: true
                     },
                     'owner.name':{
                         label:'Владелец',
+                        sortable: true
+                    },
+                    created_at:{
+                        label:'Дата',
                         sortable: true
                     }
                 }

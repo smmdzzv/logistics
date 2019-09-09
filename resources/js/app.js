@@ -23,6 +23,7 @@ window.Vue.use(Vuelidate);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 Vue.component('UsersTable', require('./components/users/UsersTable.vue').default);
 Vue.component('StoredTable', require('./components/stored/StoredTable.vue').default);
+Vue.component('OrdersTable', require('./components/orders/OrdersTable.vue').default);
 
 Vue.component('OrderEditor', require('./components/OrderEditor.vue').default);
 Vue.component('OrderViewer', require('./components/OrderViewer.vue').default);

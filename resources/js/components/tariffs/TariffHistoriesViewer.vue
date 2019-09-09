@@ -4,7 +4,7 @@
             <div class="card-header">
                 История тарифных планов
             </div>
-            <div class="card-body">
+            <div class="">
                 <b-table :items="histories"
                          :fields="fields"
                          primary-key="id"

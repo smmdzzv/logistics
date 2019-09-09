@@ -15,8 +15,10 @@
                             <li><a href="/employees">Список сотрудников</a></li>
                         <hr>
                         <li><a href="/settings">Настройки</a></li>
-
+                        <hr>
                         <li><a href="/order/create">Оформить заказ</a></li>
+                        <li><a href="/order">Список заказов</a></li>
+                        <li><a href="/order/1">Посмотреть заказ с id=1</a></li>
                         <hr>
                         <li><a href="/tariff/create">Редактирование тарифов</a></li>
                         <li><a href="/tariff-price-history/create">Редактирование тарифных планов</a></li>
