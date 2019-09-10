@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<orders-table :branches="{{$branches}}"></orders-table>
+    <div class="container">
+        <orders-table :action='order/all' :branches="{{$branches}}"></orders-table>
+    </div>
 @endsection
 

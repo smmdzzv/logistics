@@ -22,13 +22,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 //Registration
 Route::get('user/create', 'UsersController@create')->middleware('role:employee')->name('user.create');
 Route::post('user/store', 'UsersController@store')->middleware('role:employee')->name('user.store');
-Route::get('user/{user}/edit', 'UsersController@edit')->middleware('role:employee')->name('user.edit');
-Route::patch('user/{user}', 'UsersController@update')->middleware('role:employee')->name('user.update');
-
-//Users TODO remove clients and stuff
 Route::get('clients', 'UsersController@clients')->middleware('role:admin')->name('user.clients');
 Route::get('employees', 'UsersController@employees')->middleware('role:admin')->name('user.employees');
+Route::get('user/{user}/edit', 'UsersController@edit')->middleware('role:employee')->name('user.edit');
+Route::get('user/{user}/profile', 'UsersController@profile')->name('user.profile');
 Route::get('user/{role}/only', 'UsersController@filtered')->middleware('role:admin')->name('user.filtered');
+Route::patch('user/{user}', 'UsersController@update')->middleware('role:employee')->name('user.update');
+
 
 //Order
 Route::get('/order', 'OrdersController@index')->middleware('role:employee')->name('order.index');
@@ -36,7 +36,8 @@ Route::get('/order/create', 'OrdersController@create')->middleware('role:employe
 Route::post('/order/store', 'OrdersController@store')->middleware('role:employee')->name('order.store');
 Route::get('/order/update', 'OrdersController@update')->middleware('role:employee')->name('order.update');
 Route::get('/order/all','OrdersController@all')->middleware('role:employee')->name('order.all');
-Route::get('/{branch}/orders', 'OrdersController@filteredByBranch')->middleware('role:employee');
+Route::get('branch/{branch}/orders', 'OrdersController@filteredByBranch')->middleware('role:employee');
+Route::get('user/{user}/orders', 'OrdersController@filteredByUser')->middleware('role:employee');
 Route::get('/order/{order}', 'OrdersController@show')->middleware('role:client, employee')->name('order.show');
 
 //StoredItems

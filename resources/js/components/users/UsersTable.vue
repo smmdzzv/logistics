@@ -28,6 +28,10 @@
                     <template slot="id" slot-scope="data">
                         <a :href="getEditUrl(data.item)" class="btn btn-outline-secondary">Изменить</a>
                     </template>
+
+                    <template slot="profile" slot-scope="data">
+                        <a :href="getProfileUrl(data.item)" class="btn btn-primary">Профиль</a>
+                    </template>
                 </b-table>
 
             <div class="card-footer">
@@ -62,6 +66,9 @@
         methods:{
             getEditUrl(item){
                 return `/user/${item.id}/edit`;
+            },
+            getProfileUrl(item){
+                return `/user/${item.id}/profile`;
             },
             getUsers(page = 1){
                 this.isBusy = true;
@@ -105,6 +112,9 @@
                     'roles': {
                         label: 'Роли',
                         sortable: true
+                    },
+                    'profile':{
+                        label:'Профиль'
                     },
                     id:{
                         label:'Редактировать'

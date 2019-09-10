@@ -1,15 +1,16 @@
 <template>
-    <div class="container">
         <div class="card">
             <div class="card-header">
                 <div class="row align-items-baseline">
-                    <div class="col-md-6">Принятые заказы</div>
-                    <label class="col-md-4 text-right" for="branch">Филиал</label>
-                    <div class="col-md-2">
-                        <select id="branch" class="form-control custom-select" v-model="selectedBranch">
-                            <option v-for="branch in branches" :value="branch" :key="branch.id">{{branch.name}}</option>
-                        </select>
-                    </div>
+                    <div class="col-md-6">Заказы</div>
+                    <template  v-if="branches" >
+                        <label class="col-md-4 text-right" for="branch">Филиал</label>
+                        <div class="col-md-2">
+                            <select id="branch" class="form-control custom-select" v-model="selectedBranch">
+                                <option v-for="branch in branches" :value="branch" :key="branch.id">{{branch.name}}</option>
+                            </select>
+                        </div>
+                    </template>
                 </div>
             </div>
             <b-table :fields="fields"
@@ -26,12 +27,10 @@
                     </div>
                 </template>
             </b-table>
-
             <div class="card-footer">
                 <pagination :data="pagination" @pagination-change-page="getOrders"></pagination>
             </div>
         </div>
-    </div>
 </template>
 
 <script>
@@ -43,16 +42,19 @@
         props:{
             branches:{
                 type:Array,
-                required: true
+                required: false,
+            },
+            action:{
+                type:String,
+                required: false
             }
         },
         methods:{
             getOrders(page = 1){
                 this.isBusy = true;
-                let action = 'order/all';
                 if(this.selectedBranch)
-                    action = `/${this.selectedBranch.id}/orders`;
-                axios.get(action)
+                    this.action = `branch/${this.selectedBranch.id}/orders`;
+                axios.get(this.action)
                     .then(response=>{
                         this.pagination = response.data;
                         this.orders = response.data.data;

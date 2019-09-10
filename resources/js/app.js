@@ -21,6 +21,8 @@ window.Vue.use(Vuelidate);
 
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+Vue.component('Profile', require('./components/users/Profile.vue').default);
+
 Vue.component('UsersTable', require('./components/users/UsersTable.vue').default);
 Vue.component('StoredTable', require('./components/stored/StoredTable.vue').default);
 Vue.component('OrdersTable', require('./components/orders/OrdersTable.vue').default);

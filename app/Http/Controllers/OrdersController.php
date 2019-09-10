@@ -92,4 +92,11 @@ class OrdersController extends Controller
         }
         else abort(404, 'Филиал не найден');
     }
+
+    public function filteredByUser(User $user){
+        if(isset($user)){
+            return $user->orders()->with(['owner','registeredBy'])->paginate(10);
+        }
+        else abort(404, 'Пользователь не найден');
+    }
 }
