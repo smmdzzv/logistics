@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header">Создать тарифный план</div>
                     <div class="card-body p-4">
-                        <form method="POST" action="{{route('store-pricing-history')}}">
+                        <form method="POST" action="{{route('pricing.create')}}">
                             @csrf
 
                             <div class="form-group row">
