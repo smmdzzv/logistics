@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container col-md-6">
+    <div class="container col-lg-8 col-xl-6">
         <div class="card">
             <div class="card-header">
                 <div class="md-6">Обзор машины</div>
@@ -12,9 +12,9 @@
             </form>
             <div class="card-body">
                 <div class="row">
-                    <h5 class="col-12 col-sm-5">Номер машины: {{$car->number}}</h5>
-                    <div class="text-left text-sm-right col-12 col-sm-7 align-items-baseline">
-                        <a href="{{route('car.edit', $car)}}" class="pr-4">Редактировать</a>
+                    <h5 class="col-12 col-sm-6">Номер машины: {{$car->number}}</h5>
+                    <div class="text-left text-sm-right col-12 col-sm-6 align-items-baseline">
+                        <a href="{{route('car.edit', $car)}}" class="pr-md-0 pr-lg-4">Редактировать</a>
                         <button class="btn btn-link" onclick="deleteCar()">Удалить</button>
                     </div>
                     <div class="jumbotron col-10 offset-1 mt-4">
