@@ -6,7 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Car extends Model
 {
-    public function fuelConsumptions(){
-        return $this->hasMany(FuelConsumption::class);
+    protected $fillable = [
+        'number',
+        'trailerNumber',
+        'length',
+        'height',
+        'width',
+        'maxCubage',
+        'maxWeight',
+        'serial'
+    ];
+
+    public function fuelConsumptions()
+    {
+        return $this->belongsToMany(FuelConsumption::class);
     }
 }

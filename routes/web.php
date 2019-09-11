@@ -25,10 +25,11 @@ Route::post('user/store', 'UsersController@store')->middleware('role:employee')-
 Route::get('clients', 'UsersController@clients')->middleware('role:admin')->name('user.clients');
 Route::get('employees', 'UsersController@employees')->middleware('role:admin')->name('user.employees');
 Route::get('user/{user}/edit', 'UsersController@edit')->middleware('role:employee')->name('user.edit');
-Route::get('user/{user}/profile', 'UsersController@profile')->name('user.profile');
 Route::get('user/{role}/only', 'UsersController@filtered')->middleware('role:admin')->name('user.filtered');
 Route::patch('user/{user}', 'UsersController@update')->middleware('role:employee')->name('user.update');
 
+//Profile
+Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 
 //Order
 Route::get('/order', 'OrdersController@index')->middleware('role:employee')->name('order.index');
@@ -60,6 +61,16 @@ Route::get('/tariff-price-history/', 'TariffPriceHistoriesController@index')->mi
 Route::get('/tariff-price-history/create', 'TariffPriceHistoriesController@create')->middleware('role:admin')->name('pricing.create');
 Route::post('/tariff-price-history/store', 'TariffPriceHistoriesController@store')->middleware('role:admin')->name('pricing.store');
 Route::get('/tariff-price-history/{tariff}', "TariffPriceHistoriesController@lastByTariff")->middleware('role:employee');
+
+//Cars
+Route::get('/car', 'CarsController@index')->middleware('role:employee')->name('car.index');
+
+Route::get('/car/create', 'CarsController@create')->middleware('role:employee')->name('car.create');
+Route::get('/car/{car}', 'CarsController@show')->middleware('role:employee')->name('car.show');
+Route::post('/car', 'CarsController@store')->middleware('role:employee')->name('car.store');
+Route::get('/car/{car}/edit', 'CarsController@edit')->middleware('role:employee')->name('car.edit');
+Route::patch('/car/{car}', 'CarsController@update')->middleware('role:employee')->name('car.update');
+Route::delete('/car/{car}', 'CarsController@destroy')->middleware('role:employee')->name('car.delete');
 
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo')->middleware('role:employee');
 

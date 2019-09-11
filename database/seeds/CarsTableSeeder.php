@@ -17,8 +17,9 @@ class CarsTableSeeder extends Seeder
         $car->length = 8;
         $car->height = 2.6;
         $car->width = 3;
-        $car->fuel = 61;
         $car->trailerNumber = '01 АА 20-66';
+        $car->maxWeight = '40000';
+        $car->maxCubage = '60';
         $car->save();
     }
 }

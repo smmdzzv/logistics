@@ -15,14 +15,11 @@ class CreateFuelConsumptionsTable extends Migration
     {
         Schema::create('fuel_consumptions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('car_id');
             $table->double('empty');
             $table->double('loaded');
             $table->boolean('hasTrailer')->default(false);
             $table->string('destination');
             $table->timestamps();
-
-            $table->index('car_id');
         });
     }
 

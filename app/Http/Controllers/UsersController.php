@@ -110,11 +110,6 @@ class UsersController extends Controller
         return view('users.index', ['type' => 'client']);
     }
 
-    //TODO access
-    public function profile(User $user){
-        return view('users.profile', compact('user'));
-    }
-
     public function filtered($role){
         $users = Role::where('name',$role)->first() ->users()->paginate(10);
         $users->load(['position', 'roles']);

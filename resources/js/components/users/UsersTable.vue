@@ -68,7 +68,7 @@
                 return `/user/${item.id}/edit`;
             },
             getProfileUrl(item){
-                return `/user/${item.id}/profile`;
+                return `/profile/${item.id}`;
             },
             getUsers(page = 1){
                 this.isBusy = true;
@@ -86,7 +86,7 @@
         data() {
             return {
                 pagination:{},
-                users:{},
+                users:[],
                 isBusy:false,
                 fields: {
                     name: {

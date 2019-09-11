@@ -25,6 +25,8 @@
                         <li><a href="/tariff-price-history">Список историй тарифных планов</a></li>
                         <hr>
                         <li><a href="{{route('stored.index')}}">Список принятых товаров</a></li>
+                        <hr>
+                        <li><a href="{{route('car.create')}}">Добавить машину</a></li>
                     </ul>
                 </div>
             </div>

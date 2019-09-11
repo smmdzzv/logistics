@@ -8803,6 +8803,167 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/cars/CarsTable.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/cars/CarsTable.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "CarsTable",
+  props: {
+    cars: {
+      type: Array,
+      required: true
+    }
+  },
+  data: function data() {
+    return {
+      items: this.cars,
+      isBusy: false,
+      fields: {
+        number: {
+          label: 'Гос. номер'
+        },
+        serial: {
+          label: 'УКТ (ВИН)'
+        },
+        trailerNumber: {
+          label: 'Номер прицепа'
+        },
+        length: {
+          label: 'Длина'
+        },
+        width: {
+          label: 'Ширина'
+        },
+        height: {
+          label: 'Высота'
+        },
+        maxWeight: {
+          label: 'Груз-ть, кг'
+        },
+        maxCubage: {
+          label: 'Объем, куб'
+        },
+        'edit': {
+          label: ''
+        },
+        'delete': {
+          label: ''
+        }
+      }
+    };
+  },
+  methods: {
+    getEditUrl: function getEditUrl(car) {
+      return "/car/".concat(car.id, "/edit");
+    },
+    deleteCar: function () {
+      var _deleteCar = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(car) {
+        var confirm, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                this.isBusy = true;
+                _context.next = 3;
+                return this.$bvModal.msgBoxConfirm("\u0412\u044B \u0443\u0432\u0435\u0440\u0435\u043D\u044B \u0447\u0442\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u043C\u0430\u0448\u0438\u043D\u0443 ".concat(car.number, "?"), {
+                  centered: true,
+                  okTitle: 'Да',
+                  cancelTitle: 'Отменить',
+                  footerClass: 'border-0',
+                  title: 'Подтверждение удаления'
+                });
+
+              case 3:
+                confirm = _context.sent;
+
+                if (!confirm) {
+                  _context.next = 14;
+                  break;
+                }
+
+                _context.prev = 5;
+                response = axios["delete"]('/car/' + car.id);
+                this.items = $.grep(this.items, function (item) {
+                  return item.id !== car.id;
+                });
+                _context.next = 14;
+                break;
+
+              case 10:
+                _context.prev = 10;
+                _context.t0 = _context["catch"](5);
+                _context.next = 14;
+                return this.$bvModal.msgBoxOk("\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u043C\u0430\u0448\u0438\u043D\u0443  ".concat(car.number, ". \u041F\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u0435 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0443 \u0438 \u043F\u043E\u043F\u0440\u043E\u0431\u0443\u0439\u0442\u0435 \u0435\u0449\u0435 \u0440\u0430\u0437"), {
+                  centered: true,
+                  okTitle: 'Закрыть',
+                  footerClass: 'border-0',
+                  title: 'Сообщение об ошибке'
+                });
+
+              case 14:
+                this.isBusy = false;
+
+              case 15:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[5, 10]]);
+      }));
+
+      function deleteCar(_x) {
+        return _deleteCar.apply(this, arguments);
+      }
+
+      return deleteCar;
+    }()
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/items/StoredItemShortInfo.vue?vue&type=script&lang=js&":
 /*!************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/items/StoredItemShortInfo.vue?vue&type=script&lang=js& ***!
@@ -9607,7 +9768,7 @@ __webpack_require__.r(__webpack_exports__);
       return "/user/".concat(item.id, "/edit");
     },
     getProfileUrl: function getProfileUrl(item) {
-      return "/user/".concat(item.id, "/profile");
+      return "/profile/".concat(item.id);
     },
     getUsers: function getUsers() {
       var _this = this;
@@ -9628,7 +9789,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       pagination: {},
-      users: {},
+      users: [],
       isBusy: false,
       fields: {
         name: {
@@ -77014,6 +77175,98 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/cars/CarsTable.vue?vue&type=template&id=0f854f2c&scoped=true&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/cars/CarsTable.vue?vue&type=template&id=0f854f2c&scoped=true& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("b-table", {
+        attrs: {
+          fields: _vm.fields,
+          items: _vm.items,
+          borderless: "",
+          "primary-key": "id",
+          striped: "",
+          busy: _vm.isBusy,
+          responsive: ""
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "table-busy",
+            fn: function() {
+              return [
+                _c(
+                  "div",
+                  { staticClass: "text-center text-info my-2" },
+                  [_c("b-spinner", { staticClass: "align-middle" })],
+                  1
+                )
+              ]
+            },
+            proxy: true
+          },
+          {
+            key: "edit",
+            fn: function(data) {
+              return [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-outline-secondary",
+                    attrs: { href: _vm.getEditUrl(data.item) }
+                  },
+                  [_vm._v("Изменить")]
+                )
+              ]
+            }
+          },
+          {
+            key: "delete",
+            fn: function(data) {
+              return [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.deleteCar(data.item)
+                      }
+                    }
+                  },
+                  [_vm._v("Удалить")]
+                )
+              ]
+            }
+          }
+        ])
+      })
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/items/StoredItemShortInfo.vue?vue&type=template&id=3d3f476a&scoped=true&":
 /*!****************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/items/StoredItemShortInfo.vue?vue&type=template&id=3d3f476a&scoped=true& ***!
@@ -91964,6 +92217,7 @@ Vue.component('StoredTable', __webpack_require__(/*! ./components/stored/StoredT
 Vue.component('OrdersTable', __webpack_require__(/*! ./components/orders/OrdersTable.vue */ "./resources/js/components/orders/OrdersTable.vue")["default"]);
 Vue.component('OrderEditor', __webpack_require__(/*! ./components/OrderEditor.vue */ "./resources/js/components/OrderEditor.vue")["default"]);
 Vue.component('OrderViewer', __webpack_require__(/*! ./components/OrderViewer.vue */ "./resources/js/components/OrderViewer.vue")["default"]);
+Vue.component('CarsTable', __webpack_require__(/*! ./components/cars/CarsTable.vue */ "./resources/js/components/cars/CarsTable.vue")["default"]);
 Vue.component('TariffEditor', __webpack_require__(/*! ./components/tariffs/TariffEditor.vue */ "./resources/js/components/tariffs/TariffEditor.vue")["default"]);
 Vue.component('TariffHistoriesViewer', __webpack_require__(/*! ./components/tariffs/TariffHistoriesViewer.vue */ "./resources/js/components/tariffs/TariffHistoriesViewer.vue")["default"]);
 Vue.component('Barcode', __webpack_require__(/*! @xkeshi/vue-barcode */ "./node_modules/@xkeshi/vue-barcode/dist/vue-barcode.esm.js")["default"]);
@@ -91974,8 +92228,11 @@ Vue.component('QrCode', __webpack_require__(/*! @chenfengyuan/vue-qrcode */ "./n
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+// const app = new Vue({
+//     el: '#app',
+// });
 
-var app = new Vue({
+window.app = new Vue({
   el: '#app'
 });
 
@@ -92448,6 +92705,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SuggestionInput_vue_vue_type_template_id_adec6cea___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SuggestionInput_vue_vue_type_template_id_adec6cea___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/cars/CarsTable.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/cars/CarsTable.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _CarsTable_vue_vue_type_template_id_0f854f2c_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CarsTable.vue?vue&type=template&id=0f854f2c&scoped=true& */ "./resources/js/components/cars/CarsTable.vue?vue&type=template&id=0f854f2c&scoped=true&");
+/* harmony import */ var _CarsTable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CarsTable.vue?vue&type=script&lang=js& */ "./resources/js/components/cars/CarsTable.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _CarsTable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _CarsTable_vue_vue_type_template_id_0f854f2c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _CarsTable_vue_vue_type_template_id_0f854f2c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "0f854f2c",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/cars/CarsTable.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/cars/CarsTable.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/cars/CarsTable.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CarsTable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./CarsTable.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/cars/CarsTable.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CarsTable_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/cars/CarsTable.vue?vue&type=template&id=0f854f2c&scoped=true&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/components/cars/CarsTable.vue?vue&type=template&id=0f854f2c&scoped=true& ***!
+  \***********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CarsTable_vue_vue_type_template_id_0f854f2c_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./CarsTable.vue?vue&type=template&id=0f854f2c&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/cars/CarsTable.vue?vue&type=template&id=0f854f2c&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CarsTable_vue_vue_type_template_id_0f854f2c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CarsTable_vue_vue_type_template_id_0f854f2c_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
