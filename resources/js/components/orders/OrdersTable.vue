@@ -78,7 +78,7 @@
             return {
                 selectedBranch: null,
                 pagination:{},
-                orders: null,
+                orders: [],
                 isBusy:false,
                 fields: {
                     totalWeight: {

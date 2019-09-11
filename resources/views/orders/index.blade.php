@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <orders-table :action='order/all' :branches="{{$branches}}"></orders-table>
+        <orders-table action='order/all' :branches="{{$branches}}"></orders-table>
     </div>
 @endsection
 
