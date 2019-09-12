@@ -9071,6 +9071,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "BranchViewer",
   created: function created() {
@@ -9082,19 +9083,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
-      branches: []
+      branches: [],
+      branchToChange: {
+        name: null,
+        country: null,
+        id: null,
+        director: null
+      }
     };
   },
   methods: {
     editBranch: function editBranch(branch) {
-      console.log('edit branch', branch);
+      this.branchToChange = Object.assign(this.branchToChange, branch); // this.$set(this.branchToChange, 'name', branch);
     },
     onBranchSaved: function onBranchSaved(branch) {
-      console.log('saved', branch);
       this.branches.push(branch);
     },
     onBranchUpdated: function onBranchUpdated(branch) {
-      console.log('update', branch);
+      var index = this.branches.findIndex(function (obj) {
+        return obj.id === branch.id;
+      });
+      this.branches.splice(index, 1, branch);
     },
     getBranches: function () {
       var _getBranches = _asyncToGenerator(
@@ -77881,6 +77890,7 @@ var render = function() {
             { staticClass: "card-body" },
             [
               _c("branch-editor", {
+                attrs: { branch: _vm.branchToChange },
                 on: {
                   branchSaved: _vm.onBranchSaved,
                   branchUpdated: _vm.onBranchUpdated
@@ -77905,7 +77915,7 @@ var render = function() {
             { staticClass: "card-body" },
             [
               _c("branches-table", {
-                attrs: { onEditRequest: _vm.editBranch, branches: _vm.branches }
+                attrs: { branches: _vm.branches, onEditRequest: _vm.editBranch }
               })
             ],
             1

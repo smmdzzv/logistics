@@ -1,69 +1,76 @@
 <template>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Добавить филиал</div>
-                <div class="card-body">
-                    <branch-editor @branchSaved="onBranchSaved"
-                    @branchUpdated="onBranchUpdated"/>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Добавить филиал</div>
+                    <div class="card-body">
+                        <branch-editor :branch="branchToChange"
+                                       @branchSaved="onBranchSaved"
+                                       @branchUpdated="onBranchUpdated"/>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Список филиалов</div>
-                <div class="card-body">
-                    <branches-table :onEditRequest="editBranch" :branches="branches"></branches-table>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Список филиалов</div>
+                    <div class="card-body">
+                        <branches-table :branches="branches" :onEditRequest="editBranch"></branches-table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>
     export default {
         name: "BranchViewer",
-        created(){
+        created() {
             this.getBranches();
         },
-        components:{
+        components: {
             'BranchEditor': require('./BranchEditor.vue').default,
             'BranchesTable': require('./BranchesTable.vue').default
         },
-        data(){
-            return{
-                branches:[]
+        data() {
+            return {
+                branches: [],
+                branchToChange: {
+                    name: null,
+                    country: null,
+                    id: null,
+                    director: null
+                }
             }
         },
-        methods:{
-            editBranch(branch){
-                console.log('edit branch', branch)
+        methods: {
+            editBranch(branch) {
+                this.branchToChange = Object.assign(this.branchToChange, branch);
+                // this.$set(this.branchToChange, 'name', branch);
             },
-            onBranchSaved(branch){
-                console.log('saved', branch)
+            onBranchSaved(branch) {
                 this.branches.push(branch);
             },
-            onBranchUpdated(branch){
-                console.log('update', branch)
+            onBranchUpdated(branch) {
+                let index = this.branches.findIndex(obj => obj.id === branch.id);
+                this.branches.splice(index, 1, branch);
             },
-            async getBranches(){
+            async getBranches() {
                 this.$bvModal.show('busyModal');
-                try{
+                try {
                     const response = await axios.get('/branches');
                     this.branches = response.data;
-                }
-                catch (e) {
+                } catch (e) {
                     this.$root.showErrorMsg(
                         'Сбой загрузки',
                         'Не удалось загрузить филиалы. Перезагрузите страницу и попробуйте еще раз'
                     );
                 }
-                this.$nextTick(()=>{
+                this.$nextTick(() => {
                     this.$bvModal.hide('busyModal');
                 })
             }
