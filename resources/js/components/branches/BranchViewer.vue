@@ -1,29 +1,32 @@
 <template>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Добавить филиал</div>
-                    <div class="card-body">
-                        <branch-editor :branch="branchToChange"
-                                       @branchSaved="onBranchSaved"
-                                       @branchUpdated="onBranchUpdated"/>
+        <div class="row">
+            <div class="col-lg-5 col-lx-6 mb-5">
+                <div class="shadow">
+                    <div class="card">
+                        <div class="card-header">Добавить филиал</div>
+                        <div class="card-body">
+                            <branch-editor :branch="branchToChange"
+                                           @branchSaved="onBranchSaved"
+                                           @branchUpdated="onBranchUpdated"/>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Список филиалов</div>
-                    <div class="card-body">
-                        <branches-table :branches="branches" :onEditRequest="editBranch"></branches-table>
+            <div class="col-lg-7 col-lx-6">
+                <div class="shadow">
+                    <div class="card">
+                        <div class="card-header">Список филиалов</div>
+                        <div class="card-body">
+                            <branches-table :branches="branches" :onEditRequest="editBranch"></branches-table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </template>
 
 <script>

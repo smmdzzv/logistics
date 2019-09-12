@@ -63,7 +63,7 @@
                 isBusy:false,
                 fields:{
                     name:{
-                        label:'Название',
+                        label:'Имя',
                         sortable:true
                     },
                     'director.name':{

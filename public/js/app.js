@@ -9072,6 +9072,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "BranchViewer",
   created: function created() {
@@ -9227,7 +9230,7 @@ __webpack_require__.r(__webpack_exports__);
       isBusy: false,
       fields: {
         name: {
-          label: 'Название',
+          label: 'Имя',
           sortable: true
         },
         'director.name': {
@@ -77878,48 +77881,53 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-8" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v("Добавить филиал")
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "card-body" },
-            [
-              _c("branch-editor", {
-                attrs: { branch: _vm.branchToChange },
-                on: {
-                  branchSaved: _vm.onBranchSaved,
-                  branchUpdated: _vm.onBranchUpdated
-                }
-              })
-            ],
-            1
-          )
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-lg-5 col-lx-6 mb-5" }, [
+        _c("div", { staticClass: "shadow" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [
+              _vm._v("Добавить филиал")
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                _c("branch-editor", {
+                  attrs: { branch: _vm.branchToChange },
+                  on: {
+                    branchSaved: _vm.onBranchSaved,
+                    branchUpdated: _vm.onBranchUpdated
+                  }
+                })
+              ],
+              1
+            )
+          ])
         ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-8" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v("Список филиалов")
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "card-body" },
-            [
-              _c("branches-table", {
-                attrs: { branches: _vm.branches, onEditRequest: _vm.editBranch }
-              })
-            ],
-            1
-          )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-lg-7 col-lx-6" }, [
+        _c("div", { staticClass: "shadow" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [
+              _vm._v("Список филиалов")
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                _c("branches-table", {
+                  attrs: {
+                    branches: _vm.branches,
+                    onEditRequest: _vm.editBranch
+                  }
+                })
+              ],
+              1
+            )
+          ])
         ])
       ])
     ])
