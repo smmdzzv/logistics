@@ -64,7 +64,6 @@ Route::get('/tariff-price-history/{tariff}', "TariffPriceHistoriesController@las
 
 //Cars
 Route::get('/car', 'CarsController@index')->middleware('role:employee')->name('car.index');
-
 Route::get('/car/create', 'CarsController@create')->middleware('role:employee')->name('car.create');
 Route::get('/car/{car}', 'CarsController@show')->middleware('role:employee')->name('car.show');
 Route::post('/car', 'CarsController@store')->middleware('role:employee')->name('car.store');
@@ -72,10 +71,23 @@ Route::get('/car/{car}/edit', 'CarsController@edit')->middleware('role:employee'
 Route::patch('/car/{car}', 'CarsController@update')->middleware('role:employee')->name('car.update');
 Route::delete('/car/{car}', 'CarsController@destroy')->middleware('role:employee')->name('car.delete');
 
+//Branches
+Route::get('/branches', "BranchesController@all")->middleware('role:employee');
+Route::get('/branch', 'BranchesController@index')->middleware('role:employee')->name('branch.index');
+Route::get('/branch/create', 'BranchesController@create')->middleware('role:employee')->name('branch.create');
+Route::get('/branch/{branch}', 'BranchesController@show')->middleware('role:employee')->name('branch.show');
+Route::post('/branch', 'BranchesController@store')->middleware('role:employee')->name('branch.store');
+Route::get('/branch/{branch}/edit', 'BranchesController@edit')->middleware('role:employee')->name('branch.edit');
+Route::patch('/branch/{branch}', 'BranchesController@update')->middleware('role:employee')->name('branch.update');
+Route::delete('/branch/{branch}', 'BranchesController@destroy')->middleware('role:employee')->name('branch.delete');
+
+
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo')->middleware('role:employee');
 
 Route::get('/items', 'ItemsController@all')->middleware('role:employee');
 
-Route::get('/branches', "BranchesController@all")->middleware('role:employee');;
+Route::get('/countries', 'CountriesController@all')->middleware('role:employee');
+
+
 
 

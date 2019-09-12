@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Country;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -16,7 +17,11 @@ class Branch extends Model
     }
 
     public function director(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'director');
+    }
+
+    public function country(){
+        return $this->belongsTo(Country::class, 'country');
     }
 
     public function storedItems(){

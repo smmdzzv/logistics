@@ -35,6 +35,7 @@ Vue.component('CarsTable', require('./components/cars/CarsTable.vue').default);
 Vue.component('TariffEditor', require('./components/tariffs/TariffEditor.vue').default);
 Vue.component('TariffHistoriesViewer', require('./components/tariffs/TariffHistoriesViewer.vue').default);
 
+Vue.component('BranchViewer', require('./components/branches/BranchViewer.vue').default);
 Vue.component('Barcode', require('@xkeshi/vue-barcode').default);
 Vue.component('QrCode', require('@chenfengyuan/vue-qrcode').default);
 //Vue.component('search-user-dropdown', require('./components/SearchUserDropdown.vue').default);
@@ -51,4 +52,14 @@ Vue.component('QrCode', require('@chenfengyuan/vue-qrcode').default);
 
 window.app = new Vue({
     el: '#app',
+    methods:{
+        showErrorMsg(title, message){
+            this.$bvModal.msgBoxOk(message, {
+                centered: true,
+                okTitle: 'Закрыть',
+                footerClass: 'border-0',
+                title: title
+            });
+        }
+    }
 });

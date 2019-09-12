@@ -101,7 +101,9 @@
                         });
                     }
                 }
-                this.isBusy = false;
+                this.$nextTick(()=>{
+                    this.isBusy = false;
+                })
             }
         }
     }
