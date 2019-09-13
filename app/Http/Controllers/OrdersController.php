@@ -14,6 +14,12 @@ class OrdersController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
+
+        $this->middleware(function ($request, $next) {
+            if(!auth()->user()->branch)
+                abort(403, 'Для работы с заказами необходимо быть сотрудником филиала.');
+            return $next($request);
+        });
     }
 
     public function index(){
@@ -28,7 +34,6 @@ class OrdersController extends Controller
 
     public function create(){
         $user = auth()->user();
-        auth()->user()->branch;
         $tariffs = Tariff::all();
         return view('orders.create', compact('user', 'tariffs'));
     }

@@ -27,6 +27,8 @@
                         <li><a href="{{route('stored.index')}}">Список принятых товаров</a></li>
                         <hr>
                         <li><a href="{{route('car.create')}}">Добавить машину</a></li>
+                        <hr>
+                        <li><a href="{{route('branch.index')}}">Управлять филиалами</a></li>
                     </ul>
                 </div>
             </div>

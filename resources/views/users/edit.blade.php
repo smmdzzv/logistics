@@ -60,7 +60,7 @@
                                 <label for="phone" class="col-md-4 col-form-label text-md-right">Телефон</label>
 
                                 <div class="col-md-6">
-                                    <input id="phone" type="text" class="form-control @error('name') is-invalid @enderror" name="phone" value="{{ old('phone') ?? $user->phone }}" required autocomplete="phone" autofocus>
+                                    <input id="phone" type="text" class="form-control @error('name') is-invalid @enderror" name="phone" value="{{ old('phone') ?? $user->phone }}" autocomplete="phone" autofocus>
 
                                     @error('phone')
                                     <span class="invalid-feedback" role="alert">
@@ -125,9 +125,9 @@
                                                     class="form-control custom-select @error('branch') is-invalid @enderror"
                                                     name="branch"
                                                     autocomplete="branch" required>
-
+                                                <option value="" @if(!$user->branch) selected @endif  disabled>--Выберите филиал--</option>
                                                 @foreach($branches as $branch)
-                                                    <option value="{{$branch->id}}" @if($user->branch->id === $branch->id) selected @endif>{{$branch->name}}</option>
+                                                    <option value="{{$branch->id}}" @if($user->branch && $user->branch->id === $branch->id) selected @endif>{{$branch->name}}</option>
                                                 @endforeach
                                             </select>
                                             @error('position')

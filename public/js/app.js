@@ -7779,10 +7779,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "Order",
-  mounted: function mounted() {
-    console.log(this.user);
-  },
+  name: "OrderEditor",
   props: {
     user: null,
     tariffs: Array
@@ -8415,7 +8412,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "StoredItemBox",
   props: {
-    branch: null,
+    branch: {
+      type: Object,
+      required: false,
+      "default": function _default() {
+        return {
+          name: ''
+        };
+      }
+    },
     tariffs: Array,
     onStoredItemAdded: {
       type: Function,
@@ -76556,19 +76561,22 @@ var render = function() {
     { attrs: { id: "order" } },
     [
       _c("search-user-dropdown", {
-        attrs: { id: "user" },
-        on: { userSelected: _vm.onUserSelected }
+        attrs: {
+          selected: _vm.onUserSelected,
+          placeholder: "Введите ФИО или код клиента",
+          id: "user"
+        }
       }),
       _vm._v(" "),
       _c("b-popover", {
         attrs: {
           show: _vm.clientError,
-          variant: "danger",
-          target: "user",
-          placement: "bottom",
           content:
             "Необходимо выбрать клиента. Начните вводить ФИО или код клиента",
-          triggers: "null"
+          placement: "bottom",
+          target: "user",
+          triggers: "null",
+          variant: "danger"
         },
         on: {
           "update:show": function($event) {
@@ -76578,7 +76586,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("order-items-box", {
-        attrs: { user: _vm.user, tariffs: _vm.tariffs },
+        attrs: { tariffs: _vm.tariffs, user: _vm.user },
         on: { onStoredItemsChange: _vm.onStoredItemsChange }
       }),
       _vm._v(" "),

@@ -38,7 +38,7 @@ class UsersController extends Controller
     public function edit(User $user){
         $branches = Branch::all();
         $roles = $this->getRoles();
-        $user->load(['roles', 'branch']);
+        $user->load('roles', 'branch');
         return view('users.edit', compact('branches', 'roles', 'user'));
     }
 

@@ -165,7 +165,13 @@
     export default {
         name: "StoredItemBox",
         props: {
-            branch: null,
+            branch: {
+                type: Object,
+                required:false,
+                default: function () {
+                    return {name: ''}
+                }
+            },
             tariffs:Array,
             onStoredItemAdded: {
                 type: Function,

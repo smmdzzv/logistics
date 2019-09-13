@@ -82,7 +82,7 @@ Route::get('/branches', "BranchesController@all")->middleware('role:employee');
 //Route::patch('/branch/{branch}', 'BranchesController@update')->middleware('role:employee')->name('branch.update');
 //Route::delete('/branch/{branch}', 'BranchesController@destroy')->middleware('role:employee')->name('branch.delete');
 Route::resource('branch', 'BranchesController',
-    ['except' => ['create', 'edit', 'show']])->middleware('role:employee');
+    ['except' => ['create', 'edit', 'show']])->middleware('role:admin');
 
 
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo')->middleware('role:employee');

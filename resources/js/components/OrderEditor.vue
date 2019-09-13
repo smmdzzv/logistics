@@ -1,20 +1,20 @@
 <template>
     <div id="order">
-        <search-user-dropdown id="user" v-on:userSelected="onUserSelected"></search-user-dropdown>
+        <search-user-dropdown :selected="onUserSelected" placeholder="Введите ФИО или код клиента" id="user"></search-user-dropdown>
         <b-popover
             :show.sync="clientError"
-            variant="danger"
-            target="user"
-            placement="bottom"
             content="Необходимо выбрать клиента. Начните вводить ФИО или код клиента"
-            triggers="null"/>
+            placement="bottom"
+            target="user"
+            triggers="null"
+            variant="danger"/>
 
-        <order-items-box :user="user" :tariffs="tariffs"
+        <order-items-box :tariffs="tariffs" :user="user"
                          v-on:onStoredItemsChange="onStoredItemsChange"></order-items-box>
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-right pt-4" v-if="storedItems.length > 0">
-                    <button class="btn btn-primary" @click.stop.prevent.capture="submitData()">Оформить заказ</button>
+                    <button @click.stop.prevent.capture="submitData()" class="btn btn-primary">Оформить заказ</button>
                 </div>
             </div>
         </div>
@@ -23,10 +23,7 @@
 
 <script>
     export default {
-        name: "Order",
-        mounted() {
-            console.log(this.user)
-        },
+        name: "OrderEditor",
         props: {
             user: null,
             tariffs: Array
@@ -59,8 +56,7 @@
                     } catch (e) {
                         //TODO
                     }
-                }
-                else if(!this.client)
+                } else if (!this.client)
                     this.clientError = true;
                 this.$bvModal.hide('busyModal');
             },
