@@ -73,13 +73,16 @@ Route::delete('/car/{car}', 'CarsController@destroy')->middleware('role:employee
 
 //Branches
 Route::get('/branches', "BranchesController@all")->middleware('role:employee');
-Route::get('/branch', 'BranchesController@index')->middleware('role:employee')->name('branch.index');
-Route::get('/branch/create', 'BranchesController@create')->middleware('role:employee')->name('branch.create');
-Route::get('/branch/{branch}', 'BranchesController@show')->middleware('role:employee')->name('branch.show');
-Route::post('/branch', 'BranchesController@store')->middleware('role:employee')->name('branch.store');
-Route::get('/branch/{branch}/edit', 'BranchesController@edit')->middleware('role:employee')->name('branch.edit');
-Route::patch('/branch/{branch}', 'BranchesController@update')->middleware('role:employee')->name('branch.update');
-Route::delete('/branch/{branch}', 'BranchesController@destroy')->middleware('role:employee')->name('branch.delete');
+
+//Route::get('/branch', 'BranchesController@index')->middleware('role:employee')->name('branch.index');
+//Route::get('/branch/create', 'BranchesController@create')->middleware('role:employee')->name('branch.create');
+//Route::get('/branch/{branch}', 'BranchesController@show')->middleware('role:employee')->name('branch.show');
+//Route::post('/branch', 'BranchesController@store')->middleware('role:employee')->name('branch.store');
+//Route::get('/branch/{branch}/edit', 'BranchesController@edit')->middleware('role:employee')->name('branch.edit');
+//Route::patch('/branch/{branch}', 'BranchesController@update')->middleware('role:employee')->name('branch.update');
+//Route::delete('/branch/{branch}', 'BranchesController@destroy')->middleware('role:employee')->name('branch.delete');
+Route::resource('branch', 'BranchesController',
+    ['except' => ['create', 'edit', 'show']])->middleware('role:employee');
 
 
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo')->middleware('role:employee');

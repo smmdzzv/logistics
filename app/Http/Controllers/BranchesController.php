@@ -33,20 +33,24 @@ class BranchesController extends Controller
         return Branch::with('director', 'country')->get();
     }
 
-    public function show()
-    {
-
+    public function index(){
+        return view('branches.index');
     }
 
-    public function create()
-    {
-        return view('branches.create');
-    }
-
-    public function edit()
-    {
-
-    }
+//    public function show()
+//    {
+//
+//    }
+//
+//    public function create()
+//    {
+//
+//    }
+//
+//    public function edit()
+//    {
+//
+//    }
 
     public function store()
     {
