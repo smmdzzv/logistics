@@ -31,7 +31,7 @@
                         <template v-slot:first>
                             <option :value="null" disabled>-- Выберите страну --</option>
                         </template>
-                        <option :key="country.id" :value="country.id" v-for="country in countries">{{country.name}}
+                        <option :key="country.id" :value="country" v-for="country in countries">{{country.name}}
                         </option>
                     </b-form-select>
 
@@ -48,6 +48,7 @@
                 <label class="col-md-4 col-form-label text-md-right">Директор</label>
                 <div class="col-md-6">
                     <search-user-dropdown :isInvalid="errors.director && errors.director.length>0"
+                                          :preselectedUser="data.director"
                                           :selected="onUserSelected"
                                           placeholder="Введите ФИО или код сотрудника"
                                           ref="searchUserDropdown"/>
@@ -103,7 +104,7 @@
         },
         methods: {
             onUserSelected(user) {
-                this.data.director = user.id;
+                this.data.director = user;
             },
             async getCountries() {
                 try {
@@ -116,19 +117,22 @@
                     )
                 }
             },
-            async storeBranch() {
-                return await axios.post('/branch', {
-                    name: this.data.name,
-                    director: this.data.director,
-                    country: this.data.country
-                })
+            async storeBranch(data) {
+                // return await axios.post('/branch', {
+                //     name: this.data.name,
+                //     director: this.data.director.id,
+                //     country: this.data.country.id
+                // })
+
+                return await axios.post('/branch', data)
             },
-            async updateBranch() {
-                return await axios.patch(`/branch/${this.branch.id}`, {
-                    name: this.data.name,
-                    director: this.data.director,
-                    country: this.data.country
-                })
+            async updateBranch(data) {
+                // return await axios.patch(`/branch/${this.branch.id}`, {
+                //     name: this.data.name,
+                //     director: this.data.director.id,
+                //     country: this.data.country.id
+                // })
+                return await axios.patch(`/branch/${this.branch.id}`, data)
             },
             async submitForm() {
                 if (this.$v.$invalid)
@@ -137,11 +141,18 @@
                     this.$bvModal.show('busyModal');
                     let response;
                     try {
+                        let data = {
+                            name: this.data.name,
+                            country: this.data.country.id
+                        };
+                        if(this.data.director)
+                            data.director = this.data.director.id;
+
                         if (this.data.id) {
-                            response = await this.updateBranch();
+                            response = await this.updateBranch(data);
                             this.$emit('branchUpdated', response.data)
                         } else {
-                            response = await this.storeBranch();
+                            response = await this.storeBranch(data);
                             this.$emit('branchSaved', response.data)
                         }
                         this.clearForm();

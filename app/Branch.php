@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property string name
+ * @property  object|string country
+ * @property  object|string director
  */
 class Branch extends Model
 {

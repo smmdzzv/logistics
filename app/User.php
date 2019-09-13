@@ -63,9 +63,15 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'owner');
     }
 
+    //TODO remove from herer
     public function registeredOrders(){
         return $this->hasMany(Order::class, 'registeredBy');
     }
+
+    public function managedBranch(){
+        return $this->hasOne(Branch::class, 'director');
+    }
+
 
     /**
      * @param string|array $roles

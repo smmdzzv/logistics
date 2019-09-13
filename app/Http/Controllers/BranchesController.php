@@ -18,7 +18,7 @@ class BranchesController extends Controller
             'exists:countries,id'
         ],
         'director' => [
-            'nullable',
+            'sometimes',
             'exists:users,id'
         ],
     ];
@@ -30,7 +30,7 @@ class BranchesController extends Controller
 
     public function all()
     {
-        return Branch::with('director')->get();
+        return Branch::with('director', 'country')->get();
     }
 
     public function show()
@@ -51,8 +51,12 @@ class BranchesController extends Controller
     public function store()
     {
         $data = request()->validate($this->rules);
+
         $branch = Branch::create($data);
-        $branch->load('director');
+        if(!isset($data['director']))
+            $branch->director = null;
+        $branch->load('director', 'country');
+
         return $branch;
     }
 
@@ -71,8 +75,7 @@ class BranchesController extends Controller
 
         $branch->fill($data);
         $branch->save();
-
-        $branch->load('director');
+        $branch->load('director', 'country');
         return $branch;
 
     }

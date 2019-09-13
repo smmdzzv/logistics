@@ -18,6 +18,12 @@
         <template slot="edit" slot-scope="data">
             <button @click="onEditRequest(data.item)" class="btn btn-outline-secondary">Изменить</button>
         </template>
+        <template slot="remove" slot-scope="data">
+            <img
+                 alt="удалить тариф"
+                 class="icon-btn-sm"
+                 src="/svg/delete.svg">
+        </template>
     </b-table>
 </template>
 
@@ -72,6 +78,9 @@
                     },
                     'edit':{
                         label:'Изменить'
+                    },
+                    'remove':{
+                        label: ''
                     }
                 }
             }

@@ -8768,6 +8768,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "BranchEditor",
@@ -8801,7 +8802,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     onUserSelected: function onUserSelected(user) {
-      this.data.director = user.id;
+      this.data.director = user;
     },
     getCountries: function () {
       var _getCountries = _asyncToGenerator(
@@ -8844,17 +8845,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     storeBranch: function () {
       var _storeBranch = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(data) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios.post('/branch', {
-                  name: this.data.name,
-                  director: this.data.director,
-                  country: this.data.country
-                });
+                return axios.post('/branch', data);
 
               case 2:
                 return _context2.abrupt("return", _context2.sent);
@@ -8864,10 +8861,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context2.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee2);
       }));
 
-      function storeBranch() {
+      function storeBranch(_x) {
         return _storeBranch.apply(this, arguments);
       }
 
@@ -8876,17 +8873,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     updateBranch: function () {
       var _updateBranch = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(data) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios.patch("/branch/".concat(this.branch.id), {
-                  name: this.data.name,
-                  director: this.data.director,
-                  country: this.data.country
-                });
+                return axios.patch("/branch/".concat(this.branch.id), data);
 
               case 2:
                 return _context3.abrupt("return", _context3.sent);
@@ -8899,7 +8892,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3, this);
       }));
 
-      function updateBranch() {
+      function updateBranch(_x2) {
         return _updateBranch.apply(this, arguments);
       }
 
@@ -8911,7 +8904,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         var _this = this;
 
-        var response;
+        var response, data;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
@@ -8922,42 +8915,47 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 this.$v.$touch();
-                _context4.next = 24;
+                _context4.next = 26;
                 break;
 
               case 4:
                 this.$bvModal.show('busyModal');
                 _context4.prev = 5;
+                data = {
+                  name: this.data.name,
+                  country: this.data.country.id
+                };
+                if (this.data.director) data.director = this.data.director.id;
 
                 if (!this.data.id) {
-                  _context4.next = 13;
+                  _context4.next = 15;
                   break;
                 }
 
-                _context4.next = 9;
-                return this.updateBranch();
+                _context4.next = 11;
+                return this.updateBranch(data);
 
-              case 9:
+              case 11:
                 response = _context4.sent;
                 this.$emit('branchUpdated', response.data);
-                _context4.next = 17;
+                _context4.next = 19;
                 break;
 
-              case 13:
-                _context4.next = 15;
-                return this.storeBranch();
-
               case 15:
+                _context4.next = 17;
+                return this.storeBranch(data);
+
+              case 17:
                 response = _context4.sent;
                 this.$emit('branchSaved', response.data);
 
-              case 17:
+              case 19:
                 this.clearForm();
-                _context4.next = 23;
+                _context4.next = 25;
                 break;
 
-              case 20:
-                _context4.prev = 20;
+              case 22:
+                _context4.prev = 22;
                 _context4.t0 = _context4["catch"](5);
 
                 if (_context4.t0.response.status === 422) {
@@ -8968,17 +8966,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   this.$root.showErrorMsg("Ошибка сохранения", "Не удалось сохранить изменения. Перезагрузите страницу и попробуйте еще раз");
                 }
 
-              case 23:
+              case 25:
                 this.$nextTick(function () {
                   _this.$bvModal.hide('busyModal');
                 });
 
-              case 24:
+              case 26:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, this, [[5, 20]]);
+        }, _callee4, this, [[5, 22]]);
       }));
 
       function submitForm() {
@@ -9191,6 +9189,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "BranchesTable",
   props: {
@@ -9239,6 +9243,9 @@ __webpack_require__.r(__webpack_exports__);
         },
         'edit': {
           label: 'Изменить'
+        },
+        'remove': {
+          label: ''
         }
       }
     };
@@ -10200,6 +10207,10 @@ __webpack_require__.r(__webpack_exports__);
       type: Boolean,
       required: false,
       "default": false
+    },
+    preselectedUser: {
+      type: Object,
+      required: false
     }
   },
   data: function data() {
@@ -10211,6 +10222,11 @@ __webpack_require__.r(__webpack_exports__);
       selectedUserDisplayInfo: '',
       isEditMode: true
     };
+  },
+  watch: {
+    preselectedUser: function preselectedUser() {
+      this.selectActive(this.preselectedUser);
+    }
   },
   methods: {
     findUser: function findUser(event) {
@@ -77760,7 +77776,7 @@ var render = function() {
                   _vm._l(_vm.countries, function(country) {
                     return _c(
                       "option",
-                      { key: country.id, domProps: { value: country.id } },
+                      { key: country.id, domProps: { value: country } },
                       [_vm._v(_vm._s(country.name) + "\n                    ")]
                     )
                   })
@@ -77813,6 +77829,7 @@ var render = function() {
                 attrs: {
                   isInvalid:
                     _vm.errors.director && _vm.errors.director.length > 0,
+                  preselectedUser: _vm.data.director,
                   selected: _vm.onUserSelected,
                   placeholder: "Введите ФИО или код сотрудника"
                 }
@@ -78006,6 +78023,17 @@ var render = function() {
               },
               [_vm._v("Изменить")]
             )
+          ]
+        }
+      },
+      {
+        key: "remove",
+        fn: function(data) {
+          return [
+            _c("img", {
+              staticClass: "icon-btn-sm",
+              attrs: { alt: "удалить тариф", src: "/svg/delete.svg" }
+            })
           ]
         }
       }

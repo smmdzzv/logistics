@@ -50,6 +50,10 @@
                 type: Boolean,
                 required: false,
                 default: false
+            },
+            preselectedUser:{
+                type: Object,
+                required: false
             }
         },
         data() {
@@ -60,6 +64,11 @@
                 selectedUser: null,
                 selectedUserDisplayInfo: '',
                 isEditMode: true
+            }
+        },
+        watch:{
+            preselectedUser(){
+                this.selectActive(this.preselectedUser);
             }
         },
         methods: {
