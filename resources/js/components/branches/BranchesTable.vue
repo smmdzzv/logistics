@@ -19,7 +19,7 @@
             <button @click="onEditRequest(data.item)" class="btn btn-outline-secondary">Изменить</button>
         </template>
         <template slot="remove" slot-scope="data">
-            <img
+            <img @click="deleteBranch(data.item)"
                  alt="удалить тариф"
                  class="icon-btn-sm"
                  src="/svg/delete.svg">
@@ -44,24 +44,29 @@
             // this.getBranches()
         },
         methods:{
-            // async getBranches(){
-            //     this.isBusy = true;
-            //     try{
-            //         const response = await axios.get('/branches');
-            //         this.items = response.data;
-            //     }
-            //     catch (e) {
-            //         await this.$bvModal.msgBoxOk(`Не удалось загрузить филиалы. Перезагрузите страницу и попробуйте еще раз`,{
-            //             centered:true,
-            //             okTitle:'Закрыть',
-            //             footerClass: 'border-0',
-            //             title: 'Сообщение об ошибке'
-            //         });
-            //     }
-            //     this.$nextTick(()=>{
-            //         this.isBusy = false;
-            //     })
-            // }
+            async deleteBranch(branch){
+                console.log(branch);
+                let confirm = await this.$bvModal.msgBoxConfirm(`Вы уверены что хотите удалить филиал ${branch.name}?`, {
+                    centered: true,
+                    okTitle: 'Да',
+                    cancelTitle: 'Отменить',
+                    footerClass: 'border-0',
+                    title: 'Подтверждение удаления'
+                });
+
+                if(confirm){
+                    try{
+                        const response = axios.delete('/branch/' + branch.id);
+                        console.log(response);
+                        this.$emit('branchDeleted', branch)
+                    }
+                    catch (e) {
+                        this.$root.showErrorMsg('Ошибка удаления',
+                            'Не удалось удалить филиал. Обновите страницу и попробуйте удалить еще раз')
+                    }
+                }
+
+            }
         },
         data(){
             return{

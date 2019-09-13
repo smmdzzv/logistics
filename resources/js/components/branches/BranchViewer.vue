@@ -4,7 +4,7 @@
             <div class="col-lg-5 col-lx-6 mb-5">
                 <div class="shadow">
                     <div class="card">
-                        <div class="card-header">Добавить филиал</div>
+                        <div class="card-header">{{branchEditTitle}}</div>
                         <div class="card-body">
                             <branch-editor :branch="branchToChange"
                                            @branchSaved="onBranchSaved"
@@ -19,7 +19,7 @@
                     <div class="card">
                         <div class="card-header">Список филиалов</div>
                         <div class="card-body">
-                            <branches-table :branches="branches" :onEditRequest="editBranch"></branches-table>
+                            <branches-table :branches="branches" :onEditRequest="editBranch" @branchDeleted="removeFromList"></branches-table>
                         </div>
                     </div>
                 </div>
@@ -47,11 +47,13 @@
                     country: null,
                     id: null,
                     director: null
-                }
+                },
+                branchEditTitle:'Добавить филиал'
             }
         },
         methods: {
             editBranch(branch) {
+                this.branchEditTitle = 'Редактировать филиал';
                 this.branchToChange = Object.assign(this.branchToChange, branch);
                 // this.$set(this.branchToChange, 'name', branch);
             },
@@ -59,8 +61,14 @@
                 this.branches.push(branch);
             },
             onBranchUpdated(branch) {
+                this.branchEditTitle = 'Добавить филиал';
                 let index = this.branches.findIndex(obj => obj.id === branch.id);
                 this.branches.splice(index, 1, branch);
+            },
+            removeFromList(branch){
+                this.branches = this.branches.filter(function (item) {
+                    return item.id !== branch.id
+                })
             },
             async getBranches() {
                 this.$bvModal.show('busyModal');

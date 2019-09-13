@@ -80,9 +80,10 @@ class BranchesController extends Controller
 
     }
 
-    public function destroy()
+    public function destroy(Branch $branch)
     {
-
+        $branch->delete();
+        return;
     }
 
 }

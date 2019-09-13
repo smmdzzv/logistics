@@ -9090,21 +9090,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         country: null,
         id: null,
         director: null
-      }
+      },
+      branchEditTitle: 'Добавить филиал'
     };
   },
   methods: {
     editBranch: function editBranch(branch) {
+      this.branchEditTitle = 'Редактировать филиал';
       this.branchToChange = Object.assign(this.branchToChange, branch); // this.$set(this.branchToChange, 'name', branch);
     },
     onBranchSaved: function onBranchSaved(branch) {
       this.branches.push(branch);
     },
     onBranchUpdated: function onBranchUpdated(branch) {
+      this.branchEditTitle = 'Добавить филиал';
       var index = this.branches.findIndex(function (obj) {
         return obj.id === branch.id;
       });
       this.branches.splice(index, 1, branch);
+    },
+    removeFromList: function removeFromList(branch) {
+      this.branches = this.branches.filter(function (item) {
+        return item.id !== branch.id;
+      });
     },
     getBranches: function () {
       var _getBranches = _asyncToGenerator(
@@ -9166,6 +9174,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -9209,24 +9225,53 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {// this.getBranches()
   },
-  methods: {// async getBranches(){
-    //     this.isBusy = true;
-    //     try{
-    //         const response = await axios.get('/branches');
-    //         this.items = response.data;
-    //     }
-    //     catch (e) {
-    //         await this.$bvModal.msgBoxOk(`Не удалось загрузить филиалы. Перезагрузите страницу и попробуйте еще раз`,{
-    //             centered:true,
-    //             okTitle:'Закрыть',
-    //             footerClass: 'border-0',
-    //             title: 'Сообщение об ошибке'
-    //         });
-    //     }
-    //     this.$nextTick(()=>{
-    //         this.isBusy = false;
-    //     })
-    // }
+  methods: {
+    deleteBranch: function () {
+      var _deleteBranch = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(branch) {
+        var confirm, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                console.log(branch);
+                _context.next = 3;
+                return this.$bvModal.msgBoxConfirm("\u0412\u044B \u0443\u0432\u0435\u0440\u0435\u043D\u044B \u0447\u0442\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u0444\u0438\u043B\u0438\u0430\u043B ".concat(branch.name, "?"), {
+                  centered: true,
+                  okTitle: 'Да',
+                  cancelTitle: 'Отменить',
+                  footerClass: 'border-0',
+                  title: 'Подтверждение удаления'
+                });
+
+              case 3:
+                confirm = _context.sent;
+
+                if (confirm) {
+                  try {
+                    response = axios["delete"]('/branch/' + branch.id);
+                    console.log(response);
+                    this.$emit('branchDeleted', branch);
+                  } catch (e) {
+                    this.$root.showErrorMsg('Ошибка удаления', 'Не удалось удалить филиал. Обновите страницу и попробуйте удалить еще раз');
+                  }
+                }
+
+              case 5:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function deleteBranch(_x) {
+        return _deleteBranch.apply(this, arguments);
+      }
+
+      return deleteBranch;
+    }()
   },
   data: function data() {
     return {
@@ -77903,7 +77948,7 @@ var render = function() {
         _c("div", { staticClass: "shadow" }, [
           _c("div", { staticClass: "card" }, [
             _c("div", { staticClass: "card-header" }, [
-              _vm._v("Добавить филиал")
+              _vm._v(_vm._s(_vm.branchEditTitle))
             ]),
             _vm._v(" "),
             _c(
@@ -77939,7 +77984,8 @@ var render = function() {
                   attrs: {
                     branches: _vm.branches,
                     onEditRequest: _vm.editBranch
-                  }
+                  },
+                  on: { branchDeleted: _vm.removeFromList }
                 })
               ],
               1
@@ -78032,7 +78078,12 @@ var render = function() {
           return [
             _c("img", {
               staticClass: "icon-btn-sm",
-              attrs: { alt: "удалить тариф", src: "/svg/delete.svg" }
+              attrs: { alt: "удалить тариф", src: "/svg/delete.svg" },
+              on: {
+                click: function($event) {
+                  return _vm.deleteBranch(data.item)
+                }
+              }
             })
           ]
         }
