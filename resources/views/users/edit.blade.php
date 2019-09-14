@@ -46,7 +46,7 @@
                                 <label for="code" class="col-md-4 col-form-label text-md-right">Код</label>
 
                                 <div class="col-md-6">
-                                    <input id="code" type="text" class="form-control @error('name') is-invalid @enderror" name="code" value="{{ old('code') ?? $user->code }}" required autocomplete="code" autofocus>
+                                    <input id="code" type="text" class="form-control @error('code') is-invalid @enderror" name="code" value="{{ old('code') ?? $user->code }}" required autocomplete="code" autofocus>
 
                                     @error('code')
                                     <span class="invalid-feedback" role="alert">
