@@ -24,7 +24,7 @@ class UsersController extends Controller
         'branch' => 'required|exists:branches,id',
         'position' => 'nullable|string',
         'phone' => 'nullable|string',
-        'code' => 'nullable|string'
+        'code' => 'nullable|string|unique:users'
         ];
     }
 
@@ -111,8 +111,7 @@ class UsersController extends Controller
     }
 
     public function filtered($role){
-        $users = Role::where('name',$role)->first() ->users()->paginate(10);
-        $users->load(['position', 'roles']);
+        $users = Role::where('name',$role)->first()->users()->with('position', 'roles')->paginate(10);
         return $users;
     }
 

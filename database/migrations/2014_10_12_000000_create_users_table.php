@@ -25,10 +25,6 @@ class CreateUsersTable extends Migration
             $table->string('phone')->nullable();
             $table->rememberToken();
             $table->timestamps();
-
-            $table->index('position_id');
-            $table->index('branch_id');
-            $table->index(['name, code']);
         });
     }
 
