@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int tariff_id
  * @property int branch_id
  */
-class TariffPriceHistory extends Model
+class TariffPriceHistory extends BaseModel
 {
     protected $guarded = [];
 

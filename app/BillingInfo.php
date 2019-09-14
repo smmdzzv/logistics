@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property double totalDiscount
  * @property double totalPrice
  */
-class BillingInfo extends Model
+class BillingInfo extends BaseModel
 {
     public function tariffPricing(){
         return $this->belongsTo(TariffPriceHistory::class);

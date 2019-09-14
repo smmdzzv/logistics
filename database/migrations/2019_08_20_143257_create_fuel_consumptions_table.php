@@ -14,7 +14,7 @@ class CreateFuelConsumptionsTable extends Migration
     public function up()
     {
         Schema::create('fuel_consumptions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->char('id', 26)->primary();;
             $table->double('empty');
             $table->double('loaded');
             $table->boolean('hasTrailer')->default(false);

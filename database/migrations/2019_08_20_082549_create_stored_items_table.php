@@ -14,11 +14,11 @@ class CreateStoredItemsTable extends Migration
     public function up()
     {
         Schema::create('stored_items', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('item_id');
-            $table->unsignedBigInteger('owner_id');
-            $table->unsignedBigInteger('branch_id');
-            $table->unsignedBigInteger('order_id');
+            $table->char('id',26)->primary();;
+            $table->char('item_id',26);
+            $table->char('owner_id',26);
+            $table->char('branch_id',26);
+            $table->char('order_id',26);
 //            $table->unsignedBigInteger('billingInfo_id');
             $table->double('weight');
             $table->double('height');
@@ -27,7 +27,6 @@ class CreateStoredItemsTable extends Migration
             $table->integer('count');
             $table->timestamps();
 
-            $table->index('item_id');
             $table->index('owner_id');
             $table->index('branch_id');
             $table->index('order_id');

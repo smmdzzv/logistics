@@ -2,9 +2,10 @@
 
 namespace App;
 
+use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Order extends BaseModel
 {
     public function storedItems(){
         return $this->hasMany(StoredItem::class);

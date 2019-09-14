@@ -14,9 +14,9 @@ class CreateBillingInfosTable extends Migration
     public function up()
     {
         Schema::create('billing_infos', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('tariff_price_history_id');
-            $table->unsignedBigInteger('stored_item_id');
+            $table->char('id', 26)->primary();;
+            $table->char('tariff_price_history_id', 26);
+            $table->char('stored_item_id', 26);
 //            $table->integer('placesCount');
             $table->double('totalCubage');
             $table->double('totalWeight');

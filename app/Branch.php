@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\BaseModel;
 use App\Models\Country;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property  object|string country
  * @property  object|string director
  */
-class Branch extends Model
+class Branch extends BaseModel
 {
     protected $guarded = [];
 

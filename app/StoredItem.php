@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int owner_id
  * @property  int branch_id
  */
-class StoredItem extends Model
+class StoredItem extends BaseModel
 {
     public function item(){
         return $this->belongsTo(Item::class);

@@ -14,14 +14,11 @@ class CreateAccountsTable extends Migration
     public function up()
     {
         Schema::create('accounts', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('owner_id');
-            $table->unsignedBigInteger('currency_id');
+            $table->char('id', 26)->primary();
+            $table->char('owner_id', 26);
+            $table->char('currency_id',26);
             $table->unsignedDecimal('balance', 15, 5);
             $table->timestamps();
-
-            $table->index('owner_id');
-            $table->index('currency_id');
         });
     }
 

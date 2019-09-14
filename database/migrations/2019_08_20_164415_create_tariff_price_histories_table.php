@@ -14,9 +14,9 @@ class CreateTariffPriceHistoriesTable extends Migration
     public function up()
     {
         Schema::create('tariff_price_histories', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('tariff_id');
-            $table->unsignedBigInteger('branch_id');
+            $table->char('id', 26)->primary();;
+            $table->char('tariff_id', 26);
+            $table->char('branch_id', 26);
             $table->double('lowerLimit');
             $table->double('mediumLimit');
             $table->double('upperLimit');

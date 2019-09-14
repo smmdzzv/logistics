@@ -2,9 +2,10 @@
 
 namespace App;
 
+use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Model;
 
-class Car extends Model
+class Car extends BaseModel
 {
     protected $fillable = [
         'number',

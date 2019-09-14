@@ -2,9 +2,10 @@
 
 namespace App;
 
+use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Model;
 
-class Position extends Model
+class Position extends BaseModel
 {
     protected $guarded = [];
 

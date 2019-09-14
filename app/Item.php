@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property  int tariff_id
  * @property string unit
  */
-class Item extends Model
+class Item extends BaseModel
 {
     public function storedItems(){
         return $this->$this->hasMany(StoredItem::class);
