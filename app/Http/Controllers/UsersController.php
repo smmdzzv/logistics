@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Branch;
-use App\Position;
-use App\Role;
+use App\Models\Branch;
+use App\Models\Position;
+use App\Models\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;

@@ -1,6 +1,6 @@
 <?php
 
-use App\Tariff;
+use App\Models\Tariff;
 use Illuminate\Database\Seeder;
 
 class TariffsTableSeeder extends Seeder

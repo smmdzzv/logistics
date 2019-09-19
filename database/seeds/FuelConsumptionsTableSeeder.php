@@ -1,7 +1,7 @@
 <?php
 
-use App\Car;
-use App\FuelConsumption;
+use App\Models\Car;
+use App\Models\FuelConsumption;
 use Illuminate\Database\Seeder;
 
 class FuelConsumptionsTableSeeder extends Seeder

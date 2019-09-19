@@ -1,8 +1,8 @@
 <?php /** @noinspection ALL */
 
-use App\Branch;
-use App\Tariff;
-use App\TariffPriceHistory;
+use App\Models\Branch;
+use App\Models\Tariff;
+use App\Models\TariffPriceHistory;
 use Illuminate\Database\Seeder;
 
 class TariffPriceHistoriesTableSeeder extends Seeder

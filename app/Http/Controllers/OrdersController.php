@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Branch;
+use App\Models\Branch;
 use App\Http\Requests\StoreOrderRequest;
-use App\Order;
-use App\StoredItem;
-use App\Tariff;
+use App\Models\Order;
+use App\Models\StoredItem;
+use App\Models\Tariff;
 use App\User;
 use Illuminate\Http\Request;
 

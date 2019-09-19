@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\Branch;
+use App\Models\Position;
 use App\User;
-use App\Role;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
@@ -17,9 +19,9 @@ class UsersTableSeeder extends Seeder
         $roleClient = Role::where('name', 'client')->first();
         $roleEmployee = Role::where('name', 'employee')->first();
 
-        $positionId = \App\Position::where('name', 'Администратор')->first()->id;
+        $positionId = Position::where('name', 'Администратор')->first()->id;
 
-        $branchId = \App\Branch::first()->id;
+        $branchId = Branch::first()->id;
 
         $user = User::create([
             'name'=>'Султоназар Мамадазизов',

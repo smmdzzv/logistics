@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Branch;
-use App\Position;
+use App\Models\Branch;
+use App\Models\Position;
 
 class AppSettingsController extends Controller
 {

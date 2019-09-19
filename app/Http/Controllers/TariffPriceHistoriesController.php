@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TariffPriceHistoryRequest;
-use App\Tariff;
-use App\TariffPriceHistory;
+use App\Models\Tariff;
+use App\Models\TariffPriceHistory;
 use Illuminate\Http\Request;
 
 class TariffPriceHistoriesController extends Controller

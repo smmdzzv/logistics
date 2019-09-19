@@ -1,7 +1,7 @@
 <?php
 
-use App\Item;
-use App\Tariff;
+use App\Models\Item;
+use App\Models\Tariff;
 use Illuminate\Database\Seeder;
 
 class ItemsTableSeeder extends Seeder

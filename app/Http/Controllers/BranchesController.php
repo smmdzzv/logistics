@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Branch;
+use App\Models\Branch;
 use Illuminate\Validation\Rule;
 
 class BranchesController extends Controller

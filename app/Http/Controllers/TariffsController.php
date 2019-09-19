@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Tariff;
+use App\Models\Tariff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 

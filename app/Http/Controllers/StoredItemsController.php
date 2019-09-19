@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Branch;
-use App\StoredItem;
+use App\Models\Branch;
+use App\Models\StoredItem;
 use Illuminate\Http\Request;
 
 class StoredItemsController extends Controller

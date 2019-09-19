@@ -1,8 +1,8 @@
 <?php
 
-use App\Branch;
-use App\Item;
-use App\StoredItem;
+use App\Models\Branch;
+use App\Models\Item;
+use App\Models\StoredItem;
 use App\User;
 use Illuminate\Database\Seeder;
 

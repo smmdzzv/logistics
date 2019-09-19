@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Role;
+use App\Models\Role;
 use App\User;
 use App\Common\ResponseFactory;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;

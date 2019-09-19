@@ -2,8 +2,13 @@
 
 namespace App;
 
+use App\Models\Account;
+use App\Models\Branch;
+use App\Models\Order;
+use App\Models\Position;
+use App\Models\Role;
+use App\Models\StoredItem;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Rorecek\Ulid\HasUlid;
 

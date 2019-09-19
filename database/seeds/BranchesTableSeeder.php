@@ -1,6 +1,6 @@
 <?php
 
-use App\Branch;
+use App\Models\Branch;
 use App\Models\Country;
 use Illuminate\Database\Seeder;
 

@@ -1,7 +1,7 @@
 <?php
 
-use App\Account;
-use App\Currency;
+use App\Models\Account;
+use App\Models\Currency;
 use App\User;
 use Illuminate\Database\Seeder;
 
