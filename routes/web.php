@@ -36,9 +36,13 @@ Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 //Route::get('/order/create', 'OrdersController@create')->middleware('role:employee')->name('order.create');
 //Route::post('/order/store', 'OrdersController@store')->middleware('role:employee')->name('order.store');
 //Route::get('/order/update', 'OrdersController@update')->middleware('role:employee')->name('order.update');
-Route::get('/order/{order}', 'OrdersController@show')->middleware('role:client, employee')->name('order.show');
-Route::resource('order', 'OrdersController',
+
+Route::resource('orders', 'OrdersController',
     ['except' => ['delete', 'edit', 'show']])->middleware('role:admin');
+Route::get('/orders/{order}', 'OrdersController@show')->middleware('role:client, employee')->name('order.show');
+
+Route::resource('trip', 'TripsController',
+    ['only' => ['create', 'store']])->middleware('role:admin');
 
 
 Route::get('/order/all','OrdersController@all')->middleware('role:employee')->name('order.all');

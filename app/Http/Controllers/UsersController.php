@@ -13,6 +13,15 @@ use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
+// Список ролей в БД
+//    private $roles = [
+//        'admin',
+//        'manager',
+//        'employee',
+//        'driver',
+//        'client'
+//    ];
+
 
     private $rules = [
         'name' => 'required|string|max:255',
@@ -134,6 +143,8 @@ class UsersController extends Controller
         return redirect(route('home'));
     }
 
+
+    //TODO refactor this
     public function employees()
     {
         return view('users.index', ['type' => 'employee']);

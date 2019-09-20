@@ -47,12 +47,12 @@
                     this.$bvModal.show('busyModal');
 
                     try {
-                        const response = await axios.post('/order/store', {
+                        const response = await axios.post('/orders', {
                             storedItems: this.storedItems,
                             clientId: this.client.id
                         });
 
-                        window.location.href = '/order/' + response.data.id;
+                        window.location.href = '/orders/' + response.data.id;
                     } catch (e) {
                         //TODO
                     }

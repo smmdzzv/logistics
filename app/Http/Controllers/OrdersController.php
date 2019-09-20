@@ -7,6 +7,7 @@ use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
 use App\Models\StoredItem;
 use App\Models\Tariff;
+use App\Models\Users\Client;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -41,10 +42,10 @@ class OrdersController extends Controller
     public function store(StoreOrderRequest $request){
         $storedItems = $request->get('storedItems');
         $clientId =  $request->get('clientId');
-        $user = User::findOrFail($clientId);
+        $client = Client::findOrFail($clientId);
 
         $order = new Order();
-        $order->owner = $clientId;
+        $order->ownerId = $clientId;
         $order->totalCubage = 0;
         $order->totalWeight = 0;
         $order->totalPrice = 0;
@@ -65,7 +66,7 @@ class OrdersController extends Controller
             $stored->branch_id = $itemData['branch']['id'];
             $stored->order_id = $order->id;
 
-            $user->storedItems()->save($stored);
+            $client->storedItems()->save($stored);
 
             $billing = $stored->getBillingInfo($itemData['tariffPricing']['id']);
 

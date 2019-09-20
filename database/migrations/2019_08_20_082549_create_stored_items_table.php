@@ -13,13 +13,15 @@ class CreateStoredItemsTable extends Migration
      */
     public function up()
     {
+        //TODO refactor ids
         Schema::create('stored_items', function (Blueprint $table) {
             $table->char('id',26)->primary();;
             $table->char('item_id',26);
-            $table->char('owner_id',26);
+            $table->char('ownerId',26);
             $table->char('branch_id',26);
             $table->char('order_id',26);
 //            $table->unsignedBigInteger('billingInfo_id');
+            $table->char('tripId', 26)->nullable();
             $table->double('weight');
             $table->double('height');
             $table->double('width');
@@ -27,8 +29,7 @@ class CreateStoredItemsTable extends Migration
             $table->integer('count');
             $table->timestamps();
 
-            $table->index('owner_id');
-            $table->index('branch_id');
+            $table->index('ownerId');
             $table->index('order_id');
         });
     }

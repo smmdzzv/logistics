@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->char('id', 26)->primary();;
-            $table->char('owner', 26);
+            $table->char('ownerId', 26);
             $table->char('registeredBy', 26);
             $table->char('branch', 26);
             $table->string('status')->default('accepted');
@@ -26,7 +26,7 @@ class CreateOrdersTable extends Migration
             $table->double('totalDiscount');
             $table->timestamps();
 
-            $table->index('owner');
+            $table->index('ownerId');
         });
     }
 

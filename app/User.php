@@ -50,6 +50,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime'
     ];
 
+    protected $table = 'users';
+
     public function position()
     {
         return $this->belongsTo(Position::class);
@@ -70,15 +72,7 @@ class User extends Authenticatable
         return $this->hasMany(Account::class);
     }
 
-    public function storedItems()
-    {
-        return $this->hasMany(StoredItem::class, 'owner_id');
-    }
 
-    public function orders()
-    {
-        return $this->hasMany(Order::class, 'owner');
-    }
 
     public function registeredOrders()
     {

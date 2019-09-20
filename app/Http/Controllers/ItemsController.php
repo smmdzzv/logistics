@@ -18,9 +18,4 @@ class ItemsController extends Controller
     public function all(){
         return Item::all();
     }
-
-    public function validator(){
-        $validator = JsValidator::make($this->validationRules);
-        return $validator;
-    }
 }

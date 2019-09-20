@@ -43,7 +43,8 @@
         props:{
             branches:{
                 type:Array,
-                required: true
+                required: false,
+                default: null
             }
         },
         methods:{

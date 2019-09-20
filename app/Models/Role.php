@@ -7,6 +7,7 @@ use App\User;
 /**
  * @property string name
  * @property string description
+ * @property string title
  */
 class Role extends BaseModel
 {
