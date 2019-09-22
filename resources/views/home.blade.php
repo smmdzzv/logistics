@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <ul>
                         <hr>
-                            <li><a href="/user/create">Регистрация пользователей</a></li>
+                            <li><a href="/users/create">Регистрация пользователей</a></li>
                             <li><a href="/clients">Список клиентов</a></li>
                             <li><a href="/employees">Список сотрудников</a></li>
                         <hr>

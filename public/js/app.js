@@ -8712,6 +8712,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "OrderEditor",
   props: {
@@ -77571,30 +77584,45 @@ var render = function() {
     "div",
     { attrs: { id: "order" } },
     [
-      _c("search-user-dropdown", {
-        attrs: {
-          selected: _vm.onUserSelected,
-          placeholder: "Введите ФИО или код клиента",
-          id: "user"
-        }
-      }),
-      _vm._v(" "),
-      _c("b-popover", {
-        attrs: {
-          show: _vm.clientError,
-          content:
-            "Необходимо выбрать клиента. Начните вводить ФИО или код клиента",
-          placement: "bottom",
-          target: "user",
-          triggers: "null",
-          variant: "danger"
-        },
-        on: {
-          "update:show": function($event) {
-            _vm.clientError = $event
-          }
-        }
-      }),
+      _c("div", { staticClass: "row justify-content-center mb-4" }, [
+        _c(
+          "div",
+          { staticClass: "col-11" },
+          [
+            _c("label", { staticClass: "col-12", attrs: { for: "user" } }, [
+              _vm._v("Клиент")
+            ]),
+            _vm._v(" "),
+            _c("search-user-dropdown", {
+              staticClass: "col-12",
+              attrs: {
+                selected: _vm.onUserSelected,
+                url: "/concrete/client/filter?userInfo=",
+                placeholder: "Введите ФИО или код клиента",
+                id: "user"
+              }
+            }),
+            _vm._v(" "),
+            _c("b-popover", {
+              attrs: {
+                show: _vm.clientError,
+                content:
+                  "Необходимо выбрать клиента. Начните вводить ФИО или код клиента",
+                placement: "bottom",
+                target: "user",
+                triggers: "null",
+                variant: "danger"
+              },
+              on: {
+                "update:show": function($event) {
+                  _vm.clientError = $event
+                }
+              }
+            })
+          ],
+          1
+        )
+      ]),
       _vm._v(" "),
       _c("order-items-box", {
         attrs: { tariffs: _vm.tariffs, user: _vm.user },

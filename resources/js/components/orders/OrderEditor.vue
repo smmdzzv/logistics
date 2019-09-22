@@ -1,13 +1,26 @@
 <template>
     <div id="order">
-        <search-user-dropdown :selected="onUserSelected" placeholder="Введите ФИО или код клиента" id="user"></search-user-dropdown>
-        <b-popover
-            :show.sync="clientError"
-            content="Необходимо выбрать клиента. Начните вводить ФИО или код клиента"
-            placement="bottom"
-            target="user"
-            triggers="null"
-            variant="danger"/>
+        <div class="row justify-content-center mb-4">
+            <div class="col-11">
+                <label class="col-12" for="user">Клиент</label>
+                <search-user-dropdown class="col-12"
+                                      :selected="onUserSelected"
+                                      url="/concrete/client/filter?userInfo="
+                                      placeholder="Введите ФИО или код клиента"
+                                      id="user"/>
+
+                <b-popover
+                    :show.sync="clientError"
+                    content="Необходимо выбрать клиента. Начните вводить ФИО или код клиента"
+                    placement="bottom"
+                    target="user"
+                    triggers="null"
+                    variant="danger"/>
+            </div>
+
+        </div>
+
+
 
         <order-items-box :tariffs="tariffs" :user="user"
                          v-on:onStoredItemsChange="onStoredItemsChange"></order-items-box>

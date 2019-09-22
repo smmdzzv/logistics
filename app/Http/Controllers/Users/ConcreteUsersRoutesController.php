@@ -21,8 +21,11 @@ class ConcreteUsersRoutesController
             case 'driver':
                 $this->controller = new DriversController();
                 break;
+            case 'client':
+                $this->controller = new ClientsController();
+                break;
             default:
-                abort(404, "Ресурс не найден");
+                abort(404, "Роль не найдена");
         }
     }
 
