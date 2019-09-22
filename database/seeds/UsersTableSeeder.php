@@ -18,6 +18,7 @@ class UsersTableSeeder extends Seeder
         $roleAdmin = Role::where('name', 'admin')->first();
         $roleClient = Role::where('name', 'client')->first();
         $roleEmployee = Role::where('name', 'employee')->first();
+        $roleDriver = Role::where('name', 'driver')->first();
 
         $positionId = Position::where('name', 'Администратор')->first()->id;
 
@@ -77,5 +78,16 @@ class UsersTableSeeder extends Seeder
         ]);
 
         $user->roles()->attach($roleClient);
+
+        $user = User::create([
+            'name'=>'Инноятов Максуд',
+            'branch_id' => $branchId,
+            'phone' => '12312414',
+            'password' => Hash::make('asdf1234'),
+            'email' => 'test51@test.com',
+            'code'=>'13255'
+        ]);
+
+        $user->roles()->attach($roleDriver);
     }
 }

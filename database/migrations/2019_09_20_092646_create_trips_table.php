@@ -17,7 +17,7 @@ class CreateTripsTable extends Migration
             $table->char('id', 26)->primary();
             $table->char('carId', 26);
             $table->char('driverId', 26);
-            $table->string('code', 10);
+            $table->string('code', 20);
             $table->date('departureDate');
             $table->date('returnDate');
             $table->timestamps();

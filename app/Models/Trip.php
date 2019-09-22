@@ -6,11 +6,17 @@ use App\Models\Users\Driver;
 use Illuminate\Database\Eloquent\Model;
 use Rorecek\Ulid\HasUlid;
 
-class Trip extends Model
+class Trip extends BaseModel
 {
-    use HasUlid;
+    protected $fillable = ['code', 'driverId', 'carId', 'departureDate', 'returnDate'];
 
-    public function driver(){
+    public function driver()
+    {
         return $this->belongsTo(Driver::class, 'driverId');
+    }
+
+    public function car()
+    {
+        return $this->belongsTo(Car::class, 'carId');
     }
 }

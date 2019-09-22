@@ -145,6 +145,11 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'code'=> 'код',
+        'driver' => 'водитель',
+        'car' => 'машина'
+
+    ],
 
 ];

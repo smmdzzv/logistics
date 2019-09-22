@@ -16,9 +16,9 @@
                         <hr>
                         <li><a href="/settings">Настройки</a></li>
                         <hr>
-                        <li><a href="/order/create">Оформить заказ</a></li>
-                        <li><a href="/order">Список заказов</a></li>
-                        <li><a href="/order/1">Посмотреть заказ с id=1</a></li>
+                        <li><a href="/orders/create">Оформить заказ</a></li>
+                        <li><a href="/orders">Список заказов</a></li>
+                        <li><a href="/orders/1">Посмотреть заказ с id=1</a></li>
                         <hr>
                         <li><a href="/tariff/create">Редактирование тарифов</a></li>
                         <li><a href="/tariff-price-history/create">Редактирование тарифных планов</a></li>
@@ -26,9 +26,11 @@
                         <hr>
                         <li><a href="{{route('stored.index')}}">Список принятых товаров</a></li>
                         <hr>
-                        <li><a href="{{route('car.create')}}">Добавить машину</a></li>
+                        <li><a href="{{route('cars.create')}}">Добавить машину</a></li>
                         <hr>
                         <li><a href="{{route('branch.index')}}">Управлять филиалами</a></li>
+                        <hr>
+                        <li><a href="{{route('trips.create')}}">Создать рейс</a></li>
                     </ul>
                 </div>
             </div>

@@ -9,7 +9,7 @@
 
                 <div class="card-body">
 
-                        <form method="POST"   @auth action="{{ route('user.store') }}"  @endauth
+                        <form method="POST"   @auth action="{{ route('users.store') }}"  @endauth
                         @guest action="{{ route('register') }}" @endguest
                         >
                         @csrf

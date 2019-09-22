@@ -18,6 +18,10 @@ class CarsController extends Controller
         return view('cars.index', compact('cars'));
     }
 
+    public function all(){
+        return Car::all();
+    }
+
     public function create(){
         return view('cars.create');
     }
@@ -37,7 +41,7 @@ class CarsController extends Controller
 
     public function store(CarRequest $request){
         $car = Car::create($request->all());
-        return redirect(route('car.show', $car));
+        return redirect(route('cars.show', $car));
     }
 
     public function update(CarRequest $request){
@@ -45,6 +49,6 @@ class CarsController extends Controller
         $car = Car::findOrFail($data['id']);
         $car->fill($data);
         $car->save();
-        return redirect(route('car.show', $car));
+        return redirect(route('cars.show', $car));
     }
 }

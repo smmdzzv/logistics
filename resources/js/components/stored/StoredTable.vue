@@ -1,74 +1,105 @@
 <template>
-    <div class="container">
         <div class="card">
             <div class="card-header">
                 <div class="row align-items-baseline">
-                    <div class="col-md-6"> Принятые товары</div>
-                    <label class="col-md-4 text-right" for="branch">Филиал</label>
-                    <div class="col-md-2">
-                        <select id="branch" class="form-control custom-select" v-model="selectedBranch">
-                            <option v-for="branch in branches" :value="branch" :key="branch.id">{{branch.name}}</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-                <b-table :fields="fields"
-                         id="usersTable"
-                         :items="storedItems"
-                         :busy="isBusy"
-                         striped
-                         borderless
-                         primary-key="id"
-                         responsive>
-                    <template v-slot:table-busy>
-                        <div class="text-center text-info my-2">
-                            <b-spinner class="align-middle"></b-spinner>
+                    <div class="col-md-6" v-if="branches">Товары на складе</div>
+                    <div class="col-md-6" v-else>Товары на всех складах</div>
+                    <template v-if="branches">
+                        <label class="col-md-4 text-right" for="branch">Филиал</label>
+                        <div class="col-md-2">
+                            <select class="form-control custom-select" id="branch" v-model="selectedBranch">
+                                <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}
+                                </option>
+                            </select>
                         </div>
                     </template>
-                </b-table>
-
-            <div class="card-footer">
-                <pagination :data="pagination" @pagination-change-page="getStoredItems"></pagination>
+                </div>
             </div>
+            <b-table :busy="isBusy"
+                     :fields="fields"
+                     :items="storedItems"
+                     :selectable="selectable"
+                     @row-selected="itemsSelected"
+                     borderless
+                     id="usersTable"
+                     primary-key="id"
+                     responsive
+                     striped>
+                <template v-slot:table-busy>
+                    <div class="text-center text-info my-2">
+                        <b-spinner class="align-middle"></b-spinner>
+                    </div>
+                </template>
+            </b-table>
+            <template v-if="lastPage > 1">
+                <div class="card-footer text-center" v-if="flowablePagination && lastPage > currentPage">
+                    <button @click="getStoredItems(currentPage+1)" class="btn btn-outline-primary align-middle">
+                        Загрузить еще
+                    </button>
+                </div>
+                <div class="card-footer" v-if="!flowablePagination">
+                    <pagination :data="pagination" @pagination-change-page="getStoredItems"/>
+                </div>
+            </template>
         </div>
-    </div>
 </template>
 
 <script>
     export default {
         name: "StoredTable",
-        mounted(){
+        mounted() {
             this.getStoredItems();
         },
-        props:{
-            branches:{
-                type:Array,
+        props: {
+            branches: {
+                type: Array,
                 required: false,
                 default: null
+            },
+            selectable: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
+            flowablePagination: {
+                type: Boolean,
+                required: false,
+                default: false
             }
         },
-        methods:{
-            getStoredItems(page = 1){
+        methods: {
+            getStoredItems(page = 1) {
                 this.isBusy = true;
-                let action = 'stored/all';
-                if(this.selectedBranch)
-                    action = `/${this.selectedBranch.id}/stored`;
+                let action = 'stored/all?page=' + page;
+                if (this.selectedBranch)
+                    action = `/${this.selectedBranch.id}/stored?page=${page}`;
                 axios.get(action)
-                    .then(response=>{
+                    .then(response => {
                         this.pagination = response.data;
-                        this.storedItems = response.data.data;
-                        this.$nextTick(()=>{
+                        if (this.flowablePagination)
+                            response.data.data.forEach(item => {
+                                this.storedItems.push(item);
+                            });
+                        else
+                            this.storedItems = response.data.data;
+                        this.$nextTick(() => {
                             this.isBusy = false;
                         })
                     });
+            },
+            itemsSelected(items) {
+                return this.$emit('onItemsSelected', items);
             }
         },
-        computed:{
-            currentPage () {
-                return  this.pagination.current_page;
+        computed: {
+            currentPage() {
+                return this.pagination.current_page;
+            },
+            lastPage() {
+                return this.pagination.last_page
             }
         },
-        watch:{
+        watch: {
             selectedBranch: function () {
                 this.getStoredItems(this.currentPage);
             }
@@ -76,9 +107,12 @@
         data() {
             return {
                 selectedBranch: null,
-                pagination:{},
-                storedItems: null,
-                isBusy:false,
+                pagination: {
+                    last_page: null,
+                    current_page: null
+                },
+                storedItems: [],
+                isBusy: false,
                 fields: {
                     'item.name': {
                         label: 'Имя',
@@ -96,18 +130,18 @@
                         label: 'Длина',
                         sortable: true
                     },
-                    count:{
-                        label:'Кол-во',
+                    count: {
+                        label: 'Кол-во',
                         sortable: true
                     },
-                    'owner.name':{
-                        label:'Владелец',
+                    'owner.name': {
+                        label: 'Владелец',
                         sortable: true
                     }
                 }
             }
         },
-        components:{
+        components: {
             'Pagination': require('laravel-vue-pagination')
         }
     }

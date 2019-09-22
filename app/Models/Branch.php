@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\BaseModel;
-use App\Models\Country;
-use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 /**
  * @property string name

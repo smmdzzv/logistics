@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header">Добавить машину</div>
                     <div class="card-body">
-                        <form id="addCar" method="POST" action="{{route('car.store')}}">
+                        <form id="addCar" method="POST" action="{{route('cars.store')}}">
                             @csrf
 
                             <div class="form-group row">

@@ -254,7 +254,7 @@
             }
         },
         components: {
-            SuggestionsInput: require('./SuggestionInput').default
+            SuggestionsInput: require('../common/SuggestionInput').default
         },
         validations: {
             storedItem: {

@@ -150,7 +150,7 @@
             }
         },
         components:{
-            'StoredItemShortInfo': require('./items/StoredItemShortInfo').default
+            'StoredItemShortInfo': require('../stored/StoredItemShortInfo').default
         }
     }
 </script>

@@ -17,4 +17,6 @@ class BaseModel extends Model
      * @var bool
      */
     public $incrementing = false;
+
+    protected $casts = ['id' => 'string'];
 }

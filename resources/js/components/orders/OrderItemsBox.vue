@@ -141,7 +141,7 @@
             }
         },
         components: {
-            'StoredItemBox': require('./StoredItemBox').default
+            'StoredItemBox': require('../stored/StoredItemBox').default
         }
     }
 </script>

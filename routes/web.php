@@ -20,29 +20,25 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 //Registration
-Route::get('user/create', 'UsersController@create')->middleware('role:employee')->name('user.create');
-Route::post('user/store', 'UsersController@store')->middleware('role:employee')->name('user.store');
-Route::get('clients', 'UsersController@clients')->middleware('role:admin')->name('user.clients');
-Route::get('employees', 'UsersController@employees')->middleware('role:admin')->name('user.employees');
-Route::get('user/{user}/edit', 'UsersController@edit')->middleware('role:employee')->name('user.edit');
-Route::get('user/{role}/only', 'UsersController@filtered')->middleware('role:admin')->name('user.filtered');
-Route::patch('user/{user}', 'UsersController@update')->middleware('role:employee')->name('user.update');
+//Route::get('user/create', 'UsersController@create')->middleware('role:employee')->name('user.create');
+//Route::post('user/store', 'UsersController@store')->middleware('role:employee')->name('user.store');
+//Route::get('clients', 'UsersController@clients')->middleware('role:admin')->name('user.clients');
+//Route::get('employees', 'UsersController@employees')->middleware('role:admin')->name('user.employees');
+//Route::get('user/{user}/edit', 'UsersController@edit')->middleware('role:employee')->name('user.edit');
+//Route::get('user/{role}/only', 'UsersController@filtered')->middleware('role:admin')->name('user.filtered');
+//Route::patch('user/{user}', 'UsersController@update')->middleware('role:employee')->name('user.update');
+Route::resource('users', 'Users\UsersController')->parameters(['users' => 'user'])->middleware('role:admin');
 
 //Profile
 Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 
 //Order
-//Route::get('/order', 'OrdersController@index')->middleware('role:employee')->name('order.index');
-//Route::get('/order/create', 'OrdersController@create')->middleware('role:employee')->name('order.create');
-//Route::post('/order/store', 'OrdersController@store')->middleware('role:employee')->name('order.store');
-//Route::get('/order/update', 'OrdersController@update')->middleware('role:employee')->name('order.update');
-
 Route::resource('orders', 'OrdersController',
     ['except' => ['delete', 'edit', 'show']])->middleware('role:admin');
 Route::get('/orders/{order}', 'OrdersController@show')->middleware('role:client, employee')->name('order.show');
 
-Route::resource('trip', 'TripsController',
-    ['only' => ['create', 'store']])->middleware('role:admin');
+Route::resource('trips', 'TripsController',
+    ['only' => ['create', 'store', 'show', 'edit']])->middleware('role:admin');
 
 
 Route::get('/order/all','OrdersController@all')->middleware('role:employee')->name('order.all');
@@ -72,24 +68,11 @@ Route::post('/tariff-price-history/store', 'TariffPriceHistoriesController@store
 Route::get('/tariff-price-history/{tariff}', "TariffPriceHistoriesController@lastByTariff")->middleware('role:employee');
 
 //Cars
-Route::get('/car', 'CarsController@index')->middleware('role:employee')->name('car.index');
-Route::get('/car/create', 'CarsController@create')->middleware('role:employee')->name('car.create');
-Route::get('/car/{car}', 'CarsController@show')->middleware('role:employee')->name('car.show');
-Route::post('/car', 'CarsController@store')->middleware('role:employee')->name('car.store');
-Route::get('/car/{car}/edit', 'CarsController@edit')->middleware('role:employee')->name('car.edit');
-Route::patch('/car/{car}', 'CarsController@update')->middleware('role:employee')->name('car.update');
-Route::delete('/car/{car}', 'CarsController@destroy')->middleware('role:employee')->name('car.delete');
+Route::get('/cars/all', 'CarsController@all')->middleware('role:admin');
+Route::resource('cars', 'CarsController')->middleware('role:admin');
 
 //Branches
 Route::get('/branches', "BranchesController@all")->middleware('role:employee');
-
-//Route::get('/branch', 'BranchesController@index')->middleware('role:employee')->name('branch.index');
-//Route::get('/branch/create', 'BranchesController@create')->middleware('role:employee')->name('branch.create');
-//Route::get('/branch/{branch}', 'BranchesController@show')->middleware('role:employee')->name('branch.show');
-//Route::post('/branch', 'BranchesController@store')->middleware('role:employee')->name('branch.store');
-//Route::get('/branch/{branch}/edit', 'BranchesController@edit')->middleware('role:employee')->name('branch.edit');
-//Route::patch('/branch/{branch}', 'BranchesController@update')->middleware('role:employee')->name('branch.update');
-//Route::delete('/branch/{branch}', 'BranchesController@destroy')->middleware('role:employee')->name('branch.delete');
 Route::resource('branch', 'BranchesController',
     ['except' => ['create', 'edit', 'show']])->middleware('role:admin');
 

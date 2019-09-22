@@ -5,6 +5,7 @@
  */
 
 require('./bootstrap');
+
 let BootstrapVue = require('bootstrap-vue').default;
 let Vuelidate = require('vuelidate').default;
 
@@ -25,10 +26,12 @@ Vue.component('Profile', require('./components/users/Profile.vue').default);
 
 Vue.component('UsersTable', require('./components/users/UsersTable.vue').default);
 Vue.component('StoredTable', require('./components/stored/StoredTable.vue').default);
-Vue.component('OrdersTable', require('./components/orders/OrdersTable.vue').default);
 
-Vue.component('OrderEditor', require('./components/OrderEditor.vue').default);
-Vue.component('OrderViewer', require('./components/OrderViewer.vue').default);
+Vue.component('OrdersTable', require('./components/orders/OrdersTable.vue').default);
+Vue.component('OrderEditor', require('./components/orders/OrderEditor.vue').default);
+Vue.component('OrderViewer', require('./components/orders/OrderViewer.vue').default);
+
+Vue.component('TripsEditor', require('./components/trips/TripsEditor.vue').default);
 
 Vue.component('CarsTable', require('./components/cars/CarsTable.vue').default);
 

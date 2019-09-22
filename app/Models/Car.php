@@ -22,4 +22,8 @@ class Car extends BaseModel
     {
         return $this->belongsToMany(FuelConsumption::class);
     }
+
+    public function trips(){
+        return $this->hasMany(Trip::class, 'carId');
+    }
 }

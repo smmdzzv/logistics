@@ -66,7 +66,7 @@
             }
         },
         components: {
-            'SearchUserDropdown': require('./users/SearchUserDropdown.vue').default,
+            'SearchUserDropdown': require('../users/SearchUserDropdown.vue').default,
             'OrderItemsBox': require('./OrderItemsBox').default
         }
     }
