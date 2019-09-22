@@ -10823,20 +10823,19 @@ __webpack_require__.r(__webpack_exports__);
     this.getUsers();
   },
   props: {
-    type: {
+    title: {
+      type: String,
+      required: false,
+      "default": "Список пользователей"
+    },
+    url: {
       type: String,
       required: true
     }
   },
-  computed: {
-    title: function title() {
-      if (this.type === 'client') return 'Список клиентов';
-      if (this.type === 'employee') return 'Список сотрдуников';else return 'Список пользователйе';
-    }
-  },
   methods: {
     getEditUrl: function getEditUrl(item) {
-      return "/user/".concat(item.id, "/edit");
+      return "/users/".concat(item.id, "/edit");
     },
     getProfileUrl: function getProfileUrl(item) {
       return "/profile/".concat(item.id);
@@ -10846,7 +10845,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       this.isBusy = true;
-      axios.get('user/' + this.type + '/only?page=' + page).then(function (response) {
+      axios.get(this.url + '?page=' + page).then(function (response) {
         _this.pagination = response.data;
         _this.users = response.data.data;
         console.log(_this.pagination.data[0].name);
@@ -79954,7 +79953,7 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     _c(
       "div",
-      { staticClass: "card" },
+      { staticClass: "card shadow" },
       [
         _c("div", { staticClass: "card-header" }, [
           _vm._v("\n            " + _vm._s(_vm.title) + "\n        ")

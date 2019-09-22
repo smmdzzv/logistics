@@ -32,7 +32,6 @@ class Role extends BaseModel
     public function concreteUsers($class){
         return $this->belongsToMany($class, 'role_user',  'role_id', 'user_id')
             ->using('App\Models\Pivots\BasePivot')
-            ->withTimestamps()
-            ->get();
+            ->withTimestamps();
     }
 }

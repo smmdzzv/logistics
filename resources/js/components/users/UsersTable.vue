@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="card">
+        <div class="card shadow">
             <div class="card-header">
                 {{title}}
             </div>
@@ -48,31 +48,26 @@
             this.getUsers();
         },
         props: {
-            type: {
+            title:{
+                type: String,
+                required: false,
+                default:"Список пользователей"
+            },
+            url:{
                 type: String,
                 required: true
             }
         },
-        computed: {
-            title: function () {
-                if (this.type === 'client')
-                    return 'Список клиентов';
-                if(this.type === 'employee')
-                    return 'Список сотрдуников';
-                else
-                    return 'Список пользователйе';
-            }
-        },
         methods:{
             getEditUrl(item){
-                return `/user/${item.id}/edit`;
+                return `/users/${item.id}/edit`;
             },
             getProfileUrl(item){
                 return `/profile/${item.id}`;
             },
             getUsers(page = 1){
                 this.isBusy = true;
-                axios.get('user/'+ this.type +'/only?page=' + page)
+                axios.get(this.url + '?page=' + page)
                     .then(response=>{
                         this.pagination = response.data;
                         this.users = response.data.data;

@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    <users-table type="{{$type}}"></users-table>
+    <users-table url="{{$url}}" title="{{$title}}"></users-table>
 @endsection

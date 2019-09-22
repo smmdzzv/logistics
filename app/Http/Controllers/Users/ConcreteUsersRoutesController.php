@@ -12,7 +12,8 @@ class ConcreteUsersRoutesController
      */
     private $methodParams = [
         'all'=> '',
-        'filter' => 'userInfo'
+        'filter' => 'userInfo',
+        'index' => ''
     ];
 
     public function __construct()

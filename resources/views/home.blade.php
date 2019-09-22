@@ -11,8 +11,8 @@
                     <ul>
                         <hr>
                             <li><a href="/users/create">Регистрация пользователей</a></li>
-                            <li><a href="/clients">Список клиентов</a></li>
-                            <li><a href="/employees">Список сотрудников</a></li>
+                            <li><a href="/concrete/client/index">Список клиентов</a></li>
+                            <li><a href="/concrete/driver/index">Список водителей</a></li>
                         <hr>
                         <li><a href="/settings">Настройки</a></li>
                         <hr>

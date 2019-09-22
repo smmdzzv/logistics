@@ -18,4 +18,10 @@ class ClientsController extends AbstractConcreteUsersController
     {
         return 'clients';
     }
+
+    public function index(){
+        $url = 'concrete/client/all';
+        $title = 'Список клиентов';
+        return view('users.index', compact('url', 'title'));
+    }
 }

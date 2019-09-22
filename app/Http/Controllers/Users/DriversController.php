@@ -18,4 +18,10 @@ class DriversController extends AbstractConcreteUsersController
     {
         return 'drivers';
     }
+
+    public function index(){
+        $url = 'concrete/driver/all';
+        $title = 'Список водителей';
+        return view('users.index', compact('url', 'title'));
+    }
 }
