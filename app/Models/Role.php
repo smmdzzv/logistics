@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Users\Driver;
 use App\User;
 
 /**
@@ -21,9 +22,17 @@ class Role extends BaseModel
     ];
 
 
-    public function users(){
+    public function users()
+    {
         return $this->belongsToMany(User::class)
             ->using('App\Models\Pivots\BasePivot')
             ->withTimestamps();
+    }
+
+    public function concreteUsers($class){
+        return $this->belongsToMany($class, 'role_user',  'role_id', 'user_id')
+            ->using('App\Models\Pivots\BasePivot')
+            ->withTimestamps()
+            ->get();
     }
 }

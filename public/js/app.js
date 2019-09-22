@@ -10346,6 +10346,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "TripsEditor",
@@ -10623,6 +10624,11 @@ __webpack_require__.r(__webpack_exports__);
     preselectedUser: {
       type: Object,
       required: false
+    },
+    url: {
+      type: String,
+      required: false,
+      "default": "/search/user/"
     }
   },
   created: function created() {
@@ -10654,7 +10660,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       if (this.userInfo.length > 0) {
-        axios.get("/search/user/" + this.userInfo).then(function (result) {
+        axios.get(this.url + this.userInfo).then(function (result) {
           if (result) {
             _this.setUsers(result.data);
 
@@ -79482,6 +79488,7 @@ var render = function() {
                             _vm.$v.data.driver.$error || _vm.errors.driver,
                           preselectedUser: _vm.data.driver,
                           selected: _vm.driverSelected,
+                          url: "/concrete/driver/filter?userInfo=",
                           id: "driverId",
                           placeholder: "Введите ФИО или код водителя"
                         }

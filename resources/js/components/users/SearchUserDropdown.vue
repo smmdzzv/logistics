@@ -57,6 +57,11 @@
             preselectedUser: {
                 type: Object,
                 required: false
+            },
+            url:{
+                type:String,
+                required:false,
+                default:"/search/user/"
             }
         },
         created(){
@@ -86,7 +91,7 @@
         methods: {
             loadUsers() {
                 if (this.userInfo.length > 0) {
-                    axios.get(`/search/user/` + this.userInfo)
+                    axios.get(this.url + this.userInfo)
                         .then(result => {
                             if (result) {
                                 this.setUsers(result.data);

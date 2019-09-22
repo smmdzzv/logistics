@@ -1,15 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Users;
 
-use App\Models\Branch;
-use App\Models\Role;
-use Illuminate\Validation\Rule;
-
-class DriversController extends AbstractRoleUsersController
+class DriversController extends AbstractConcreteUsersController
 {
     protected function getRoleName()
     {
         return 'driver';
+    }
+
+    protected function getClassName()
+    {
+       return 'App\Models\Users\Driver';
+    }
+
+    protected function getRoleNamePlural()
+    {
+        return 'drivers';
     }
 }

@@ -19,15 +19,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-//Registration
-//Route::get('user/create', 'UsersController@create')->middleware('role:employee')->name('user.create');
-//Route::post('user/store', 'UsersController@store')->middleware('role:employee')->name('user.store');
-//Route::get('clients', 'UsersController@clients')->middleware('role:admin')->name('user.clients');
-//Route::get('employees', 'UsersController@employees')->middleware('role:admin')->name('user.employees');
-//Route::get('user/{user}/edit', 'UsersController@edit')->middleware('role:employee')->name('user.edit');
-//Route::get('user/{role}/only', 'UsersController@filtered')->middleware('role:admin')->name('user.filtered');
-//Route::patch('user/{user}', 'UsersController@update')->middleware('role:employee')->name('user.update');
 Route::resource('users', 'Users\UsersController')->parameters(['users' => 'user'])->middleware('role:admin');
+
+Route::get('/concrete/{roleName}/{action}', 'Users\ConcreteUsersRoutesController');
 
 //Profile
 Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');

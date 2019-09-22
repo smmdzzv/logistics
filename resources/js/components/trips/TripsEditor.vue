@@ -62,6 +62,7 @@
                                     <search-user-dropdown :isInvalid="$v.data.driver.$error || errors.driver"
                                                           :preselectedUser="data.driver"
                                                           :selected="driverSelected"
+                                                          url="/concrete/driver/filter?userInfo="
                                                           id="driverId"
                                                           placeholder="Введите ФИО или код водителя"/>
                                     <input class="is-invalid form-control" type="hidden">
