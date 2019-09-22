@@ -14,7 +14,7 @@ class StoredItemsController extends Controller
     }
 
     public function all(){
-        return StoredItem::with(['owner','item'])->paginate(1);
+        return StoredItem::with(['owner','item'])->paginate(10);
     }
 
     public function filteredByBranch(Branch $branch){

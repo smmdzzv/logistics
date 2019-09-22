@@ -19,11 +19,12 @@ class Client extends User
     {
         parent::boot();
 
-        static::addGlobalScope('roles', function (Builder $builder) {
-            $builder->whereHas('roles', function ($query) {
-                $query->where('roles.name', 'client');
-            });
-        });
+        //Todo make local
+//        static::addGlobalScope('roles', function (Builder $builder) {
+//            $builder->whereHas('roles', function ($query) {
+//                $query->where('roles.name', 'client');
+//            });
+//        });
     }
     public function storedItems()
     {

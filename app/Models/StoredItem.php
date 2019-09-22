@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property double length
  * @property int count
  * @property int item_id
- * @property int owner_id
  * @property  int branch_id
+ * @property  string ownerId
  */
 class StoredItem extends BaseModel
 {
@@ -23,7 +23,7 @@ class StoredItem extends BaseModel
     }
 
     public function owner(){
-        return $this->belongsTo(Client::class, 'ownerId');
+        return $this->belongsTo(Client::class, 'ownerId', 'id', 'users');
     }
 
     public function branch(){

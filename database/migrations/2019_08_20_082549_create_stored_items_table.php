@@ -15,12 +15,11 @@ class CreateStoredItemsTable extends Migration
     {
         //TODO refactor ids
         Schema::create('stored_items', function (Blueprint $table) {
-            $table->char('id',26)->primary();;
+            $table->char('id',26)->primary();
             $table->char('item_id',26);
             $table->char('ownerId',26);
             $table->char('branch_id',26);
             $table->char('order_id',26);
-//            $table->unsignedBigInteger('billingInfo_id');
             $table->char('tripId', 26)->nullable();
             $table->double('weight');
             $table->double('height');
