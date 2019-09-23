@@ -19,7 +19,9 @@
                      :fields="fields"
                      :items="storedItems"
                      :selectable="selectable"
-                     @row-selected="itemsSelected"
+                     select-mode="single"
+                     @row-selected=""
+                     @row-clicked="itemSelected"
                      borderless
                      id="usersTable"
                      primary-key="id"
@@ -30,7 +32,13 @@
                         <b-spinner class="align-middle"></b-spinner>
                     </div>
                 </template>
+
+                <template slot="selected" slot-scope="data">
+                    <span v-if="data.item.selected">&check;</span>
+                    <span v-else></span>
+                </template>
             </b-table>
+
             <template v-if="lastPage > 1">
                 <div class="card-footer text-center" v-if="flowablePagination && lastPage > currentPage">
                     <button @click="getStoredItems(currentPage+1)" class="btn btn-outline-primary align-middle">
@@ -87,8 +95,17 @@
                         })
                     });
             },
-            itemsSelected(items) {
-                return this.$emit('onItemsSelected', items);
+            itemSelected(item) {
+                if(item.selected) {
+                     this.selected = this.selected.filter(function (stored) {
+                         return stored.id === item.id
+                     })
+                }
+                else{
+                    this.selected.push(item)
+                }
+                item.selected = !item.selected;
+                return this.$emit('onItemsSelected', this.selected);
             }
         },
         computed: {
@@ -101,12 +118,15 @@
         },
         watch: {
             selectedBranch: function () {
-                this.getStoredItems(this.currentPage);
+                this.selected.splice(0, this.selected.length);
+                this.storedItems.splice(0, this.storedItems.length);
+                this.getStoredItems(1);
             }
         },
         data() {
             return {
                 selectedBranch: null,
+                selected:[],
                 pagination: {
                     last_page: null,
                     current_page: null
@@ -137,6 +157,9 @@
                     'owner.name': {
                         label: 'Владелец',
                         sortable: true
+                    },
+                    'selected': {
+                        label:''
                     }
                 }
             }

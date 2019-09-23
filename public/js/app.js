@@ -9707,6 +9707,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "StoredTable",
   mounted: function mounted() {
@@ -9748,8 +9756,17 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
     },
-    itemsSelected: function itemsSelected(items) {
-      return this.$emit('onItemsSelected', items);
+    itemSelected: function itemSelected(item) {
+      if (item.selected) {
+        this.selected = this.selected.filter(function (stored) {
+          return stored.id === item.id;
+        });
+      } else {
+        this.selected.push(item);
+      }
+
+      item.selected = !item.selected;
+      return this.$emit('onItemsSelected', this.selected);
     }
   },
   computed: {
@@ -9762,12 +9779,15 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     selectedBranch: function selectedBranch() {
-      this.getStoredItems(this.currentPage);
+      this.selected.splice(0, this.selected.length);
+      this.storedItems.splice(0, this.storedItems.length);
+      this.getStoredItems(1);
     }
   },
   data: function data() {
     return {
       selectedBranch: null,
+      selected: [],
       pagination: {
         last_page: null,
         current_page: null
@@ -9798,6 +9818,9 @@ __webpack_require__.r(__webpack_exports__);
         'owner.name': {
           label: 'Владелец',
           sortable: true
+        },
+        'selected': {
+          label: ''
         }
       }
     };
@@ -78911,13 +78934,17 @@ var render = function() {
           fields: _vm.fields,
           items: _vm.storedItems,
           selectable: _vm.selectable,
+          "select-mode": "single",
           borderless: "",
           id: "usersTable",
           "primary-key": "id",
           responsive: "",
           striped: ""
         },
-        on: { "row-selected": _vm.itemsSelected },
+        on: {
+          "row-selected": function($event) {},
+          "row-clicked": _vm.itemSelected
+        },
         scopedSlots: _vm._u([
           {
             key: "table-busy",
@@ -78932,6 +78959,14 @@ var render = function() {
               ]
             },
             proxy: true
+          },
+          {
+            key: "selected",
+            fn: function(data) {
+              return [
+                data.item.selected ? _c("span", [_vm._v("✓")]) : _c("span")
+              ]
+            }
           }
         ])
       }),
