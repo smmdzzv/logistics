@@ -19,4 +19,8 @@ class Trip extends BaseModel
     {
         return $this->belongsTo(Car::class, 'carId');
     }
+
+    public function storedItems(){
+        return $this->hasMany(StoredItem::class, 'tripId');
+    }
 }

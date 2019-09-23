@@ -30,4 +30,20 @@ class TripsController extends Controller
         $trip->load('driver', 'car');
         return view('trips.edit', compact('cars', 'trip','branches'));
     }
+
+    public function update(TripRequest $request, Trip $trip){
+        $trip->fill($request->all());
+        $trip->save();
+        return $trip;
+    }
+
+    public function editStoredList(Trip $trip){
+        $trip->load('storedItems','car');
+        $branches = Branch::all();
+        return view('trips.edit-items-list', compact('trip', 'branches'));
+    }
+
+    public function storedItems(Trip $trip){
+        return $trip->storedItems;
+    }
 }

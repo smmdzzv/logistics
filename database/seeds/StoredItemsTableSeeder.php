@@ -35,10 +35,10 @@ class StoredItemsTableSeeder extends Seeder
         for($i=0; $i<20; $i++){
             $stored = new StoredItem();
             $stored->weight = 20;
-            $stored->height = 1.5;
-            $stored->length = 2;
-            $stored->width = 2.3;
-            $stored->count = 2;
+            $stored->height = 1;
+            $stored->length = 0.4;
+            $stored->width = 0.3;
+            $stored->count = 4;
             $stored->item_id = Item::first()->id;
             $stored->ownerId = User::first()->id;
             $stored->order_id = User::first()->id;

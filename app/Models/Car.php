@@ -18,6 +18,11 @@ class Car extends BaseModel
         'serial'
     ];
 
+    protected $casts =[
+      'maxWeight' => 'double',
+      'maxCubage' => 'double',
+    ];
+
     public function fuelConsumptions()
     {
         return $this->belongsToMany(FuelConsumption::class);

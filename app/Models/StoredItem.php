@@ -18,6 +18,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class StoredItem extends BaseModel
 {
+    protected $casts =[
+        'count' => 'integer',
+        'weight' => 'double',
+        'height' => 'double',
+        'length' => 'double',
+        'width' => 'double',
+    ];
+
     public function item(){
         return $this->belongsTo(Item::class);
     }
@@ -32,6 +40,10 @@ class StoredItem extends BaseModel
 
     public function order(){
         return $this->belongsTo(Order::class);
+    }
+
+    public function trip(){
+        return $this->belongsTo(Trip::class, 'tripId');
     }
 
     public function billingInfo(){

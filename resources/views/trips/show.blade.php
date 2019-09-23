@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-center justify-content-md-end">
-            <div class="col-sm-8 col-md-6 col-lg-5 col-xl-4">
+        <div class="row justify-content-center">
+            <div class="col-sm-8 col-md-6 col-lg-5 col-xl-4 mb-4">
                 <div class="card shadow">
                     <div class="card-header">
                         <div class="row">
@@ -19,8 +19,12 @@
                         <p>Дата возвращения: <span class="font-weight-bold">{{$trip->returnDate}}</span></p>
                         <p>Факт. дата отправления: </p>
                         <p>Факт. дата возвращения: </p>
+                        <p><a href="{{route('trip.edit-items', $trip->id)}}">Изменить список товаров</a></p>
                     </div>
                 </div>
+            </div>
+            <div >
+                <stored-table></stored-table>
             </div>
         </div>
     </div>

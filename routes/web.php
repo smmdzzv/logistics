@@ -31,8 +31,12 @@ Route::resource('orders', 'OrdersController',
     ['except' => ['delete', 'edit', 'show']])->middleware('role:admin');
 Route::get('/orders/{order}', 'OrdersController@show')->middleware('role:client, employee')->name('order.show');
 
+//Trips
+Route::get('/trips/{trip}/items/edit', 'TripsController@editStoredList')->middleware('role:manager, director')->name('trip.edit-items');
+Route::get('/trips/{trip}/items', 'TripsController@storedItems')->middleware('role:manager, director')->name('trip.items');
 Route::resource('trips', 'TripsController',
-    ['only' => ['create', 'store', 'show', 'edit']])->middleware('role:admin');
+    ['except' => ['index', 'destroy']])->middleware('role:admin');
+
 
 
 Route::get('/order/all','OrdersController@all')->middleware('role:employee')->name('order.all');
@@ -44,6 +48,7 @@ Route::get('user/{user}/orders', 'OrdersController@filteredByUser')->middleware(
 Route::get('/stored','StoredItemsController@index')->middleware('role:employee')->name('stored.index');
 Route::get('/stored/all','StoredItemsController@all')->middleware('role:employee')->name('stored.all');
 Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch')->middleware('role:employee');
+Route::post('/stored/trip/{trip}', 'StoredItemsController@associateToTrip')->middleware('role:employee');
 
 //Settings
 Route::get('/settings', 'AppSettingsController@show')->middleware('role:admin');

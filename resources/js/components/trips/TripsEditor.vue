@@ -122,12 +122,6 @@
                         </form>
                     </div>
                 </div>
-                <div class="shadow" v-if="isEditMode">
-                    <stored-table :branches="branches"
-                                  @onItemsSelected="onItemsSelected"
-                                  flowablePagination
-                                  selectable/>
-                </div>
             </div>
         </div>
 
@@ -186,9 +180,6 @@
             }
         },
         methods: {
-            onItemsSelected(items) {
-                console.log(items)
-            },
             onCarSearchChange(query) {
                 this.filteredCars = this.cars.filter(function (car) {
                     return car.number.toLowerCase().includes(query.toLowerCase())
@@ -218,7 +209,11 @@
                         id: this.data.id
                     };
 
-                    const response = await axios.post('/trips', data);
+                    let response;
+                    if(this.isEditMode)
+                        response = await axios.patch('/trips/' + data.id, data);
+                    else
+                        response = await axios.post('/trips', data);
                     window.location = getBaseUrl() + '/trips/' + response.data.id;
 
                 } catch (e) {
