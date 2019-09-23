@@ -124,6 +124,7 @@
                 </div>
                 <div class="shadow" v-if="isEditMode">
                     <stored-table :branches="branches"
+                                  @onItemsSelected="onItemsSelected"
                                   flowablePagination
                                   selectable/>
                 </div>

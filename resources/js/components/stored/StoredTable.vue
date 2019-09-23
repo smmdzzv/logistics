@@ -98,7 +98,7 @@
             itemSelected(item) {
                 if(item.selected) {
                      this.selected = this.selected.filter(function (stored) {
-                         return stored.id === item.id
+                         return stored.id !== item.id
                      })
                 }
                 else{
