@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Account;
+use App\Models\Till\Account;
 use App\Models\Currency;
 use App\User;
 use Illuminate\Database\Seeder;

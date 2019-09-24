@@ -2,12 +2,12 @@
 
 namespace App;
 
-use App\Models\Account;
 use App\Models\Branch;
 use App\Models\Order;
 use App\Models\Position;
 use App\Models\Role;
 use App\Models\StoredItem;
+use App\Models\Till\Account;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Rorecek\Ulid\HasUlid;
@@ -63,17 +63,14 @@ class User extends Authenticatable
         return $this->belongsTo(Branch::class);
     }
 
+    public function accounts(){
+        return $this->morphMany(Account::class, 'owner');
+    }
+
     public function clientRole()
     {
         return $this->belongsToMany(Role::class)->where('name', 'client');
     }
-
-    public function accounts()
-    {
-        return $this->hasMany(Account::class);
-    }
-
-
 
     public function registeredOrders()
     {

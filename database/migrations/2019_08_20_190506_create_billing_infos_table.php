@@ -22,9 +22,9 @@ class CreateBillingInfosTable extends Migration
             $table->double('totalWeight');
             $table->double('weightPerCube');
             $table->double('pricePerItem');
-            $table->double('totalPrice');
+            $table->double('totalPrice', 10, 5);
             $table->double('discountPerCube');
-            $table->double('totalDiscount');
+            $table->double('totalDiscount', 10, 5);
             $table->timestamps();
 
             $table->index('stored_item_id');

@@ -20,6 +20,8 @@ class CreateTripsTable extends Migration
             $table->string('code', 20)->unique();
             $table->date('departureDate');
             $table->date('returnDate');
+            $table->date('departureAt');
+            $table->date('returnedAt');
             $table->timestamps();
         });
     }

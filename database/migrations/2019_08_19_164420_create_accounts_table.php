@@ -16,8 +16,10 @@ class CreateAccountsTable extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->char('id', 26)->primary();
             $table->char('owner_id', 26);
-            $table->char('currency_id',26);
-            $table->unsignedDecimal('balance', 15, 5);
+            $table->string('owner_type');
+            $table->char('currencyId',26);
+            $table->unsignedDecimal('balance', 10, 2);
+            $table->string('description', 255);
             $table->timestamps();
         });
     }
