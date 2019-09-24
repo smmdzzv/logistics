@@ -2,10 +2,10 @@
         <div class="card">
             <div class="card-header">
                 <div class="row align-items-baseline">
-                    <div class="col-md-6">Заказы</div>
+                    <div class="col-md-4">Заказы</div>
                     <template  v-if="branches" >
                         <label class="col-md-4 text-right" for="branch">Филиал</label>
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <select id="branch" class="form-control custom-select" v-model="selectedBranch">
                                 <option v-for="branch in branches" :value="branch" :key="branch.id">{{branch.name}}</option>
                             </select>

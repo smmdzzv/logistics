@@ -27,6 +27,7 @@ Route::get('/concrete/{roleName}/{action}', 'Users\ConcreteUsersRoutesController
 Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 
 //Order
+Route::get('/orders/all','OrdersController@all')->middleware('role:employee')->name('order.all');
 Route::resource('orders', 'OrdersController',
     ['except' => ['delete', 'edit', 'show']])->middleware('role:admin');
 Route::get('/orders/{order}', 'OrdersController@show')->middleware('role:client, employee')->name('order.show');
@@ -40,7 +41,7 @@ Route::resource('trips', 'TripsController',
 
 
 
-Route::get('/order/all','OrdersController@all')->middleware('role:employee')->name('order.all');
+
 Route::get('branch/{branch}/orders', 'OrdersController@filteredByBranch')->middleware('role:employee');
 Route::get('user/{user}/orders', 'OrdersController@filteredByUser')->middleware('role:employee');
 
