@@ -80180,7 +80180,9 @@ var render = function() {
                 { class: { "text-danger": _vm.totalWeight > _vm.maxWeight } },
                 [_vm._v(_vm._s(_vm.totalWeight))]
               ),
-              _vm._v("\n                        из " + _vm._s(_vm.maxWeight))
+              _vm._v(
+                "\n                        из " + _vm._s(_vm.maxWeight) + " кг"
+              )
             ]),
             _vm._v(" "),
             _c("p", [
@@ -80190,7 +80192,8 @@ var render = function() {
                 { class: { "text-danger": _vm.totalCubage > _vm.maxCubage } },
                 [_vm._v(_vm._s(_vm.totalCubage))]
               ),
-              _vm._v(" из " + _vm._s(_vm.maxCubage) + "\n                    ")
+              _vm._v(" из " + _vm._s(_vm.maxCubage) + " м"),
+              _c("sup", [_vm._v("3")])
             ])
           ]),
           _vm._v(" "),
@@ -80671,7 +80674,7 @@ var render = function() {
             fn: function() {
               return [
                 _c("div", { staticClass: "card-header" }, [
-                  _vm._v("\n                Список рейсов\n            ")
+                  _vm._v("\r\n                Список рейсов\r\n            ")
                 ])
               ]
             },

@@ -10,9 +10,9 @@
                         <p>Количество позиций: {{storedItems.length}}</p>
                         <p>Количество товаров: {{itemsCount}}</p>
                         <p>Суммарный вес: <span :class="{'text-danger': totalWeight > maxWeight}">{{totalWeight}}</span>
-                            из {{maxWeight}}</p>
+                            из {{maxWeight}} кг</p>
                         <p>Суммарная кубатура: <span
-                            :class="{'text-danger': totalCubage > maxCubage}">{{totalCubage}}</span> из {{maxCubage}}
+                            :class="{'text-danger': totalCubage > maxCubage}">{{totalCubage}}</span> из {{maxCubage}} м<sup>3</sup>
                         </p>
                     </div>
                     <div class="card-footer">
