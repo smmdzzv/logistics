@@ -31,6 +31,7 @@
                         <li><a href="{{route('branch.index')}}">Управлять филиалами</a></li>
                         <hr>
                         <li><a href="{{route('trips.create')}}">Создать рейс</a></li>
+                        <li><a href="/trips/">Список рейсов</a></li>
                     </ul>
                 </div>
             </div>

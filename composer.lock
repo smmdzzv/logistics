@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e2666b484ee14010d485cd8299a69d3",
+    "content-hash": "fec24c8749fe81ff77baa5c697493063",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1580,6 +1580,62 @@
                 "uuid"
             ],
             "time": "2017-08-29T11:22:22+00:00"
+        },
+        {
+            "name": "spatie/enum",
+            "version": "2.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/enum.git",
+                "reference": "f42ebe26308bf00d486ef7e18d8518a3e3de5892"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/enum/zipball/f42ebe26308bf00d486ef7e18d8518a3e3de5892",
+                "reference": "f42ebe26308bf00d486ef7e18d8518a3e3de5892",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.2"
+            },
+            "require-dev": {
+                "nunomaduro/phpinsights": "^1.9",
+                "phpmd/phpmd": "^2.7",
+                "phpunit/phpunit": "^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Enum\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Roose",
+                    "email": "brent@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Tom Witkowski",
+                    "email": "dev.gummibeer@gmail.com",
+                    "homepage": "https://gummibeer.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Enums",
+            "homepage": "https://github.com/spatie/enum",
+            "keywords": [
+                "enum",
+                "enumerable",
+                "spatie"
+            ],
+            "time": "2019-09-05T21:28:08+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

@@ -34,8 +34,9 @@ Route::get('/orders/{order}', 'OrdersController@show')->middleware('role:client,
 //Trips
 Route::get('/trips/{trip}/items/edit', 'TripsController@editStoredList')->middleware('role:manager, director')->name('trip.edit-items');
 Route::get('/trips/{trip}/items', 'TripsController@storedItems')->middleware('role:manager, director')->name('trip.items');
+Route::get('/trips/all', 'TripsController@all')->middleware('role:manager, director');
 Route::resource('trips', 'TripsController',
-    ['except' => ['index', 'destroy']])->middleware('role:admin');
+    ['except' => ['destroy']])->middleware('role:admin');
 
 
 
