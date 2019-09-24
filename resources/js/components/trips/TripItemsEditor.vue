@@ -2,20 +2,23 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4 mb-4">
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-header">
                         Детали рейса
                     </div>
                     <div class="card-body">
                         <p>Количество позиций: {{storedItems.length}}</p>
                         <p>Количество товаров: {{itemsCount}}</p>
-                        <p>Суммарный вес: <span :class="{'text-danger': totalWeight > maxWeight}">{{totalWeight}}</span> из {{maxWeight}}</p>
-                        <p>Суммарная кубатура: <span :class="{'text-danger': totalCubage > maxCubage}">{{totalCubage}}</span> из {{maxCubage}}</p>
+                        <p>Суммарный вес: <span :class="{'text-danger': totalWeight > maxWeight}">{{totalWeight}}</span>
+                            из {{maxWeight}}</p>
+                        <p>Суммарная кубатура: <span
+                            :class="{'text-danger': totalCubage > maxCubage}">{{totalCubage}}</span> из {{maxCubage}}
+                        </p>
                     </div>
                     <div class="card-footer">
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button class="btn btn-primary" @click="submit" :disabled="isSubmitting">
+                                <button :disabled="isSubmitting" @click="submit" class="btn btn-primary">
                                     Сохранить
                                 </button>
                             </div>
@@ -28,8 +31,9 @@
             <div class="col-lg-8">
                 <stored-table :branches="branches"
                               :preselected="trip.stored_items"
-
+                              :striped="false"
                               @onItemsSelected="onItemsSelected"
+                              class="shadow"
                               flowablePagination
                               selectable/>
             </div>
@@ -42,59 +46,59 @@
 <script>
     export default {
         name: "TripItemsEditor",
-        props:{
-            trip:{
-                type:Object,
+        props: {
+            trip: {
+                type: Object,
                 required: true
             },
-            branches:{
-                type:Array,
-                required:true
+            branches: {
+                type: Array,
+                required: true
             }
         },
-        data(){
-            return{
+        data() {
+            return {
                 storedItems: this.trip.stored_items,
-                isSubmitting:false
+                isSubmitting: false
             }
         },
         computed: {
-            itemsCount: function(){
+            itemsCount: function () {
                 let count = 0;
-                for(let stored of this.storedItems){
+                for (let stored of this.storedItems) {
                     count += stored.count;
                 }
 
                 return count;
             },
-            totalWeight(){
+            totalWeight() {
                 let total = 0;
-                for(let stored of this.storedItems){
+                for (let stored of this.storedItems) {
                     total += stored.weight * stored.count;
                 }
 
                 return total;
             },
 
-            totalCubage(){
+            totalCubage() {
                 let total = 0;
-                for(let stored of this.storedItems){
+                for (let stored of this.storedItems) {
                     total += stored.weight * stored.height * stored.length;
                 }
 
                 return total;
             },
-            maxWeight(){
+            maxWeight() {
                 return this.trip.car.maxWeight
             },
-            maxCubage(){
+            maxCubage() {
                 return this.trip.car.maxCubage
             },
-            action(){
-                return '/trips/'+ this.trip.id +'/items'
+            action() {
+                return '/trips/' + this.trip.id + '/items'
             }
         },
-        methods:{
+        methods: {
             onItemsSelected(items) {
                 this.storedItems.splice(0, this.storedItems.length);
 
@@ -102,17 +106,16 @@
                     return true;
                 });
             },
-            async submit(){
+            async submit() {
                 let data = {
-                    storedItems: this.storedItems.map(function(item) {
+                    storedItems: this.storedItems.map(function (item) {
                         return item.id;
                     })
                 };
-                try{
+                try {
                     await axios.post('/stored/trip/' + this.trip.id, data);
                     window.location = getBaseUrl() + '/trips/' + this.trip.id;
-                }
-                catch (e) {
+                } catch (e) {
                     this.$root.showErrorMsg(
                         'Ошибка сохранения',
                         'Не удалось закрепить список товаров за рейсом. Повторите попытку после перезагрузки страницы.'

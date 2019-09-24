@@ -9715,9 +9715,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "StoredTable",
   mounted: function mounted() {
+    if (this.items) this.storedItems = this.items;
+
+    if (this.preselected) {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.preselected[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var pre = _step.value;
+          this.selected.push(pre);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+    }
+
     this.getStoredItems();
   },
   props: {
@@ -9747,6 +9779,15 @@ __webpack_require__.r(__webpack_exports__);
       type: String,
       required: false,
       "default": ''
+    },
+    items: {
+      type: Array,
+      required: false
+    },
+    striped: {
+      type: Boolean,
+      required: false,
+      "default": true
     }
   },
   methods: {
@@ -9754,6 +9795,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      if (this.items) return;
       this.isBusy = true;
       var action = 'stored/all?page=' + page;
       if (this.action) action = this.action;
@@ -9784,6 +9826,10 @@ __webpack_require__.r(__webpack_exports__);
       return this.selected.find(function (selected) {
         return selected.id === item.id;
       });
+    },
+    rowClass: function rowClass(item, type) {
+      if (!item) return;
+      if (this.isSelected(item)) return 'table-success';
     }
   },
   computed: {
@@ -9805,7 +9851,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       selectedBranch: null,
-      selected: this.preselected,
+      selected: [],
       pagination: {
         last_page: null,
         current_page: null
@@ -10262,6 +10308,10 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
 //
 //
 //
@@ -79105,79 +79155,82 @@ var render = function() {
     "div",
     { staticClass: "card" },
     [
-      _c("div", { staticClass: "card-header" }, [
-        _c(
-          "div",
-          { staticClass: "row align-items-baseline" },
-          [
-            _vm.branches
-              ? _c("div", { staticClass: "col-md-6" }, [
-                  _vm._v("Товары на складе")
-                ])
-              : _c("div", { staticClass: "col-md-6" }, [
-                  _vm._v("Товары на всех складах")
-                ]),
-            _vm._v(" "),
-            _vm.branches
-              ? [
-                  _c(
-                    "label",
-                    {
-                      staticClass: "col-md-4 text-right",
-                      attrs: { for: "branch" }
-                    },
-                    [_vm._v("Филиал")]
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-md-2" }, [
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.selectedBranch,
-                            expression: "selectedBranch"
-                          }
-                        ],
-                        staticClass: "form-control custom-select",
-                        attrs: { id: "branch" },
-                        on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.selectedBranch = $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          }
-                        }
-                      },
-                      _vm._l(_vm.branches, function(branch) {
-                        return _c(
-                          "option",
-                          { key: branch.id, domProps: { value: branch } },
-                          [
-                            _vm._v(
-                              _vm._s(branch.name) + "\n                        "
-                            )
-                          ]
-                        )
-                      }),
-                      0
-                    )
+      _vm._t("header", [
+        _c("div", { staticClass: "card-header" }, [
+          _c(
+            "div",
+            { staticClass: "row align-items-baseline" },
+            [
+              _vm.branches
+                ? _c("div", { staticClass: "col-md-6" }, [
+                    _vm._v("Товары на складе")
                   ])
-                ]
-              : _vm._e()
-          ],
-          2
-        )
+                : _c("div", { staticClass: "col-md-6" }, [
+                    _vm._v("Товары на всех складах")
+                  ]),
+              _vm._v(" "),
+              _vm.branches
+                ? [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "col-md-4 text-right",
+                        attrs: { for: "branch" }
+                      },
+                      [_vm._v("Филиал")]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-2" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.selectedBranch,
+                              expression: "selectedBranch"
+                            }
+                          ],
+                          staticClass: "form-control custom-select",
+                          attrs: { id: "branch" },
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.selectedBranch = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        _vm._l(_vm.branches, function(branch) {
+                          return _c(
+                            "option",
+                            { key: branch.id, domProps: { value: branch } },
+                            [
+                              _vm._v(
+                                _vm._s(branch.name) +
+                                  "\n                            "
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ])
+                  ]
+                : _vm._e()
+            ],
+            2
+          )
+        ])
       ]),
       _vm._v(" "),
       _c("b-table", {
@@ -79192,7 +79245,8 @@ var render = function() {
           responsive: "",
           "select-mode": "single",
           "sticky-header": "400px",
-          striped: ""
+          "tbody-tr-class": _vm.rowClass,
+          striped: _vm.striped
         },
         on: { "row-clicked": _vm.itemSelected },
         scopedSlots: _vm._u([
@@ -79215,7 +79269,7 @@ var render = function() {
             fn: function(data) {
               return [
                 _vm.isSelected(data.item)
-                  ? _c("span", [_vm._v("✓")])
+                  ? _c("span", { staticClass: "text-success" }, [_vm._v("✓")])
                   : _c("span")
               ]
             }
@@ -79621,7 +79675,7 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-lg-4 mb-4" }, [
-        _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card shadow" }, [
           _c("div", { staticClass: "card-header" }, [
             _vm._v("\n                    Детали рейса\n                ")
           ]),
@@ -79640,7 +79694,7 @@ var render = function() {
                 { class: { "text-danger": _vm.totalWeight > _vm.maxWeight } },
                 [_vm._v(_vm._s(_vm.totalWeight))]
               ),
-              _vm._v(" из " + _vm._s(_vm.maxWeight))
+              _vm._v("\n                        из " + _vm._s(_vm.maxWeight))
             ]),
             _vm._v(" "),
             _c("p", [
@@ -79650,7 +79704,7 @@ var render = function() {
                 { class: { "text-danger": _vm.totalCubage > _vm.maxCubage } },
                 [_vm._v(_vm._s(_vm.totalCubage))]
               ),
-              _vm._v(" из " + _vm._s(_vm.maxCubage))
+              _vm._v(" из " + _vm._s(_vm.maxCubage) + "\n                    ")
             ])
           ]),
           _vm._v(" "),
@@ -79681,9 +79735,11 @@ var render = function() {
         { staticClass: "col-lg-8" },
         [
           _c("stored-table", {
+            staticClass: "shadow",
             attrs: {
               branches: _vm.branches,
               preselected: _vm.trip.stored_items,
+              striped: false,
               flowablePagination: "",
               selectable: ""
             },

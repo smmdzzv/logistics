@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container" xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
         <div class="row justify-content-center">
             <div class="col-sm-8 col-md-6 col-lg-5 col-xl-4 mb-4">
                 <div class="card shadow">
@@ -19,12 +19,17 @@
                         <p>Дата возвращения: <span class="font-weight-bold">{{$trip->returnDate}}</span></p>
                         <p>Факт. дата отправления: </p>
                         <p>Факт. дата возвращения: </p>
-                        <p><a href="{{route('trip.edit-items', $trip->id)}}">Изменить список товаров</a></p>
                     </div>
                 </div>
             </div>
-            <div >
-                <stored-table></stored-table>
+            <div class="col-lg-8">
+                <stored-table class="shadow" :items="{{$trip->storedItems}}">
+                    <template v-slot:header>
+                        <div class="card-header text-right">
+                            <a href="{{route('trip.edit-items', $trip->id)}}">Изменить список товаров</a>
+                        </div>
+                    </template>
+                </stored-table>
             </div>
         </div>
     </div>
