@@ -91,8 +91,8 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
+                                <label for="item" class="col-form-label text-md-right">Наименование товара</label>
                                 <suggestions-input id="item"
-                                                   title="Наимнование товара"
                                                    placeholder="Введите название товара"
                                                    keyPropertyName="id"
                                                    displayPropertyName="name"
@@ -129,7 +129,7 @@
                             </div>
 
                             <div class="form-group col-md-2">
-                                <label for="count" class="col-form-label text-md-right">Количество</label>
+                                <label for="count" class="col-form-label text-md-right">Кол-во</label>
                                 <input class="form-control"
                                        v-model.number="storedItem.count"
                                        @blur="$v.storedItem.count.$touch()"

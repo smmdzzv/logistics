@@ -9298,14 +9298,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "OrderViewer",
   props: {
@@ -78659,21 +78651,17 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("div", { staticClass: "row pl-1" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "row pl-1" }),
-      _vm._v(" "),
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-8" }, [
+        _c("div", { staticClass: "col-12 col-sm-6" }, [
           _c("p", [
-            _vm._v("\n                    Клиент: "),
+            _vm._v(" Клиент: "),
             _c("span", { staticClass: "font-weight-bold" }, [
               _vm._v(_vm._s(_vm.order.owner.name))
             ])
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-4 text-right" }, [
+        _c("div", { staticClass: "col-12 col-sm-6 text-left text-sm-right" }, [
           _c("p", { staticClass: "badge badge-primary p-2" }, [
             _vm._v("\n                    Статус: "),
             _c("span", { staticClass: "text" }, [
@@ -79320,10 +79308,18 @@ var render = function() {
                     "div",
                     { staticClass: "form-group col-md-6" },
                     [
+                      _c(
+                        "label",
+                        {
+                          staticClass: "col-form-label text-md-right",
+                          attrs: { for: "item" }
+                        },
+                        [_vm._v("Наименование товара")]
+                      ),
+                      _vm._v(" "),
                       _c("suggestions-input", {
                         attrs: {
                           id: "item",
-                          title: "Наимнование товара",
                           placeholder: "Введите название товара",
                           keyPropertyName: "id",
                           displayPropertyName: "name",
@@ -79452,7 +79448,7 @@ var render = function() {
                           staticClass: "col-form-label text-md-right",
                           attrs: { for: "count" }
                         },
-                        [_vm._v("Количество")]
+                        [_vm._v("Кол-во")]
                       ),
                       _vm._v(" "),
                       _c("input", {

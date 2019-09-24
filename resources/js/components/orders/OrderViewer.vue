@@ -1,18 +1,10 @@
 <template>
-    <div >
-        <div class="row pl-1">
-<!--            <barcode :value="orderUrl" :options='{displayValue:true, height:30, width:2}'></barcode>-->
-        </div>
-        <div class="row pl-1">
-<!--            <qr-code value="Hello, World!" :options="{ width: 200 }"></qr-code>-->
-        </div>
+    <div>
         <div class="row">
-            <div class="col-md-8">
-                <p>
-                    Клиент: <span class="font-weight-bold">{{order.owner.name}}</span>
-                </p>
+            <div class="col-12 col-sm-6">
+                <p> Клиент: <span class="font-weight-bold">{{order.owner.name}}</span></p>
             </div>
-            <div class="col-md-4 text-right">
+            <div class="col-12 col-sm-6 text-left text-sm-right">
                 <p class="badge badge-primary p-2">
                     Статус: <span class="text">{{getStatus()}}</span>
                 </p>
