@@ -10016,6 +10016,8 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     itemSelected: function itemSelected(item) {
+      if (!this.selectable) return;
+
       if (this.isSelected(item)) {
         this.selected = this.selected.filter(function (stored) {
           return stored.id !== item.id;

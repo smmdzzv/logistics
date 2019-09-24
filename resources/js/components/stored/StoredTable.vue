@@ -132,6 +132,8 @@
                     });
             },
             itemSelected(item) {
+                if(!this.selectable)
+                    return;
                 if (this.isSelected(item)) {
                     this.selected = this.selected.filter(function (stored) {
                         return stored.id !== item.id
