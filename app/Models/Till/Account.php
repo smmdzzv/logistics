@@ -19,7 +19,8 @@ class Account extends BaseModel
         parent::boot();
 
         Relation::morphMap([
-            'users' => 'App\User'
+            'users' => 'App\User',
+            'legalEntities' => 'App\Models\LegalEntities\LegalEntity'
         ]);
     }
 

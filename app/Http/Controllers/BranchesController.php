@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 
 class BranchesController extends Controller
 {
+
     private $rules = [
         'name' => [
             'required',

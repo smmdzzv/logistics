@@ -32,6 +32,8 @@
                         <hr>
                         <li><a href="{{route('trips.create')}}">Создать рейс</a></li>
                         <li><a href="/trips/">Список рейсов</a></li>
+                        <hr>
+                        <li><a href="/payments/create">Принять платеж</a></li>
                     </ul>
                 </div>
             </div>

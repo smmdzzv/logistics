@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class TripsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('role:admin');
+    }
+
     public function create()
     {
         $cars = Car::all();

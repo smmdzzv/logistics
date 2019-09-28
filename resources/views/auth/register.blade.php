@@ -127,7 +127,7 @@
                                             <option value="{{$branch->id}}">{{$branch->name}}</option>
                                         @endforeach
                                     </select>
-                                    @error('position')
+                                    @error('branch')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
