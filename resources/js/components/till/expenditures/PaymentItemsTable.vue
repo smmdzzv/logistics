@@ -38,7 +38,7 @@
 
             <template #footer>
                 <div class="card-footer">
-                    <main-paginator :flowable="flowablePagination" :onPageChange="getExpenditures"
+                    <main-paginator :flowable="flowablePagination" :onPageChange="getPaymentItems"
                                     :pagination="pagination"></main-paginator>
                 </div>
             </template>
@@ -48,18 +48,18 @@
 
 <script>
     export default {
-        name: "ExpendituresTable",
+        name: "PaymentItemsTable",
         mounted() {
-            if (this.expenditures)
-                this.items = this.expenditures;
-            this.getExpenditures();
+            if (this.paymentItems)
+                this.items = this.paymentItems;
+            this.getPaymentItems();
         },
         props: {
             selectable: {
                 type: Boolean,
                 default: false
             },
-            expenditures: {
+            paymentItems: {
                 type: Array,
                 required: false
             },
@@ -104,15 +104,15 @@
         },
         methods: {
             getDetailsUrl(item) {
-                return '/expenditures/' + item.id;
+                return '/payment-items/' + item.id;
             },
-            getExpenditures(page = 1) {
+            getPaymentItems(page = 1) {
                 if (this.trips)
                     return;
 
                 this.isBusy = true;
 
-                let action = '/expenditures/all?paginate=20&page=' + page;
+                let action = '/payment-items/all?paginate=20&page=' + page;
 
                 axios.get(action)
                     .then(response => {
@@ -129,9 +129,10 @@
                     });
             },
             getEditUrl(item) {
-                return '/expenditures/' + item.id + '/edit';
+                return '/payment-items/' + item.id + '/edit';
             },
             async deleteItem(item) {
+
                 let confirm = await this.$bvModal.msgBoxConfirm(`Вы уверены что хотите удалить статью ${item.title}?`, {
                     centered: true,
                     okTitle: 'Да',
@@ -139,10 +140,10 @@
                     footerClass: 'border-0',
                     title: 'Подтверждение удаления'
                 });
-
+                this.$bvModal.show('busyModal');
                 if(confirm){
                     try{
-                        const response = await axios.delete('/expenditures/' + item.id);
+                        const response = await axios.delete('/payment-items/' + item.id);
                         this.items = this.items.filter(function (i) {
                             return i.id !== item.id
                         })
@@ -151,6 +152,11 @@
                         console.log(e);
                     }
                 }
+                this.$nextTick(
+                    ()=>{
+                        this.$bvModal.hide('busyModal');
+                    }
+                )
             }
         },
         computed: {

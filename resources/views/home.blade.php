@@ -35,7 +35,7 @@
                         <hr>
                         <li><a href="{{route('payments.create')}}">Принять платеж</a></li>
                         <hr>
-                        <li><a href="{{route('expenditures.index')}}">Статьи доходов/расходов</a></li>
+                        <li><a href="{{route('payment-items.index')}}">Статьи доходов/расходов</a></li>
                     </ul>
                 </div>
             </div>

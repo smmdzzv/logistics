@@ -42,7 +42,7 @@ Vue.component('TariffHistoriesViewer', require('./components/tariffs/TariffHisto
 
 Vue.component('PaymentEditor', require('./components/till/payments/PaymentEditor.vue').default);
 
-Vue.component('ExpendituresTable', require('./components/till/expenditures/ExpendituresTable.vue').default);
+Vue.component('PaymentItemsTable', require('./components/till/expenditures/PaymentItemsTable.vue').default);
 
 Vue.component('BranchViewer', require('./components/branches/BranchViewer.vue').default);
 Vue.component('Barcode', require('@xkeshi/vue-barcode').default);

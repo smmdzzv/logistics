@@ -9,7 +9,7 @@
 
                     <div class="card-body">
 
-                        <form method="POST" action="{{ route('expenditures.store') }}">
+                        <form method="POST" action="{{ route('payment-items.store') }}">
                             @csrf
 
                             <div class="form-group row">

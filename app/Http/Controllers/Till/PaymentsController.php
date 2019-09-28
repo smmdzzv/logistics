@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Till;
 use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use App\Models\LegalEntities\LegalEntity;
+use App\Models\Till\Expenditure;
 
 class PaymentsController extends Controller
 {

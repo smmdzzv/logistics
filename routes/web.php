@@ -80,9 +80,9 @@ Route::resource('branch', 'BranchesController',
     ['except' => ['create', 'edit', 'show']]);
 
 //Expenditure
-Route::get('/expenditures/all', 'Till\ExpendituresController@all');
-Route::resource('expenditures', 'Till\ExpendituresController',
-    ['except'=> 'show'])->parameters(['expenditures' => 'expenditure']);
+Route::get('/payment-items/all', 'Till\PaymentItemsController@all');
+Route::resource('payment-items', 'Till\PaymentItemsController',
+    ['except'=> 'show'])->parameters(['payment-items' => 'paymentItem']);
 
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo');
 

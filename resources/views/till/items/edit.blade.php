@@ -9,10 +9,10 @@
 
                     <div class="card-body">
 
-                        <form method="POST" action="{{ route('expenditures.update', $expenditure->id) }}">
+                        <form method="POST" action="{{ route('payment-items.update', $paymentItem->id) }}">
                             @csrf
                             @method('patch')
-                            <input type="hidden" name="id" value="{{$expenditure->id}}">
+                            <input type="hidden" name="id" value="{{$paymentItem->id}}">
 
                             <div class="form-group row">
                                 <label for="title" class="col-md-4 col-form-label text-md-right">Наименование</label>
@@ -20,7 +20,7 @@
                                 <div class="col-md-6">
                                     <input id="title" type="text"
                                            class="form-control @error('title') is-invalid @enderror" name="title"
-                                           value="{{ old('title') ?? $expenditure->title }}" required autocomplete="title" autofocus>
+                                           value="{{ old('title') ?? $paymentItem->title }}" required autocomplete="title" autofocus>
 
                                     @error('title')
                                     <span class="invalid-feedback" role="alert">
@@ -36,7 +36,7 @@
                                 <div class="col-md-6">
                                     <input id="description" type="text"
                                            class="form-control @error('description') is-invalid @enderror"
-                                           name="description" value="{{ old('description') ?? $expenditure->description }}"
+                                           name="description" value="{{ old('description') ?? $paymentItem->description }}"
                                            autocomplete="description">
 
                                     @error('description')
@@ -56,7 +56,7 @@
                                             type="text"
                                             class="form-control custom-select @error('type') is-invalid @enderror"
                                             name="type"
-                                            value="{{ old('type') ?? $expenditure->type }}"
+                                            value="{{ old('type') ?? $paymentItem->type }}"
                                             autocomplete="type" required>
                                         <option disabled>--Выберите тип--</option>
                                         <option value="in">Доход</option>

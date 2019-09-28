@@ -29,6 +29,6 @@ class DatabaseSeeder extends Seeder
          $this->call(FuelConsumptionsTableSeeder::class);
          $this->call(TariffPriceHistoriesTableSeeder::class);
 
-         $this->call(ExpendituresTableSeeder::class);
+         $this->call(PaymentItemsTableSeeder::class);
     }
 }

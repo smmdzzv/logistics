@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Till\Expenditure;
+use App\Models\Till\PaymentItem;
 use Illuminate\Database\Seeder;
 
-class ExpendituresTableSeeder extends Seeder
+class PaymentItemsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +12,7 @@ class ExpendituresTableSeeder extends Seeder
      */
     public function run()
     {
-        Expenditure::create(
+        PaymentItem::create(
             [
                 'title' => 'Оплата заказа',
                 'description' => 'Плата за принятый заказ',
@@ -20,7 +20,7 @@ class ExpendituresTableSeeder extends Seeder
             ]
         );
 
-        Expenditure::create(
+        PaymentItem::create(
             [
                 'title' => 'Пополнение баланса',
                 'description' => 'Пополнение долларового счета пользователя',
@@ -28,7 +28,7 @@ class ExpendituresTableSeeder extends Seeder
             ]
         );
 
-        Expenditure::create(
+        PaymentItem::create(
             [
                 'title' => 'Аванс',
                 'description' => 'Выплата аванса с заработной платы',
@@ -36,7 +36,7 @@ class ExpendituresTableSeeder extends Seeder
             ]
         );
 
-        Expenditure::create(
+        PaymentItem::create(
             [
                 'title' => 'Зарплата',
                 'description' => 'Выплата заработной платы',

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Till;
 
-use App\Models\Till\Expenditure;
+use App\Models\Till\PaymentItem;
 use App\Models\Trip;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 
-class ExpendituresController extends Controller
+class PaymentItemsController extends Controller
 {
     public function __construct()
     {
@@ -26,7 +26,7 @@ class ExpendituresController extends Controller
             ],
             'title' => [
                 'required',
-                Rule::unique('expenditures')->ignore(request()->get('id'))
+                Rule::unique('payment_items')->ignore(request()->get('id'))
             ]
         ];
     }
@@ -34,42 +34,42 @@ class ExpendituresController extends Controller
     public function all()
     {
         $paginate = request()->paginate ?? 10;
-        return Expenditure::paginate($paginate);
+        return PaymentItem::paginate($paginate);
     }
 
     public function index()
     {
-        return view('till.expenditures.index');
+        return view('till.items.index');
     }
 
     function create()
     {
-        return view('till.expenditures.create');
+        return view('till.items.create');
     }
 
     public function store(Request $request)
     {
         $data = $request->validate($this->rules());
-        Expenditure::create($data);
-        return redirect(route('expenditures.index'));
+        PaymentItem::create($data);
+        return redirect(route('payment-items.index'));
     }
 
-    public function edit(Expenditure $expenditure)
+    public function edit(PaymentItem $paymentItem)
     {
-        return view('till.expenditures.edit', compact('expenditure'));
+        return view('till.items.edit', compact('paymentItem'));
     }
 
-    public function update(Request $request, Expenditure $expenditure)
+    public function update(Request $request, PaymentItem $paymentItem)
     {
         $data = $request->validate($this->rules());
-        $expenditure->fill($data);
-        $expenditure->save();
-        return redirect(route('expenditures.index'));
+        $paymentItem->fill($data);
+        $paymentItem->save();
+        return redirect(route('payment-items.index'));
     }
 
-    public function destroy(Expenditure $expenditure)
+    public function destroy(PaymentItem $paymentItem)
     {
-       $expenditure->delete();
+        $paymentItem->delete();
        return;
     }
 }
