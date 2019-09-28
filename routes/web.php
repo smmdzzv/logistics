@@ -79,10 +79,15 @@ Route::get('/branches', "BranchesController@all");
 Route::resource('branch', 'BranchesController',
     ['except' => ['create', 'edit', 'show']]);
 
-//Expenditure
+//PaymentItems
 Route::get('/payment-items/all', 'Till\PaymentItemsController@all');
+Route::get('/payment-items/type/{type}', 'Till\PaymentItemsController@filteredByType');
 Route::resource('payment-items', 'Till\PaymentItemsController',
-    ['except'=> 'show'])->parameters(['payment-items' => 'paymentItem']);
+    ['except' => 'show'])->parameters(['payment-items' => 'paymentItem']);
+
+//Currency
+Route::resource('currencies', 'Till\CurrenciesController',
+    ['only' => ['create', 'store']])->parameters(['currencies' => 'currency']);
 
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo');
 

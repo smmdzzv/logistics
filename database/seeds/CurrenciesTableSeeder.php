@@ -13,15 +13,17 @@ class CurrenciesTableSeeder extends Seeder
     public function run()
     {
         $currencies = [
-            'доллар' => 'ДОЛ',
-            'сомони' => 'СОМ',
-            'рубль' => 'РУБ'
+            'доллар' => ['ДОЛ', 'USD'],
+            'сомони' => ['СОМ', 'TJS'],
+            'рубль' => ['РУБ', 'RUB'],
+            'юань' => ['ЮАН', 'CHY']
             ];
 
         foreach ($currencies as $key=>$value){
             $currency = new Currency();
             $currency->name = $key;
-            $currency->shortName = $value;
+            $currency->shortName = $value[0];
+            $currency->isoName = $value[1];
             $currency->save();
         }
     }
