@@ -89,6 +89,9 @@ Route::resource('payment-items', 'Till\PaymentItemsController',
 Route::resource('currencies', 'Till\CurrenciesController',
     ['only' => ['create', 'store']])->parameters(['currencies' => 'currency']);
 
+Route::resource('money-exchanges', 'Till\MoneyExchangesController',
+    ['only' => ['create', 'store']])->parameters(['money-exchanges' => 'exchange']);
+
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo');
 
 Route::get('/items', 'ItemsController@all');
