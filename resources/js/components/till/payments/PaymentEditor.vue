@@ -169,12 +169,30 @@
                 )
             },
             currency() {
-                this.needConverting = this.currency.id !== this.accountTo.currency.id
+                this.needConverting = this.currency.id !== this.accountTo.currency.id;
+                if(this.needConverting)
+                    this.convert()
             }
         },
         methods: {
             clientSelected(client) {
                 this.client = client;
+            },
+            async convert(){
+                this.$bvModal.show('busyModal');
+                let action = `exchange-history/rate/${this.currency.id}/${this.accountTo.currency.id}`;
+                try{
+                    const result = await axios.get(action);
+                    console.log(result);
+                }catch (e) {
+                    this.$root.showErrorMsg('Ошибка загрузки', 'Не удалось загрузить курс валют. Убедитесь, что курс для данной валюты создан.')
+                }
+
+                this.$nextTick(
+                    ()=>{
+                        this.$bvModal.hide('busyModal');
+                    }
+                )
             }
         },
         components: {
