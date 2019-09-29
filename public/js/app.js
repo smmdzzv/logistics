@@ -10820,11 +10820,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PaymentEditor",
   mounted: function mounted() {
     this.currency = this.currencies[0];
+    this.paymentType = 'in';
   },
   props: {
     accountTo: {
@@ -10834,13 +10860,6 @@ __webpack_require__.r(__webpack_exports__);
     currencies: {
       type: Array,
       required: true
-    },
-    expenditures: {
-      type: Array,
-      required: false,
-      "default": function _default() {
-        return [];
-      }
     }
   },
   data: function data() {
@@ -10848,14 +10867,35 @@ __webpack_require__.r(__webpack_exports__);
       client: null,
       amount: 0,
       currency: null,
-      expenditure: null,
+      paymentItem: null,
+      paymentType: null,
+      needConverting: false,
       errors: {
         client: null,
         amount: null,
         currency: null,
-        expenditure: null
-      }
+        paymentItem: null
+      },
+      paymentItems: []
     };
+  },
+  watch: {
+    paymentType: function paymentType() {
+      var _this = this;
+
+      this.$bvModal.show('busyModal');
+      var action = '/payment-items/type/' + this.paymentType;
+      axios.get(action).then(function (response) {
+        _this.paymentItems = response.data;
+        if (_this.paymentItems.length === 1) _this.paymentItem = _this.paymentItems[0];
+      })["catch"]();
+      this.$nextTick(function () {
+        _this.$bvModal.hide('busyModal');
+      });
+    },
+    currency: function currency() {
+      this.needConverting = this.currency.id !== this.accountTo.currency.id;
+    }
   },
   methods: {
     clientSelected: function clientSelected(client) {
@@ -10876,7 +10916,7 @@ __webpack_require__.r(__webpack_exports__);
       required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
       decimal: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["decimal"]
     },
-    expenditure: {
+    paymentItem: {
       required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
     }
   }
@@ -80675,255 +80715,154 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-12 col-lg-10" }, [
-        _c("div", { staticClass: "card shadow" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v("\n                    Проведение платежа\n                ")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "row" }, [
-              _c(
-                "div",
-                { staticClass: "form-group col-md-6" },
-                [
-                  _c("label", { attrs: { for: "client" } }, [
-                    _vm._v("Плательщик")
-                  ]),
-                  _vm._v(" "),
-                  _c("search-user-dropdown", {
-                    attrs: { selected: _vm.clientSelected }
-                  }),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { id: "client", type: "hidden" }
-                  })
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group col-md-6" }, [
-                _c("label", { attrs: { for: "accountTo" } }, [
-                  _vm._v("Счет зачисления")
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.accountTo.description,
-                      expression: "accountTo.description"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { disabled: "", id: "accountTo", type: "text" },
-                  domProps: { value: _vm.accountTo.description },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(
-                        _vm.accountTo,
-                        "description",
-                        $event.target.value
-                      )
-                    }
-                  }
-                })
-              ])
+    _c("form", [
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _c("div", { staticClass: "col-md-12 col-lg-10" }, [
+          _c("div", { staticClass: "card shadow" }, [
+            _c("div", { staticClass: "card-header" }, [
+              _vm._v(
+                "\n                        Проведение платежа\n                    "
+              )
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "form-group col-6 col-md-3" }, [
-                _c("label", { attrs: { for: "amount" } }, [_vm._v("Сумма")]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model.number",
-                      value: _vm.amount,
-                      expression: "amount",
-                      modifiers: { number: true }
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { id: "amount", type: "number" },
-                  domProps: { value: _vm.amount },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.amount = _vm._n($event.target.value)
-                    },
-                    blur: function($event) {
-                      return _vm.$forceUpdate()
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _vm.$v.amount.$error
-                  ? _c(
-                      "span",
+            _c("div", { staticClass: "card-body" }, [
+              _c("div", { staticClass: "row" }, [
+                _c(
+                  "div",
+                  { staticClass: "form-group col-md-12" },
+                  [
+                    _c("label", [_vm._v("Тип операции")]),
+                    _vm._v(" "),
+                    _c(
+                      "b-form-select",
                       {
-                        staticClass: "invalid-feedback",
-                        attrs: { role: "alert" }
+                        scopedSlots: _vm._u([
+                          {
+                            key: "first",
+                            fn: function() {
+                              return [
+                                _c(
+                                  "option",
+                                  {
+                                    attrs: { disabled: "" },
+                                    domProps: { value: null }
+                                  },
+                                  [_vm._v("-- Выберите тип операции --")]
+                                )
+                              ]
+                            },
+                            proxy: true
+                          }
+                        ]),
+                        model: {
+                          value: _vm.paymentType,
+                          callback: function($$v) {
+                            _vm.paymentType = $$v
+                          },
+                          expression: "paymentType"
+                        }
                       },
                       [
-                        _c("strong", [
-                          _vm._v("Необходимо ввести сумму платежа")
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "in" } }, [
+                          _vm._v("ПРИХОД")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "out" } }, [
+                          _vm._v("РАСХОД")
                         ])
                       ]
                     )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.errors.amount
-                  ? _c(
-                      "span",
-                      {
-                        staticClass: "invalid-feedback",
-                        attrs: { role: "alert" }
-                      },
-                      _vm._l(_vm.errors.amount, function(message) {
-                        return _c("strong", [_vm._v(_vm._s(message))])
-                      }),
-                      0
-                    )
-                  : _vm._e()
+                  ],
+                  1
+                )
               ]),
               _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "form-group col-6 col-md-3" },
-                [
-                  _c("label", [_vm._v("Валюта")]),
-                  _vm._v(" "),
-                  _c(
-                    "b-form-select",
-                    {
-                      class: {
-                        "is-invalid":
-                          _vm.$v.currency.$error || _vm.errors.currency
-                      },
-                      model: {
-                        value: _vm.currency,
-                        callback: function($$v) {
-                          _vm.currency = $$v
-                        },
-                        expression: "currency"
-                      }
-                    },
-                    _vm._l(_vm.currencies, function(currency) {
-                      return _c(
-                        "option",
-                        { key: currency.id, domProps: { value: currency } },
-                        [
-                          _vm._v(
-                            "\n                                    " +
-                              _vm._s(currency.name.toUpperCase()) +
-                              "\n                                "
-                          )
-                        ]
-                      )
+              _c("div", { staticClass: "row" }, [
+                _c(
+                  "div",
+                  { staticClass: "form-group col-md-6" },
+                  [
+                    _c("label", { attrs: { for: "client" } }, [
+                      _vm._v("Плательщик")
+                    ]),
+                    _vm._v(" "),
+                    _c("search-user-dropdown", {
+                      attrs: { selected: _vm.clientSelected }
                     }),
-                    0
-                  ),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "form-control",
+                      attrs: { id: "client", type: "hidden" }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group col-md-6" }, [
+                  _c("label", { attrs: { for: "accountTo" } }, [
+                    _vm._v("Счет зачисления")
+                  ]),
                   _vm._v(" "),
-                  _vm.$v.currency.$error
-                    ? _c(
-                        "span",
-                        {
-                          staticClass: "invalid-feedback",
-                          attrs: { role: "alert" }
-                        },
-                        [_c("strong", [_vm._v("Необходимо выбрать валюту")])]
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.errors.currency
-                    ? _c(
-                        "span",
-                        {
-                          staticClass: "invalid-feedback",
-                          attrs: { role: "alert" }
-                        },
-                        _vm._l(_vm.errors.currency, function(message) {
-                          return _c("strong", [_vm._v(_vm._s(message))])
-                        }),
-                        0
-                      )
-                    : _vm._e()
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "form-group col-md-6" },
-                [
-                  _c("label", [_vm._v("Статья")]),
-                  _vm._v(" "),
-                  _c(
-                    "b-form-select",
-                    {
-                      class: {
-                        "is-invalid":
-                          _vm.$v.expenditure.$error || _vm.errors.expenditure
-                      },
-                      scopedSlots: _vm._u([
-                        {
-                          key: "first",
-                          fn: function() {
-                            return [
-                              _c(
-                                "option",
-                                {
-                                  attrs: { disabled: "" },
-                                  domProps: { value: null }
-                                },
-                                [_vm._v("-- Выберите статью прихода --")]
-                              )
-                            ]
-                          },
-                          proxy: true
-                        }
-                      ]),
-                      model: {
-                        value: _vm.expenditure,
-                        callback: function($$v) {
-                          _vm.expenditure = $$v
-                        },
-                        expression: "expenditure"
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.accountTo.description,
+                        expression: "accountTo.description"
                       }
-                    },
-                    [
-                      _vm._v(" "),
-                      _vm._l(_vm.expenditures, function(expenditure) {
-                        return _c(
-                          "option",
-                          {
-                            key: expenditure.id,
-                            domProps: { value: expenditure }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                    " +
-                                _vm._s(expenditure.name.toUpperCase()) +
-                                "\n                                "
-                            )
-                          ]
-                        )
-                      })
                     ],
-                    2
-                  ),
+                    staticClass: "form-control",
+                    attrs: { disabled: "", id: "accountTo", type: "text" },
+                    domProps: { value: _vm.accountTo.description },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.accountTo,
+                          "description",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "form-group col-6 col-md-3" }, [
+                  _c("label", { attrs: { for: "amount" } }, [_vm._v("Сумма")]),
                   _vm._v(" "),
-                  _vm.$v.expenditure.$error
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model.number",
+                        value: _vm.amount,
+                        expression: "amount",
+                        modifiers: { number: true }
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { id: "amount", type: "number" },
+                    domProps: { value: _vm.amount },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.amount = _vm._n($event.target.value)
+                      },
+                      blur: function($event) {
+                        return _vm.$forceUpdate()
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.$v.amount.$error
                     ? _c(
                         "span",
                         {
@@ -80932,36 +80871,216 @@ var render = function() {
                         },
                         [
                           _c("strong", [
-                            _vm._v("Необходимо выбрать статью прихода")
+                            _vm._v("Необходимо ввести сумму платежа")
                           ])
                         ]
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.errors.expenditure
+                  _vm.errors.amount
                     ? _c(
                         "span",
                         {
                           staticClass: "invalid-feedback",
                           attrs: { role: "alert" }
                         },
-                        _vm._l(_vm.errors.expenditure, function(message) {
+                        _vm._l(_vm.errors.amount, function(message) {
                           return _c("strong", [_vm._v(_vm._s(message))])
                         }),
                         0
                       )
                     : _vm._e()
-                ],
-                1
-              )
-            ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group col-6 col-md-3" },
+                  [
+                    _c("label", [_vm._v("Валюта")]),
+                    _vm._v(" "),
+                    _c(
+                      "b-form-select",
+                      {
+                        class: {
+                          "is-invalid":
+                            _vm.$v.currency.$error || _vm.errors.currency
+                        },
+                        model: {
+                          value: _vm.currency,
+                          callback: function($$v) {
+                            _vm.currency = $$v
+                          },
+                          expression: "currency"
+                        }
+                      },
+                      _vm._l(_vm.currencies, function(currency) {
+                        return _c(
+                          "option",
+                          { key: currency.id, domProps: { value: currency } },
+                          [
+                            _vm._v(
+                              "\n                                        " +
+                                _vm._s(currency.name.toUpperCase()) +
+                                "\n                                    "
+                            )
+                          ]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _vm.$v.currency.$error
+                      ? _c(
+                          "span",
+                          {
+                            staticClass: "invalid-feedback",
+                            attrs: { role: "alert" }
+                          },
+                          [_c("strong", [_vm._v("Необходимо выбрать валюту")])]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.errors.currency
+                      ? _c(
+                          "span",
+                          {
+                            staticClass: "invalid-feedback",
+                            attrs: { role: "alert" }
+                          },
+                          _vm._l(_vm.errors.currency, function(message) {
+                            return _c("strong", [_vm._v(_vm._s(message))])
+                          }),
+                          0
+                        )
+                      : _vm._e()
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "form-group col-md-6" },
+                  [
+                    _c("label", [_vm._v("Статья")]),
+                    _vm._v(" "),
+                    _c(
+                      "b-form-select",
+                      {
+                        class: {
+                          "is-invalid":
+                            _vm.$v.paymentItem.$error || _vm.errors.paymentItem
+                        },
+                        scopedSlots: _vm._u([
+                          {
+                            key: "first",
+                            fn: function() {
+                              return [
+                                _c(
+                                  "option",
+                                  {
+                                    attrs: { disabled: "" },
+                                    domProps: { value: null }
+                                  },
+                                  [_vm._v("-- Выберите статью прихода --")]
+                                )
+                              ]
+                            },
+                            proxy: true
+                          }
+                        ]),
+                        model: {
+                          value: _vm.paymentItem,
+                          callback: function($$v) {
+                            _vm.paymentItem = $$v
+                          },
+                          expression: "paymentItem"
+                        }
+                      },
+                      [
+                        _vm._v(" "),
+                        _vm._l(_vm.paymentItems, function(paymentItem) {
+                          return _c(
+                            "option",
+                            {
+                              key: paymentItem.id,
+                              domProps: { value: paymentItem }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                        " +
+                                  _vm._s(paymentItem.title.toUpperCase()) +
+                                  "\n                                    "
+                              )
+                            ]
+                          )
+                        })
+                      ],
+                      2
+                    ),
+                    _vm._v(" "),
+                    _vm.$v.paymentItem.$error
+                      ? _c(
+                          "span",
+                          {
+                            staticClass: "invalid-feedback",
+                            attrs: { role: "alert" }
+                          },
+                          [
+                            _c("strong", [
+                              _vm._v("Необходимо выбрать статью прихода")
+                            ])
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.errors.paymentItem
+                      ? _c(
+                          "span",
+                          {
+                            staticClass: "invalid-feedback",
+                            attrs: { role: "alert" }
+                          },
+                          _vm._l(_vm.errors.paymentItem, function(message) {
+                            return _c("strong", [_vm._v(_vm._s(message))])
+                          }),
+                          0
+                        )
+                      : _vm._e()
+                  ],
+                  1
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _vm._m(0)
           ])
         ])
       ])
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-footer" }, [
+      _c("div", { staticClass: "form-group row mb-0" }, [
+        _c("div", { staticClass: "col-md-6 offset-md-4" }, [
+          _c(
+            "button",
+            { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+            [
+              _vm._v(
+                "\n                                    Провести операцию\n                                "
+              )
+            ]
+          )
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 

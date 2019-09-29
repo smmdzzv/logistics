@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use App\Models\LegalEntities\LegalEntity;
 use App\Models\Till\Expenditure;
+use App\Models\Till\PaymentItem;
 
 class PaymentsController extends Controller
 {

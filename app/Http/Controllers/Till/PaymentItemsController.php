@@ -37,6 +37,10 @@ class PaymentItemsController extends Controller
         return PaymentItem::paginate($paginate);
     }
 
+    public function filteredByType($type){
+        return PaymentItem::where('type', $type)->get();
+    }
+
     public function index()
     {
         return view('till.items.index');
