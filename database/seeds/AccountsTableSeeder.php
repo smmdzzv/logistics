@@ -16,7 +16,7 @@ class AccountsTableSeeder extends Seeder
     public function run()
     {
         $owner = LegalEntity::first();
-        $currencyId = Currency::where('name', 'доллар')->first()->id;
+        $currencyId = Currency::where('isoName', 'USD')->first()->id;
 
         $owner->accounts()->create([
             'balance' => 0,

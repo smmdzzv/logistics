@@ -16,17 +16,16 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->char('id', 26)->primary();;
             $table->char('ownerId', 26);
+            $table->char('paymentId', 26)->nullable()->unique();
             $table->char('registeredBy', 26);
             $table->char('branch', 26);
             $table->string('status')->default('accepted');
-            $table->double('totalCount');
-            $table->double('totalWeight');
-            $table->double('totalCubage');
-            $table->double('totalPrice');
-            $table->double('totalDiscount');
+            $table->decimal('totalCount', 10, 2);
+            $table->decimal('totalWeight', 10, 2);
+            $table->decimal('totalCubage', 10, 2);
+            $table->decimal('totalPrice', 10, 2);
+            $table->decimal('totalDiscount', 10, 2);
             $table->timestamps();
-
-            $table->index('ownerId');
         });
     }
 

@@ -11,6 +11,12 @@ use App\Models\Till\PaymentItem;
 
 class PaymentsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('role:cashier, manager');
+    }
+
     public function create(){
         $accountTo = LegalEntity::first()->accounts()->with('currency')->first();
         $currencies = Currency::all();

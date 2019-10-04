@@ -30,7 +30,7 @@ class MoneyExchangesController extends Controller
 //    }
 
     public function exchangeRate($from, $to){
-            return MoneyExchange::where('from',$from)->where('to',$to)->firstOrFail();
+            return MoneyExchange::with('toCurrency')->where('from',$from)->where('to',$to)->firstOrFail();
     }
 
     public function create()

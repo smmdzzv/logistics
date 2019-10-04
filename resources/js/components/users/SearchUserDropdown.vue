@@ -85,6 +85,14 @@
                 this.selectActive(this.preselectedUser);
             },
             userInfo() {
+                if(this.selectedUser
+                    && this.userInfo !== this.selectedUser.name)
+                {
+                    this.selectedUser = null;
+                    this.selectedUserDisplayInfo = '';
+                    this.selected(this.selectedUser);
+                }
+
                 this.loadUsers()
             }
         },

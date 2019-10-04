@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Models\Users\Client;
+
 class ClientsController extends AbstractConcreteUsersController
 {
     protected function getRoleName()
@@ -23,5 +25,11 @@ class ClientsController extends AbstractConcreteUsersController
         $url = 'concrete/client/all';
         $title = 'Список клиентов';
         return view('users.index', compact('url', 'title'));
+    }
+
+    //TODO handle input params in router
+    public function orders(){
+        $client = Client::findOrFail(request()->get('client'));
+        return $client->orders;
     }
 }

@@ -80,7 +80,8 @@ class OrdersController extends Controller
             $order->totalCount += $itemData['count'];
         }
 
-         $order->save();
+        $order->roundNumeric();
+        $order->save();
         return $order;
     }
 
