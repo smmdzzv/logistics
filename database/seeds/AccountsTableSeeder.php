@@ -23,5 +23,13 @@ class AccountsTableSeeder extends Seeder
             'description' => "Основной счет Дуоб",
             'currencyId' => $currencyId
         ]);
+
+        $owner = User::where('code', '1345')->first();
+
+        $owner->accounts()->create([
+            'balance' => 100,
+            'description' => "Долларовый счет Бахтиерова",
+            'currencyId' => $currencyId
+        ]);
     }
 }

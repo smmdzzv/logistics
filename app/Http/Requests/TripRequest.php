@@ -50,7 +50,7 @@ class TripRequest extends FormRequest
         $validator->after(function ($validator) {
             $driverId = request()->get('driverId');
             $driver = Driver::find($driverId);
-            if(!isset($driver))
+            if($driver === null)
                 $validator->errors()->add('driverId', 'Указанный пользователь не является водителем');
         });
     }

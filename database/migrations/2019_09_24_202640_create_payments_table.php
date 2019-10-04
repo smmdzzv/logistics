@@ -19,13 +19,11 @@ class CreatePaymentsTable extends Migration
             $table->char('cashierId', 26);
             $table->char('currencyId', 26);
             $table->char('payerId', 26);
-            $table->char('expenditureId', 26);
-            $table->char('accountFrom', 26);
-            $table->string('accountFrom_type');
-            $table->char('accountTo', 26);
-            $table->string('accountTo_type');
-
-            $table->unsignedDecimal('amount', 10, 2);
+            $table->char('paymentItemId', 26);
+            $table->char('exchangeId', 26)->nullable();
+            $table->char('accountFromId', 26)->nullable();
+            $table->char('accountToId', 26);
+            $table->decimal('amount', 10, 2);
 
             $table->timestamps();
         });

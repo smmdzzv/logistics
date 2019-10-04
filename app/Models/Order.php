@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use App\Models\Till\Payment;
 use App\Models\Users\Client;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
@@ -42,6 +43,10 @@ class Order extends BaseModel
     public function branch()
     {
         return $this->belongsTo(Branch::class, 'branch');
+    }
+
+    public function payment(){
+        return $this->belongsTo(Payment::class,'paymentId');
     }
 
     private function roundNumeric()

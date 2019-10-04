@@ -8,6 +8,7 @@ use App\Models\Position;
 use App\Models\Role;
 use App\Models\StoredItem;
 use App\Models\Till\Account;
+use App\Models\Till\Payment;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Rorecek\Ulid\HasUlid;

@@ -156,7 +156,12 @@
                                         label="Курс"
                                         label-for="rate">
                                         <b-form-input disabled id="rate"
+                                                      :class="{'is-invalid': errors.exchange}"
                                                       v-model="exchange.coefficient"></b-form-input>
+
+                                        <span class="invalid-feedback" role="alert" v-if="errors.exchange">
+                                             <strong v-for="message in errors.exchange">{{message}}</strong>
+                                        </span>
                                     </b-form-group>
                                 </div>
 
@@ -202,6 +207,13 @@
             return vm.amount > 0;
     };
 
+    const validateOrder = (value, vm) => {
+        if(vm.isOrderPayment)
+            return vm.order && vm.order.id;
+        else
+            return true;
+    };
+
     export default {
         name: "PaymentEditor",
         mounted() {
@@ -239,7 +251,9 @@
                     client: null,
                     amount: null,
                     currency: null,
-                    paymentItem: null
+                    paymentItem: null,
+                    order: null,
+                    exchange: null
                 },
                 paymentItems: []
             }
@@ -273,6 +287,7 @@
                     this.convert()
             },
             paymentItem() {
+                this.order = null;
                 this.getOrders();
             },
             order() {
@@ -325,7 +340,31 @@
                 if (this.$v.$invalid)
                     this.$v.$touch();
                 else {
+                    let data = {
+                        payerId: this.client.id,
+                        paymentItemId: this.paymentItem.id,
+                        currencyId: this.currency.id,
+                        accountTo: this.accountTo.id,
+                        amount: this.amount,
+                        exchangeId: this.exchange.id,
+                        orderId: this.order ? this.order.id : null
+                    };
 
+                    try {
+                        const result = await axios.post('/payments', data)
+                    } catch (e) {
+                        if (e.response.status === 422) {
+                            this.errors.client = e.response.data.errors.payerId;
+                            this.errors.order = e.response.data.errors.orderId;
+                            this.errors.amount = e.response.data.errors.amount;
+                            this.errors.currency = e.response.data.errors.currencyId;
+                            this.errors.paymentItem = e.response.data.errors.paymentItemId;
+                            this.errors.exchange = e.response.data.errors.exchangeId;
+                        } else {
+                            this.$root.showErrorMsg('Ошибка соранения',
+                                'Не удалось провести платеж. Обновите странице и повторите попытку')
+                        }
+                    }
                 }
             },
         },
@@ -348,7 +387,7 @@
                 validateAmount
             },
             order: {
-                required
+                validateOrder
             }
         }
     }

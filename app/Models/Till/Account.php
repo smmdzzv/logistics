@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 
 class Account extends BaseModel
 {
+    protected $casts = [
+        'balance' => 'double'
+    ];
+
     /**
      * The "booting" method of the model.
      *
@@ -30,5 +34,13 @@ class Account extends BaseModel
 
     public function currency(){
         return $this->belongsTo(Currency::class, 'currencyId');
+    }
+
+    public function paymentsIn(){
+        return $this->hasMany(Payment::class, 'accountToId');
+    }
+
+    public function paymentsOut(){
+        return $this->hasMany(Payment::class, 'accountFromId');
     }
 }

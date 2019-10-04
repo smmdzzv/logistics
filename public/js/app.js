@@ -10929,6 +10929,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 var validateAmount = function validateAmount(value, vm) {
@@ -10937,6 +10942,10 @@ var validateAmount = function validateAmount(value, vm) {
     console.log(compareTo, vm.requiredAmount);
     return vm.requiredAmount === compareTo;
   } else return vm.amount > 0;
+};
+
+var validateOrder = function validateOrder(value, vm) {
+  if (vm.isOrderPayment) return vm.order && vm.order.id;else return true;
 };
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -10976,7 +10985,9 @@ var validateAmount = function validateAmount(value, vm) {
         client: null,
         amount: null,
         currency: null,
-        paymentItem: null
+        paymentItem: null,
+        order: null,
+        exchange: null
       },
       paymentItems: []
     };
@@ -11003,6 +11014,7 @@ var validateAmount = function validateAmount(value, vm) {
       if (this.needConverting) this.convert();
     },
     paymentItem: function paymentItem() {
+      this.order = null;
       this.getOrders();
     },
     order: function order() {
@@ -11119,18 +11131,60 @@ var validateAmount = function validateAmount(value, vm) {
       var _submitForm = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var data, result;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                if (this.$v.$invalid) this.$v.$touch();else {}
+                if (!this.$v.$invalid) {
+                  _context3.next = 4;
+                  break;
+                }
 
-              case 1:
+                this.$v.$touch();
+                _context3.next = 14;
+                break;
+
+              case 4:
+                data = {
+                  payerId: this.client.id,
+                  paymentItemId: this.paymentItem.id,
+                  currencyId: this.currency.id,
+                  accountTo: this.accountTo.id,
+                  amount: this.amount,
+                  exchangeId: this.exchange.id,
+                  orderId: this.order ? this.order.id : null
+                };
+                _context3.prev = 5;
+                _context3.next = 8;
+                return axios.post('/payments', data);
+
+              case 8:
+                result = _context3.sent;
+                _context3.next = 14;
+                break;
+
+              case 11:
+                _context3.prev = 11;
+                _context3.t0 = _context3["catch"](5);
+
+                if (_context3.t0.response.status === 422) {
+                  this.errors.client = _context3.t0.response.data.errors.payerId;
+                  this.errors.order = _context3.t0.response.data.errors.orderId;
+                  this.errors.amount = _context3.t0.response.data.errors.amount;
+                  this.errors.currency = _context3.t0.response.data.errors.currencyId;
+                  this.errors.paymentItem = _context3.t0.response.data.errors.paymentItemId;
+                  this.errors.exchange = _context3.t0.response.data.errors.exchangeId;
+                } else {
+                  this.$root.showErrorMsg('Ошибка соранения', 'Не удалось провести платеж. Обновите странице и повторите попытку');
+                }
+
+              case 14:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, this);
+        }, _callee3, this, [[5, 11]]);
       }));
 
       function submitForm() {
@@ -11159,7 +11213,7 @@ var validateAmount = function validateAmount(value, vm) {
       validateAmount: validateAmount
     },
     order: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"]
+      validateOrder: validateOrder
     }
   }
 });
@@ -81514,6 +81568,7 @@ var render = function() {
                         },
                         [
                           _c("b-form-input", {
+                            class: { "is-invalid": _vm.errors.exchange },
                             attrs: { disabled: "", id: "rate" },
                             model: {
                               value: _vm.exchange.coefficient,
@@ -81522,7 +81577,21 @@ var render = function() {
                               },
                               expression: "exchange.coefficient"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _vm.errors.exchange
+                            ? _c(
+                                "span",
+                                {
+                                  staticClass: "invalid-feedback",
+                                  attrs: { role: "alert" }
+                                },
+                                _vm._l(_vm.errors.exchange, function(message) {
+                                  return _c("strong", [_vm._v(_vm._s(message))])
+                                }),
+                                0
+                              )
+                            : _vm._e()
                         ],
                         1
                       )
