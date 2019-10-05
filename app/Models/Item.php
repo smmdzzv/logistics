@@ -16,6 +16,11 @@ class Item extends BaseModel
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'onlyCustomPrice' => 'boolean',
+        'applyDiscount' => 'boolean'
+    ];
+
     public function storedItems(){
         return $this->$this->hasMany(StoredItem::class);
     }

@@ -51,7 +51,7 @@
         props: {
             tableHeight: {
                 type: String,
-                default: '400px'
+                default: '500px'
             },
             items: {
                 type: Array,

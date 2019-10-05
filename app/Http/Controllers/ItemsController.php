@@ -18,7 +18,12 @@ class ItemsController extends Controller
 
     public function all()
     {
-        return Item::all();
+        $paginate = request()->paginate ?? 10;
+        return Item::with('tariff')->paginate($paginate);
+    }
+
+    public function index(){
+        return view('items.index');
     }
 
     public function create()
@@ -31,7 +36,7 @@ class ItemsController extends Controller
     {
         $data = $request->validate($this->rules());
         Item::create($data);
-        return redirect()->route('items.create');
+        return redirect()->route('items.index');
     }
 
     private function rules()

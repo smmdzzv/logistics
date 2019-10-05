@@ -44,8 +44,8 @@
                                 Заказы <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="ordersMenuDropdown">
-                                <a class="dropdown-item" href="{{ route('orders.create') }}">Оформить</a>
-                                <a class="dropdown-item" href="{{route('orders.index')}}">Список</a>
+                                <a class="dropdown-item" href="{{ route('orders.create') }}">Оформить заказ</a>
+                                <a class="dropdown-item" href="{{route('orders.index')}}">Список заказов</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{route('orders.index')}}">Принятые товары</a>
                                 <div class="dropdown-divider"></div>
@@ -54,9 +54,11 @@
                                 <h6 class="dropdown-header">Расценка тарифов</h6>
                                 <a class="dropdown-item" href="{{route('tariff-price-histories.create')}}">Обновить
                                     расценки</a>
-                                <a class="dropdown-item" href="{{route('tariff-price-histories.index')}}">История</a>
+                                <a class="dropdown-item" href="{{route('tariff-price-histories.index')}}">История цен</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{route('items.create')}}">Создать товар</a>
+                                <h6 class="dropdown-header">Наименования</h6>
+                                <a class="dropdown-item" href="{{route('items.create')}}">Добавить наименование</a>
+                                <a class="dropdown-item" href="{{route('items.index')}}">Список  наименований</a>
                             </div>
                         </li>
                         <!--Till-->

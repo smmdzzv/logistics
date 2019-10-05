@@ -101,7 +101,7 @@ Route::resource('money-exchanges', 'Till\MoneyExchangesController',
 Route::get('exchange-history/rate/{from}/{to}', 'Till\MoneyExchangesController@exchangeRate');
 
 Route::get('/items/all', 'ItemsController@all');
-Route::resource('items', 'ItemsController', ['only' => ['create', 'store']])->parameters(['items' => 'item']);
+Route::resource('items', 'ItemsController', ['only' => ['index', 'create', 'store']])->parameters(['items' => 'item']);
 
 
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo');
