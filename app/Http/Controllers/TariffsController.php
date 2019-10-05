@@ -12,10 +12,15 @@ class TariffsController extends Controller
         $this->middleware('auth');
     }
 
-    public function create(){
+    public function index(){
         $tariffs = Tariff::all();
         return view('tariffs.create', compact('tariffs'));
     }
+
+//    public function create(){
+//        $tariffs = Tariff::all();
+//        return view('tariffs.create', compact('tariffs'));
+//    }
 
     public function store(){
         $data = request()->validate([
@@ -26,7 +31,7 @@ class TariffsController extends Controller
         return Tariff::create($data);
     }
 
-    public function delete(Tariff $tariff){
+    public function destroy(Tariff $tariff){
         $tariff->delete();
     }
 }

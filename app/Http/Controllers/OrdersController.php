@@ -21,6 +21,11 @@ class OrdersController extends Controller
                 abort(403, 'Для работы с заказами необходимо быть сотрудником филиала.');
             return $next($request);
         });
+
+        $adminOnly = ['edit, update, destroy'];
+
+        $this->middleware('role:employee,manager,director')->except($adminOnly);
+        $this->middleware('role:admin')->only($adminOnly);
     }
 
     public function index(){

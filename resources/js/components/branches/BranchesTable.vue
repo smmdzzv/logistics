@@ -56,7 +56,7 @@
 
                 if(confirm){
                     try{
-                        const response = axios.delete('/branch/' + branch.id);
+                        const response = axios.delete('/branches/' + branch.id);
                         console.log(response);
                         this.$emit('branchDeleted', branch)
                     }

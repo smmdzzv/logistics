@@ -126,7 +126,7 @@
                     this.$v.$touch();
                 else {
                     try {
-                        const response = await axios.post('/tariff/store', {
+                        const response = await axios.post('/tariffs', {
                             name: this.tariff.name,
                             description: this.tariff.description
                         });
@@ -175,7 +175,7 @@
 
                 this.setBusy();
                 try{
-                    await axios.delete('/tariff/' + tariff.id);
+                    await axios.delete('/tariffs/' + tariff.id);
 
                     this.tariffs = jQuery.grep(this.tariffs, function (value) {
                         return value !== tariff;

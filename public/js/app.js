@@ -7912,7 +7912,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios.post('/branch', data);
+                return axios.post('/branches', data);
 
               case 2:
                 return _context2.abrupt("return", _context2.sent);
@@ -7940,7 +7940,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios.patch("/branch/".concat(this.branch.id), data);
+                return axios.patch("/branches/".concat(this.branch.id), data);
 
               case 2:
                 return _context3.abrupt("return", _context3.sent);
@@ -8189,7 +8189,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 this.$bvModal.show('busyModal');
                 _context.prev = 1;
                 _context.next = 4;
-                return axios.get('/branches');
+                return axios.get('/branches/all');
 
               case 4:
                 response = _context.sent;
@@ -8311,7 +8311,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 if (confirm) {
                   try {
-                    response = axios["delete"]('/branch/' + branch.id);
+                    response = axios["delete"]('/branches/' + branch.id);
                     console.log(response);
                     this.$emit('branchDeleted', branch);
                   } catch (e) {
@@ -10261,7 +10261,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 5:
                 _context.prev = 5;
                 _context.next = 8;
-                return axios.post('/tariff/store', {
+                return axios.post('/tariffs', {
                   name: this.tariff.name,
                   description: this.tariff.description
                 });
@@ -10351,7 +10351,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 this.setBusy();
                 _context2.prev = 6;
                 _context2.next = 9;
-                return axios["delete"]('/tariff/' + tariff.id);
+                return axios["delete"]('/tariffs/' + tariff.id);
 
               case 9:
                 this.tariffs = jQuery.grep(this.tariffs, function (value) {

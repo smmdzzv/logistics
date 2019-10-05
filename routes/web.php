@@ -60,9 +60,12 @@ Route::post('/settings/branch', 'AppSettingsController@storeBranch');
 Route::post('/settings/position', 'AppSettingsController@storePosition');
 
 //Tariffs
-Route::get('/tariff/create', "TariffsController@create")->name('tariff.create');
-Route::post('/tariff/store', "TariffsController@store")->name('tariff.store');
-Route::delete('/tariff/{tariff}', "TariffsController@delete")->name('tariff.delete');
+Route::resource('tariffs', 'TariffsController', [
+    'only' => ['index', 'store', 'destroy']
+])->parameters(['tariffs' => 'tariff']);
+//Route::get('/tariff', "TariffsController@index")->name('tariff.index');
+//Route::post('/tariff/store', "TariffsController@store")->name('tariff.store');
+//Route::delete('/tariff/{tariff}', "TariffsController@delete")->name('tariff.delete');
 
 //Tariff price histories
 Route::get('/tariff-price-history/', 'TariffPriceHistoriesController@index')->name('pricing.index');
@@ -75,9 +78,9 @@ Route::get('/cars/all', 'CarsController@all');
 Route::resource('cars', 'CarsController');
 
 //Branches
-Route::get('/branches', "BranchesController@all");
-Route::resource('branch', 'BranchesController',
-    ['except' => ['create', 'edit', 'show']]);
+Route::get('/branches/all', "BranchesController@all");
+Route::resource('branches', 'BranchesController',
+    ['except' => ['create', 'edit', 'show']])->parameters(['branches' => 'branch']);;
 
 //PaymentItems
 Route::get('/payment-items/all', 'Till\PaymentItemsController@all');

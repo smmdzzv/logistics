@@ -124,7 +124,7 @@
                 //     country: this.data.country.id
                 // })
 
-                return await axios.post('/branch', data)
+                return await axios.post('/branches', data)
             },
             async updateBranch(data) {
                 // return await axios.patch(`/branch/${this.branch.id}`, {
@@ -132,7 +132,7 @@
                 //     director: this.data.director.id,
                 //     country: this.data.country.id
                 // })
-                return await axios.patch(`/branch/${this.branch.id}`, data)
+                return await axios.patch(`/branches/${this.branch.id}`, data)
             },
             async submitForm() {
                 if (this.$v.$invalid)

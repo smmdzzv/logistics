@@ -73,7 +73,7 @@
             async getBranches() {
                 this.$bvModal.show('busyModal');
                 try {
-                    const response = await axios.get('/branches');
+                    const response = await axios.get('/branches/all');
                     this.branches = response.data;
                 } catch (e) {
                     this.$root.showErrorMsg(
