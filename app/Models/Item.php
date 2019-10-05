@@ -7,17 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property string name
- * @property bool isPriceCustom
- * @property  int tariff_id
  * @property string unit
+ * @property bool onlyCustomPrice
+ * @property bool applyDiscount
+ * @property string tariffId
  */
 class Item extends BaseModel
 {
+    protected $guarded = [];
+
     public function storedItems(){
         return $this->$this->hasMany(StoredItem::class);
     }
 
     public function tariff(){
-        return $this->belongsTo(Tariff::class);
+        return $this->belongsTo(Tariff::class, 'tariffId');
     }
 }

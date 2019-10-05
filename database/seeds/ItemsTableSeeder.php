@@ -24,8 +24,9 @@ class ItemsTableSeeder extends Seeder
         foreach ($items as $key=>$value){
             $item = new Item();
             $item->name = $key;
-            $item->isPriceCustom = false;
-            $item->tariff_id = Tariff::where('name',$value)->first()->id;
+            $item->onlyCustomPrice = false;
+            $item->applyDiscount = true;
+            $item->tariffId = Tariff::where('name',$value)->first()->id;
             $item->unit = 'шт';
             $item->save();
         }

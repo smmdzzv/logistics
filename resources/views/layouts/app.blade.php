@@ -34,90 +34,92 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            @auth
                 <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav ml-4 mr-auto">
-                    <!--Orders-->
-                    <li class="nav-item dropdown">
-                        <a id="ordersMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Заказы <span class="caret"></span>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="ordersMenuDropdown">
-                            <a class="dropdown-item" href="{{ route('orders.create') }}">Оформить</a>
-                            <a class="dropdown-item" href="{{route('orders.index')}}">Список</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{route('orders.index')}}">Принятые товары</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{route('tariffs.index')}}">Управлять тарифами</a>
-                            <div class="dropdown-divider"></div>
-                            <h6 class="dropdown-header">Расценка тарифов</h6>
-                            <a class="dropdown-item" href="{{route('tariff-price-histories.create')}}">Обновить расценки</a>
-                            <a class="dropdown-item" href="{{route('tariff-price-histories.index')}}">История</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Добавить товар</a>
-                        </div>
-                    </li>
-                    <!--Till-->
-                    <li class="nav-item dropdown">
-                        <a id="tillMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Касса <span class="caret"></span>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="tillMenuDropdown">
-                            <h6 class="dropdown-header">Провести платеж</h6>
-                            <a class="dropdown-item" href="#">Приход</a>
-                            <a class="dropdown-item" href="#">Расход</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Сформировать отчет</a>
-                            <div class="dropdown-divider"></div>
-                            <h6 class="dropdown-header">Статьи прихода/расхода</h6>
-                            <a class="dropdown-item" href="#">Добавить</a>
-                            <a class="dropdown-item" href="#">Список</a>
-                            <div class="dropdown-divider"></div>
-                            <h6 class="dropdown-header">Валюта</h6>
-                            <a class="dropdown-item" href="#">Добавить</a>
-                            <a class="dropdown-item" href="#">Список</a>
-                        </div>
-                    </li>
-                    <!--Users-->
-                    <li class="nav-item dropdown">
-                        <a id="usersMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Пользователи <span class="caret"></span>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="usersMenuDropdown">
-                            <a class="dropdown-item" href="#">Регистрация</a>
-                            <a class="dropdown-item" href="#">Список</a>
-                        </div>
-                    </li>
-                    <!--Trips-->
-                    <li class="nav-item dropdown">
-                        <a id="tripsMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Рейсы <span class="caret"></span>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="tripsMenuDropdown">
-                            <a class="dropdown-item" href="#">Создать</a>
-                            <a class="dropdown-item" href="#">Список</a>
-                            <div class="dropdown-divider"></div>
-                            <h6 class="dropdown-header">Машины</h6>
-                            <a class="dropdown-item" href="#">Добавить</a>
-                            <a class="dropdown-item" href="#">Список</a>
-                        </div>
-                    </li>
-                    <!--Branches-->
-                    <li class="nav-item dropdown">
-                        <a id="usersMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Филиалы <span class="caret"></span>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="usersMenuDropdown">
-                            <a class="dropdown-item" href="{{route('branches.index')}}">Управлять</a>
-                        </div>
-                    </li>
-                </ul>
-
-                <!-- Right Side Of Navbar -->
+                    <ul class="navbar-nav ml-4 mr-auto">
+                        <!--Orders-->
+                        <li class="nav-item dropdown">
+                            <a id="ordersMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                Заказы <span class="caret"></span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="ordersMenuDropdown">
+                                <a class="dropdown-item" href="{{ route('orders.create') }}">Оформить</a>
+                                <a class="dropdown-item" href="{{route('orders.index')}}">Список</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{route('orders.index')}}">Принятые товары</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{route('tariffs.index')}}">Управлять тарифами</a>
+                                <div class="dropdown-divider"></div>
+                                <h6 class="dropdown-header">Расценка тарифов</h6>
+                                <a class="dropdown-item" href="{{route('tariff-price-histories.create')}}">Обновить
+                                    расценки</a>
+                                <a class="dropdown-item" href="{{route('tariff-price-histories.index')}}">История</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{route('items.create')}}">Создать товар</a>
+                            </div>
+                        </li>
+                        <!--Till-->
+                        <li class="nav-item dropdown">
+                            <a id="tillMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                Касса <span class="caret"></span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="tillMenuDropdown">
+                                <h6 class="dropdown-header">Провести платеж</h6>
+                                <a class="dropdown-item" href="#">Приход</a>
+                                <a class="dropdown-item" href="#">Расход</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Сформировать отчет</a>
+                                <div class="dropdown-divider"></div>
+                                <h6 class="dropdown-header">Статьи прихода/расхода</h6>
+                                <a class="dropdown-item" href="#">Добавить</a>
+                                <a class="dropdown-item" href="#">Список</a>
+                                <div class="dropdown-divider"></div>
+                                <h6 class="dropdown-header">Валюта</h6>
+                                <a class="dropdown-item" href="#">Добавить</a>
+                                <a class="dropdown-item" href="#">Список</a>
+                            </div>
+                        </li>
+                        <!--Users-->
+                        <li class="nav-item dropdown">
+                            <a id="usersMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                Пользователи <span class="caret"></span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="usersMenuDropdown">
+                                <a class="dropdown-item" href="#">Регистрация</a>
+                                <a class="dropdown-item" href="#">Список</a>
+                            </div>
+                        </li>
+                        <!--Trips-->
+                        <li class="nav-item dropdown">
+                            <a id="tripsMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                Рейсы <span class="caret"></span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="tripsMenuDropdown">
+                                <a class="dropdown-item" href="#">Создать</a>
+                                <a class="dropdown-item" href="#">Список</a>
+                                <div class="dropdown-divider"></div>
+                                <h6 class="dropdown-header">Машины</h6>
+                                <a class="dropdown-item" href="#">Добавить</a>
+                                <a class="dropdown-item" href="#">Список</a>
+                            </div>
+                        </li>
+                        <!--Branches-->
+                        <li class="nav-item dropdown">
+                            <a id="usersMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                Филиалы <span class="caret"></span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="usersMenuDropdown">
+                                <a class="dropdown-item" href="{{route('branches.index')}}">Управлять</a>
+                            </div>
+                        </li>
+                    </ul>
+            @endauth
+            <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
                     @guest

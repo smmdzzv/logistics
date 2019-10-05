@@ -13,7 +13,7 @@ class Tariff extends BaseModel
     protected $guarded = [];
 
     public function items(){
-        return $this->hasMany(Item::class);
+        return $this->hasMany(Item::class, 'tariffId');
     }
 
     public function priceHistories(){
