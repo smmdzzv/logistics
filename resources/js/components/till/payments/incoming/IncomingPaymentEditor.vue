@@ -215,7 +215,7 @@
     };
 
     export default {
-        name: "PaymentEditor",
+        name: "IncomingPaymentEditor",
         mounted() {
             this.currency = this.currencies[0];
             this.paymentType = 'in'
@@ -351,7 +351,7 @@
                     };
 
                     try {
-                        const result = await axios.post('/payments', data)
+                        const result = await axios.post('/incoming-payments', data)
                     } catch (e) {
                         if (e.response.status === 422) {
                             this.errors.client = e.response.data.errors.payerId;
@@ -369,7 +369,7 @@
             },
         },
         components: {
-            'SearchUserDropdown': require('../../users/SearchUserDropdown.vue').default,
+            'SearchUserDropdown': require('../../../users/SearchUserDropdown.vue').default,
         },
         validations: {
             client: {

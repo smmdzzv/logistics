@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Till;
+namespace App\Http\Controllers\Till\Payments;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Till\PaymentRequest;
@@ -11,7 +11,7 @@ use App\Models\Till\MoneyExchange;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
 
-class PaymentsController extends Controller
+class IncomingPaymentsController extends Controller
 {
     public function __construct()
     {
@@ -23,7 +23,7 @@ class PaymentsController extends Controller
     {
         $accountTo = LegalEntity::first()->accounts()->with('currency')->first();
         $currencies = Currency::all();
-        return view('till.payments.create', compact('accountTo', 'currencies'));
+        return view('till.payments.incoming.create', compact('accountTo', 'currencies'));
     }
 
     public function store(PaymentRequest $request)

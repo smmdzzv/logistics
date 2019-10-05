@@ -41,7 +41,7 @@ Route::resource('trips', 'TripsController',
     ['except' => ['destroy']]);
 
 //Payments
-Route::resource('payments', 'Till\PaymentsController',
+Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
     ['except' => ['destroy']]);
 
 Route::get('branch/{branch}/orders', 'OrdersController@filteredByBranch');
