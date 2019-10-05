@@ -51,8 +51,8 @@
                             <a class="dropdown-item" href="{{route('tariffs.index')}}">Управлять тарифами</a>
                             <div class="dropdown-divider"></div>
                             <h6 class="dropdown-header">Расценка тарифов</h6>
-                            <a class="dropdown-item" href="#">Обновить расценки</a>
-                            <a class="dropdown-item" href="#">Текущие расценки</a>
+                            <a class="dropdown-item" href="{{route('tariff-price-histories.create')}}">Обновить расценки</a>
+                            <a class="dropdown-item" href="{{route('tariff-price-histories.index')}}">История</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Добавить товар</a>
                         </div>

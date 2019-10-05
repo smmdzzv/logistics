@@ -9,23 +9,35 @@ use Illuminate\Http\Request;
 
 class TariffPriceHistoriesController extends Controller
 {
-    public function index(){
-        $histories = TariffPriceHistory::with('tariff')->get();
-        return view('tariff-price-histories.index', compact('histories'));
+    public function all()
+    {
+        $paginate = request()->paginate ?? 10;
+        return TariffPriceHistory::with('tariff')
+            ->orderBy('created_at', 'desc')
+            ->paginate($paginate);
     }
 
-    public function create(){
+    public function index()
+    {
+        return view('tariff-price-histories.index');
+    }
+
+    public function create()
+    {
         $tariffs = Tariff::all();
         return view('tariff-price-histories.create', compact('tariffs'));
     }
 
-    public function store(TariffPriceHistoryRequest $request){
+    public function store(TariffPriceHistoryRequest $request)
+    {
         $data = $request->all();
         $data['branch_id'] = auth()->user()->branch->id;
-        return TariffPriceHistory::create($data);
+        TariffPriceHistory::create($data);
+        return redirect()->route('tariff-price-histories.index');
     }
 
-    public function lastByTariff(Tariff $tariff){
+    public function lastByTariff(Tariff $tariff)
+    {
         return $tariff->lastPriceHistory();
     }
 }

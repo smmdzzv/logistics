@@ -10406,6 +10406,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -10428,14 +10447,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "TariffHistoriesViewer",
+  mounted: function mounted() {
+    this.getHistories();
+  },
   props: {
-    histories: {
-      type: Array,
-      required: true
+    flowable: {
+      type: Boolean,
+      required: false,
+      "default": false
     }
   },
   data: function data() {
     return {
+      pagination: {
+        last_page: null,
+        current_page: null
+      },
+      items: [],
+      isBusy: false,
       fields: {
         'tariff.name': {
           label: 'Тариф',
@@ -10487,6 +10516,73 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     };
+  },
+  methods: {
+    getHistories: function () {
+      var _getHistories = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var _this = this;
+
+        var page,
+            action,
+            response,
+            _args = arguments;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                page = _args.length > 0 && _args[0] !== undefined ? _args[0] : 1;
+                this.isBusy = true;
+                action = '/tariff-price-histories/all?paginate=10&page=' + page;
+                _context.prev = 3;
+                _context.next = 6;
+                return axios.get(action);
+
+              case 6:
+                response = _context.sent;
+                this.pagination = response.data;
+                if (this.flowablePagination) response.data.data.forEach(function (item) {
+                  _this.items.push(item);
+                });else this.items = response.data.data;
+                _context.next = 14;
+                break;
+
+              case 11:
+                _context.prev = 11;
+                _context.t0 = _context["catch"](3);
+                this.$root.showErrorMsg('Ошибка загрузки', 'Не удалось загрузить историю расценок. Попробуйте обновить список позднее');
+
+              case 14:
+                this.$nextTick(function () {
+                  _this.isBusy = false;
+                });
+
+              case 15:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[3, 11]]);
+      }));
+
+      function getHistories() {
+        return _getHistories.apply(this, arguments);
+      }
+
+      return getHistories;
+    }()
+  },
+  computed: {
+    currentPage: function currentPage() {
+      return this.pagination.current_page;
+    },
+    lastPage: function lastPage() {
+      return this.pagination.last_page;
+    }
+  },
+  components: {
+    'MainPaginator': __webpack_require__(/*! ../common/MainPaginator.vue */ "./resources/js/components/common/MainPaginator.vue")["default"]
   }
 });
 
@@ -80846,7 +80942,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container col-12" }, [
-    _c("div", { staticClass: "card" }, [
+    _c("div", { staticClass: "card shadow" }, [
       _c("div", { staticClass: "card-header" }, [
         _vm._v("\n            История тарифных планов\n        ")
       ]),
@@ -80857,13 +80953,45 @@ var render = function() {
         [
           _c("b-table", {
             attrs: {
-              items: _vm.histories,
               fields: _vm.fields,
-              "primary-key": "id",
-              striped: "",
-              outlined: "",
+              items: _vm.items,
+              busy: _vm.isBusy,
               hover: "",
-              responsive: ""
+              outlined: "",
+              "primary-key": "id",
+              responsive: "",
+              striped: ""
+            },
+            scopedSlots: _vm._u([
+              {
+                key: "table-busy",
+                fn: function() {
+                  return [
+                    _c(
+                      "div",
+                      { staticClass: "text-center text-info my-2" },
+                      [_c("b-spinner", { staticClass: "align-middle" })],
+                      1
+                    )
+                  ]
+                },
+                proxy: true
+              }
+            ])
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "card-footer" },
+        [
+          _c("main-paginator", {
+            attrs: {
+              flowable: _vm.flowable,
+              onPageChange: _vm.getHistories,
+              pagination: _vm.pagination
             }
           })
         ],

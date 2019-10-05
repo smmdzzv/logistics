@@ -21,14 +21,14 @@
                         <li><a href="/orders/1">Посмотреть заказ с id=1</a></li>
                         <hr>
                         <li><a href="/tariff/create">Редактирование тарифов</a></li>
-                        <li><a href="/tariff-price-history/create">Редактирование тарифных планов</a></li>
-                        <li><a href="/tariff-price-history">Список историй тарифных планов</a></li>
+                        <li><a href="{{route('tariff-price-histories.create')}}">Редактирование тарифных планов</a></li>
+                        <li><a href="{{route('tariff-price-histories.index')}}">Список историй тарифных планов</a></li>
                         <hr>
                         <li><a href="{{route('stored.index')}}">Список принятых товаров</a></li>
                         <hr>
                         <li><a href="{{route('cars.create')}}">Добавить машину</a></li>
                         <hr>
-                        <li><a href="{{route('branch.index')}}">Управлять филиалами</a></li>
+                        <li><a href="{{route('branches.index')}}">Управлять филиалами</a></li>
                         <hr>
                         <li><a href="{{route('trips.create')}}">Создать рейс</a></li>
                         <li><a href="/trips/">Список рейсов</a></li>

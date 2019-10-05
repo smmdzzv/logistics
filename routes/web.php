@@ -68,10 +68,14 @@ Route::resource('tariffs', 'TariffsController', [
 //Route::delete('/tariff/{tariff}', "TariffsController@delete")->name('tariff.delete');
 
 //Tariff price histories
-Route::get('/tariff-price-history/', 'TariffPriceHistoriesController@index')->name('pricing.index');
-Route::get('/tariff-price-history/create', 'TariffPriceHistoriesController@create')->name('pricing.create');
-Route::post('/tariff-price-history/store', 'TariffPriceHistoriesController@store')->name('pricing.store');
-Route::get('/tariff-price-history/{tariff}', "TariffPriceHistoriesController@lastByTariff");
+//Route::get('/tariff-price-history/', 'TariffPriceHistoriesController@index')->name('pricing.index');
+//Route::get('/tariff-price-history/create', 'TariffPriceHistoriesController@create')->name('pricing.create');
+//Route::post('/tariff-price-history/store', 'TariffPriceHistoriesController@store')->name('pricing.store');
+Route::get('/tariff-price-histories/all', "TariffPriceHistoriesController@all");
+Route::resource('tariff-price-histories', 'TariffPriceHistoriesController', [
+    'only' => ['index', 'create', 'store']
+])->parameters(['tariff-price-histories' => 'history']);
+Route::get('/tariff-price-histories/{tariff}', "TariffPriceHistoriesController@lastByTariff");
 
 //Cars
 Route::get('/cars/all', 'CarsController@all');
