@@ -49,7 +49,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{route('orders.index')}}">Принятые товары</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{route('tariffs.index')}}">Управлять тарифами</a>
+                                <a class="dropdown-item" href="{{route('tariffs.index')}}">Управление тарифами</a>
                                 <div class="dropdown-divider"></div>
                                 <h6 class="dropdown-header">Расценка тарифов</h6>
                                 <a class="dropdown-item" href="{{route('tariff-price-histories.create')}}">Обновить
