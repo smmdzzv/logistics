@@ -136,7 +136,7 @@
                                        id="count"
                                        maxlength="4"
                                        name="count"
-                                       placeholder="в шт" required>
+                                       placeholder="в ед. товара" required>
                                 <b-popover
                                     :show.sync="$v.storedItem.count.$error"
                                     variant="danger"
@@ -179,18 +179,7 @@
             }
         },
         mounted() {
-            // axios.get(`/branches`)
-            //     .then(result => {
-            //         if (result) {
-            //             this.branches = result.data;
-            //         }
-            //     });
-            axios.get('/items')
-                .then(result => {
-                    if (result) {
-                        this.items = result.data;
-                    }
-                });
+            this.getItems();
         },
         data() {
             return {
@@ -209,6 +198,33 @@
             }
         },
         methods: {
+            async getItems(){
+                try{
+                    const response = await axios.get('/items/all/eager');
+                    this.items = response.data;
+                }
+                catch (e) {
+                    this.$root.showErrorMsg(
+                        'Ошибка загрузки',
+                        'Не удалось загрузить список наименований. Повторите попытку после перезагрузки страницы'
+                    )
+                }
+            },
+            async getPricing(){
+                let stored = $.extend(true, {}, this.storedItem);
+                try{
+                    const response = await axios.get('/tariff-price-histories/' + this.tariff.id)
+                    stored.tariffPricing = response.data;
+                    this.onStoredItemAdded(stored);
+                    this.clearForm(null);
+                }
+                catch (e) {
+                    this.$root.showErrorMsg(
+                        'Ошибка загрузки',
+                        'Не удалось загрузить расценки для выбранного тарифа. Убедитесь, что расценки заданы в системе'
+                    )
+                }
+            },
             onItemSearchInputChange(query) {
                 if (query === "")
                     return this.filteredItems = [];
@@ -234,22 +250,23 @@
                     this.$refs.modal.hide()
                 })
             },
-            onAdded(e) {
+            async onAdded(e) {
                 if (e) e.preventDefault();
 
                 if (this.$v.$invalid)
                     this.$v.$touch();
                 else {
-                    let stored = $.extend(true, {}, this.storedItem);
-
-                    axios.get('/tariff-price-history/' + this.tariff.id)
-                        .then(result => {
-                            stored.tariffPricing = result.data;
-                        })
-                        .then(result=>{
-                            this.onStoredItemAdded(stored);
-                            this.clearForm(null);
-                        });
+                    await this.getPricing();
+                    // let stored = $.extend(true, {}, this.storedItem);
+                    //
+                    // axios.get('/tariff-price-history/' + this.tariff.id)
+                    //     .then(result => {
+                    //         stored.tariffPricing = result.data;
+                    //     })
+                    //     .then(result=>{
+                    //         this.onStoredItemAdded(stored);
+                    //         this.clearForm(null);
+                    //     });
                 }
             }
         },

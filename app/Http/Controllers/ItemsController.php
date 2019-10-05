@@ -22,6 +22,10 @@ class ItemsController extends Controller
         return Item::with('tariff')->paginate($paginate);
     }
 
+    public function allEager(){
+        return Item::with('tariff')->get();
+    }
+
     public function index(){
         return view('items.index');
     }

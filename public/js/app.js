@@ -9056,8 +9056,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "OrderEditor",
   props: {
@@ -9647,8 +9645,16 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
-/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -9830,19 +9836,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    var _this = this;
-
-    // axios.get(`/branches`)
-    //     .then(result => {
-    //         if (result) {
-    //             this.branches = result.data;
-    //         }
-    //     });
-    axios.get('/items').then(function (result) {
-      if (result) {
-        _this.items = result.data;
-      }
-    });
+    this.getItems();
   },
   data: function data() {
     return {
@@ -9861,6 +9855,85 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    getItems: function () {
+      var _getItems = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return axios.get('/items/all/eager');
+
+              case 3:
+                response = _context.sent;
+                this.items = response.data;
+                _context.next = 10;
+                break;
+
+              case 7:
+                _context.prev = 7;
+                _context.t0 = _context["catch"](0);
+                this.$root.showErrorMsg('Ошибка загрузки', 'Не удалось загрузить список наименований. Повторите попытку после перезагрузки страницы');
+
+              case 10:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[0, 7]]);
+      }));
+
+      function getItems() {
+        return _getItems.apply(this, arguments);
+      }
+
+      return getItems;
+    }(),
+    getPricing: function () {
+      var _getPricing = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var stored, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                stored = $.extend(true, {}, this.storedItem);
+                _context2.prev = 1;
+                _context2.next = 4;
+                return axios.get('/tariff-price-histories/' + this.tariff.id);
+
+              case 4:
+                response = _context2.sent;
+                stored.tariffPricing = response.data;
+                this.onStoredItemAdded(stored);
+                this.clearForm(null);
+                _context2.next = 13;
+                break;
+
+              case 10:
+                _context2.prev = 10;
+                _context2.t0 = _context2["catch"](1);
+                this.$root.showErrorMsg('Ошибка загрузки', 'Не удалось загрузить расценки для выбранного тарифа. Убедитесь, что расценки заданы в системе');
+
+              case 13:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[1, 10]]);
+      }));
+
+      function getPricing() {
+        return _getPricing.apply(this, arguments);
+      }
+
+      return getPricing;
+    }(),
     onItemSearchInputChange: function onItemSearchInputChange(query) {
       if (query === "") return this.filteredItems = [];
       this.filteredItems = this.items.filter(function (value) {
@@ -9871,7 +9944,7 @@ __webpack_require__.r(__webpack_exports__);
       this.storedItem.item = item;
     },
     clearForm: function clearForm(e) {
-      var _this2 = this;
+      var _this = this;
 
       if (e) e.preventDefault();
       this.storedItem.weight = '';
@@ -9883,26 +9956,48 @@ __webpack_require__.r(__webpack_exports__);
       this.filteredItems = [];
       this.tariff = null;
       this.$nextTick(function () {
-        _this2.$v.$reset();
+        _this.$v.$reset();
 
-        _this2.$refs.modal.hide();
+        _this.$refs.modal.hide();
       });
     },
-    onAdded: function onAdded(e) {
-      var _this3 = this;
+    onAdded: function () {
+      var _onAdded = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(e) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                if (e) e.preventDefault();
 
-      if (e) e.preventDefault();
-      if (this.$v.$invalid) this.$v.$touch();else {
-        var stored = $.extend(true, {}, this.storedItem);
-        axios.get('/tariff-price-history/' + this.tariff.id).then(function (result) {
-          stored.tariffPricing = result.data;
-        }).then(function (result) {
-          _this3.onStoredItemAdded(stored);
+                if (!this.$v.$invalid) {
+                  _context3.next = 5;
+                  break;
+                }
 
-          _this3.clearForm(null);
-        });
+                this.$v.$touch();
+                _context3.next = 7;
+                break;
+
+              case 5:
+                _context3.next = 7;
+                return this.getPricing();
+
+              case 7:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function onAdded(_x) {
+        return _onAdded.apply(this, arguments);
       }
-    }
+
+      return onAdded;
+    }()
   },
   components: {
     SuggestionsInput: __webpack_require__(/*! ../common/SuggestionInput */ "./resources/js/components/common/SuggestionInput.vue")["default"]
@@ -9910,36 +10005,36 @@ __webpack_require__.r(__webpack_exports__);
   validations: {
     storedItem: {
       width: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        decimal: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["decimal"],
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(6)
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
+        decimal: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["decimal"],
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["maxLength"])(6)
       },
       height: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        decimal: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["decimal"],
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(6)
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
+        decimal: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["decimal"],
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["maxLength"])(6)
       },
       length: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        decimal: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["decimal"],
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(6)
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
+        decimal: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["decimal"],
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["maxLength"])(6)
       },
       weight: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        decimal: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["decimal"],
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(6)
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
+        decimal: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["decimal"],
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["maxLength"])(6)
       },
       count: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
-        integer: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["integer"],
-        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(6)
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"],
+        integer: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["integer"],
+        maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["maxLength"])(6)
       },
       item: {
-        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
+        required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"]
       }
     },
     tariff: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_1__["required"]
     }
   }
 });
@@ -79466,7 +79561,7 @@ var render = function() {
       _c("div", { staticClass: "row justify-content-center mb-4" }, [
         _c(
           "div",
-          { staticClass: "col-11" },
+          { staticClass: "col-12" },
           [
             _c("label", { staticClass: "col-12", attrs: { for: "user" } }, [
               _vm._v("Клиент")
@@ -80539,7 +80634,7 @@ var render = function() {
                           id: "count",
                           maxlength: "4",
                           name: "count",
-                          placeholder: "в шт",
+                          placeholder: "в ед. товара",
                           required: ""
                         },
                         domProps: { value: _vm.storedItem.count },

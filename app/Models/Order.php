@@ -49,7 +49,7 @@ class Order extends BaseModel
         return $this->belongsTo(Payment::class,'paymentId');
     }
 
-    private function roundNumeric()
+    public function roundNumeric()
     {
         $this->totalCubage = round($this->totalCubage, 2);
         $this->totalWeight = round($this->totalWeight, 2);

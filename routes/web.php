@@ -101,6 +101,7 @@ Route::resource('money-exchanges', 'Till\MoneyExchangesController',
 Route::get('exchange-history/rate/{from}/{to}', 'Till\MoneyExchangesController@exchangeRate');
 
 Route::get('/items/all', 'ItemsController@all');
+Route::get('/items/all/eager', 'ItemsController@allEager');
 Route::resource('items', 'ItemsController', ['only' => ['index', 'create', 'store']])->parameters(['items' => 'item']);
 
 

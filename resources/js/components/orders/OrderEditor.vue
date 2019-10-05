@@ -1,7 +1,7 @@
 <template>
     <div id="order">
         <div class="row justify-content-center mb-4">
-            <div class="col-11">
+            <div class="col-12">
                 <label class="col-12" for="user">Клиент</label>
                 <search-user-dropdown class="col-12"
                                       :selected="onUserSelected"
@@ -19,8 +19,6 @@
             </div>
 
         </div>
-
-
 
         <order-items-box :tariffs="tariffs" :user="user"
                          v-on:onStoredItemsChange="onStoredItemsChange"></order-items-box>
