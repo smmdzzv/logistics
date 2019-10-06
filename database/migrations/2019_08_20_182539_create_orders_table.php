@@ -17,8 +17,8 @@ class CreateOrdersTable extends Migration
             $table->char('id', 26)->primary();;
             $table->char('ownerId', 26);
             $table->char('paymentId', 26)->nullable()->unique();
-            $table->char('registeredBy', 26);
-            $table->char('branch', 26);
+            $table->char('registeredById', 26);
+            $table->char('branchId', 26);
             $table->string('status')->default('accepted');
             $table->decimal('totalCount', 10, 2);
             $table->decimal('totalWeight', 10, 2);

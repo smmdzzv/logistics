@@ -43,10 +43,10 @@
             </template>
 
             <template slot="HEAD[id]">
-               <img class="icon-btn-sm" src="/svg/barcode.svg" alt="delete-item" @click="showShortInfo()">
+               <img class="icon-btn-sm" src="/svg/barcode.svg" @click="showShortInfo()">
             </template>
             <template slot="id" slot-scope="data">
-                <img class="icon-btn-sm" src="/svg/barcode.svg" alt="delete-item" @click="showShortInfo(data)">
+                <img class="icon-btn-sm" src="/svg/barcode.svg" @click="showShortInfo(data)">
             </template>
             <template slot="FOOT[id]">
                 <span></span>

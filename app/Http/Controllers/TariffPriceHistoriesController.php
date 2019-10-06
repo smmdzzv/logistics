@@ -38,6 +38,6 @@ class TariffPriceHistoriesController extends Controller
 
     public function lastByTariff(Tariff $tariff)
     {
-        return $tariff->lastPriceHistory();
+        return $tariff->lastPriceHistory;
     }
 }

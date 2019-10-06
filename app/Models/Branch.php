@@ -34,6 +34,6 @@ class Branch extends BaseModel
     }
 
     public function orders(){
-        return $this->hasMany(Order::class, 'branch');
+        return $this->hasMany(Order::class, 'branchId');
     }
 }

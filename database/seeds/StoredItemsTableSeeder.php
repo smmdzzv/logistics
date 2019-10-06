@@ -26,8 +26,8 @@ class StoredItemsTableSeeder extends Seeder
         $order->totalPrice = 0;
         $order->totalDiscount = 0;
         $order->totalCount = 0;
-        $order->branch = Branch::first()->id;
-        $order->registeredBy = $employee->id;
+        $order->branchId = Branch::first()->id;
+        $order->registeredById = $employee->id;
         $order->save();
 
 

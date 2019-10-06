@@ -18,13 +18,14 @@ class CreateBillingInfosTable extends Migration
             $table->char('tariff_price_history_id', 26);
             $table->char('stored_item_id', 26);
 //            $table->integer('placesCount');
-            $table->double('totalCubage');
-            $table->double('totalWeight');
-            $table->double('weightPerCube');
-            $table->double('pricePerItem');
-            $table->double('totalPrice', 10, 5);
-            $table->double('discountPerCube');
-            $table->double('totalDiscount', 10, 5);
+            $table->decimal('totalCubage');
+            $table->decimal('totalWeight');
+            $table->decimal('weightPerCube');
+            $table->decimal('pricePerItem');
+            $table->decimal('totalPrice', 10, 2);
+            $table->decimal('discountPerCube', 10, 2);
+            $table->decimal('totalDiscount', 10, 2);
+            $table->decimal('count');
             $table->timestamps();
 
             $table->index('stored_item_id');

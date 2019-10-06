@@ -9084,7 +9084,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 if (!(this.client && this.storedItems.length > 0)) {
-                  _context.next = 13;
+                  _context.next = 14;
                   break;
                 }
 
@@ -9099,24 +9099,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 5:
                 response = _context.sent;
                 window.location.href = '/orders/' + response.data.id;
-                _context.next = 11;
+                _context.next = 12;
                 break;
 
               case 9:
                 _context.prev = 9;
                 _context.t0 = _context["catch"](2);
+                this.$root.showErrorMsg('Ошибка сохранения', 'Не удалось сохранить заказ. Попробуйте принять заказ позже');
 
-              case 11:
-                _context.next = 14;
+              case 12:
+                _context.next = 15;
                 break;
 
-              case 13:
+              case 14:
                 if (!this.client) this.clientError = true;
 
-              case 14:
+              case 15:
                 this.$bvModal.hide('busyModal');
 
-              case 15:
+              case 16:
               case "end":
                 return _context.stop();
             }
@@ -9151,6 +9152,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -9240,14 +9243,18 @@ __webpack_require__.r(__webpack_exports__);
       var tariff = stored.tariffPricing;
       var weightPerCube = stored.totalWeight / stored.totalCubage;
 
-      if (weightPerCube >= tariff.maxWeightPerCube) {
+      if (stored.item.onlyCustomPrice || weightPerCube >= tariff.maxWeightPerCube) {
         stored.price = tariff.agreedPricePerKg * stored.totalWeight;
         stored.price = Math.round(stored.price * 100) / 100;
         return stored.price;
       }
 
       var price = tariff.pricePerCube;
-      if (tariff.lowerLimit > 0 && weightPerCube <= tariff.lowerLimit) price = price - tariff.discountForLowerLimit;else if (tariff.mediumLimit > 0 && weightPerCube <= tariff.mediumLimit) price = price - tariff.discountForMediumLimit;else if (weightPerCube > tariff.upperLimit) price = price + (weightPerCube - tariff.upperLimit) * tariff.pricePerExtraKg;
+
+      if (stored.item.applyDiscount) {
+        if (tariff.lowerLimit > 0 && weightPerCube <= tariff.lowerLimit) price = price - tariff.discountForLowerLimit;else if (tariff.mediumLimit > 0 && weightPerCube <= tariff.mediumLimit) price = price - tariff.discountForMediumLimit;
+      } else if (weightPerCube > tariff.upperLimit) price = price + (weightPerCube - tariff.upperLimit) * tariff.pricePerExtraKg;
+
       stored.price = price * stored.totalCubage;
       stored.price = Math.round(stored.price * 100) / 100;
       return stored.price;
@@ -79718,7 +79725,7 @@ var render = function() {
                       _c("div", { staticClass: "col-md-2" }, [
                         _c("img", {
                           staticClass: "icon-btn-sm",
-                          attrs: { src: "/svg/delete.svg", alt: "delete-item" },
+                          attrs: { alt: "delete-item", src: "/svg/delete.svg" },
                           on: {
                             click: function($event) {
                               return _vm.removeFromList(stored)
@@ -79734,7 +79741,7 @@ var render = function() {
               _vm.storedItems.length === 0
                 ? _c("li", { staticClass: "list-group-item" }, [
                     _vm._v(
-                      "Для приема товара необходимо нажать кнопку\n                    добавить\n                "
+                      "Для приема товара необходимо нажать\n                    кнопку\n                    добавить\n                "
                     )
                   ])
                 : _vm._e()
@@ -79786,8 +79793,8 @@ var render = function() {
       _vm._v(" "),
       _c("stored-item-box", {
         attrs: {
-          onStoredItemAdded: _vm.onStoredItemAdded,
           branch: _vm.user.branch,
+          onStoredItemAdded: _vm.onStoredItemAdded,
           tariffs: _vm.tariffs
         }
       })
@@ -79910,7 +79917,7 @@ var render = function() {
                 return [
                   _c("img", {
                     staticClass: "icon-btn-sm",
-                    attrs: { src: "/svg/barcode.svg", alt: "delete-item" },
+                    attrs: { src: "/svg/barcode.svg" },
                     on: {
                       click: function($event) {
                         return _vm.showShortInfo(data)
@@ -79933,7 +79940,7 @@ var render = function() {
           _c("template", { slot: "HEAD[id]" }, [
             _c("img", {
               staticClass: "icon-btn-sm",
-              attrs: { src: "/svg/barcode.svg", alt: "delete-item" },
+              attrs: { src: "/svg/barcode.svg" },
               on: {
                 click: function($event) {
                   return _vm.showShortInfo()

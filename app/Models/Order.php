@@ -25,6 +25,16 @@ class Order extends BaseModel
         'totalCount' => 'double',
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->totalCubage = 0;
+        $this->totalWeight = 0;
+        $this->totalPrice = 0;
+        $this->totalDiscount = 0;
+        $this->totalCount = 0;
+    }
+
     public function storedItems()
     {
         return $this->hasMany(StoredItem::class);
@@ -37,19 +47,33 @@ class Order extends BaseModel
 
     public function registeredBy()
     {
-        return $this->belongsTo(User::class, 'registeredBy');
+        return $this->belongsTo(User::class, 'registeredById');
     }
 
     public function branch()
     {
-        return $this->belongsTo(Branch::class, 'branch');
+        return $this->belongsTo(Branch::class, 'branchId');
     }
 
-    public function payment(){
-        return $this->belongsTo(Payment::class,'paymentId');
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class, 'paymentId');
     }
 
-    public function roundNumeric()
+    public function updateStat(Array $billings)
+    {
+        foreach ($billings as $billing) {
+            $this->totalCubage += $billing['totalCubage'];
+            $this->totalWeight += $billing['totalWeight'];
+            $this->totalPrice += $billing['totalPrice'];
+            $this->totalDiscount += $billing['totalDiscount'];
+            $this->totalCount += $billing['count'];
+        }
+
+        $this->roundStat();
+    }
+
+    public function roundStat()
     {
         $this->totalCubage = round($this->totalCubage, 2);
         $this->totalWeight = round($this->totalWeight, 2);

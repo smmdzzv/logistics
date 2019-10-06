@@ -6,6 +6,10 @@ use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property string id
+ * @property TariffPriceHistory lastPriceHistory
+ */
 class Tariff extends BaseModel
 {
     use SoftDeletes;
@@ -21,6 +25,6 @@ class Tariff extends BaseModel
     }
 
     public function lastPriceHistory(){
-        return $this->hasMany(TariffPriceHistory::class)->first();
+        return $this->hasOne(TariffPriceHistory::class)->latest();
     }
 }

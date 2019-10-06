@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool onlyCustomPrice
  * @property bool applyDiscount
  * @property string tariffId
+ * @property Tariff tariff
  */
 class Item extends BaseModel
 {

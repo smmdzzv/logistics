@@ -65,7 +65,10 @@
 
                         window.location.href = '/orders/' + response.data.id;
                     } catch (e) {
-                        //TODO
+                        this.$root.showErrorMsg(
+                            'Ошибка сохранения',
+                            'Не удалось сохранить заказ. Попробуйте принять заказ позже'
+                        )
                     }
                 } else if (!this.client)
                     this.clientError = true;
