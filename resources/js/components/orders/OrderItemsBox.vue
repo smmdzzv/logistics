@@ -3,9 +3,12 @@
         <div class="card">
             <div class="card-header bg-info">
                 <div class="row">
-                    <div class="text-light col-sm-5 col-md-4 pt-2 h5">Список товаров</div>
-                    <button @click="showModal" class="btn btn-light offset-sm-4 offset-md-5  offset-lg-6">Добавить
-                    </button>
+                    <div class="text-light col-6 col-md-4 h5">Список товаров</div>
+                    <div class="text-right col-6 col-md-8">
+                        <button @click="showModal" class="btn btn-light">
+                            Добавить
+                        </button>
+                    </div>
                 </div>
             </div>
             <div>

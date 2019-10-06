@@ -9201,6 +9201,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "OrderItemsBox",
   props: {
@@ -79665,19 +79668,21 @@ var render = function() {
       _c("div", { staticClass: "card" }, [
         _c("div", { staticClass: "card-header bg-info" }, [
           _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "text-light col-sm-5 col-md-4 pt-2 h5" }, [
+            _c("div", { staticClass: "text-light col-6 col-md-4 h5" }, [
               _vm._v("Список товаров")
             ]),
             _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass:
-                  "btn btn-light offset-sm-4 offset-md-5  offset-lg-6",
-                on: { click: _vm.showModal }
-              },
-              [_vm._v("Добавить\n                ")]
-            )
+            _c("div", { staticClass: "text-right col-6 col-md-8" }, [
+              _c(
+                "button",
+                { staticClass: "btn btn-light", on: { click: _vm.showModal } },
+                [
+                  _vm._v(
+                    "\n                        Добавить\n                    "
+                  )
+                ]
+              )
+            ])
           ])
         ]),
         _vm._v(" "),
