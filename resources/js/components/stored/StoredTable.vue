@@ -43,16 +43,19 @@
             </template>
         </b-table>
 
-        <template v-if="lastPage > 1">
-            <div class="card-footer text-center" v-if="flowablePagination && lastPage > currentPage">
-                <button @click="getStoredItems(currentPage+1)" class="btn btn-outline-primary align-middle">
-                    Загрузить еще
-                </button>
-            </div>
-            <div class="card-footer" v-if="!flowablePagination">
-                <pagination :data="pagination" @pagination-change-page="getStoredItems"/>
-            </div>
-        </template>
+        <div class="card-footer">
+            <main-paginator :pagination="pagination" :onPageChange="getStoredItems" :flowable="flowable"></main-paginator>
+        </div>
+<!--        <template v-if="lastPage > 1">-->
+<!--            <div class="card-footer text-center" v-if="flowablePagination && lastPage > currentPage">-->
+<!--                <button @click="getStoredItems(currentPage+1)" class="btn btn-outline-primary align-middle">-->
+<!--                    Загрузить еще-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="card-footer" v-if="!flowablePagination">-->
+<!--                <pagination :data="pagination" @pagination-change-page="getStoredItems"/>-->
+<!--            </div>-->
+<!--        </template>-->
     </div>
 </template>
 
@@ -79,7 +82,7 @@
                 required: false,
                 default: false
             },
-            flowablePagination: {
+            flowable: {
                 type: Boolean,
                 required: false,
                 default: false
@@ -89,10 +92,10 @@
                 required: false,
                 default: () => []
             },
-            action: {
+            url: {
                 type: String,
                 required: false,
-                default: ''
+                default: '/stored/all'
             },
             items:{
                 type: Array,
@@ -108,19 +111,15 @@
             getStoredItems(page = 1) {
                 if(this.items)
                     return;
-
                 this.isBusy = true;
 
-                let action = 'stored/all?page=' + page;
-                if(this.action)
-                    action = this.action;
-
                 if (this.selectedBranch)
-                    action = `/${this.selectedBranch.id}/stored?page=${page}`;
-                axios.get(action)
+                    this.action = `/${this.selectedBranch.id}/stored`;
+                this.action += '?paginate=7&page=' + page;
+                axios.get(this.action)
                     .then(response => {
                         this.pagination = response.data;
-                        if (this.flowablePagination)
+                        if (this.flowable)
                             response.data.data.forEach(item => {
                                 this.storedItems.push(item);
                             });
@@ -150,7 +149,7 @@
                 });
             },
             rowClass(item, type) {
-                if (!item) return
+                if (!item) return;
                 if (this.isSelected(item)) return 'table-success'
             }
         },
@@ -174,6 +173,7 @@
             return {
                 selectedBranch: null,
                 selected: [],
+                action: this.url,
                 pagination: {
                     last_page: null,
                     current_page: null
@@ -211,8 +211,8 @@
                 }
             }
         },
-        components: {
-            'Pagination': require('laravel-vue-pagination')
+        components:{
+            'MainPaginator': require('../common/MainPaginator.vue').default
         }
     }
 </script>

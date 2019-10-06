@@ -9659,8 +9659,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   components: {
-    'MainPaginator': __webpack_require__(/*! ../common/MainPaginator.vue */ "./resources/js/components/common/MainPaginator.vue")["default"],
-    'Pagination': __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js")
+    'MainPaginator': __webpack_require__(/*! ../common/MainPaginator.vue */ "./resources/js/components/common/MainPaginator.vue")["default"]
   }
 });
 
@@ -10091,6 +10090,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "StoredItemShortInfo",
   props: {
@@ -10112,6 +10114,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -10214,7 +10219,7 @@ __webpack_require__.r(__webpack_exports__);
       required: false,
       "default": false
     },
-    flowablePagination: {
+    flowable: {
       type: Boolean,
       required: false,
       "default": false
@@ -10226,10 +10231,10 @@ __webpack_require__.r(__webpack_exports__);
         return [];
       }
     },
-    action: {
+    url: {
       type: String,
       required: false,
-      "default": ''
+      "default": '/stored/all'
     },
     items: {
       type: Array,
@@ -10248,12 +10253,11 @@ __webpack_require__.r(__webpack_exports__);
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       if (this.items) return;
       this.isBusy = true;
-      var action = 'stored/all?page=' + page;
-      if (this.action) action = this.action;
-      if (this.selectedBranch) action = "/".concat(this.selectedBranch.id, "/stored?page=").concat(page);
-      axios.get(action).then(function (response) {
+      if (this.selectedBranch) this.action = "/".concat(this.selectedBranch.id, "/stored");
+      this.action += '?paginate=7&page=' + page;
+      axios.get(this.action).then(function (response) {
         _this.pagination = response.data;
-        if (_this.flowablePagination) response.data.data.forEach(function (item) {
+        if (_this.flowable) response.data.data.forEach(function (item) {
           _this.storedItems.push(item);
         });else _this.storedItems = response.data.data;
 
@@ -10305,6 +10309,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       selectedBranch: null,
       selected: [],
+      action: this.url,
       pagination: {
         last_page: null,
         current_page: null
@@ -10343,7 +10348,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   components: {
-    'Pagination': __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js")
+    'MainPaginator': __webpack_require__(/*! ../common/MainPaginator.vue */ "./resources/js/components/common/MainPaginator.vue")["default"]
   }
 });
 
@@ -80799,23 +80804,23 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container border-bottom pt-3" }, [
-    _c("p", [
-      _vm._v(
-        _vm._s(
-          "ШхВхД: " +
-            _vm.storedItem.width +
-            "x" +
-            _vm.storedItem.height +
-            "x" +
-            _vm.storedItem.length
-        ) + " "
-      )
-    ]),
-    _vm._v(" "),
-    _c("p", [_vm._v(_vm._s("Вес: " + _vm.storedItem.weight + " кг") + " ")]),
-    _vm._v(" "),
-    _c("p", [
-      _vm._v(_vm._s("Принят: " + _vm.storedItem.created_at.split(" ")[0]) + " ")
+    _c("div", { staticClass: "container" }, [
+      _c("p", [
+        _vm._v(
+          _vm._s(
+            "ШхВхД: " +
+              _vm.storedItem.width +
+              "x" +
+              _vm.storedItem.height +
+              "x" +
+              _vm.storedItem.length
+          )
+        )
+      ]),
+      _vm._v(" "),
+      _c("p", [_vm._v(_vm._s("Вес: " + _vm.storedItem.weight + " кг") + " ")]),
+      _vm._v(" "),
+      _c("p", [_vm._v(_vm._s("Принят: " + _vm.storedItem.created_at) + " ")])
     ]),
     _vm._v(" "),
     _c(
@@ -80922,7 +80927,7 @@ var render = function() {
                             [
                               _vm._v(
                                 _vm._s(branch.name) +
-                                  "\n                            "
+                                  "\n                                "
                               )
                             ]
                           )
@@ -80982,40 +80987,20 @@ var render = function() {
         ])
       }),
       _vm._v(" "),
-      _vm.lastPage > 1
-        ? [
-            _vm.flowablePagination && _vm.lastPage > _vm.currentPage
-              ? _c("div", { staticClass: "card-footer text-center" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-outline-primary align-middle",
-                      on: {
-                        click: function($event) {
-                          return _vm.getStoredItems(_vm.currentPage + 1)
-                        }
-                      }
-                    },
-                    [_vm._v("\n                Загрузить еще\n            ")]
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            !_vm.flowablePagination
-              ? _c(
-                  "div",
-                  { staticClass: "card-footer" },
-                  [
-                    _c("pagination", {
-                      attrs: { data: _vm.pagination },
-                      on: { "pagination-change-page": _vm.getStoredItems }
-                    })
-                  ],
-                  1
-                )
-              : _vm._e()
-          ]
-        : _vm._e()
+      _c(
+        "div",
+        { staticClass: "card-footer" },
+        [
+          _c("main-paginator", {
+            attrs: {
+              pagination: _vm.pagination,
+              onPageChange: _vm.getStoredItems,
+              flowable: _vm.flowable
+            }
+          })
+        ],
+        1
+      )
     ],
     2
   )

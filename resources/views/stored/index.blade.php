@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<stored-table :branches="{{$branches}}"></stored-table>
+    <div class="container">
+        <stored-table class="shadow" :branches="{{$branches}}"></stored-table>
+    </div>
 @endsection
 

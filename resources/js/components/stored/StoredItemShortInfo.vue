@@ -1,8 +1,11 @@
 <template>
     <div class="container border-bottom pt-3">
-        <p>{{`ШхВхД: ${storedItem.width}x${storedItem.height}x${storedItem.length}`}} </p>
-        <p>{{`Вес: ${storedItem.weight} кг`}} </p>
-        <p>{{`Принят: ${storedItem.created_at.split(' ')[0]}`}} </p>
+        <div class="container">
+            <p>{{`ШхВхД: ${storedItem.width}x${storedItem.height}x${storedItem.length}`}}</p>
+            <p>{{`Вес: ${storedItem.weight} кг`}} </p>
+            <p>{{`Принят: ${storedItem.created_at}`}} </p>
+        </div>
+
         <div style="width:100px">
             <barcode :value="storedItem.id" :options='{displayValue:false, height:50, width:1}' tag="svg"></barcode>
         </div>

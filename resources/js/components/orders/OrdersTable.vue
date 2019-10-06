@@ -135,8 +135,7 @@
             }
         },
         components:{
-            'MainPaginator': require('../common/MainPaginator.vue').default,
-            'Pagination': require('laravel-vue-pagination')
+            'MainPaginator': require('../common/MainPaginator.vue').default
         }
     }
 </script>

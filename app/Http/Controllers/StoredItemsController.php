@@ -17,13 +17,13 @@ class StoredItemsController extends Controller
 
     public function all()
     {
-        return StoredItem::with(['owner', 'item'])->paginate(20);
+        return StoredItem::with(['owner', 'item'])->latest()->paginate(20);
     }
 
     public function filteredByBranch(Branch $branch)
     {
         if (isset($branch)) {
-            return $branch->storedItems()->with(['owner', 'item'])->paginate(20);
+            return $branch->storedItems()->with(['owner', 'item'])->latest()->paginate(20);
         } else abort(404, 'Филиал не найден');
     }
 
