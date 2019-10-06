@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use App\Models\StoredItems\StoredItem;
 use Illuminate\Database\Eloquent\Model;
 
 /**

@@ -1,8 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\StoredItems;
 
 use App\Models\BaseModel;
+use App\Models\BillingInfo;
+use App\Models\Branch;
+use App\Models\Order;
+use App\Models\Trip;
 use App\Models\Users\Client;
 use Illuminate\Database\Eloquent\Model;
 

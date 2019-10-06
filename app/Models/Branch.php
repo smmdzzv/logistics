@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\StoredItems\StoredItem;
 use App\User;
 
 /**

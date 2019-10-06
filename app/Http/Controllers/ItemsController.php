@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
+use App\Models\StoredItems\Item;
 use App\Models\Tariff;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;

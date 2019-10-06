@@ -47,7 +47,7 @@
                                 <a class="dropdown-item" href="{{ route('orders.create') }}">Оформить заказ</a>
                                 <a class="dropdown-item" href="{{route('orders.index')}}">Список заказов</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{route('orders.index')}}">Принятые товары</a>
+                                <a class="dropdown-item" href="{{route('stored.index')}}">Принятые товары</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{route('tariffs.index')}}">Управление тарифами</a>
                                 <div class="dropdown-divider"></div>

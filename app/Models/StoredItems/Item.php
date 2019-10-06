@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\StoredItems;
 
 use App\Models\BaseModel;
+use App\Models\Tariff;
 use Illuminate\Database\Eloquent\Model;
 
 /**

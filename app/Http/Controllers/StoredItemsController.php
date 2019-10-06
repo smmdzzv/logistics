@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
-use App\Models\StoredItem;
+use App\Models\StoredItems\StoredItem;
 use App\Models\Trip;
 use Illuminate\Http\Request;
 

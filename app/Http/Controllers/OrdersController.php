@@ -6,7 +6,7 @@ use App\Models\BillingInfo;
 use App\Models\Branch;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
-use App\Models\StoredItem;
+use App\Models\StoredItems\StoredItem;
 use App\Models\Tariff;
 use App\Models\Users\Client;
 use App\User;

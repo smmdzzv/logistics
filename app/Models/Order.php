@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BaseModel;
+use App\Models\StoredItems\StoredItem;
 use App\Models\Till\Payment;
 use App\Models\Users\Client;
 use App\User;

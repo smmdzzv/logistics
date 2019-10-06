@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\BaseModel;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\StoredItems\Item;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**

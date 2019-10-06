@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\StoredItems\StoredItem;
 use App\Models\Users\Driver;
-use Illuminate\Database\Eloquent\Model;
-use Rorecek\Ulid\HasUlid;
 
 class Trip extends BaseModel
 {

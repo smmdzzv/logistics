@@ -3,7 +3,7 @@
 namespace App\Models\Users;
 
 use App\Models\Order;
-use App\Models\StoredItem;
+use App\Models\StoredItems\StoredItem;
 use App\Models\Trip;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
