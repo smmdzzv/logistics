@@ -9434,6 +9434,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "OrderViewer",
   props: {
@@ -79893,6 +79897,19 @@ var render = function() {
           },
           scopedSlots: _vm._u([
             {
+              key: "count",
+              fn: function(ref) {
+                var item = ref.item
+                return [
+                  _c("span", [
+                    _vm._v(
+                      _vm._s(item.count) + " (" + _vm._s(item.item.unit) + ")"
+                    )
+                  ])
+                ]
+              }
+            },
+            {
               key: "FOOT[item.name]",
               fn: function(data) {
                 return [_c("span", [_vm._v("Итого")])]
@@ -79901,9 +79918,7 @@ var render = function() {
             {
               key: "FOOT[count]",
               fn: function(data) {
-                return [
-                  _c("span", [_vm._v(_vm._s(Math.round(_vm.order.totalCount)))])
-                ]
+                return [_c("span")]
               }
             },
             {
@@ -79960,6 +79975,7 @@ var render = function() {
           ])
         },
         [
+          _vm._v(" "),
           _vm._v(" "),
           _vm._v(" "),
           _vm._v(" "),

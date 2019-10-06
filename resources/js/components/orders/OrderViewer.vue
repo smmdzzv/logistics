@@ -20,11 +20,15 @@
                  responsive
                  foot-clone
                  no-footer-sorting>
+            <template slot="count" slot-scope="{item}">
+                <span>{{item.count}} ({{item.item.unit}})</span>
+            </template>
+
             <template slot="FOOT[item.name]" slot-scope="data">
                 <span>Итого</span>
             </template>
             <template slot="FOOT[count]" slot-scope="data">
-                <span>{{Math.round(order.totalCount)}}</span>
+                <span> </span>
             </template>
             <template slot="FOOT[billing_info.totalWeight]" slot-scope="data">
                 <span>{{order.totalWeight}}</span>
