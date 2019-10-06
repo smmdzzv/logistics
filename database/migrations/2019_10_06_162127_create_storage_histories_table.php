@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStoredItemsTable extends Migration
+class CreateStorageHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateStoredItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('stored_items', function (Blueprint $table) {
+        Schema::create('storage_histories', function (Blueprint $table) {
             $table->char('id',26)->primary();
-            $table->char('infoId',26);
-
+            $table->char('storage_id',26);
+            $table->char('stored_item_id',26);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateStoredItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stored_items');
+        Schema::dropIfExists('storage_histories');
     }
 }

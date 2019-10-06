@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Branches\Storage;
 use App\Models\StoredItems\StoredItem;
 use App\User;
 
@@ -36,5 +37,9 @@ class Branch extends BaseModel
 
     public function orders(){
         return $this->hasMany(Order::class, 'branchId');
+    }
+
+    public function storage(){
+        return $this->hasMany(Storage::class);
     }
 }
