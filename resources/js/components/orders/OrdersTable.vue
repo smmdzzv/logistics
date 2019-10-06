@@ -26,9 +26,14 @@
                         <b-spinner class="align-middle"></b-spinner>
                     </div>
                 </template>
+
+                <template slot="details" slot-scope="{item}">
+                    <a class="btn btn-outline-primary" :href="getDetailsUrl(item)">Детали</a>
+                </template>
             </b-table>
             <div class="card-footer">
-                <pagination :data="pagination" @pagination-change-page="getOrders"></pagination>
+<!--                <pagination :data="pagination" @pagination-change-page="getOrders"></pagination>-->
+                <main-paginator :pagination="pagination" :onPageChange="getOrders" :flowable="flowable"></main-paginator>
             </div>
         </div>
 </template>
@@ -44,9 +49,13 @@
                 type:Array,
                 required: false,
             },
-            action:{
+            url:{
                 type:String,
-                required: false
+                default:'/orders/all'
+            },
+            flowable:{
+                type:Boolean,
+                default:false
             }
         },
         methods:{
@@ -54,14 +63,23 @@
                 this.isBusy = true;
                 if(this.selectedBranch)
                     this.action = `branch/${this.selectedBranch.id}/orders`;
+                this.action += '?paginate=7&page=' + page;
                 axios.get(this.action)
                     .then(response=>{
                         this.pagination = response.data;
-                        this.orders = response.data.data;
-                        this.$nextTick(()=>{
+                        if (this.flowable)
+                            response.data.data.forEach(item => {
+                                this.orders.push(item);
+                            });
+                        else
+                            this.orders = response.data.data;
+                        this.$nextTick(() => {
                             this.isBusy = false;
                         })
                     });
+            },
+            getDetailsUrl(order){
+                return '/orders/' + order.id;
             }
         },
         computed:{
@@ -71,7 +89,7 @@
         },
         watch:{
             selectedBranch: function () {
-                this.getOrders(this.currentPage);
+                this.getOrders();
             }
         },
         data() {
@@ -79,6 +97,7 @@
                 selectedBranch: null,
                 pagination:{},
                 orders: [],
+                action: this.url,
                 isBusy:false,
                 fields: {
                     totalWeight: {
@@ -108,11 +127,15 @@
                     created_at:{
                         label:'Дата',
                         sortable: true
+                    },
+                    'details':{
+                        label:'',
                     }
                 }
             }
         },
         components:{
+            'MainPaginator': require('../common/MainPaginator.vue').default,
             'Pagination': require('laravel-vue-pagination')
         }
     }

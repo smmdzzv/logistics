@@ -9559,6 +9559,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "OrdersTable",
   mounted: function mounted() {
@@ -9569,9 +9574,13 @@ __webpack_require__.r(__webpack_exports__);
       type: Array,
       required: false
     },
-    action: {
+    url: {
       type: String,
-      required: false
+      "default": '/orders/all'
+    },
+    flowable: {
+      type: Boolean,
+      "default": false
     }
   },
   methods: {
@@ -9581,14 +9590,20 @@ __webpack_require__.r(__webpack_exports__);
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       this.isBusy = true;
       if (this.selectedBranch) this.action = "branch/".concat(this.selectedBranch.id, "/orders");
+      this.action += '?paginate=7&page=' + page;
       axios.get(this.action).then(function (response) {
         _this.pagination = response.data;
-        _this.orders = response.data.data;
+        if (_this.flowable) response.data.data.forEach(function (item) {
+          _this.orders.push(item);
+        });else _this.orders = response.data.data;
 
         _this.$nextTick(function () {
           _this.isBusy = false;
         });
       });
+    },
+    getDetailsUrl: function getDetailsUrl(order) {
+      return '/orders/' + order.id;
     }
   },
   computed: {
@@ -9598,7 +9613,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     selectedBranch: function selectedBranch() {
-      this.getOrders(this.currentPage);
+      this.getOrders();
     }
   },
   data: function data() {
@@ -9606,6 +9621,7 @@ __webpack_require__.r(__webpack_exports__);
       selectedBranch: null,
       pagination: {},
       orders: [],
+      action: this.url,
       isBusy: false,
       fields: {
         totalWeight: {
@@ -9635,11 +9651,15 @@ __webpack_require__.r(__webpack_exports__);
         created_at: {
           label: 'Дата',
           sortable: true
+        },
+        'details': {
+          label: ''
         }
       }
     };
   },
   components: {
+    'MainPaginator': __webpack_require__(/*! ../common/MainPaginator.vue */ "./resources/js/components/common/MainPaginator.vue")["default"],
     'Pagination': __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js")
   }
 });
@@ -80104,6 +80124,22 @@ var render = function() {
               ]
             },
             proxy: true
+          },
+          {
+            key: "details",
+            fn: function(ref) {
+              var item = ref.item
+              return [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-outline-primary",
+                    attrs: { href: _vm.getDetailsUrl(item) }
+                  },
+                  [_vm._v("Детали")]
+                )
+              ]
+            }
           }
         ])
       }),
@@ -80112,9 +80148,12 @@ var render = function() {
         "div",
         { staticClass: "card-footer" },
         [
-          _c("pagination", {
-            attrs: { data: _vm.pagination },
-            on: { "pagination-change-page": _vm.getOrders }
+          _c("main-paginator", {
+            attrs: {
+              pagination: _vm.pagination,
+              onPageChange: _vm.getOrders,
+              flowable: _vm.flowable
+            }
           })
         ],
         1

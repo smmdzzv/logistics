@@ -115,20 +115,23 @@ class OrdersController extends Controller
 
     public function all()
     {
-        return Order::with(['owner', 'registeredBy'])->paginate(10);
+        $paginate = request()->paginate ?? 10;
+        return Order::with(['owner', 'registeredBy'])->paginate($paginate);
     }
 
     public function filteredByBranch(Branch $branch)
     {
+        $paginate = request()->paginate ?? 10;
         if (isset($branch)) {
-            return $branch->orders()->with(['owner', 'registeredBy'])->paginate(10);
+            return $branch->orders()->with(['owner', 'registeredBy'])->paginate($paginate);
         } else abort(404, 'Филиал не найден');
     }
 
     public function filteredByUser(User $user)
     {
+        $paginate = request()->paginate ?? 10;
         if (isset($user)) {
-            return $user->orders()->with(['owner', 'registeredBy'])->paginate(10);
+            return $user->orders()->with(['owner', 'registeredBy'])->paginate($paginate);
         } else abort(404, 'Пользователь не найден');
     }
 }

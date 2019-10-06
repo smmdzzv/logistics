@@ -30,8 +30,10 @@ Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 //Order
 Route::get('/orders/all', 'OrdersController@all')->name('order.all');
 Route::resource('orders', 'OrdersController',
-    ['except' => ['delete', 'edit', 'show']]);
-Route::get('/orders/{order}', 'OrdersController@show')->name('order.show');
+    ['except' => ['delete', 'edit']]);
+Route::get('branch/{branch}/orders', 'OrdersController@filteredByBranch');
+Route::get('user/{user}/orders', 'OrdersController@filteredByUser');
+//Route::get('/orders/{order}', 'OrdersController@show')->name('order.show');
 
 //Trips
 Route::get('/trips/{trip}/items/edit', 'TripsController@editStoredList')->name('trip.edit-items');
@@ -43,10 +45,6 @@ Route::resource('trips', 'TripsController',
 //Payments
 Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
     ['except' => ['destroy']]);
-
-Route::get('branch/{branch}/orders', 'OrdersController@filteredByBranch');
-Route::get('user/{user}/orders', 'OrdersController@filteredByUser');
-
 
 //StoredItems
 Route::get('/stored', 'StoredItemsController@index')->name('stored.index');
