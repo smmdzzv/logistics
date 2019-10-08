@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Branches;
+namespace App\Models\Branches;
 
 use App\Models\BaseModel;
 use App\Models\Branch;
@@ -12,7 +12,7 @@ class Storage extends BaseModel
         return $this->belongsTo(Branch::class);
     }
 
-    public function history(){
-        return $this->hasOne(StorageHistory::class);
+    public function histories(){
+        return $this->hasMany(StorageHistory::class);
     }
 }

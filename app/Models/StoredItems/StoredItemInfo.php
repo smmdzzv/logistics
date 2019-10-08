@@ -16,9 +16,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property double width
  * @property double length
  * @property int item_id
- * @property  int branch_id
- * @property  string ownerId
+ * @property int branch_id
+ * @property string ownerId
  * @property Item item
+ * @property int count
  */
 class StoredItemInfo extends BaseModel
 {
@@ -41,11 +42,6 @@ class StoredItemInfo extends BaseModel
         return $this->belongsTo(Client::class, 'ownerId', 'id', 'users');
     }
 
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class);
-    }
-
     public function order()
     {
         return $this->belongsTo(Order::class);
@@ -61,11 +57,13 @@ class StoredItemInfo extends BaseModel
         return $this->hasOne(BillingInfo::class);
     }
 
-    public function stored(){
-        return $this->belongsTo(StoredItem::class, 'infoId');
+    public function storedItems()
+    {
+        return $this->hasMany(StoredItem::class, 'infoId');
     }
 
     //TODO count prop
+
     /**
      * Finds and creates new BillingInfo for StoredItem
      * @return BillingInfo

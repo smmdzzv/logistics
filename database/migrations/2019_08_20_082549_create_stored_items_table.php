@@ -16,7 +16,6 @@ class CreateStoredItemsTable extends Migration
         Schema::create('stored_items', function (Blueprint $table) {
             $table->char('id',26)->primary();
             $table->char('infoId',26);
-
             $table->timestamps();
         });
     }

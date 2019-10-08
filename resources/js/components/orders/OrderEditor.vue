@@ -63,7 +63,7 @@
                             clientId: this.client.id
                         });
 
-                        window.location.href = '/orders/' + response.data.id;
+                        // window.location.href = '/orders/' + response.data.id;
                     } catch (e) {
                         this.$root.showErrorMsg(
                             'Ошибка сохранения',

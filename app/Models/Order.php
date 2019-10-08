@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\BaseModel;
 use App\Models\StoredItems\StoredItem;
+use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Till\Payment;
 use App\Models\Users\Client;
 use App\User;
@@ -35,10 +36,14 @@ class Order extends BaseModel
         $this->totalDiscount = 0;
         $this->totalCount = 0;
     }
+    //TODO add this
+//    public function storedItems()
+//    {
+//        return $this->hasMany(StoredItem::class);
+//    }
 
-    public function storedItems()
-    {
-        return $this->hasMany(StoredItem::class);
+    public function storedItemInfos(){
+        return $this->hasMany(StoredItemInfo::class);
     }
 
     public function owner()

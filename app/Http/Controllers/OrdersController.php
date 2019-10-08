@@ -7,6 +7,7 @@ use App\Models\Branch;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
 use App\Models\StoredItems\StoredItem;
+use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Tariff;
 use App\Models\Users\Client;
 use App\User;
@@ -68,26 +69,28 @@ class OrdersController extends Controller
         $order->push();
 
         //Create stored items
-        $items = [];
+        $itemsInfo = [];
         $ulidGenerator = new Ulid\Ulid();
 
         foreach ($storedItems as $itemData) {
-            $items[] = [
-                'id' => $ulidGenerator->generate(),
+            $info = new StoredItemInfo([
                 'width' => $itemData['width'],
                 'height' => $itemData['height'],
                 'length' => $itemData['length'],
                 'weight' => $itemData['weight'],
                 'count' => $itemData['count'],
                 'item_id' => $itemData['item']['id'],
-                'branch_id' => $itemData['branch']['id'],
                 'ownerId' => $client->id,
-                'order_id' => $order->id,
-                'created_at' => Carbon::now()
-            ];
+            ]);
+
+            $itemsInfo[] = $info;
         }
 
-        StoredItem::insert($items);
+        $order->storedItemInfos()->saveMany($itemsInfo);
+
+
+
+//        StoredItem::insert($itemsInfo);
 
         //Calculate billing
         $billings = [];

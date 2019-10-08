@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\StoredItems\StoredItemInfo;
+use App\Observers\StoredItems\StoredItemInfoObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        StoredItemInfo::observe(StoredItemInfoObserver::class);
     }
 }

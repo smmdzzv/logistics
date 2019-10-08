@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Branch;
+use App\Models\Branches\Storage;
 use App\Models\Country;
 use Illuminate\Database\Seeder;
 
@@ -26,6 +27,11 @@ class BranchesTableSeeder extends Seeder
             $branch->name = $name;
             $branch->country = Country::where('name', $country)->first()->id;
             $branch->save();
+
+            $storage = new Storage([
+                'name' => 'main'
+            ]);
+            $branch->storages()->save($storage);
         }
     }
 }

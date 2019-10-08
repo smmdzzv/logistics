@@ -9084,7 +9084,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 if (!(this.client && this.storedItems.length > 0)) {
-                  _context.next = 14;
+                  _context.next = 13;
                   break;
                 }
 
@@ -9098,31 +9098,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 5:
                 response = _context.sent;
-                window.location.href = '/orders/' + response.data.id;
-                _context.next = 12;
+                _context.next = 11;
                 break;
 
-              case 9:
-                _context.prev = 9;
+              case 8:
+                _context.prev = 8;
                 _context.t0 = _context["catch"](2);
                 this.$root.showErrorMsg('Ошибка сохранения', 'Не удалось сохранить заказ. Попробуйте принять заказ позже');
 
-              case 12:
-                _context.next = 15;
+              case 11:
+                _context.next = 14;
                 break;
 
-              case 14:
+              case 13:
                 if (!this.client) this.clientError = true;
 
-              case 15:
+              case 14:
                 this.$bvModal.hide('busyModal');
 
-              case 16:
+              case 15:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[2, 9]]);
+        }, _callee, this, [[2, 8]]);
       }));
 
       function submitData() {
@@ -33125,7 +33124,7 @@ var VBTooltip = {
 /*!*************************************************!*\
   !*** ./node_modules/bootstrap-vue/esm/index.js ***!
   \*************************************************/
-/*! exports provided: componentsPlugin, BVModalPlugin, BVToastPlugin, AlertPlugin, BAlert, BadgePlugin, BBadge, BreadcrumbPlugin, BBreadcrumb, BBreadcrumbItem, ButtonPlugin, BButton, BButtonClose, ButtonGroupPlugin, BButtonGroup, ButtonToolbarPlugin, BButtonToolbar, CardPlugin, BCard, BCardBody, BCardFooter, BCardGroup, BCardHeader, BCardImg, BCardImgLazy, BCardSubTitle, BCardText, BCardTitle, CarouselPlugin, BCarousel, BCarouselSlide, CollapsePlugin, BCollapse, DropdownPlugin, BDropdown, BDropdownItem, BDropdownItemButton, BDropdownDivider, BDropdownForm, BDropdownGroup, BDropdownHeader, BDropdownText, EmbedPlugin, BEmbed, FormPlugin, BForm, BFormDatalist, BFormText, BFormInvalidFeedback, BFormValidFeedback, FormCheckboxPlugin, BFormCheckbox, BFormCheckboxGroup, FormFilePlugin, BFormFile, FormGroupPlugin, BFormGroup, FormInputPlugin, BFormInput, FormRadioPlugin, BFormRadio, BFormRadioGroup, FormSelectPlugin, BFormSelect, FormTextareaPlugin, BFormTextarea, ImagePlugin, BImg, BImgLazy, InputGroupPlugin, BInputGroup, BInputGroupAddon, BInputGroupAppend, BInputGroupPrepend, BInputGroupText, JumbotronPlugin, BJumbotron, LayoutPlugin, BContainer, BRow, BCol, BFormRow, LinkPlugin, BLink, ListGroupPlugin, BListGroup, BListGroupItem, MediaPlugin, BMedia, BMediaAside, BMediaBody, ModalPlugin, BModal, NavPlugin, BNav, BNavForm, BNavItem, BNavItemDropdown, BNavText, NavbarPlugin, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle, PaginationPlugin, BPagination, PaginationNavPlugin, BPaginationNav, PopoverPlugin, BPopover, ProgressPlugin, BProgress, BProgressBar, SpinnerPlugin, BSpinner, TablePlugin, TableLitePlugin, TableSimplePlugin, BTable, BTableLite, BTableSimple, BTbody, BThead, BTfoot, BTr, BTh, BTd, TabsPlugin, BTabs, BTab, ToastPlugin, BToast, BToaster, TooltipPlugin, BTooltip, directivesPlugin, VBModalPlugin, VBModal, VBPopoverPlugin, VBPopover, VBScrollspyPlugin, VBScrollspy, VBTogglePlugin, VBToggle, VBTooltipPlugin, VBTooltip, install, NAME, BVConfigPlugin, BVConfig, BootstrapVue, default */
+/*! exports provided: install, NAME, BVConfigPlugin, BVConfig, BootstrapVue, default, componentsPlugin, BVModalPlugin, BVToastPlugin, AlertPlugin, BAlert, BadgePlugin, BBadge, BreadcrumbPlugin, BBreadcrumb, BBreadcrumbItem, ButtonPlugin, BButton, BButtonClose, ButtonGroupPlugin, BButtonGroup, ButtonToolbarPlugin, BButtonToolbar, CardPlugin, BCard, BCardBody, BCardFooter, BCardGroup, BCardHeader, BCardImg, BCardImgLazy, BCardSubTitle, BCardText, BCardTitle, CarouselPlugin, BCarousel, BCarouselSlide, CollapsePlugin, BCollapse, DropdownPlugin, BDropdown, BDropdownItem, BDropdownItemButton, BDropdownDivider, BDropdownForm, BDropdownGroup, BDropdownHeader, BDropdownText, EmbedPlugin, BEmbed, FormPlugin, BForm, BFormDatalist, BFormText, BFormInvalidFeedback, BFormValidFeedback, FormCheckboxPlugin, BFormCheckbox, BFormCheckboxGroup, FormFilePlugin, BFormFile, FormGroupPlugin, BFormGroup, FormInputPlugin, BFormInput, FormRadioPlugin, BFormRadio, BFormRadioGroup, FormSelectPlugin, BFormSelect, FormTextareaPlugin, BFormTextarea, ImagePlugin, BImg, BImgLazy, InputGroupPlugin, BInputGroup, BInputGroupAddon, BInputGroupAppend, BInputGroupPrepend, BInputGroupText, JumbotronPlugin, BJumbotron, LayoutPlugin, BContainer, BRow, BCol, BFormRow, LinkPlugin, BLink, ListGroupPlugin, BListGroup, BListGroupItem, MediaPlugin, BMedia, BMediaAside, BMediaBody, ModalPlugin, BModal, NavPlugin, BNav, BNavForm, BNavItem, BNavItemDropdown, BNavText, NavbarPlugin, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle, PaginationPlugin, BPagination, PaginationNavPlugin, BPaginationNav, PopoverPlugin, BPopover, ProgressPlugin, BProgress, BProgressBar, SpinnerPlugin, BSpinner, TablePlugin, TableLitePlugin, TableSimplePlugin, BTable, BTableLite, BTableSimple, BTbody, BThead, BTfoot, BTr, BTh, BTd, TabsPlugin, BTabs, BTab, ToastPlugin, BToast, BToaster, TooltipPlugin, BTooltip, directivesPlugin, VBModalPlugin, VBModal, VBPopoverPlugin, VBPopover, VBScrollspyPlugin, VBScrollspy, VBTogglePlugin, VBToggle, VBTooltipPlugin, VBTooltip */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

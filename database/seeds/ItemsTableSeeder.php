@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Item;
+use App\Models\StoredItems\Item;
 use App\Models\Tariff;
 use Illuminate\Database\Seeder;
 
