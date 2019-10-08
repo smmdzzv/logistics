@@ -16,7 +16,7 @@ class CreateBillingInfosTable extends Migration
         Schema::create('billing_infos', function (Blueprint $table) {
             $table->char('id', 26)->primary();;
             $table->char('tariff_price_history_id', 26);
-            $table->char('stored_item_id', 26);
+            $table->char('stored_item_info_id', 26);
 //            $table->integer('placesCount');
             $table->decimal('totalCubage');
             $table->decimal('totalWeight');
@@ -27,8 +27,6 @@ class CreateBillingInfosTable extends Migration
             $table->decimal('totalDiscount', 10, 2);
             $table->decimal('count');
             $table->timestamps();
-
-            $table->index('stored_item_id');
         });
     }
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\BaseModel;
 use App\Models\StoredItems\StoredItem;
+use App\Models\StoredItems\StoredItemInfo;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -23,8 +24,8 @@ class BillingInfo extends BaseModel
         return $this->belongsTo(TariffPriceHistory::class, 'tariff_price_history_id');
     }
 
-    public function storedItem(){
-        return $this->belongsTo(StoredItem::class);
+    public function storedItemInfo(){
+        return $this->belongsTo(StoredItemInfo::class);
     }
 
     public function roundData(){

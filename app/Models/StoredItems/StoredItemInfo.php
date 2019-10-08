@@ -75,7 +75,7 @@ class StoredItemInfo extends BaseModel
         $billingInfo = $this->billingInfo ?? new BillingInfo();
 
         $billingInfo->tariffPricing()->associate($tariffPricing);
-        $billingInfo->storedItem()->associate($this);
+        $billingInfo->storedItemInfo()->associate($this);
 
         $billingInfo->totalWeight = $this->weight * $this->count;
         $billingInfo->totalCubage = $this->width * $this->height * $this->length * $this->count;
@@ -103,5 +103,19 @@ class StoredItemInfo extends BaseModel
 
         $billingInfo->roundData();
         return $billingInfo;
+    }
+
+
+    /**
+     * @return array of StoredItem
+     */
+    public function getStoredItems()
+    {
+        $items  = array();
+        for ($i = 0; $i < $this->count; $i++) {
+            $items[] = new StoredItem(['infoId' => $this->id]);
+        }
+
+        return $items;
     }
 }

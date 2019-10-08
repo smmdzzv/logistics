@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BillingInfo;
+use App\Data\RequestWriters\Order\OrderRequestWriter;
 use App\Models\Branch;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
-use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Tariff;
 use App\Models\Users\Client;
 use App\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Rorecek\Ulid;
+use stdClass;
 
 class OrdersController extends Controller
 {
@@ -56,59 +53,26 @@ class OrdersController extends Controller
     public function store(StoreOrderRequest $request)
     {
         //Create order
-        $storedItems = $request->input('storedItems');
-        $clientId = $request->input('clientId');
+        $data = new stdClass();
+        $data->client = Client::findOrFail($request->input('clientId'));
+        $data->branch = Branch::findOrFail(auth()->user()->branch->id);
 
-        $client = Client::findOrFail($clientId);
-        $branch = Branch::findOrFail(auth()->user()->branch->id);
-
-        $order = new Order();
-        $order->owner()->associate($client);
-        $order->branch()->associate($branch);
-        $order->registeredBy()->associate(auth()->user());
-        $order->push();
-
-        //Create stored items
-        $itemsInfo = [];
-        $ulidGenerator = new Ulid\Ulid();
-
-        foreach ($storedItems as $itemData) {
-            $info = new StoredItemInfo([
+        foreach ($request->input('storedItems') as $itemData) {
+            $data->storedItemInfos[] = new StoredItemInfo([
                 'width' => $itemData['width'],
                 'height' => $itemData['height'],
                 'length' => $itemData['length'],
                 'weight' => $itemData['weight'],
                 'count' => $itemData['count'],
                 'item_id' => $itemData['item']['id'],
-                'ownerId' => $client->id,
+                'ownerId' => $data->client->id
             ]);
-
-            $itemsInfo[] = $info;
         }
 
-        $order->storedItemInfos()->saveMany($itemsInfo);
+        $orderWriter = new OrderRequestWriter($data);
+        $result = $orderWriter->write();
 
-
-
-//        StoredItem::insert($itemsInfo);
-
-        //Calculate billing
-        $billings = [];
-        foreach ($items as $item) {
-            $stored = new StoredItem();
-            $stored->fill($item);
-            $billing = $stored->getBillingInfo();
-            $billing->id = $ulidGenerator->generate();
-            array_push($billings, $billing->attributesToArray());
-        }
-
-        BillingInfo::insert($billings);
-
-        //Update order statistics (totalWeight, totalPrice and etc.)
-        $order->updateStat($billings);
-        $order->save();
-
-        return $order;
+        return  $result->order;
     }
 
     public function update(StoreOrderRequest $request)
