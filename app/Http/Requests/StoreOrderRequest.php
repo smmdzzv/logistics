@@ -12,40 +12,40 @@ class StoreOrderRequest extends FormRequest
     /**
      *  Validation rules to be applied to the input.
      *
-     *  @return array
+     * @return array
      */
     public function rules()
     {
-        $rules =['storedItems' =>'required|array'];
-        foreach ($this->request->get('storedItems') as $key => $value){
-            $rules['clientId'] = 'required|exists:users,id';
+        $rules = ['storedItemInfos' => 'required|array'];
 
-            $rules['storedItems.'.$key.'.width'] = 'required|numeric';
-            $rules['storedItems.'.$key.'.height'] = 'required|numeric';
-            $rules['storedItems.'.$key.'.length'] = 'required|numeric';
-            $rules['storedItems.'.$key.'.weight'] = 'required|numeric';
-            $rules['storedItems.'.$key.'.count'] = 'required|numeric';
-            $rules['storedItems.'.$key.'.totalCubage'] = 'required|numeric';
-            $rules['storedItems.'.$key.'.totalWeight'] = 'required|numeric';
-            $rules['storedItems.'.$key.'.price'] = 'required|numeric';
+        $rules['clientId'] = 'required|exists:users,id';
 
-            $rules['storedItems.'.$key.'.branch'] = 'required|array';
-            $rules['storedItems.'.$key.'.branch.id'] = 'required|exists:branches,id';
+        $rules['storedItemInfos.*.width'] = 'required|numeric';
+        $rules['storedItemInfos.*.height'] = 'required|numeric';
+        $rules['storedItemInfos.*.length'] = 'required|numeric';
+        $rules['storedItemInfos.*.weight'] = 'required|numeric';
+        $rules['storedItemInfos.*.count'] = 'required|numeric';
+        $rules['storedItemInfos.*.totalCubage'] = 'required|numeric';
+        $rules['storedItemInfos.*.totalWeight'] = 'required|numeric';
+        $rules['storedItemInfos.*.price'] = 'required|numeric';
 
-            $rules['storedItems.'.$key.'.tariffPricing'] = 'required|array';
-            $rules['storedItems.'.$key.'.tariffPricing.id'] = 'required|exists:tariff_price_histories,id';
+//            $rules['storedItemInfos.*.branch'] = 'required|array';
+//            $rules['storedItemInfos.*.branch.id'] = 'required|exists:branches,id';
+
+        $rules['storedItemInfos.*.tariffPricing'] = 'required|array';
+        $rules['storedItemInfos.*.tariffPricing.id'] = 'required|exists:tariff_price_histories,id';
 
 
-            $rules['storedItems.'.$key.'.item'] = 'required|array';
-            $rules['storedItems.'.$key.'.item.id'] = 'required|exists:items,id';
-        }
+        $rules['storedItemInfos.*.item'] = 'required|array';
+        $rules['storedItemInfos.*.item.id'] = 'required|exists:items,id';
+
         return $rules;
     }
 
     /**
      *  Filters to be applied to the input.
      *
-     *  @return void
+     * @return void
      */
     public function filters()
     {

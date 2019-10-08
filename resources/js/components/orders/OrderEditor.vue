@@ -52,18 +52,16 @@
                 this.clientError = false;
             },
             async submitData() {
-
-
                 if (this.client && this.storedItems.length > 0) {
                     this.$bvModal.show('busyModal');
 
                     try {
                         const response = await axios.post('/orders', {
-                            storedItems: this.storedItems,
+                            storedItemInfos: this.storedItems,
                             clientId: this.client.id
                         });
 
-                        // window.location.href = '/orders/' + response.data.id;
+                        window.location.href = '/orders/' + response.data.id;
                     } catch (e) {
                         this.$root.showErrorMsg(
                             'Ошибка сохранения',
