@@ -1,13 +1,14 @@
 <template>
     <div class="container border-bottom pt-3">
         <div class="container">
-            <p>{{`ШхВхД: ${storedItem.width}x${storedItem.height}x${storedItem.length}`}}</p>
-            <p>{{`Вес: ${storedItem.weight} кг`}} </p>
+            <p>{{`Тип: ${storedItemInfo.item.name}`}}</p>
+            <p>{{`ШхВхД: ${storedItemInfo.width}x${storedItemInfo.height}x${storedItemInfo.length}`}}</p>
+            <p>{{`Вес: ${storedItemInfo.weight} кг`}} </p>
             <p>{{`Принят: ${storedItem.created_at}`}} </p>
         </div>
 
         <div style="width:100px">
-            <barcode :value="storedItem.id" :options='{displayValue:false, height:50, width:1}' tag="svg"></barcode>
+            <barcode :options='{displayValue:false, height:50, width:1}' :value="storedItem.id" tag="svg"></barcode>
         </div>
     </div>
 </template>
@@ -15,8 +16,15 @@
 <script>
     export default {
         name: "StoredItemShortInfo",
-        props:{
-            storedItem: {type: Object, required: true}
+        props: {
+            storedItemInfo: {
+                type: Object,
+                required: true
+            },
+            storedItem: {
+                type: Object,
+                required: true
+            }
         }
     }
 </script>

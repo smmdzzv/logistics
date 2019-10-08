@@ -11,15 +11,15 @@
             </div>
         </div>
 
-        <b-table :items="order.stored_items"
-                 :fields="fields"
-                 primary-key="id"
-                 striped
-                 outlined
-                 hover
-                 responsive
+        <b-table :fields="fields"
+                 :items="order.stored_item_infos"
                  foot-clone
-                 no-footer-sorting>
+                 hover
+                 no-footer-sorting
+                 outlined
+                 primary-key="id"
+                 responsive
+                 striped>
             <template slot="count" slot-scope="{item}">
                 <span>{{item.count}} ({{item.item.unit}})</span>
             </template>
@@ -47,25 +47,30 @@
             </template>
 
             <template slot="HEAD[id]">
-               <img class="icon-btn-sm" src="/svg/barcode.svg" @click="showShortInfo()">
+                <img @click="showShortInfo()" class="icon-btn-sm" src="/svg/barcode.svg">
             </template>
             <template slot="id" slot-scope="data">
-                <img class="icon-btn-sm" src="/svg/barcode.svg" @click="showShortInfo(data)">
+                <img @click="showShortInfo(data)" class="icon-btn-sm" src="/svg/barcode.svg">
             </template>
             <template slot="FOOT[id]">
                 <span></span>
             </template>
         </b-table>
 
-<!--        <stored-item-short-info v-for="item in itemsToShow" :storedItem="item" :key="item.id"></stored-item-short-info>-->
+        <!--        <stored-item-short-info v-for="item in itemsToShow" :storedItem="item" :key="item.id"></stored-item-short-info>-->
 
-        <b-modal id="shortItemInfoModal"
-                 no-close-on-esc
-                 title="Распечатать бирки?"
-                 ok-title="Да"
+        <b-modal @hidden="onModalHidden()"
                  cancel-title="Отменить"
-                 @hidden="onModalHidden()">
-            <stored-item-short-info v-for="item in itemsToShow" :storedItem="item" :key="item.id"></stored-item-short-info>
+                 id="shortItemInfoModal"
+                 no-close-on-esc
+                 ok-title="Да"
+                 title="Распечатать бирки?">
+            <template v-for="item in itemsToShow">
+                <stored-item-short-info :key="stored.id"
+                                        :storedItemInfo="item"
+                                        :storedItem="stored"
+                                        v-for="stored in item.stored_items"/>
+            </template>
         </b-modal>
     </div>
 </template>
@@ -108,8 +113,8 @@
                         label: 'Сумма, $',
                         sortable: true
                     },
-                    'id':{
-                        label:''
+                    'id': {
+                        label: ''
                     } //for barcode btn
                 },
                 itemsToShow: []
@@ -120,7 +125,7 @@
                 let url = window.location;
                 return url.protocol + "//" + url.host
             },
-            getStatus(){
+            getStatus() {
                 switch (this.order.status) {
                     case "accepted":
                         return "Принят к обработке";
@@ -132,19 +137,19 @@
                         return "Выполнен"
                 }
             },
-            showShortInfo(data){
+            showShortInfo(data) {
                 console.log(data);
-                if(data)
+                if (data)
                     this.itemsToShow.push(data.item);
                 else
-                    this.itemsToShow = this.order.stored_items;
+                    this.itemsToShow = this.order.stored_item_infos;
                 this.$bvModal.show('shortItemInfoModal');
             },
-            onModalHidden(e){
+            onModalHidden(e) {
                 this.itemsToShow = [];
             }
         },
-        components:{
+        components: {
             'StoredItemShortInfo': require('../stored/StoredItemShortInfo').default
         }
     }

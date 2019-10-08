@@ -9438,6 +9438,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "OrderViewer",
   props: {
@@ -9505,7 +9510,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     showShortInfo: function showShortInfo(data) {
       console.log(data);
-      if (data) this.itemsToShow.push(data.item);else this.itemsToShow = this.order.stored_items;
+      if (data) this.itemsToShow.push(data.item);else this.itemsToShow = this.order.stored_item_infos;
       this.$bvModal.show('shortItemInfoModal');
     },
     onModalHidden: function onModalHidden(e) {
@@ -10097,9 +10102,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "StoredItemShortInfo",
   props: {
+    storedItemInfo: {
+      type: Object,
+      required: true
+    },
     storedItem: {
       type: Object,
       required: true
@@ -79873,7 +79883,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "col-12 col-sm-6 text-left text-sm-right" }, [
           _c("p", { staticClass: "badge badge-primary p-2" }, [
-            _vm._v("\n                    Статус: "),
+            _vm._v("\n                Статус: "),
             _c("span", { staticClass: "text" }, [
               _vm._v(_vm._s(_vm.getStatus()))
             ])
@@ -79885,15 +79895,15 @@ var render = function() {
         "b-table",
         {
           attrs: {
-            items: _vm.order.stored_items,
             fields: _vm.fields,
-            "primary-key": "id",
-            striped: "",
-            outlined: "",
-            hover: "",
-            responsive: "",
+            items: _vm.order.stored_item_infos,
             "foot-clone": "",
-            "no-footer-sorting": ""
+            hover: "",
+            "no-footer-sorting": "",
+            outlined: "",
+            "primary-key": "id",
+            responsive: "",
+            striped: ""
           },
           scopedSlots: _vm._u([
             {
@@ -80005,11 +80015,11 @@ var render = function() {
         "b-modal",
         {
           attrs: {
+            "cancel-title": "Отменить",
             id: "shortItemInfoModal",
             "no-close-on-esc": "",
-            title: "Распечатать бирки?",
             "ok-title": "Да",
-            "cancel-title": "Отменить"
+            title: "Распечатать бирки?"
           },
           on: {
             hidden: function($event) {
@@ -80017,13 +80027,17 @@ var render = function() {
             }
           }
         },
-        _vm._l(_vm.itemsToShow, function(item) {
-          return _c("stored-item-short-info", {
-            key: item.id,
-            attrs: { storedItem: item }
+        [
+          _vm._l(_vm.itemsToShow, function(item) {
+            return _vm._l(item.stored_items, function(stored) {
+              return _c("stored-item-short-info", {
+                key: stored.id,
+                attrs: { storedItemInfo: item, storedItem: stored }
+              })
+            })
           })
-        }),
-        1
+        ],
+        2
       )
     ],
     1
@@ -80821,20 +80835,24 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container border-bottom pt-3" }, [
     _c("div", { staticClass: "container" }, [
+      _c("p", [_vm._v(_vm._s("Тип: " + _vm.storedItemInfo.item.name))]),
+      _vm._v(" "),
       _c("p", [
         _vm._v(
           _vm._s(
             "ШхВхД: " +
-              _vm.storedItem.width +
+              _vm.storedItemInfo.width +
               "x" +
-              _vm.storedItem.height +
+              _vm.storedItemInfo.height +
               "x" +
-              _vm.storedItem.length
+              _vm.storedItemInfo.length
           )
         )
       ]),
       _vm._v(" "),
-      _c("p", [_vm._v(_vm._s("Вес: " + _vm.storedItem.weight + " кг") + " ")]),
+      _c("p", [
+        _vm._v(_vm._s("Вес: " + _vm.storedItemInfo.weight + " кг") + " ")
+      ]),
       _vm._v(" "),
       _c("p", [_vm._v(_vm._s("Принят: " + _vm.storedItem.created_at) + " ")])
     ]),
@@ -80845,8 +80863,8 @@ var render = function() {
       [
         _c("barcode", {
           attrs: {
-            value: _vm.storedItem.id,
             options: { displayValue: false, height: 50, width: 1 },
+            value: _vm.storedItem.id,
             tag: "svg"
           }
         })

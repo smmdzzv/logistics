@@ -59,7 +59,7 @@ class StoredItemInfo extends BaseModel
 
     public function storedItems()
     {
-        return $this->hasMany(StoredItem::class, 'infoId');
+        return $this->hasMany(StoredItem::class);
     }
 
     //TODO count prop
@@ -113,7 +113,7 @@ class StoredItemInfo extends BaseModel
     {
         $items  = array();
         for ($i = 0; $i < $this->count; $i++) {
-            $items[] = new StoredItem(['infoId' => $this->id]);
+            $items[] = new StoredItem(['stored_item_info_id' => $this->id]);
         }
 
         return $items;

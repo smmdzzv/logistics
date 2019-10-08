@@ -38,7 +38,7 @@ class OrdersController extends Controller
 
     public function show(Order $order)
     {
-        $order->load(['storedItems.billingInfo', 'storedItems.item', 'owner']);
+        $order->load(['storedItemInfos', 'storedItemInfos.billingInfo', 'storedItemInfos.item', 'storedItemInfos.storedItems', 'owner']);
         return view('orders.show', compact('order'));
     }
 
@@ -49,7 +49,6 @@ class OrdersController extends Controller
         return view('orders.create', compact('user', 'tariffs'));
     }
 
-    //TODO check client in StoreOrderRequest
     public function store(StoreOrderRequest $request)
     {
         //Create order
@@ -72,7 +71,7 @@ class OrdersController extends Controller
         $orderWriter = new OrderRequestWriter($data);
         $result = $orderWriter->write();
 
-        return  $result->order;
+        return $result->order;
     }
 
     public function update(StoreOrderRequest $request)

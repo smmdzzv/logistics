@@ -36,14 +36,13 @@ class Order extends BaseModel
         $this->totalDiscount = 0;
         $this->totalCount = 0;
     }
-    //TODO add this
-//    public function storedItems()
-//    {
-//        return $this->hasMany(StoredItem::class);
-//    }
 
     public function storedItemInfos(){
         return $this->hasMany(StoredItemInfo::class);
+    }
+
+    public function storedItems(){
+        return $this->hasManyThrough(StoredItem::class, StoredItemInfo::class);
     }
 
     public function owner()
