@@ -20,10 +20,11 @@ class DenyRolesMiddleware
         if (count($user->roles) === 0)
             return abort(403, 'У вас нет ни одной роли');
 
-        if ($user->hasAnyRole($roles))
-            return abort(403, 'Доступ запрещен.');
+        foreach ($user->roles as $role) {
+            if (!in_array($role->name, $roles))
+                return $next($request);
+        }
 
-
-        return $next($request);
+        return abort(403, 'Доступ запрещен');
     }
 }

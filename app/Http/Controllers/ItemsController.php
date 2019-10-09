@@ -13,9 +13,10 @@ class ItemsController extends Controller
     {
         $this->middleware('auth');
 
-        $this->middleware('roles.allow:admin', ['except' => 'all']);
+        $except = ['all', 'eager'];
 
-        $this->middleware('roles.deny:client', ['only' => 'all, allEager']);
+        $this->middleware('roles.allow:admin')->except($except);
+        $this->middleware('roles.deny:client')->only($except);
     }
 
     public function all()
@@ -24,11 +25,13 @@ class ItemsController extends Controller
         return Item::with('tariff')->paginate($paginate);
     }
 
-    public function allEager(){
+    public function allEager()
+    {
         return Item::with('tariff')->get();
     }
 
-    public function index(){
+    public function index()
+    {
         return view('items.index');
     }
 
@@ -52,7 +55,7 @@ class ItemsController extends Controller
             'onlyCustomPrice' => "required|in:0,1",
             'applyDiscount' => "required|in:0,1",
             'tariffId' => 'required|exists:tariffs,id',
-            'name' =>[
+            'name' => [
                 'required',
                 'string',
                 'max:255',

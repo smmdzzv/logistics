@@ -20,10 +20,10 @@ class UsersController extends Controller
     {
         $this->middleware('auth');
 
-        $except = ['all, index'];
+        $except = ['all', 'index'];
 
         $this->middleware('roles.allow:admin,director')->except($except);
-        $this->middleware('roles.except:client')->only($except);
+        $this->middleware('roles.deny:client')->only($except);
     }
 
     public function all()

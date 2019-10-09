@@ -54,11 +54,6 @@ class User extends Authenticatable
 
     protected $table = 'users';
 
-    public function position()
-    {
-        return $this->belongsTo(Position::class);
-    }
-
     public function branch()
     {
         return $this->belongsTo(Branch::class);
@@ -67,38 +62,6 @@ class User extends Authenticatable
     public function accounts(){
         return $this->morphMany(Account::class, 'owner');
     }
-
-    public function clientRole()
-    {
-        return $this->belongsToMany(Role::class)->where('name', 'client');
-    }
-
-    public function registeredOrders()
-    {
-        return $this->hasMany(Order::class, 'registeredBy');
-    }
-
-    //TODO remove from here
-
-    public function managedBranch()
-    {
-        return $this->hasOne(Branch::class, 'director');
-    }
-//=
-//    /**
-//     * @param string|array $roles
-//     * @return bool
-//     */
-//    public function authorizeRoles($roles)
-//    {
-//        if (is_array($roles)) {
-//            return $this->hasAnyRole($roles) ||
-//                abort(401, 'Доступ запрещен');
-//        }
-//
-//        return $this->hasRole($roles) ||
-//            abort(401, 'Доступ запрещен');
-//    }
 
     public function hasAnyRole($roles)
     {

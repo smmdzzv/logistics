@@ -20,10 +20,10 @@ class OrdersController extends Controller
 
         $this->middleware('user.branch');
 
-        $adminOnly = ['edit, update, destroy'];
+        $adminOnly = ['edit', 'update', 'destroy'];
 
         $this->middleware('roles.allow:admin')->only($adminOnly);
-        $this->middleware('roles.deny:client')->except($adminOnly);
+        $this->middleware('roles.deny:client,worker')->except($adminOnly);
     }
 
     public function index()

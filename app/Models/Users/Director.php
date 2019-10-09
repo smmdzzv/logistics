@@ -4,6 +4,8 @@
 namespace App\Models\Users;
 
 
+use App\Models\Branch;
+
 class Director extends Employee
 {
     public function getRoles()
@@ -11,5 +13,10 @@ class Director extends Employee
         return [
             'director'
         ];
+    }
+
+    public function managedBranch()
+    {
+        return $this->hasOne(Branch::class, 'director');
     }
 }

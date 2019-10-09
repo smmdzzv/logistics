@@ -13,10 +13,10 @@ class TariffPriceHistoriesController extends Controller
     {
         $this->middleware('auth');
 
-        $adminOnly = ['create, store, edit,  update, destroy'];
+        $except = ['all', 'index', 'lastByTariff'];
 
-        $this->middleware('roles.allow:admin')->only($adminOnly);
-        $this->middleware('roles.deny:client')->except($adminOnly);
+        $this->middleware('roles.allow:admin')->except($except);
+        $this->middleware('roles.deny:client')->only($except);
     }
 
     public function all()
