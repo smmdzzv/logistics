@@ -2,24 +2,17 @@
 
 namespace App\Http\Controllers\Users;
 
-class DriversController extends AbstractConcreteUsersController
+use App\Models\Users\Driver;
+
+class DriversController extends AbstractRoleUsersController
 {
-    protected function getRoleName()
+    public function __construct()
     {
-        return 'driver';
+        $this->entityClass = Driver::class;
     }
 
-    protected function getClassName()
+    public function index()
     {
-       return 'App\Models\Users\Driver';
-    }
-
-    protected function getRoleNamePlural()
-    {
-        return 'drivers';
-    }
-
-    public function index(){
         $url = 'concrete/driver/all';
         $title = 'Список водителей';
         return view('users.index', compact('url', 'title'));

@@ -4,21 +4,12 @@ namespace App\Http\Controllers\Users;
 
 use App\Models\Users\Client;
 
-class ClientsController extends AbstractConcreteUsersController
+class ClientsController extends AbstractRoleUsersController
 {
-    protected function getRoleName()
-    {
-        return 'client';
-    }
 
-    protected function getClassName()
+    public function __construct()
     {
-       return 'App\Models\Users\Client';
-    }
-
-    protected function getRoleNamePlural()
-    {
-        return 'clients';
+        $this->entityClass = Client::class;
     }
 
     public function index(){

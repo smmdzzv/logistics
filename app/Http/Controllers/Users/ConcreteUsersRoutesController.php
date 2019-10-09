@@ -20,11 +20,24 @@ class ConcreteUsersRoutesController
     public function __construct()
     {
         switch (request()->roleName) {
+
+            case 'client':
+                $this->controller = new ClientsController();
+                break;
+            case 'employee':
+                $this->controller = new EmployeesController();
+                break;
+            case 'worker':
+                $this->controller = new WorkersController();
+                break;
             case 'driver':
                 $this->controller = new DriversController();
                 break;
-            case 'client':
-                $this->controller = new ClientsController();
+            case 'manager':
+                $this->controller = new ManagersController();
+                break;
+            case 'director':
+                $this->controller = new DirectorsController();
                 break;
             default:
                 abort(404, "Роль не найдена");
@@ -45,6 +58,6 @@ class ConcreteUsersRoutesController
             return $this->controller->$action();
         }
 
-        return $this->controller->concreteUser($action);
+        return $this->controller->user($action);
     }
 }

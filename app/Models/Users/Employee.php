@@ -14,7 +14,7 @@ class Employee extends RoleUser
     public function getRoles()
     {
         return [
-            'employee',
+            'worker',
             'cashier',
             'driver',
             'director',
