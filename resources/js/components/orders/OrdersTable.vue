@@ -1,5 +1,5 @@
 <template>
-        <div class="card">
+        <div class="card shadow">
             <div class="card-header">
                 <div class="row align-items-baseline">
                     <div class="col-md-4">Заказы</div>

@@ -80134,7 +80134,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "card" },
+    { staticClass: "card shadow" },
     [
       _c("div", { staticClass: "card-header" }, [
         _c(
