@@ -38,7 +38,13 @@ class OrdersController extends Controller
 
     public function show(Order $order)
     {
-        $order->load(['storedItemInfos', 'storedItemInfos.billingInfo', 'storedItemInfos.item', 'storedItemInfos.storedItems', 'owner']);
+        $order->load([
+            'storedItemInfos',
+            'storedItemInfos.billingInfo',
+            'storedItemInfos.item',
+            'storedItemInfos.storedItems',
+            'owner'
+        ]);
         return view('orders.show', compact('order'));
     }
 

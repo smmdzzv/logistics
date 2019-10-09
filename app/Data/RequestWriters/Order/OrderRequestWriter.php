@@ -10,8 +10,8 @@ use App\Data\MassWriters\Order\StoredItemInfosWriter;
 use App\Data\MassWriters\Order\StoredItemsWriter;
 use App\Data\RequestWriters\RequestWriter;
 use App\Models\Order;
-use App\Models\StoredItems\StoredItemInfo;
 use App\StoredItems\StorageHistory;
+use stdClass;
 
 class OrderRequestWriter extends RequestWriter
 {
@@ -21,7 +21,7 @@ class OrderRequestWriter extends RequestWriter
     }
 
     /**
-     * @return \stdClass, which contains saved models
+     * @return stdClass, which contains saved models
      */
     function write()
     {
@@ -64,6 +64,9 @@ class OrderRequestWriter extends RequestWriter
 
     }
 
+    /**
+     *Creates and saves for each StoredItemInfo related array of StoredItems
+     */
     private function createStoredItems()
     {
         foreach ($this->saved->storedItemInfos as $info) {
@@ -78,11 +81,14 @@ class OrderRequestWriter extends RequestWriter
         $this->data->storedItems = [];
     }
 
+    /**
+     *Creates and saves for each StoredItem StorageHistory
+     */
     private function createStorageHistories()
     {
         $storageId = $this->input->branch->mainStorage->id;
 
-        foreach ($this->saved->storedItems as $item){
+        foreach ($this->saved->storedItems as $item) {
             $this->data->storageHistories[] = new StorageHistory([
                 'stored_item_id' => $item->id,
                 'storage_id' => $storageId,
@@ -95,6 +101,10 @@ class OrderRequestWriter extends RequestWriter
         $this->data->storageHistories = [];
     }
 
+
+    /**
+     *Creates and saves for each StoredItemInfo BillingInfo
+     */
     private function createBillingInfos()
     {
         foreach ($this->saved->storedItemInfos as $info) {
@@ -106,6 +116,9 @@ class OrderRequestWriter extends RequestWriter
         $this->data->billingInfos = [];
     }
 
+    /**
+     *Updates Order stat on total params based on saved BillingInfo array
+     */
     private function updateOrderStatistics()
     {
         $this->saved->order->updateStat($this->saved->billingInfos);
