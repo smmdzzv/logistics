@@ -10,6 +10,8 @@ class TariffsController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
+
+        $this->middleware('roles.allow:admin');
     }
 
     public function index(){

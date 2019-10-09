@@ -9,6 +9,16 @@ use Illuminate\Http\Request;
 
 class TariffPriceHistoriesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+
+        $adminOnly = ['create, store, edit,  update, destroy'];
+
+        $this->middleware('roles.allow:admin')->only($adminOnly);
+        $this->middleware('roles.deny:client')->except($adminOnly);
+    }
+
     public function all()
     {
         $paginate = request()->paginate ?? 10;
@@ -36,6 +46,7 @@ class TariffPriceHistoriesController extends Controller
         return redirect()->route('tariff-price-histories.index');
     }
 
+    //TODO move to tariff controller
     public function lastByTariff(Tariff $tariff)
     {
         return $tariff->lastPriceHistory;

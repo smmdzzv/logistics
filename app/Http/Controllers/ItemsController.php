@@ -15,7 +15,7 @@ class ItemsController extends Controller
 
         $this->middleware('roles.allow:admin', ['except' => 'all']);
 
-        $this->middleware('roles.deny:client', ['only' => 'all']);
+        $this->middleware('roles.deny:client', ['only' => 'all, allEager']);
     }
 
     public function all()

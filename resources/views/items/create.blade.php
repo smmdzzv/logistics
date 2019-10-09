@@ -30,7 +30,7 @@
                                 <label for="unit" class="col-md-4 col-form-label text-md-right">Единица
                                     измерения</label>
                                 <div class="col-md-6">
-                                    <input id="unit" placeholder="например, шт, литр, кг" type="text"
+                                    <input id="unit" placeholder="например, шт, ед, пачка" type="text"
                                            class="form-control @error('unit') is-invalid @enderror"
                                            name="unit" value="{{ old('unit') }}" required
                                            autocomplete="unit" autofocus>
