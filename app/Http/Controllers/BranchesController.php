@@ -27,6 +27,8 @@ class BranchesController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->middleware('roles.allow:admin');
     }
 
     public function all()
@@ -34,31 +36,17 @@ class BranchesController extends Controller
         return Branch::with('director', 'country')->get();
     }
 
-    public function index(){
+    public function index()
+    {
         return view('branches.index');
     }
-
-//    public function show()
-//    {
-//
-//    }
-//
-//    public function create()
-//    {
-//
-//    }
-//
-//    public function edit()
-//    {
-//
-//    }
 
     public function store()
     {
         $data = request()->validate($this->rules);
 
         $branch = Branch::create($data);
-        if(!isset($data['director']))
+        if (!isset($data['director']))
             $branch->director = null;
         $branch->load('director', 'country');
 
