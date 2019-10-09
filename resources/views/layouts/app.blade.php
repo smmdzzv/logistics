@@ -90,8 +90,8 @@
                                 Пользователи <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="usersMenuDropdown">
-                                <a class="dropdown-item" href="#">Регистрация</a>
-                                <a class="dropdown-item" href="#">Список</a>
+                                <a class="dropdown-item" href="{{route("users.create")}}">Регистрация</a>
+                                <a class="dropdown-item" href="{{route("users.index")}}">Список</a>
                             </div>
                         </li>
                         <!--Trips-->

@@ -19,6 +19,8 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->middleware('roles.allow:admin,director');
     }
 
     public function create()
