@@ -2,37 +2,45 @@
     <div class="container">
         <div class="card shadow">
             <div class="card-header">
-                {{title}}
-            </div>
-                <b-table :fields="fields"
-                         id="usersTable"
-                         :items="users"
-                         :busy="isBusy"
-                         striped
-                         borderless
-                         primary-key="id"
-                         responsive
-                          >
-                    <template v-slot:table-busy>
-                        <div class="text-center text-info my-2">
-                            <b-spinner class="align-middle"></b-spinner>
-                        </div>
-                    </template>
-
-                    <template slot="roles" slot-scope="data">
-                        <select class="form-control" v-if="data.item.roles.length > 0" aria-label="Роли пользователя">
-                            <option v-for="(role, index) in data.item.roles" :key="index + data.item.id">{{role.title}}</option>
+                <div class="row align-items-baseline">
+                    <div class="col-sm-6 col-md-4">{{title}}</div>
+                    <div class="col-sm-6 col-md-8 text-sm-right pt-2" v-if="roles.length > 0">
+                        <select class="form-control col-sm-6 col-md-4 d-inline-flex " v-model="selectedRole">
+                            <option value="null">Все роли</option>
+                            <option :value="role" v-for="role in roles">{{role.title}}</option>
                         </select>
-                        <span v-if="data.item.roles.length === 0">Нет ролей</span>
-                    </template>
-                    <template slot="id" slot-scope="data">
-                        <a :href="getEditUrl(data.item)" class="btn btn-outline-secondary">Изменить</a>
-                    </template>
+                    </div>
+                </div>
+            </div>
+            <b-table :busy="isBusy"
+                     :fields="fields"
+                     :items="users"
+                     borderless
+                     id="usersTable"
+                     primary-key="id"
+                     responsive
+                     striped>
+                <template v-slot:table-busy>
+                    <div class="text-center text-info my-2">
+                        <b-spinner class="align-middle"></b-spinner>
+                    </div>
+                </template>
 
-                    <template slot="profile" slot-scope="data">
-                        <a :href="getProfileUrl(data.item)" class="btn btn-primary">Профиль</a>
-                    </template>
-                </b-table>
+                <template slot="roles" slot-scope="data">
+                    <select aria-label="Роли пользователя" class="form-control" v-if="data.item.roles.length > 0">
+                        <option :key="index + data.item.id" v-for="(role, index) in data.item.roles">{{role.title}}
+                        </option>
+                    </select>
+                    <span v-if="data.item.roles.length === 0">Нет ролей</span>
+                </template>
+                <template slot="id" slot-scope="data">
+                    <a :href="getEditUrl(data.item)" class="btn btn-outline-secondary">Изменить</a>
+                </template>
+
+                <template slot="profile" slot-scope="data">
+                    <a :href="getProfileUrl(data.item)" class="btn btn-primary">Профиль</a>
+                </template>
+            </b-table>
 
             <div class="card-footer">
                 <pagination :data="pagination" @pagination-change-page="getUsers"></pagination>
@@ -44,45 +52,65 @@
 <script>
     export default {
         name: "UsersTable",
-        mounted(){
+        mounted() {
             this.getUsers();
         },
         props: {
-            title:{
+            title: {
                 type: String,
                 required: false,
-                default:"Список пользователей"
+                default: "Список пользователей"
             },
-            url:{
+            url: {
                 type: String,
                 required: true
-            }
+            },
+            roles: {
+                type: Array,
+                default: () => []
+            },
         },
-        methods:{
-            getEditUrl(item){
+        methods: {
+            getEditUrl(item) {
                 return `/users/${item.id}/edit`;
             },
-            getProfileUrl(item){
+            getProfileUrl(item) {
                 return `/profile/${item.id}`;
             },
-            getUsers(page = 1){
+            async getUsers(page = 1) {
                 this.isBusy = true;
-                axios.get(this.url + '?page=' + page)
-                    .then(response=>{
-                        this.pagination = response.data;
-                        this.users = response.data.data;
-                        console.log(this.pagination.data[0].name);
-                        this.$nextTick(()=>{
-                            this.isBusy = false;
-                        })
-                    });
+                let action = this.url;
+                if (this.selectedRole)
+                    action = `/concrete/${this.selectedRole.name}/all`;
+                action += '?page=' + page;
+                try {
+                    const response = await axios.get(action);
+                    this.pagination = response.data;
+                    this.users = response.data.data;
+                } catch (e) {
+                    this.$root.showErrorMsg(
+                        'Ошибка загрузки',
+                        'Не удалось загрузить список пользоватейлей. Попробуйте обновить страницу'
+                    )
+
+                }
+
+                this.$nextTick(() => {
+                    this.isBusy = false;
+                })
+            }
+        },
+        watch: {
+            selectedRole() {
+                this.getUsers();
             }
         },
         data() {
             return {
-                pagination:{},
-                users:[],
-                isBusy:false,
+                pagination: {},
+                users: [],
+                selectedRole: null,
+                isBusy: false,
                 fields: {
                     name: {
                         label: 'Имя',
@@ -108,16 +136,16 @@
                         label: 'Роли',
                         sortable: true
                     },
-                    'profile':{
-                        label:'Профиль'
+                    'profile': {
+                        label: 'Профиль'
                     },
-                    id:{
-                        label:'Редактировать'
+                    id: {
+                        label: 'Редактировать'
                     }
                 }
             }
         },
-        components:{
+        components: {
             'Pagination': require('laravel-vue-pagination')
         }
     }

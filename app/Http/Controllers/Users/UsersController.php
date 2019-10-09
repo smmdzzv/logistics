@@ -20,7 +20,23 @@ class UsersController extends Controller
     {
         $this->middleware('auth');
 
-        $this->middleware('roles.allow:admin,director');
+        $except = ['all, index'];
+
+        $this->middleware('roles.allow:admin,director')->except($except);
+        $this->middleware('roles.except:client')->only($except);
+    }
+
+    public function all()
+    {
+        return User::with('roles')->paginate(10);
+    }
+
+    public function index()
+    {
+        $roles = Role::all();
+        $title = "Список пользователей";
+        $url = route('users.all');
+        return view('users.index', compact('roles', 'title', 'url'));
     }
 
     public function create()
@@ -31,6 +47,21 @@ class UsersController extends Controller
         return view('auth/register', compact('branches', 'roles'));
     }
 
+    /**
+     * @return Role[]|array
+     */
+    protected function getRoles()
+    {
+        $roles = array();
+        if (auth()->user()->hasRole('admin'))
+            $roles = Role::all();
+        else
+            $roles = Role::where('name', '!=', 'admin')->get();
+        return $roles;
+    }
+
+    //TODO validation
+
     public function edit(User $user)
     {
         $branches = Branch::all();
@@ -38,8 +69,6 @@ class UsersController extends Controller
         $user->load('roles', 'branch');
         return view('users.edit', compact('branches', 'roles', 'user'));
     }
-
-    //TODO validation
 
     public function store(UserRequest $request)
     {
@@ -61,7 +90,6 @@ class UsersController extends Controller
                 $role->users()->attach($user);
         }
 
-//        return redirect(route('home'));
         return $user;
     }
 
@@ -93,19 +121,6 @@ class UsersController extends Controller
 
         $user->save();
         return redirect(route('home'));
-    }
-
-    /**
-     * @return Role[]|array
-     */
-    protected function getRoles()
-    {
-        $roles = array();
-        if (auth()->user()->hasRole('admin'))
-            $roles = Role::all();
-        else
-            $roles = Role::where('name', '!=', 'admin')->get();
-        return $roles;
     }
 
 }

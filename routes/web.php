@@ -20,8 +20,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+//Users
+Route::get('/users/all', 'users\UsersController@all')->name('users.all');
 Route::resource('users', 'Users\UsersController')->parameters(['users' => 'user']);
-
 Route::get('/concrete/{roleName}/{action}', 'Users\ConcreteUsersRoutesController');
 
 //Profile

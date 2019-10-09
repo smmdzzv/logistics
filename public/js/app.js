@@ -12539,6 +12539,22 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -12596,6 +12612,12 @@ __webpack_require__.r(__webpack_exports__);
     url: {
       type: String,
       required: true
+    },
+    roles: {
+      type: Array,
+      "default": function _default() {
+        return [];
+      }
     }
   },
   methods: {
@@ -12605,26 +12627,71 @@ __webpack_require__.r(__webpack_exports__);
     getProfileUrl: function getProfileUrl(item) {
       return "/profile/".concat(item.id);
     },
-    getUsers: function getUsers() {
-      var _this = this;
+    getUsers: function () {
+      var _getUsers = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var _this = this;
 
-      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-      this.isBusy = true;
-      axios.get(this.url + '?page=' + page).then(function (response) {
-        _this.pagination = response.data;
-        _this.users = response.data.data;
-        console.log(_this.pagination.data[0].name);
+        var page,
+            action,
+            response,
+            _args = arguments;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                page = _args.length > 0 && _args[0] !== undefined ? _args[0] : 1;
+                this.isBusy = true;
+                action = this.url;
+                if (this.selectedRole) action = "/concrete/".concat(this.selectedRole.name, "/all");
+                action += '?page=' + page;
+                _context.prev = 5;
+                _context.next = 8;
+                return axios.get(action);
 
-        _this.$nextTick(function () {
-          _this.isBusy = false;
-        });
-      });
+              case 8:
+                response = _context.sent;
+                this.pagination = response.data;
+                this.users = response.data.data;
+                _context.next = 16;
+                break;
+
+              case 13:
+                _context.prev = 13;
+                _context.t0 = _context["catch"](5);
+                this.$root.showErrorMsg('Ошибка загрузки', 'Не удалось загрузить список пользоватейлей. Попробуйте обновить страницу');
+
+              case 16:
+                this.$nextTick(function () {
+                  _this.isBusy = false;
+                });
+
+              case 17:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[5, 13]]);
+      }));
+
+      function getUsers() {
+        return _getUsers.apply(this, arguments);
+      }
+
+      return getUsers;
+    }()
+  },
+  watch: {
+    selectedRole: function selectedRole() {
+      this.getUsers();
     }
   },
   data: function data() {
     return {
       pagination: {},
       users: [],
+      selectedRole: null,
       isBusy: false,
       fields: {
         name: {
@@ -83043,19 +83110,74 @@ var render = function() {
       { staticClass: "card shadow" },
       [
         _c("div", { staticClass: "card-header" }, [
-          _vm._v("\n            " + _vm._s(_vm.title) + "\n        ")
+          _c("div", { staticClass: "row align-items-baseline" }, [
+            _c("div", { staticClass: "col-sm-6 col-md-4" }, [
+              _vm._v(_vm._s(_vm.title))
+            ]),
+            _vm._v(" "),
+            _vm.roles.length > 0
+              ? _c(
+                  "div",
+                  { staticClass: "col-sm-6 col-md-8 text-sm-right pt-2" },
+                  [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.selectedRole,
+                            expression: "selectedRole"
+                          }
+                        ],
+                        staticClass:
+                          "form-control col-sm-6 col-md-4 d-inline-flex ",
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.selectedRole = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          }
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "null" } }, [
+                          _vm._v("Все роли")
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.roles, function(role) {
+                          return _c("option", { domProps: { value: role } }, [
+                            _vm._v(_vm._s(role.title))
+                          ])
+                        })
+                      ],
+                      2
+                    )
+                  ]
+                )
+              : _vm._e()
+          ])
         ]),
         _vm._v(" "),
         _c("b-table", {
           attrs: {
-            fields: _vm.fields,
-            id: "usersTable",
-            items: _vm.users,
             busy: _vm.isBusy,
-            striped: "",
+            fields: _vm.fields,
+            items: _vm.users,
             borderless: "",
+            id: "usersTable",
             "primary-key": "id",
-            responsive: ""
+            responsive: "",
+            striped: ""
           },
           scopedSlots: _vm._u([
             {
@@ -83085,7 +83207,9 @@ var render = function() {
                         },
                         _vm._l(data.item.roles, function(role, index) {
                           return _c("option", { key: index + data.item.id }, [
-                            _vm._v(_vm._s(role.title))
+                            _vm._v(
+                              _vm._s(role.title) + "\n                    "
+                            )
                           ])
                         }),
                         0
