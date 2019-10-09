@@ -181,27 +181,27 @@
                 storedItems: [],
                 isBusy: false,
                 fields: {
-                    'item.name': {
+                    'info.item.name': {
                         label: 'Имя',
                         sortable: true
                     },
-                    width: {
+                    'info.width': {
                         label: 'Ширина',
                         sortable: true
                     },
-                    height: {
+                    'info.height': {
                         label: 'Высота',
                         sortable: true
                     },
-                    length: {
+                    'info.length': {
                         label: 'Длина',
                         sortable: true
                     },
-                    count: {
+                    'info.count': {
                         label: 'Кол-во',
                         sortable: true
                     },
-                    'owner.name': {
+                    'info.owner.name': {
                         label: 'Владелец',
                         sortable: true
                     },

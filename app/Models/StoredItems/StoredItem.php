@@ -11,7 +11,7 @@ class StoredItem extends BaseModel
     protected $guarded = [];
 
     public function info(){
-        return $this->belongsTo(StoredItemInfo::class);
+        return $this->belongsTo(StoredItemInfo::class, 'stored_item_info_id');
     }
 
     public function storageHistory(){

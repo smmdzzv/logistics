@@ -84,25 +84,25 @@ class User extends Authenticatable
     {
         return $this->hasOne(Branch::class, 'director');
     }
-
-    /**
-     * @param string|array $roles
-     * @return bool
-     */
-    public function authorizeRoles($roles)
-    {
-        if (is_array($roles)) {
-            return $this->hasAnyRole($roles) ||
-                abort(401, 'This action is unauthorized.');
-        }
-
-        return $this->hasRole($roles) ||
-            abort(401, 'This action is unauthorized.');
-    }
+//=
+//    /**
+//     * @param string|array $roles
+//     * @return bool
+//     */
+//    public function authorizeRoles($roles)
+//    {
+//        if (is_array($roles)) {
+//            return $this->hasAnyRole($roles) ||
+//                abort(401, 'Доступ запрещен');
+//        }
+//
+//        return $this->hasRole($roles) ||
+//            abort(401, 'Доступ запрещен');
+//    }
 
     public function hasAnyRole($roles)
     {
-        return null !== $this->roles()->whrerIn('name', $roles)->first();
+        return null !== $this->roles()->whereIn('name', $roles)->first();
     }
 
     public function roles()

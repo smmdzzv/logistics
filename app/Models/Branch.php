@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Branches\Storage;
 use App\Models\StoredItems\StoredItem;
+use App\Models\StoredItems\StoredItemInfo;
 use App\User;
 
 /**
@@ -27,8 +28,12 @@ class Branch extends BaseModel
         return $this->belongsTo(Country::class, 'country');
     }
 
+    public function storedItemInfos(){
+        return $this->hasMany(StoredItemInfo::class);
+    }
+
     public function storedItems(){
-        return $this->hasMany(StoredItem::class);
+        return $this->hasManyThrough(StoredItem::class, StoredItemInfo::class);
     }
 
     public function tariffPriceHistories(){

@@ -18,16 +18,12 @@ class OrdersController extends Controller
     {
         $this->middleware('auth');
 
-        $this->middleware(function ($request, $next) {
-            if (!auth()->user()->branch)
-                abort(403, 'Для работы с заказами необходимо быть сотрудником филиала.');
-            return $next($request);
-        });
+        $this->middleware('user.branch');
 
         $adminOnly = ['edit, update, destroy'];
 
-        $this->middleware('role:employee,manager,director')->except($adminOnly);
-        $this->middleware('role:admin')->only($adminOnly);
+        $this->middleware('roles.allow:admin')->only($adminOnly);
+        $this->middleware('roles.deny:client')->except($adminOnly);
     }
 
     public function index()
@@ -70,7 +66,8 @@ class OrdersController extends Controller
                 'weight' => $itemData['weight'],
                 'count' => $itemData['count'],
                 'item_id' => $itemData['item']['id'],
-                'ownerId' => $data->client->id
+                'ownerId' => $data->client->id,
+                'branch_id' => $data->branch->id
             ]);
         }
 
