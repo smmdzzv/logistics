@@ -4,27 +4,14 @@ namespace App\Models\Users;
 
 use App\Models\Order;
 use App\Models\StoredItems\StoredItem;
-use App\Models\Trip;
-use App\User;
-use Illuminate\Database\Eloquent\Builder;
 
-class Client extends User
+class Client extends RoleUser
 {
-    /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    protected static function boot()
+    public function getRoles()
     {
-        parent::boot();
-
-        //Todo make local
-        static::addGlobalScope('roles', function (Builder $builder) {
-            $builder->whereHas('roles', function ($query) {
-                $query->where('roles.name', 'client');
-            });
-        });
+        return [
+            'client'
+        ];
     }
 
     public function storedItems()
