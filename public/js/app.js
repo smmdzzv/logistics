@@ -80141,17 +80141,17 @@ var render = function() {
           "div",
           { staticClass: "row align-items-baseline" },
           [
-            _c("div", { staticClass: "col-md-4" }, [_vm._v("Заказы")]),
+            _c("div", { staticClass: "col-6 col-md-4" }, [_vm._v("Заказы")]),
             _vm._v(" "),
             _vm.branches
               ? [
                   _c(
                     "label",
                     {
-                      staticClass: "col-md-4 text-right",
+                      staticClass: "col-6 col-md-4 text-right",
                       attrs: { for: "branch" }
                     },
-                    [_vm._v("Филиал")]
+                    [_vm._v("Филиалы")]
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "col-md-4" }, [
