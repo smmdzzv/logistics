@@ -90,7 +90,7 @@ class UsersController extends Controller
                 $role->users()->attach($user);
         }
 
-        return $user;
+        return redirect(route('users.index'));
     }
 
     public function update(UserRequest $request, User $user)
