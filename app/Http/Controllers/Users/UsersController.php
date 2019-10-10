@@ -120,7 +120,7 @@ class UsersController extends Controller
         }
 
         $user->save();
-        return redirect(route('home'));
+        return redirect(route('users.index'));
     }
 
 }
