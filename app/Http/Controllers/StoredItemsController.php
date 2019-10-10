@@ -34,20 +34,4 @@ class StoredItemsController extends Controller
             return $branch->storedItems()->with(['info.owner', 'info.item'])->latest()->paginate(10);
         } else abort(404, 'Филиал не найден');
     }
-
-    public function associateToTrip(Trip $trip)
-    {
-        $storedItems = request()->storedItems;
-        $dissociate = [];
-
-        foreach ($trip->storedItems as $stored) {
-            if (!in_array($stored->id, $storedItems))
-                array_push($dissociate, $stored->id);
-        }
-
-        StoredItem::whereIn('id', $dissociate)->update(['tripId' => null]);
-        StoredItem::whereIn('id', $storedItems)->update(['tripId' => $trip->id]);
-
-        return $trip;
-    }
 }

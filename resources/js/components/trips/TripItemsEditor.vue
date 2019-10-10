@@ -8,7 +8,7 @@
                     </div>
                     <div class="card-body">
                         <p>Количество позиций: {{storedItems.length}}</p>
-                        <p>Количество товаров: {{itemsCount}}</p>
+<!--                        <p>Количество товаров: {{itemsCount}}</p>-->
                         <p>Суммарный вес: <span :class="{'text-danger': totalWeight > maxWeight}">{{totalWeight}}</span>
                             из {{maxWeight}} кг</p>
                         <p>Суммарная кубатура: <span
@@ -64,17 +64,18 @@
         },
         computed: {
             itemsCount: function () {
-                let count = 0;
-                for (let stored of this.storedItems) {
-                    count += stored.count;
-                }
-
-                return count;
+                return this.storedItems.length;
+                // let count = 0;
+                // for (let stored of this.storedItems) {
+                //     count += stored.count;
+                // }
+                //
+                // return count;
             },
             totalWeight() {
                 let total = 0;
                 for (let stored of this.storedItems) {
-                    total += stored.weight * stored.count;
+                    total += stored.info.weight;
                 }
 
                 return total;
@@ -83,7 +84,7 @@
             totalCubage() {
                 let total = 0;
                 for (let stored of this.storedItems) {
-                    total += stored.weight * stored.height * stored.length;
+                    total += stored.info.weight * stored.info.height * stored.info.length;
                 }
 
                 return total;
@@ -113,7 +114,7 @@
                     })
                 };
                 try {
-                    await axios.post('/stored/trip/' + this.trip.id, data);
+                    const response = await axios.post('/trip/' + this.trip.id + '/stored-items', data);
                     window.location = getBaseUrl() + '/trips/' + this.trip.id;
                 } catch (e) {
                     this.$root.showErrorMsg(

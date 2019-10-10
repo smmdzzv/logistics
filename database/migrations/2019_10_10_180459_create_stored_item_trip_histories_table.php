@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateStoredItemsTable extends Migration
+class CreateStoredItemTripHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateStoredItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('stored_items', function (Blueprint $table) {
-            $table->char('id',26)->primary();
-            $table->char('trip_id', 26)->nullable();
-            $table->char('stored_item_info_id',26);
+        Schema::create('stored_item_trip_histories', function (Blueprint $table) {
+            $table->char('id', 26)->unique();
+            $table->char('stored_item_id', 26);
+            $table->char('trip_id', 26);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateStoredItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stored_items');
+        Schema::dropIfExists('stored_item_trip_histories');
     }
 }

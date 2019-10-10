@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Trips;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\TripRequest;
 use App\Models\Branch;
 use App\Models\Car;
@@ -13,7 +14,7 @@ class TripsController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('role:admin');
+        $this->middleware('roles.allow:employee');
     }
 
     public function create()
@@ -34,7 +35,7 @@ class TripsController extends Controller
 
     public function show(Trip $trip)
     {
-        $trip->load('driver', 'car', 'storedItems.owner', 'storedItems.item');
+        $trip->load('driver', 'car', 'storedItems.info.owner', 'storedItems.info.item');
         return view('trips.show', compact('trip'));
     }
 
@@ -56,13 +57,6 @@ class TripsController extends Controller
         $trip->fill($request->all());
         $trip->save();
         return $trip;
-    }
-
-    public function editStoredList(Trip $trip)
-    {
-        $trip->load('storedItems', 'car');
-        $branches = Branch::all();
-        return view('trips.edit-items-list', compact('trip', 'branches'));
     }
 
     public function storedItems(Trip $trip)

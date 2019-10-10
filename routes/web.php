@@ -36,11 +36,14 @@ Route::get('branch/{branch}/orders', 'OrdersController@filteredByBranch');
 Route::get('user/{user}/orders', 'OrdersController@filteredByUser');
 
 //Trips
-Route::get('/trips/{trip}/items/edit', 'TripsController@editStoredList')->name('trip.edit-items');
-Route::get('/trips/{trip}/items', 'TripsController@storedItems')->name('trip.items');
-Route::get('/trips/all', 'TripsController@all');
-Route::resource('trips', 'TripsController',
+//Route::get('/trips/{trip}/items', 'Trips\TripsController@storedItems')->name('trip.items');
+Route::get('/trips/all', 'Trips\TripsController@all');
+Route::resource('trips', 'Trips\TripsController',
     ['except' => ['destroy']]);
+
+Route::get('/trip/{trip}/stored-items/edit', 'Trips\TripStoredItemsController@edit')->name('trip.edit-items');
+Route::get('/trip-stored-items/available', 'Trips\TripStoredItemsController@availableItems');
+Route::post('/trip/{trip}/stored-items', 'Trips\TripStoredItemsController@associateToTrip');
 
 //Payments
 Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
@@ -50,7 +53,7 @@ Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
 Route::get('/stored', 'StoredItemsController@index')->name('stored.index');
 Route::get('/stored/all', 'StoredItemsController@all')->name('stored.all');
 Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch');
-Route::post('/stored/trip/{trip}', 'StoredItemsController@associateToTrip');
+//Route::post('/stored/trip/{trip}', 'StoredItemsController@associateToTrip');
 
 //Settings
 Route::get('/settings', 'AppSettingsController@show');

@@ -11669,7 +11669,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: {
     itemsCount: function itemsCount() {
-      var count = 0;
+      return this.storedItems.length; // let count = 0;
+      // for (let stored of this.storedItems) {
+      //     count += stored.count;
+      // }
+      //
+      // return count;
+    },
+    totalWeight: function totalWeight() {
+      var total = 0;
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
@@ -11677,7 +11685,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       try {
         for (var _iterator = this.storedItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var stored = _step.value;
-          count += stored.count;
+          total += stored.info.weight;
         }
       } catch (err) {
         _didIteratorError = true;
@@ -11694,9 +11702,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       }
 
-      return count;
+      return total;
     },
-    totalWeight: function totalWeight() {
+    totalCubage: function totalCubage() {
       var total = 0;
       var _iteratorNormalCompletion2 = true;
       var _didIteratorError2 = false;
@@ -11705,7 +11713,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       try {
         for (var _iterator2 = this.storedItems[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
           var stored = _step2.value;
-          total += stored.weight * stored.count;
+          total += stored.info.weight * stored.info.height * stored.info.length;
         }
       } catch (err) {
         _didIteratorError2 = true;
@@ -11718,34 +11726,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         } finally {
           if (_didIteratorError2) {
             throw _iteratorError2;
-          }
-        }
-      }
-
-      return total;
-    },
-    totalCubage: function totalCubage() {
-      var total = 0;
-      var _iteratorNormalCompletion3 = true;
-      var _didIteratorError3 = false;
-      var _iteratorError3 = undefined;
-
-      try {
-        for (var _iterator3 = this.storedItems[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-          var stored = _step3.value;
-          total += stored.weight * stored.height * stored.length;
-        }
-      } catch (err) {
-        _didIteratorError3 = true;
-        _iteratorError3 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
-            _iterator3["return"]();
-          }
-        } finally {
-          if (_didIteratorError3) {
-            throw _iteratorError3;
           }
         }
       }
@@ -11773,7 +11753,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _submit = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var data;
+        var data, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -11785,24 +11765,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 };
                 _context.prev = 1;
                 _context.next = 4;
-                return axios.post('/stored/trip/' + this.trip.id, data);
+                return axios.post('/trip/' + this.trip.id + '/stored-items', data);
 
               case 4:
+                response = _context.sent;
                 window.location = getBaseUrl() + '/trips/' + this.trip.id;
-                _context.next = 10;
+                _context.next = 11;
                 break;
 
-              case 7:
-                _context.prev = 7;
+              case 8:
+                _context.prev = 8;
                 _context.t0 = _context["catch"](1);
                 this.$root.showErrorMsg('Ошибка сохранения', 'Не удалось закрепить список товаров за рейсом. Повторите попытку после перезагрузки страницы.');
 
-              case 10:
+              case 11:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[1, 7]]);
+        }, _callee, this, [[1, 8]]);
       }));
 
       function submit() {
@@ -82313,15 +82294,15 @@ var render = function() {
       _c("div", { staticClass: "col-lg-4 mb-4" }, [
         _c("div", { staticClass: "card shadow" }, [
           _c("div", { staticClass: "card-header" }, [
-            _vm._v("\n                    Детали рейса\n                ")
+            _vm._v(
+              "\n                        Детали рейса\n                    "
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c("p", [
               _vm._v("Количество позиций: " + _vm._s(_vm.storedItems.length))
             ]),
-            _vm._v(" "),
-            _c("p", [_vm._v("Количество товаров: " + _vm._s(_vm.itemsCount))]),
             _vm._v(" "),
             _c("p", [
               _vm._v("Суммарный вес: "),
@@ -82331,7 +82312,9 @@ var render = function() {
                 [_vm._v(_vm._s(_vm.totalWeight))]
               ),
               _vm._v(
-                "\n                        из " + _vm._s(_vm.maxWeight) + " кг"
+                "\n                            из " +
+                  _vm._s(_vm.maxWeight) +
+                  " кг"
               )
             ]),
             _vm._v(" "),
@@ -82359,7 +82342,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                                Сохранить\n                            "
+                      "\n                                    Сохранить\n                                "
                     )
                   ]
                 )

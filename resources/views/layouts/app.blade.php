@@ -101,12 +101,12 @@
                                 Рейсы <span class="caret"></span>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="tripsMenuDropdown">
-                                <a class="dropdown-item" href="#">Создать</a>
-                                <a class="dropdown-item" href="#">Список</a>
+                                <a class="dropdown-item" href="{{route('trips.create')}}">Создать рейс</a>
+                                <a class="dropdown-item" href="{{route('trips.index')}}">Список рейсов</a>
                                 <div class="dropdown-divider"></div>
                                 <h6 class="dropdown-header">Машины</h6>
-                                <a class="dropdown-item" href="#">Добавить</a>
-                                <a class="dropdown-item" href="#">Список</a>
+                                <a class="dropdown-item" href="{{route('cars.create')}}">Добавить машину</a>
+                                <a class="dropdown-item" href="{{route('cars.index')}}">Список машин</a>
                             </div>
                         </li>
                         <!--Branches-->
