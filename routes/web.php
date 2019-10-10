@@ -34,7 +34,6 @@ Route::resource('orders', 'OrdersController',
     ['except' => ['delete', 'edit']]);
 Route::get('branch/{branch}/orders', 'OrdersController@filteredByBranch');
 Route::get('user/{user}/orders', 'OrdersController@filteredByUser');
-//Route::get('/orders/{order}', 'OrdersController@show')->name('order.show');
 
 //Trips
 Route::get('/trips/{trip}/items/edit', 'TripsController@editStoredList')->name('trip.edit-items');
@@ -62,14 +61,8 @@ Route::post('/settings/position', 'AppSettingsController@storePosition');
 Route::resource('tariffs', 'TariffsController', [
     'only' => ['index', 'store', 'destroy']
 ])->parameters(['tariffs' => 'tariff']);
-//Route::get('/tariff', "TariffsController@index")->name('tariff.index');
-//Route::post('/tariff/store', "TariffsController@store")->name('tariff.store');
-//Route::delete('/tariff/{tariff}', "TariffsController@delete")->name('tariff.delete');
 
 //Tariff price histories
-//Route::get('/tariff-price-history/', 'TariffPriceHistoriesController@index')->name('pricing.index');
-//Route::get('/tariff-price-history/create', 'TariffPriceHistoriesController@create')->name('pricing.create');
-//Route::post('/tariff-price-history/store', 'TariffPriceHistoriesController@store')->name('pricing.store');
 Route::get('/tariff-price-histories/all', "TariffPriceHistoriesController@all");
 Route::resource('tariff-price-histories', 'TariffPriceHistoriesController', [
     'only' => ['index', 'create', 'store']

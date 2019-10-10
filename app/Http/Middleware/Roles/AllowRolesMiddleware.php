@@ -22,8 +22,10 @@ class AllowRolesMiddleware
         if(in_array('employee',$roles))
         {
             $employee = new Employee();
-            array_merge($roles, $employee->getRoles());
+            $roles = array_merge($roles, $employee->getRoles());
         }
+
+        array_push($roles, 'admin');
 
         if ($user->hasAnyRole($roles))
             return $next($request);

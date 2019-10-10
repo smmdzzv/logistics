@@ -3,7 +3,9 @@
 
 namespace App\Http\Controllers\Users;
 
-class ConcreteUsersRoutesController
+use App\Http\Controllers\Controller;
+
+class ConcreteUsersRoutesController extends Controller
 {
     private $controller;
 
@@ -11,7 +13,7 @@ class ConcreteUsersRoutesController
      * Determines allowed actions and parameters
      */
     private $methodParams = [
-        'all'=> '',
+        'all' => '',
         'filter' => 'userInfo',
         'index' => '',
         'orders' => 'client'
@@ -19,8 +21,10 @@ class ConcreteUsersRoutesController
 
     public function __construct()
     {
-        switch (request()->roleName) {
+        $this->middleware('auth');
+        $this->middleware('roles.allow:employee');
 
+        switch (request()->roleName) {
             case 'client':
                 $this->controller = new ClientsController();
                 break;
@@ -33,11 +37,17 @@ class ConcreteUsersRoutesController
             case 'driver':
                 $this->controller = new DriversController();
                 break;
+            case 'cashier':
+                $this->controller = new CashiersController();
+                break;
             case 'manager':
                 $this->controller = new ManagersController();
                 break;
             case 'director':
                 $this->controller = new DirectorsController();
+                break;
+            case 'admin':
+                $this->controller = new AdminsController();
                 break;
             default:
                 abort(404, "Роль не найдена");

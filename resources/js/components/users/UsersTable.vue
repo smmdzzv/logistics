@@ -88,9 +88,13 @@
                     this.pagination = response.data;
                     this.users = response.data.data;
                 } catch (e) {
+                    let message = 'Не удалось загрузить список пользователей. Повторите попытку после перезагрузки страницы';
+                    if (e.response.status === 403)
+                        message = e.response.data.message;
+
                     this.$root.showErrorMsg(
                         'Ошибка загрузки',
-                        'Не удалось загрузить список пользоватейлей. Попробуйте обновить страницу'
+                        message
                     )
 
                 }
