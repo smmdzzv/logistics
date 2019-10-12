@@ -51,16 +51,6 @@
             <main-paginator :flowable="flowable" :onPageChange="getStoredItems"
                             :pagination="pagination"></main-paginator>
         </div>
-        <!--        <template v-if="lastPage > 1">-->
-        <!--            <div class="card-footer text-center" v-if="flowablePagination && lastPage > currentPage">-->
-        <!--                <button @click="getStoredItems(currentPage+1)" class="btn btn-outline-primary align-middle">-->
-        <!--                    Загрузить еще-->
-        <!--                </button>-->
-        <!--            </div>-->
-        <!--            <div class="card-footer" v-if="!flowablePagination">-->
-        <!--                <pagination :data="pagination" @pagination-change-page="getStoredItems"/>-->
-        <!--            </div>-->
-        <!--        </template>-->
     </div>
 </template>
 
@@ -110,6 +100,15 @@
                 type: Boolean,
                 required: false,
                 default: true
+            },
+            prepareUrl:{
+                type:Function,
+                default:(page,vm) =>{
+                    let action = vm.url;
+                    if (vm.selectedBranch)
+                        action = `/${vm.selectedBranch.id}/stored`;
+                    return action += '?paginate=7&page=' + page;
+                }
             }
         },
         methods: {
@@ -118,10 +117,9 @@
                     return;
                 this.isBusy = true;
 
-                if (this.selectedBranch)
-                    this.action = `/${this.selectedBranch.id}/stored`;
-                this.action += '?paginate=7&page=' + page;
-                axios.get(this.action)
+                let action = this.prepareUrl(page, this);
+
+                axios.get(action)
                     .then(response => {
                         this.pagination = response.data;
                         if (this.flowable)
@@ -178,7 +176,6 @@
             return {
                 selectedBranch: null,
                 selected: [],
-                action: this.url,
                 pagination: {
                     last_page: null,
                     current_page: null
