@@ -34,7 +34,7 @@
                               :striped="false"
                               @onItemsSelected="onItemsSelected"
                               class="shadow"
-                              flowablePagination
+                              flowable
                               selectable/>
             </div>
 

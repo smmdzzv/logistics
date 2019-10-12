@@ -82372,7 +82372,7 @@ var render = function() {
               branches: _vm.branches,
               preselected: _vm.trip.stored_items,
               striped: false,
-              flowablePagination: "",
+              flowable: "",
               selectable: ""
             },
             on: { onItemsSelected: _vm.onItemsSelected }
