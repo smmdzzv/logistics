@@ -11702,7 +11702,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       }
 
-      return total;
+      return Math.round(total * 100) / 100;
     },
     totalCubage: function totalCubage() {
       var total = 0;
@@ -11730,7 +11730,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       }
 
-      return total;
+      return Math.round(total * 100) / 100;
     },
     maxWeight: function maxWeight() {
       return this.trip.car.maxWeight;
@@ -82294,9 +82294,7 @@ var render = function() {
       _c("div", { staticClass: "col-lg-4 mb-4" }, [
         _c("div", { staticClass: "card shadow" }, [
           _c("div", { staticClass: "card-header" }, [
-            _vm._v(
-              "\n                        Детали рейса\n                    "
-            )
+            _vm._v("\n                    Детали рейса\n                ")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
@@ -82312,9 +82310,7 @@ var render = function() {
                 [_vm._v(_vm._s(_vm.totalWeight))]
               ),
               _vm._v(
-                "\n                            из " +
-                  _vm._s(_vm.maxWeight) +
-                  " кг"
+                "\n                        из " + _vm._s(_vm.maxWeight) + " кг"
               )
             ]),
             _vm._v(" "),
@@ -82325,7 +82321,9 @@ var render = function() {
                 { class: { "text-danger": _vm.totalCubage > _vm.maxCubage } },
                 [_vm._v(_vm._s(_vm.totalCubage))]
               ),
-              _vm._v(" из " + _vm._s(_vm.maxCubage) + " м"),
+              _vm._v(
+                " из " + _vm._s(_vm.maxCubage) + "\n                        м"
+              ),
               _c("sup", [_vm._v("3")])
             ])
           ]),
@@ -82342,7 +82340,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                                    Сохранить\n                                "
+                      "\n                                Сохранить\n                            "
                     )
                   ]
                 )

@@ -8,11 +8,11 @@
                     </div>
                     <div class="card-body">
                         <p>Количество позиций: {{storedItems.length}}</p>
-<!--                        <p>Количество товаров: {{itemsCount}}</p>-->
                         <p>Суммарный вес: <span :class="{'text-danger': totalWeight > maxWeight}">{{totalWeight}}</span>
                             из {{maxWeight}} кг</p>
                         <p>Суммарная кубатура: <span
-                            :class="{'text-danger': totalCubage > maxCubage}">{{totalCubage}}</span> из {{maxCubage}} м<sup>3</sup>
+                            :class="{'text-danger': totalCubage > maxCubage}">{{totalCubage}}</span> из {{maxCubage}}
+                            м<sup>3</sup>
                         </p>
                     </div>
                     <div class="card-footer">
@@ -77,8 +77,7 @@
                 for (let stored of this.storedItems) {
                     total += stored.info.weight;
                 }
-
-                return total;
+                return Math.round(total * 100) / 100;
             },
 
             totalCubage() {
@@ -86,8 +85,7 @@
                 for (let stored of this.storedItems) {
                     total += stored.info.weight * stored.info.height * stored.info.length;
                 }
-
-                return total;
+                return Math.round(total * 100) / 100;
             },
             maxWeight() {
                 return this.trip.car.maxWeight
