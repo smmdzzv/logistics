@@ -3,13 +3,17 @@
         <slot name="header">
             <div class="card-header">
                 <div class="row align-items-baseline">
-                    <div class="col-md-6" v-if="branches">Товары на складе</div>
-                    <div class="col-md-6" v-else>Товары на всех складах</div>
+                    <div class="col-6 col-md-4">
+                        <span  v-if="branches">Товары на складе</span>
+                        <span  v-else>Товары на всех складах</span>
+                    </div>
                     <template v-if="branches">
-                        <label class="col-md-4 text-right" for="branch">Филиал</label>
-                        <div class="col-md-2">
+                        <label class="col-6 col-md-4 text-right" for="branch">Филиал</label>
+                        <div class="col-md-4">
                             <select class="form-control custom-select" id="branch" v-model="selectedBranch">
-                                <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}
+                                <option value="null" disabled>--Все склады--</option>
+                                <option :key="branch.id" :value="branch" v-for="branch in branches">
+                                    {{branch.name}}
                                 </option>
                             </select>
                         </div>
@@ -22,15 +26,15 @@
                  :fields="fields"
                  :items="storedItems"
                  :selectable="selectable"
+                 :striped="striped"
+                 :tbody-tr-class="rowClass"
                  @row-clicked="itemSelected"
                  borderless
                  id="usersTable"
                  primary-key="id"
                  responsive
                  select-mode="single"
-                 sticky-header="400px"
-                 :tbody-tr-class="rowClass"
-                 :striped="striped">
+                 sticky-header="400px">
             <template v-slot:table-busy>
                 <div class="text-center text-info my-2">
                     <b-spinner class="align-middle"></b-spinner>
@@ -44,18 +48,19 @@
         </b-table>
 
         <div class="card-footer">
-            <main-paginator :pagination="pagination" :onPageChange="getStoredItems" :flowable="flowable"></main-paginator>
+            <main-paginator :flowable="flowable" :onPageChange="getStoredItems"
+                            :pagination="pagination"></main-paginator>
         </div>
-<!--        <template v-if="lastPage > 1">-->
-<!--            <div class="card-footer text-center" v-if="flowablePagination && lastPage > currentPage">-->
-<!--                <button @click="getStoredItems(currentPage+1)" class="btn btn-outline-primary align-middle">-->
-<!--                    Загрузить еще-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            <div class="card-footer" v-if="!flowablePagination">-->
-<!--                <pagination :data="pagination" @pagination-change-page="getStoredItems"/>-->
-<!--            </div>-->
-<!--        </template>-->
+        <!--        <template v-if="lastPage > 1">-->
+        <!--            <div class="card-footer text-center" v-if="flowablePagination && lastPage > currentPage">-->
+        <!--                <button @click="getStoredItems(currentPage+1)" class="btn btn-outline-primary align-middle">-->
+        <!--                    Загрузить еще-->
+        <!--                </button>-->
+        <!--            </div>-->
+        <!--            <div class="card-footer" v-if="!flowablePagination">-->
+        <!--                <pagination :data="pagination" @pagination-change-page="getStoredItems"/>-->
+        <!--            </div>-->
+        <!--        </template>-->
     </div>
 </template>
 
@@ -63,10 +68,10 @@
     export default {
         name: "StoredTable",
         mounted() {
-            if(this.items)
+            if (this.items)
                 this.storedItems = this.items;
-            if(this.preselected)
-                for(let pre of this.preselected){
+            if (this.preselected)
+                for (let pre of this.preselected) {
                     this.selected.push(pre);
                 }
             this.getStoredItems();
@@ -97,19 +102,19 @@
                 required: false,
                 default: '/stored/all'
             },
-            items:{
+            items: {
                 type: Array,
-                required:false
+                required: false
             },
-            striped:{
-                type:Boolean,
-                required:false,
-                default:true
+            striped: {
+                type: Boolean,
+                required: false,
+                default: true
             }
         },
         methods: {
             getStoredItems(page = 1) {
-                if(this.items)
+                if (this.items)
                     return;
                 this.isBusy = true;
 
@@ -131,7 +136,7 @@
                     });
             },
             itemSelected(item) {
-                if(!this.selectable)
+                if (!this.selectable)
                     return;
                 if (this.isSelected(item)) {
                     this.selected = this.selected.filter(function (stored) {
@@ -211,7 +216,7 @@
                 }
             }
         },
-        components:{
+        components: {
             'MainPaginator': require('../common/MainPaginator.vue').default
         }
     }

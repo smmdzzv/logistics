@@ -10189,6 +10189,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "StoredTable",
   mounted: function mounted() {
@@ -80956,26 +80961,24 @@ var render = function() {
             "div",
             { staticClass: "row align-items-baseline" },
             [
-              _vm.branches
-                ? _c("div", { staticClass: "col-md-6" }, [
-                    _vm._v("Товары на складе")
-                  ])
-                : _c("div", { staticClass: "col-md-6" }, [
-                    _vm._v("Товары на всех складах")
-                  ]),
+              _c("div", { staticClass: "col-6 col-md-4" }, [
+                _vm.branches
+                  ? _c("span", [_vm._v("Товары на складе")])
+                  : _c("span", [_vm._v("Товары на всех складах")])
+              ]),
               _vm._v(" "),
               _vm.branches
                 ? [
                     _c(
                       "label",
                       {
-                        staticClass: "col-md-4 text-right",
+                        staticClass: "col-6 col-md-4 text-right",
                         attrs: { for: "branch" }
                       },
                       [_vm._v("Филиал")]
                     ),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-md-2" }, [
+                    _c("div", { staticClass: "col-md-4" }, [
                       _c(
                         "select",
                         {
@@ -81005,19 +81008,28 @@ var render = function() {
                             }
                           }
                         },
-                        _vm._l(_vm.branches, function(branch) {
-                          return _c(
+                        [
+                          _c(
                             "option",
-                            { key: branch.id, domProps: { value: branch } },
-                            [
-                              _vm._v(
-                                _vm._s(branch.name) +
-                                  "\n                                "
-                              )
-                            ]
-                          )
-                        }),
-                        0
+                            { attrs: { value: "null", disabled: "" } },
+                            [_vm._v("--Все склады--")]
+                          ),
+                          _vm._v(" "),
+                          _vm._l(_vm.branches, function(branch) {
+                            return _c(
+                              "option",
+                              { key: branch.id, domProps: { value: branch } },
+                              [
+                                _vm._v(
+                                  "\n                                " +
+                                    _vm._s(branch.name) +
+                                    "\n                            "
+                                )
+                              ]
+                            )
+                          })
+                        ],
+                        2
                       )
                     ])
                   ]
@@ -81034,14 +81046,14 @@ var render = function() {
           fields: _vm.fields,
           items: _vm.storedItems,
           selectable: _vm.selectable,
+          striped: _vm.striped,
+          "tbody-tr-class": _vm.rowClass,
           borderless: "",
           id: "usersTable",
           "primary-key": "id",
           responsive: "",
           "select-mode": "single",
-          "sticky-header": "400px",
-          "tbody-tr-class": _vm.rowClass,
-          striped: _vm.striped
+          "sticky-header": "400px"
         },
         on: { "row-clicked": _vm.itemSelected },
         scopedSlots: _vm._u([
@@ -81078,9 +81090,9 @@ var render = function() {
         [
           _c("main-paginator", {
             attrs: {
-              pagination: _vm.pagination,
+              flowable: _vm.flowable,
               onPageChange: _vm.getStoredItems,
-              flowable: _vm.flowable
+              pagination: _vm.pagination
             }
           })
         ],
