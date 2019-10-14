@@ -60,7 +60,6 @@
         mounted() {
             if (this.items)
                 this.setItems();
-            console.log(this.selectedItems, this.selected);
             this.getStoredItems();
         },
         props: {
