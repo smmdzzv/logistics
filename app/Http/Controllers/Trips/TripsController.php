@@ -35,7 +35,7 @@ class TripsController extends Controller
 
     public function show(Trip $trip)
     {
-        $trip->load('driver', 'car', 'storedItems.info.owner', 'storedItems.info.item');
+        $trip->load('driver', 'car', 'storedItems.info.owner', 'storedItems.info.item', 'storedItems.storageHistory.storage');
         return view('trips.show', compact('trip'));
     }
 

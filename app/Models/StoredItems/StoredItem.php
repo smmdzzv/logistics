@@ -25,6 +25,10 @@ class StoredItem extends BaseModel
         return $this->hasOne(StorageHistory::class)->latest();
     }
 
+    public function storage(){
+        return $this->stores()->latest()->first();
+    }
+
     public function stores(){
         return $this->belongsToMany(
             Storage::class,

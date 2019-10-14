@@ -29,9 +29,9 @@ class BranchesTableSeeder extends Seeder
             $branch->save();
 
             $storage = new Storage([
-                'name' => 'main'
+                'name' => $name
             ]);
-            $branch->storages()->save($storage);
+            $branch->stores()->save($storage);
         }
     }
 }

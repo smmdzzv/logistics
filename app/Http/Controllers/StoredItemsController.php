@@ -25,13 +25,13 @@ class StoredItemsController extends Controller
 
     public function all()
     {
-        return StoredItem::with(['info.owner', 'info.item'])->latest()->paginate(10);
+        return StoredItem::with('info.owner', 'info.item', 'storageHistory.storage')->latest()->paginate(10);
     }
 
     public function filteredByBranch(Branch $branch)
     {
         if (isset($branch)) {
-            return $branch->storedItems()->with(['info.owner', 'info.item'])->latest()->paginate(10);
+            return $branch->storedItems()->with('info.owner', 'info.item', 'storageHistory.storage')->latest()->paginate(10);
         } else abort(404, 'Филиал не найден');
     }
 }

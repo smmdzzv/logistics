@@ -10195,7 +10195,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "StoredTable",
   mounted: function mounted() {
-    if (this.items) this.setItems();
+    this.setItems();
     this.getStoredItems();
   },
   props: {
@@ -10282,7 +10282,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         if (_this.flowable) items.forEach(function (item) {
           _this.storedItems.push(item);
         });else {
-          _this.storedItems = [].concat(_toConsumableArray(_this.items), _toConsumableArray(items));
+          _this.storedItems = [].concat(_toConsumableArray(_this.storedItems), _toConsumableArray(items));
         }
 
         _this.$nextTick(function () {
@@ -10309,26 +10309,28 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       if (this.isSelected(item)) return 'table-success';else if (this.isInProvidedItems(item)) return 'table-danger';
     },
     setItems: function setItems() {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+      if (this.items) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
 
-      try {
-        for (var _iterator = this.items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _item = _step.value;
-          this.storedItems.push(_item);
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
         try {
-          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-            _iterator["return"]();
+          for (var _iterator = this.items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var item = _step.value;
+            this.storedItems.push(item);
           }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          try {
+            if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+              _iterator["return"]();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
           }
         }
       }
@@ -10340,8 +10342,8 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
         try {
           for (var _iterator2 = this.selectedItems[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var item = _step2.value;
-            if (!this.isInStoredItems(item)) this.storedItems.push(item);
+            var _item = _step2.value;
+            if (!this.isInStoredItems(_item)) this.storedItems.push(_item);
           }
         } catch (err) {
           _didIteratorError2 = true;
@@ -10408,6 +10410,9 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         'info.owner.name': {
           label: 'Владелец',
           sortable: true
+        },
+        'storage_history.storage.name': {
+          label: 'Склад'
         },
         'selected': {
           label: ''

@@ -58,8 +58,7 @@
     export default {
         name: "StoredTable",
         mounted() {
-            if (this.items)
-                this.setItems();
+            this.setItems();
             this.getStoredItems();
         },
         props: {
@@ -95,7 +94,7 @@
             },
             items: {
                 type: Array,
-                required: false
+                required: false,
             },
             striped: {
                 type: Boolean,
@@ -111,9 +110,9 @@
                     return action += '?paginate=7&page=' + page;
                 }
             },
-            highlightRows:{
-                type:Boolean,
-                default:false
+            highlightRows: {
+                type: Boolean,
+                default: false
             }
         },
         methods: {
@@ -150,7 +149,7 @@
                                 this.storedItems.push(item);
                             });
                         else {
-                            this.storedItems = [...this.items, ...items];
+                            this.storedItems = [...this.storedItems, ...items];
                         }
                         this.$nextTick(() => {
                             this.isBusy = false;
@@ -179,9 +178,10 @@
                     return 'table-danger';
             },
             setItems() {
-                for (let item of this.items) {
-                    this.storedItems.push(item);
-                }
+                if (this.items)
+                    for (let item of this.items) {
+                        this.storedItems.push(item);
+                    }
 
                 if (this.selectedItems)
                     for (let item of this.selectedItems) {
@@ -238,6 +238,9 @@
                     'info.owner.name': {
                         label: 'Владелец',
                         sortable: true
+                    },
+                    'storage_history.storage.name': {
+                        label: 'Склад'
                     },
                     'selected': {
                         label: ''

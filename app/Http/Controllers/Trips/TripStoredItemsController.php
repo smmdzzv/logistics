@@ -72,12 +72,12 @@ class TripStoredItemsController extends Controller
     public function availableItems()
     {
         $paginate = request()->input('paginate') ?? 10;
-        return StoredItem::with('info.owner', 'info.item')->whereDoesntHave('tripHistory')->paginate($paginate);
+        return StoredItem::whereDoesntHave('tripHistory')->with('info.owner', 'info.item', 'storageHistory.storage')->paginate($paginate);
     }
 
     public function availableItemsAtBranch(Branch $branch)
     {
         $paginate = request()->input('paginate') ?? 10;
-        return $branch->stores()->first()->storedItems()->whereDoesntHave('tripHistory')->with('info.owner', 'info.item')->paginate($paginate);
+        return $branch->stores()->first()->storedItems()->whereDoesntHave('tripHistory')->with('info.owner', 'info.item', 'storageHistory.storage')->paginate($paginate);
     }
 }

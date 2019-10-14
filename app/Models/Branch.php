@@ -50,6 +50,6 @@ class Branch extends BaseModel
     }
 
     public function mainStorage(){
-        return $this->hasOne(Storage::class)->where('name', 'main');
+        return $this->hasOne(Storage::class);
     }
 }
