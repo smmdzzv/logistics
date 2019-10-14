@@ -10196,7 +10196,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   name: "StoredTable",
   mounted: function mounted() {
     if (this.items) this.setItems();
-    console.log(this.selectedItems, this.selected);
     this.getStoredItems();
   },
   props: {
@@ -10248,6 +10247,10 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         if (vm.selectedBranch) action = "/".concat(vm.selectedBranch.id, "/stored");
         return action += '?paginate=7&page=' + page;
       }
+    },
+    highlightRows: {
+      type: Boolean,
+      "default": false
     }
   },
   methods: {
@@ -10302,7 +10305,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       });
     },
     rowClass: function rowClass(item, type) {
-      if (!item) return;
+      if (!this.highlightRows || !item) return;
       if (this.isSelected(item)) return 'table-success';else if (this.isInProvidedItems(item)) return 'table-danger';
     },
     setItems: function setItems() {
@@ -11702,6 +11705,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "TripItemsEditor",
   props: {
@@ -11798,10 +11802,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     onItemSelected: function onItemSelected(item) {
-      this.storedItems.push(item); // this.storedItems.splice(0, this.storedItems.length);
-      // this.storedItems = items.filter(function () {
-      //     return true;
-      // });
+      this.storedItems.push(item);
     },
     onItemUnselected: function onItemUnselected(item) {
       this.storedItems = this.storedItems.filter(function (stored) {
@@ -11854,7 +11855,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     prepareUrl: function prepareUrl(page, vm) {
       var action = "/trip/stored-items/available";
       if (vm.selectedBranch) action = "/trip/".concat(vm.selectedBranch.id, "/stored-items/available");
-      return action += '?paginate=2&page=' + page;
+      return action += '?paginate=7&page=' + page;
     }
   }
 });
@@ -82429,6 +82430,7 @@ var render = function() {
               prepareUrl: _vm.prepareUrl,
               selectedItems: _vm.storedItems,
               flowable: "",
+              highlightRows: "",
               selectable: ""
             },
             on: {

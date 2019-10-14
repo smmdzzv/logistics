@@ -110,6 +110,10 @@
                         action = `/${vm.selectedBranch.id}/stored`;
                     return action += '?paginate=7&page=' + page;
                 }
+            },
+            highlightRows:{
+                type:Boolean,
+                default:false
             }
         },
         methods: {
@@ -168,7 +172,7 @@
                 });
             },
             rowClass(item, type) {
-                if (!item) return;
+                if (!this.highlightRows || !item) return;
                 if (this.isSelected(item))
                     return 'table-success';
                 else if (this.isInProvidedItems(item))

@@ -37,6 +37,7 @@
                               @onItemUnselected="onItemUnselected"
                               class="shadow"
                               flowable
+                              highlightRows
                               selectable/>
             </div>
 
@@ -103,11 +104,6 @@
         methods: {
             onItemSelected(item) {
                 this.storedItems.push(item)
-                // this.storedItems.splice(0, this.storedItems.length);
-
-                // this.storedItems = items.filter(function () {
-                //     return true;
-                // });
             },
             onItemUnselected(item) {
                 this.storedItems = this.storedItems.filter(function (stored) {
