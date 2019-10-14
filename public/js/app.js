@@ -10251,9 +10251,17 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
   },
   methods: {
+    // Checks if item in all stored items array
     isInStoredItems: function isInStoredItems(item) {
-      return this.storedItems.find(function (selected) {
-        return selected.id === item.id;
+      return this.storedItems.find(function (stored) {
+        return stored.id === item.id;
+      });
+    },
+    // Checks if item in provided list stored items,
+    // which are items belonging to certain trip
+    isInProvidedItems: function isInProvidedItems(item) {
+      return this.items.find(function (stored) {
+        return stored.id === item.id;
       });
     },
     getStoredItems: function getStoredItems() {
@@ -10283,12 +10291,8 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       if (!this.selectable) return;
 
       if (this.isSelected(item)) {
-        // this.selected = this.selected.filter(function (stored) {
-        //     return stored.id !== item.id
-        // })
         return this.$emit('onItemUnselected', item);
       } else {
-        // this.selected.push(item)
         return this.$emit('onItemSelected', item);
       }
     },
@@ -10299,7 +10303,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     },
     rowClass: function rowClass(item, type) {
       if (!item) return;
-      if (this.isSelected(item)) return 'table-success';
+      if (this.isSelected(item)) return 'table-success';else if (this.isInProvidedItems(item)) return 'table-danger';
     },
     setItems: function setItems() {
       var _iteratorNormalCompletion = true;
@@ -11850,7 +11854,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     prepareUrl: function prepareUrl(page, vm) {
       var action = "/trip/stored-items/available";
       if (vm.selectedBranch) action = "/trip/".concat(vm.selectedBranch.id, "/stored-items/available");
-      return action += '?paginate=7&page=' + page;
+      return action += '?paginate=2&page=' + page;
     }
   }
 });

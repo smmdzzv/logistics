@@ -4,8 +4,8 @@
             <div class="card-header">
                 <div class="row align-items-baseline">
                     <div class="col-6 col-md-4">
-                        <span  v-if="branches">Товары на складе</span>
-                        <span  v-else>Товары на всех складах</span>
+                        <span v-if="branches">Товары на складе</span>
+                        <span v-else>Товары на всех складах</span>
                     </div>
                     <template v-if="branches">
                         <label class="col-6 col-md-4 text-right" for="branch">Филиал</label>
@@ -79,10 +79,10 @@
                 required: false,
                 default: false
             },
-            loadData:{
-                type:Boolean,
+            loadData: {
+                type: Boolean,
                 required: false,
-                default:true
+                default: true
             },
             selectedItems: {
                 type: Array,
@@ -103,9 +103,9 @@
                 required: false,
                 default: true
             },
-            prepareUrl:{
-                type:Function,
-                default:(page,vm) =>{
+            prepareUrl: {
+                type: Function,
+                default: (page, vm) => {
                     let action = vm.url;
                     if (vm.selectedBranch)
                         action = `/${vm.selectedBranch.id}/stored`;
@@ -114,13 +114,21 @@
             }
         },
         methods: {
-            isInStoredItems(item){
-                return this.storedItems.find(function (selected) {
-                    return selected.id === item.id;
+            // Checks if item in all stored items array
+            isInStoredItems(item) {
+                return this.storedItems.find(function (stored) {
+                    return stored.id === item.id;
+                });
+            },
+            // Checks if item in provided list stored items,
+            // which are items belonging to certain trip
+            isInProvidedItems(item) {
+                return this.items.find(function (stored) {
+                    return stored.id === item.id;
                 });
             },
             getStoredItems(page = 1) {
-                if(!this.loadData)
+                if (!this.loadData)
                     return;
 
                 this.isBusy = true;
@@ -131,14 +139,14 @@
                     .then(response => {
                         this.pagination = response.data;
                         let items = response.data.data.filter(item => {
-                                return !this.isInStoredItems(item)
-                            });
+                            return !this.isInStoredItems(item)
+                        });
 
                         if (this.flowable)
                             items.forEach(item => {
                                 this.storedItems.push(item);
                             });
-                        else{
+                        else {
                             this.storedItems = [...this.items, ...items];
                         }
                         this.$nextTick(() => {
@@ -150,12 +158,8 @@
                 if (!this.selectable)
                     return;
                 if (this.isSelected(item)) {
-                    // this.selected = this.selected.filter(function (stored) {
-                    //     return stored.id !== item.id
-                    // })
                     return this.$emit('onItemUnselected', item);
                 } else {
-                    // this.selected.push(item)
                     return this.$emit('onItemSelected', item);
                 }
             },
@@ -166,16 +170,19 @@
             },
             rowClass(item, type) {
                 if (!item) return;
-                if (this.isSelected(item)) return 'table-success'
+                if (this.isSelected(item))
+                    return 'table-success';
+                else if (this.isInProvidedItems(item))
+                    return 'table-danger';
             },
-            setItems(){
+            setItems() {
                 for (let item of this.items) {
                     this.storedItems.push(item);
                 }
 
-                if(this.selectedItems)
-                    for(let item of this.selectedItems){
-                        if(!this.isInStoredItems(item))
+                if (this.selectedItems)
+                    for (let item of this.selectedItems) {
+                        if (!this.isInStoredItems(item))
                             this.storedItems.push(item);
                     }
             }
