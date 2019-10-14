@@ -4,6 +4,8 @@ namespace App\Models\StoredItems;
 
 
 use App\Models\BaseModel;
+use App\Models\Branch;
+use App\Models\Branches\Storage;
 use App\Models\Trip;
 use App\StoredItems\StorageHistory;
 
@@ -15,17 +17,23 @@ class StoredItem extends BaseModel
         return $this->belongsTo(StoredItemInfo::class, 'stored_item_info_id');
     }
 
-    public function storageHistory(){
+    public function storageHistories(){
         return $this->hasMany(StorageHistory::class);
     }
 
-    public function storage(){
+    public function storageHistory(){
         return $this->hasOne(StorageHistory::class)->latest();
     }
 
-//    public function trips(){
-//        return $this->hasManyThrough(Trip::class, StoredItemTripHistory::class);
-//    }
+    public function stores(){
+        return $this->belongsToMany(
+            Storage::class,
+            'storage_histories',
+            'stored_item_id',
+            'storage_id')
+            ->using('App\Models\Pivots\BasePivot')
+            ->withTimestamps();
+    }
 
     public function trips()
     {
@@ -38,11 +46,11 @@ class StoredItem extends BaseModel
             ->withTimestamps();
     }
 
-    public function tripHistory(){
-        return $this->hasMany(StoredItemTripHistory::class);
+    public function tripHistories(){
+        return $this->hasMany(StoredItemTripHistory::class)->withTrashed();
     }
 
-//    public function activeTrip(){
-//        return $this->hasOneThrough(Trip::class, StoredItemTripHistory::class)->latest();
-//    }
+    public function tripHistory(){
+        return $this->hasOne(StoredItemTripHistory::class)->latest();
+    }
 }

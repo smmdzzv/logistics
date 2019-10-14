@@ -11,7 +11,7 @@
                         <label class="col-6 col-md-4 text-right" for="branch">Филиал</label>
                         <div class="col-md-4">
                             <select class="form-control custom-select" id="branch" v-model="selectedBranch">
-                                <option value="null" disabled>--Все склады--</option>
+                                <option :value="null">--Все склады--</option>
                                 <option :key="branch.id" :value="branch" v-for="branch in branches">
                                     {{branch.name}}
                                 </option>
@@ -59,11 +59,8 @@
         name: "StoredTable",
         mounted() {
             if (this.items)
-                this.storedItems = this.items;
-            if (this.preselected)
-                for (let pre of this.preselected) {
-                    this.selected.push(pre);
-                }
+                this.setItems();
+            console.log(this.selectedItems, this.selected);
             this.getStoredItems();
         },
         props: {
@@ -82,7 +79,12 @@
                 required: false,
                 default: false
             },
-            preselected: {
+            loadData:{
+                type:Boolean,
+                required: false,
+                default:true
+            },
+            selectedItems: {
                 type: Array,
                 required: false,
                 default: () => []
@@ -112,9 +114,15 @@
             }
         },
         methods: {
+            isInStoredItems(item){
+                return this.storedItems.find(function (selected) {
+                    return selected.id === item.id;
+                });
+            },
             getStoredItems(page = 1) {
-                if (this.items)
+                if(!this.loadData)
                     return;
+
                 this.isBusy = true;
 
                 let action = this.prepareUrl(page, this);
@@ -122,12 +130,17 @@
                 axios.get(action)
                     .then(response => {
                         this.pagination = response.data;
+                        let items = response.data.data.filter(item => {
+                                return !this.isInStoredItems(item)
+                            });
+
                         if (this.flowable)
-                            response.data.data.forEach(item => {
+                            items.forEach(item => {
                                 this.storedItems.push(item);
                             });
-                        else
-                            this.storedItems = response.data.data;
+                        else{
+                            this.storedItems = [...this.items, ...items];
+                        }
                         this.$nextTick(() => {
                             this.isBusy = false;
                         })
@@ -137,23 +150,34 @@
                 if (!this.selectable)
                     return;
                 if (this.isSelected(item)) {
-                    this.selected = this.selected.filter(function (stored) {
-                        return stored.id !== item.id
-                    })
+                    // this.selected = this.selected.filter(function (stored) {
+                    //     return stored.id !== item.id
+                    // })
+                    return this.$emit('onItemUnselected', item);
                 } else {
-                    this.selected.push(item)
+                    // this.selected.push(item)
+                    return this.$emit('onItemSelected', item);
                 }
-
-                return this.$emit('onItemsSelected', this.selected);
             },
             isSelected(item) {
-                return this.selected.find(function (selected) {
+                return this.selectedItems.find(function (selected) {
                     return selected.id === item.id;
                 });
             },
             rowClass(item, type) {
                 if (!item) return;
                 if (this.isSelected(item)) return 'table-success'
+            },
+            setItems(){
+                for (let item of this.items) {
+                    this.storedItems.push(item);
+                }
+
+                if(this.selectedItems)
+                    for(let item of this.selectedItems){
+                        if(!this.isInStoredItems(item))
+                            this.storedItems.push(item);
+                    }
             }
         },
         computed: {
@@ -166,16 +190,14 @@
         },
         watch: {
             selectedBranch: function () {
-                this.selected.splice(0, this.selected.length);
                 this.storedItems.splice(0, this.storedItems.length);
-                this.$emit('onItemsSelected', this.selected);
+                this.setItems();
                 this.getStoredItems();
-            }
+            },
         },
         data() {
             return {
                 selectedBranch: null,
-                selected: [],
                 pagination: {
                     last_page: null,
                     current_page: null
@@ -199,8 +221,8 @@
                         label: 'Длина',
                         sortable: true
                     },
-                    'info.count': {
-                        label: 'Кол-во',
+                    'info.weight': {
+                        label: 'Вес',
                         sortable: true
                     },
                     'info.owner.name': {

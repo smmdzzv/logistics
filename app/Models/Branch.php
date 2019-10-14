@@ -32,6 +32,7 @@ class Branch extends BaseModel
         return $this->hasMany(StoredItemInfo::class);
     }
 
+    //TODO check this
     public function storedItems(){
         return $this->hasManyThrough(StoredItem::class, StoredItemInfo::class);
     }
@@ -44,7 +45,7 @@ class Branch extends BaseModel
         return $this->hasMany(Order::class, 'branchId');
     }
 
-    public function storages(){
+    public function stores(){
         return $this->hasMany(Storage::class);
     }
 

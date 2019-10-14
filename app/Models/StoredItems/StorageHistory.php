@@ -3,6 +3,7 @@
 namespace App\StoredItems;
 
 use App\Models\BaseModel;
+use App\Models\Branch;
 use App\Models\Branches\Storage;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Users\Employee;
@@ -14,6 +15,10 @@ class StorageHistory extends BaseModel
 
     public function storage(){
         return $this->belongsTo(Storage::class);
+    }
+
+    public function branch(){
+        return $this->hasOneThrough(Branch::class, Storage::class);
     }
 
     public function storedItem(){

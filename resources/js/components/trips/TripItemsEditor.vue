@@ -7,7 +7,7 @@
                         Детали рейса
                     </div>
                     <div class="card-body">
-                        <p>Количество позиций: {{storedItems.length}}</p>
+                        <p>Количество позиций: {{itemsCount}}</p>
                         <p>Суммарный вес: <span :class="{'text-danger': totalWeight > maxWeight}">{{totalWeight}}</span>
                             из {{maxWeight}} кг</p>
                         <p>Суммарная кубатура: <span
@@ -30,9 +30,11 @@
 
             <div class="col-lg-8">
                 <stored-table :branches="branches"
-                              :preselected="trip.stored_items"
-                              :striped="false"
-                              @onItemsSelected="onItemsSelected"
+                              :items="trip.stored_items"
+                              :prepareUrl="prepareUrl"
+                              :selectedItems="storedItems"
+                              @onItemSelected="onItemSelected"
+                              @onItemUnselected="onItemUnselected"
                               class="shadow"
                               flowable
                               selectable/>
@@ -56,21 +58,22 @@
                 required: true
             }
         },
+        mounted() {
+            // this.storedItems = this.trip.stored_items.filter(function () {
+            //     return true;
+            // });
+        },
         data() {
             return {
-                storedItems: this.trip.stored_items,
+                storedItems: this.trip.stored_items.filter(function () {
+                    return true;
+                }),
                 isSubmitting: false
             }
         },
         computed: {
             itemsCount: function () {
                 return this.storedItems.length;
-                // let count = 0;
-                // for (let stored of this.storedItems) {
-                //     count += stored.count;
-                // }
-                //
-                // return count;
             },
             totalWeight() {
                 let total = 0;
@@ -98,12 +101,18 @@
             }
         },
         methods: {
-            onItemsSelected(items) {
-                this.storedItems.splice(0, this.storedItems.length);
+            onItemSelected(item) {
+                this.storedItems.push(item)
+                // this.storedItems.splice(0, this.storedItems.length);
 
-                this.storedItems = items.filter(function () {
-                    return true;
-                });
+                // this.storedItems = items.filter(function () {
+                //     return true;
+                // });
+            },
+            onItemUnselected(item) {
+                this.storedItems = this.storedItems.filter(function (stored) {
+                    return stored.id !== item.id
+                })
             },
             async submit() {
                 let data = {
@@ -120,6 +129,12 @@
                         'Не удалось закрепить список товаров за рейсом. Повторите попытку после перезагрузки страницы.'
                     );
                 }
+            },
+            prepareUrl(page, vm) {
+                let action = `/trip/stored-items/available`;
+                if (vm.selectedBranch)
+                    action = `/trip/${vm.selectedBranch.id}/stored-items/available`;
+                return action += '?paginate=7&page=' + page;
             }
         }
     }

@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="col-lg-8">
-                <stored-table class="shadow" :items="{{$trip->storedItems}}" :selectable="false">
+                <stored-table class="shadow" :load-data="false" :items="{{$trip->storedItems}}" :selectable="false">
                     <template v-slot:header>
                         <div class="card-header text-right">
                             <a href="{{route('trip.edit-items', $trip->id)}}">Изменить список товаров</a>

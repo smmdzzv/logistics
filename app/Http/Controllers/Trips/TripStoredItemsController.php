@@ -64,13 +64,20 @@ class TripStoredItemsController extends Controller
 
     public function edit(Trip $trip)
     {
-        $trip->load('storedItems.info.item', 'car');
+        $trip->load('storedItems.info.item', 'storedItems.info.owner', 'car');
         $branches = Branch::all();
         return view('trips.edit-items-list', compact('trip', 'branches'));
     }
 
     public function availableItems()
     {
-        return StoredItem::whereDoesntHave('activeTripHistory')->get();
+        $paginate = request()->input('paginate') ?? 10;
+        return StoredItem::with('info.owner', 'info.item')->whereDoesntHave('tripHistory')->paginate($paginate);
+    }
+
+    public function availableItemsAtBranch(Branch $branch)
+    {
+        $paginate = request()->input('paginate') ?? 10;
+        return $branch->stores()->first()->storedItems()->whereDoesntHave('tripHistory')->with('info.owner', 'info.item')->paginate($paginate);
     }
 }

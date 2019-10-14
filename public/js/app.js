@@ -10128,16 +10128,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 //
 //
 //
@@ -10197,34 +10195,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "StoredTable",
   mounted: function mounted() {
-    if (this.items) this.storedItems = this.items;
-
-    if (this.preselected) {
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = this.preselected[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var pre = _step.value;
-          this.selected.push(pre);
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-            _iterator["return"]();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-    }
-
+    if (this.items) this.setItems();
+    console.log(this.selectedItems, this.selected);
     this.getStoredItems();
   },
   props: {
@@ -10243,7 +10215,12 @@ __webpack_require__.r(__webpack_exports__);
       required: false,
       "default": false
     },
-    preselected: {
+    loadData: {
+      type: Boolean,
+      required: false,
+      "default": true
+    },
+    selectedItems: {
       type: Array,
       required: false,
       "default": function _default() {
@@ -10263,22 +10240,39 @@ __webpack_require__.r(__webpack_exports__);
       type: Boolean,
       required: false,
       "default": true
+    },
+    prepareUrl: {
+      type: Function,
+      "default": function _default(page, vm) {
+        var action = vm.url;
+        if (vm.selectedBranch) action = "/".concat(vm.selectedBranch.id, "/stored");
+        return action += '?paginate=7&page=' + page;
+      }
     }
   },
   methods: {
+    isInStoredItems: function isInStoredItems(item) {
+      return this.storedItems.find(function (selected) {
+        return selected.id === item.id;
+      });
+    },
     getStoredItems: function getStoredItems() {
       var _this = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-      if (this.items) return;
+      if (!this.loadData) return;
       this.isBusy = true;
-      if (this.selectedBranch) this.action = "/".concat(this.selectedBranch.id, "/stored");
-      this.action += '?paginate=7&page=' + page;
-      axios.get(this.action).then(function (response) {
+      var action = this.prepareUrl(page, this);
+      axios.get(action).then(function (response) {
         _this.pagination = response.data;
-        if (_this.flowable) response.data.data.forEach(function (item) {
+        var items = response.data.data.filter(function (item) {
+          return !_this.isInStoredItems(item);
+        });
+        if (_this.flowable) items.forEach(function (item) {
           _this.storedItems.push(item);
-        });else _this.storedItems = response.data.data;
+        });else {
+          _this.storedItems = [].concat(_toConsumableArray(_this.items), _toConsumableArray(items));
+        }
 
         _this.$nextTick(function () {
           _this.isBusy = false;
@@ -10289,23 +10283,74 @@ __webpack_require__.r(__webpack_exports__);
       if (!this.selectable) return;
 
       if (this.isSelected(item)) {
-        this.selected = this.selected.filter(function (stored) {
-          return stored.id !== item.id;
-        });
+        // this.selected = this.selected.filter(function (stored) {
+        //     return stored.id !== item.id
+        // })
+        return this.$emit('onItemUnselected', item);
       } else {
-        this.selected.push(item);
+        // this.selected.push(item)
+        return this.$emit('onItemSelected', item);
       }
-
-      return this.$emit('onItemsSelected', this.selected);
     },
     isSelected: function isSelected(item) {
-      return this.selected.find(function (selected) {
+      return this.selectedItems.find(function (selected) {
         return selected.id === item.id;
       });
     },
     rowClass: function rowClass(item, type) {
       if (!item) return;
       if (this.isSelected(item)) return 'table-success';
+    },
+    setItems: function setItems() {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this.items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var _item = _step.value;
+          this.storedItems.push(_item);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      if (this.selectedItems) {
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+          for (var _iterator2 = this.selectedItems[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var item = _step2.value;
+            if (!this.isInStoredItems(item)) this.storedItems.push(item);
+          }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+              _iterator2["return"]();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
+          }
+        }
+      }
     }
   },
   computed: {
@@ -10318,17 +10363,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     selectedBranch: function selectedBranch() {
-      this.selected.splice(0, this.selected.length);
       this.storedItems.splice(0, this.storedItems.length);
-      this.$emit('onItemsSelected', this.selected);
+      this.setItems();
       this.getStoredItems();
     }
   },
   data: function data() {
     return {
       selectedBranch: null,
-      selected: [],
-      action: this.url,
       pagination: {
         last_page: null,
         current_page: null
@@ -10352,8 +10394,8 @@ __webpack_require__.r(__webpack_exports__);
           label: 'Длина',
           sortable: true
         },
-        'info.count': {
-          label: 'Кол-во',
+        'info.weight': {
+          label: 'Вес',
           sortable: true
         },
         'info.owner.name': {
@@ -11654,6 +11696,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "TripItemsEditor",
   props: {
@@ -11666,20 +11710,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       required: true
     }
   },
+  mounted: function mounted() {// this.storedItems = this.trip.stored_items.filter(function () {
+    //     return true;
+    // });
+  },
   data: function data() {
     return {
-      storedItems: this.trip.stored_items,
+      storedItems: this.trip.stored_items.filter(function () {
+        return true;
+      }),
       isSubmitting: false
     };
   },
   computed: {
     itemsCount: function itemsCount() {
-      return this.storedItems.length; // let count = 0;
-      // for (let stored of this.storedItems) {
-      //     count += stored.count;
-      // }
-      //
-      // return count;
+      return this.storedItems.length;
     },
     totalWeight: function totalWeight() {
       var total = 0;
@@ -11748,10 +11793,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
-    onItemsSelected: function onItemsSelected(items) {
-      this.storedItems.splice(0, this.storedItems.length);
-      this.storedItems = items.filter(function () {
-        return true;
+    onItemSelected: function onItemSelected(item) {
+      this.storedItems.push(item); // this.storedItems.splice(0, this.storedItems.length);
+      // this.storedItems = items.filter(function () {
+      //     return true;
+      // });
+    },
+    onItemUnselected: function onItemUnselected(item) {
+      this.storedItems = this.storedItems.filter(function (stored) {
+        return stored.id !== item.id;
       });
     },
     submit: function () {
@@ -11796,7 +11846,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return submit;
-    }()
+    }(),
+    prepareUrl: function prepareUrl(page, vm) {
+      var action = "/trip/stored-items/available";
+      if (vm.selectedBranch) action = "/trip/".concat(vm.selectedBranch.id, "/stored-items/available");
+      return action += '?paginate=7&page=' + page;
+    }
   }
 });
 
@@ -81009,11 +81064,9 @@ var render = function() {
                           }
                         },
                         [
-                          _c(
-                            "option",
-                            { attrs: { value: "null", disabled: "" } },
-                            [_vm._v("--Все склады--")]
-                          ),
+                          _c("option", { domProps: { value: null } }, [
+                            _vm._v("--Все склады--")
+                          ]),
                           _vm._v(" "),
                           _vm._l(_vm.branches, function(branch) {
                             return _c(
@@ -82310,9 +82363,7 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
-            _c("p", [
-              _vm._v("Количество позиций: " + _vm._s(_vm.storedItems.length))
-            ]),
+            _c("p", [_vm._v("Количество позиций: " + _vm._s(_vm.itemsCount))]),
             _vm._v(" "),
             _c("p", [
               _vm._v("Суммарный вес: "),
@@ -82370,12 +82421,16 @@ var render = function() {
             staticClass: "shadow",
             attrs: {
               branches: _vm.branches,
-              preselected: _vm.trip.stored_items,
-              striped: false,
+              items: _vm.trip.stored_items,
+              prepareUrl: _vm.prepareUrl,
+              selectedItems: _vm.storedItems,
               flowable: "",
               selectable: ""
             },
-            on: { onItemsSelected: _vm.onItemsSelected }
+            on: {
+              onItemSelected: _vm.onItemSelected,
+              onItemUnselected: _vm.onItemUnselected
+            }
           })
         ],
         1
