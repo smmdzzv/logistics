@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header">Редактировать машину</div>
                     <div class="card-body">
-                        <form id="addCar" method="POST" action="{{route('car.update', $car)}}">
+                        <form id="addCar" method="POST" action="{{route('cars.update', $car)}}">
                             @csrf
                             @method('patch')
                             <input type="hidden" name="id" value="{{$car->id}}">

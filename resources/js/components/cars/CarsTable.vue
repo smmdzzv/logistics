@@ -73,7 +73,7 @@
         },
         methods:{
             getEditUrl(car){
-                return `/car/${car.id}/edit`;
+                return `/cars/${car.id}/edit`;
             },
             async deleteCar(car){
                 this.isBusy = true;
@@ -87,7 +87,7 @@
 
                 if(confirm){
                     try{
-                        const response = axios.delete('/car/'+car.id);
+                        const response = axios.delete('/cars/'+car.id);
                         this.items = $.grep(this.items, function(item){
                             return item.id !== car.id;
                         });

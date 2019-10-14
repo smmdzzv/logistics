@@ -8451,7 +8451,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   methods: {
     getEditUrl: function getEditUrl(car) {
-      return "/car/".concat(car.id, "/edit");
+      return "/cars/".concat(car.id, "/edit");
     },
     deleteCar: function () {
       var _deleteCar = _asyncToGenerator(
@@ -8483,7 +8483,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
 
                 _context.prev = 5;
-                response = axios["delete"]('/car/' + car.id);
+                response = axios["delete"]('/cars/' + car.id);
                 this.items = $.grep(this.items, function (item) {
                   return item.id !== car.id;
                 });
@@ -11860,7 +11860,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     prepareUrl: function prepareUrl(page, vm) {
       var action = "/trip/stored-items/available";
       if (vm.selectedBranch) action = "/trip/".concat(vm.selectedBranch.id, "/stored-items/available");
-      return action += '?paginate=7&page=' + page;
+      return action += '?paginate=15&page=' + page;
     }
   }
 });
