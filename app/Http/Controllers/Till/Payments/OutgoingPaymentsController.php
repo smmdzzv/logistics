@@ -39,7 +39,7 @@ class OutgoingPaymentsController extends Controller
             'accountFromId' => $accountFrom->id,
             'amount' => round($request->input('amount'), 2)
         ]);
-dd($payment);
+
         //Change balance of account to
         $sum = $payment->amount;
 

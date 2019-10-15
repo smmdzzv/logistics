@@ -333,6 +333,7 @@
                 )
             },
             async submitForm() {
+                this.$bvModal.show('busyModal');
                 if (this.$v.$invalid)
                     this.$v.$touch();
                 else {
@@ -348,6 +349,7 @@
 
                     try {
                         const result = await axios.post('/incoming-payments', data)
+                        window.location.href = '/payments'
                     } catch (e) {
                         if (e.response.status === 422) {
                             this.errors.client = e.response.data.errors.payerId;
@@ -362,6 +364,11 @@
                         }
                     }
                 }
+
+                this.$nextTick(() => {
+                        this.$bvModal.hide('busyModal');
+                    }
+                );
             },
         },
         components: {

@@ -11813,21 +11813,25 @@ var validateOrder = function validateOrder(value, vm) {
       var _submitForm = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var _this3 = this;
+
         var data, result;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
+                this.$bvModal.show('busyModal');
+
                 if (!this.$v.$invalid) {
-                  _context3.next = 4;
+                  _context3.next = 5;
                   break;
                 }
 
                 this.$v.$touch();
-                _context3.next = 14;
+                _context3.next = 16;
                 break;
 
-              case 4:
+              case 5:
                 data = {
                   payerId: this.client.id,
                   paymentItemId: this.paymentItem.id,
@@ -11837,18 +11841,19 @@ var validateOrder = function validateOrder(value, vm) {
                   exchangeId: this.exchange.id,
                   orderId: this.order ? this.order.id : null
                 };
-                _context3.prev = 5;
-                _context3.next = 8;
+                _context3.prev = 6;
+                _context3.next = 9;
                 return axios.post('/incoming-payments', data);
 
-              case 8:
+              case 9:
                 result = _context3.sent;
-                _context3.next = 14;
+                window.location.href = '/payments';
+                _context3.next = 16;
                 break;
 
-              case 11:
-                _context3.prev = 11;
-                _context3.t0 = _context3["catch"](5);
+              case 13:
+                _context3.prev = 13;
+                _context3.t0 = _context3["catch"](6);
 
                 if (_context3.t0.response.status === 422) {
                   this.errors.client = _context3.t0.response.data.errors.payerId;
@@ -11861,12 +11866,17 @@ var validateOrder = function validateOrder(value, vm) {
                   this.$root.showErrorMsg('Ошибка соранения', 'Не удалось провести платеж. Обновите странице и повторите попытку');
                 }
 
-              case 14:
+              case 16:
+                this.$nextTick(function () {
+                  _this3.$bvModal.hide('busyModal');
+                });
+
+              case 17:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, this, [[5, 11]]);
+        }, _callee3, this, [[6, 13]]);
       }));
 
       function submitForm() {
@@ -12063,9 +12073,7 @@ var validateAmount = function validateAmount(value, vm) {
       requiredAmount: null,
       errors: {
         amount: null,
-        currency: null,
-        paymentItem: null,
-        order: null
+        paymentItem: null
       }
     };
   },
@@ -12074,57 +12082,62 @@ var validateAmount = function validateAmount(value, vm) {
       var _submitForm = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var _this = this;
+
         var data, result;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
+                this.$bvModal.show('busyModal');
+
                 if (!this.$v.$invalid) {
-                  _context.next = 4;
+                  _context.next = 5;
                   break;
                 }
 
                 this.$v.$touch();
-                _context.next = 15;
+                _context.next = 17;
                 break;
 
-              case 4:
+              case 5:
                 data = {
                   paymentItemId: this.paymentItem.id,
-                  amount: this.amount // orderId: this.order ? this.order.id : null
-
+                  amount: this.amount
                 };
-                _context.prev = 5;
-                _context.next = 8;
+                _context.prev = 6;
+                _context.next = 9;
                 return axios.post('/outgoing-payments', data);
 
-              case 8:
+              case 9:
                 result = _context.sent;
-                _context.next = 15;
+                window.location.href = '/payments';
+                _context.next = 17;
                 break;
 
-              case 11:
-                _context.prev = 11;
-                _context.t0 = _context["catch"](5);
+              case 13:
+                _context.prev = 13;
+                _context.t0 = _context["catch"](6);
                 console.log(_context.t0);
 
                 if (_context.t0.response.status === 422) {
-                  // this.errors.client = e.response.data.errors.payerId;
-                  // this.errors.order = e.response.data.errors.orderId;
                   this.errors.amount = _context.t0.response.data.errors.amount;
-                  this.errors.currency = _context.t0.response.data.errors.currencyId;
                   this.errors.paymentItem = _context.t0.response.data.errors.paymentItemId;
-                  this.errors.exchange = _context.t0.response.data.errors.exchangeId;
                 } else {
                   this.$root.showErrorMsg('Ошибка сохранения', 'Не удалось провести платеж. Обновите странице и повторите попытку');
                 }
 
-              case 15:
+              case 17:
+                this.$nextTick(function () {
+                  _this.$bvModal.hide('busyModal');
+                });
+
+              case 18:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[5, 11]]);
+        }, _callee, this, [[6, 13]]);
       }));
 
       function submitForm() {

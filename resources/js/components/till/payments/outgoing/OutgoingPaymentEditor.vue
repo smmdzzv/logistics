@@ -142,40 +142,40 @@
                 requiredAmount: null,
                 errors: {
                     amount: null,
-                    currency: null,
                     paymentItem: null,
-                    order: null,
                 },
             }
         },
         methods: {
             async submitForm() {
+                this.$bvModal.show('busyModal');
                 if (this.$v.$invalid)
                     this.$v.$touch();
                 else {
                     let data = {
                         paymentItemId: this.paymentItem.id,
                         amount: this.amount
-                        // orderId: this.order ? this.order.id : null
                     };
 
                     try {
                         const result = await axios.post('/outgoing-payments', data)
+                        window.location.href = '/payments'
                     } catch (e) {
                         console.log(e)
                         if (e.response.status === 422) {
-                            // this.errors.client = e.response.data.errors.payerId;
-                            // this.errors.order = e.response.data.errors.orderId;
                             this.errors.amount = e.response.data.errors.amount;
-                            this.errors.currency = e.response.data.errors.currencyId;
                             this.errors.paymentItem = e.response.data.errors.paymentItemId;
-                            this.errors.exchange = e.response.data.errors.exchangeId;
                         } else {
                             this.$root.showErrorMsg('Ошибка сохранения',
                                 'Не удалось провести платеж. Обновите странице и повторите попытку')
                         }
                     }
                 }
+                this.$nextTick(()=>{
+                    this.$bvModal.hide('busyModal')
+                    }
+                );
+
             },
         },
         components: {
