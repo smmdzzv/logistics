@@ -12,6 +12,7 @@
                  :items="items"
                  :primary-key="primaryKey"
                  :responsive="responsive"
+                 :fixed="fixed"
                  :select-mode="selectMode"
                  :selectable="selectable"
                  :sticky-header="tableHeight"
@@ -82,6 +83,10 @@
                 default: false
             },
             responsive: {
+                type: Boolean,
+                default: false
+            },
+            fixed: {
                 type: Boolean,
                 default: false
             },

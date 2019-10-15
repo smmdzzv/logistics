@@ -6,6 +6,7 @@
         :items="items"
         :striped="striped"
         class="shadow"
+        fixed
         primary-key="id"
         responsive>
         <template #header>
@@ -22,7 +23,7 @@
                     <div class="pr-2" v-if="branches">
                         <b-select v-model="selectedBranch">
                             <option :value="null">Все филиалы</option>
-                            <option v-for="branch in branches" :value="branch" :key="branch.id">{{branch.name}}</option>
+                            <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}</option>
                         </b-select>
                     </div>
                 </div>
@@ -52,9 +53,9 @@
             this.getItems();
         },
         props: {
-            branches:{
-                type:Array,
-                required:false
+            branches: {
+                type: Array,
+                required: false
             },
             selectable: {
                 type: Boolean,
@@ -86,8 +87,8 @@
                 items: [],
                 isBusy: false,
                 customCells: [],
-                selectedBranch:null,
-                selectedType:null,
+                selectedBranch: null,
+                selectedType: null,
                 fields: {
                     created_at: {
                         label: 'Дата',
@@ -105,11 +106,11 @@
                         label: 'Сумма',
                         sortable: true
                     },
-                    'currency.isoName':{
+                    'currency.isoName': {
                         label: 'Валюта',
                         sortable: true
                     },
-                    'payment_item.title':{
+                    'payment_item.title': {
                         label: 'Статья',
                         sortable: true
                     }
@@ -120,10 +121,10 @@
             prepareUrl() {
                 let action = '/payments/filtered?';
 
-                if(this.selectedBranch)
+                if (this.selectedBranch)
                     action += `branch=${this.selectedBranch.id}&`;
-                if(this.selectedType)
-                    action += 'type=' + this.selectedType +'&';
+                if (this.selectedType)
+                    action += 'type=' + this.selectedType + '&';
 
                 return action;
             },
@@ -158,8 +159,11 @@
                     );
             }
         },
-        watch:{
-            selectedBranch(){
+        watch: {
+            selectedBranch() {
+                this.getItems();
+            },
+            selectedType() {
                 this.getItems();
             }
         },

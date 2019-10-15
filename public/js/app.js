@@ -8787,6 +8787,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "TableCard",
   props: {
@@ -8823,6 +8824,10 @@ __webpack_require__.r(__webpack_exports__);
       "default": false
     },
     responsive: {
+      type: Boolean,
+      "default": false
+    },
+    fixed: {
       type: Boolean,
       "default": false
     },
@@ -11303,6 +11308,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PaymentsTable",
   mounted: function mounted() {
@@ -11402,6 +11408,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     selectedBranch: function selectedBranch() {
+      this.getItems();
+    },
+    selectedType: function selectedType() {
       this.getItems();
     }
   },
@@ -80061,6 +80070,7 @@ var render = function() {
           items: _vm.items,
           "primary-key": _vm.primaryKey,
           responsive: _vm.responsive,
+          fixed: _vm.fixed,
           "select-mode": _vm.selectMode,
           selectable: _vm.selectable,
           "sticky-header": _vm.tableHeight,
@@ -82284,6 +82294,7 @@ var render = function() {
       isBusy: _vm.isBusy,
       items: _vm.items,
       striped: _vm.striped,
+      fixed: "",
       "primary-key": "id",
       responsive: ""
     },
