@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Till;
 
+use App\Models\Country;
 use App\Models\Currency;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,7 +22,8 @@ class CurrenciesController extends Controller
         return [
             'name' => 'required|unique:currencies',
             'shortName' => 'required|unique:currencies',
-            'isoName' => 'required|unique:currencies'
+            'isoName' => 'required|unique:currencies',
+            'country_id' => 'required|exists:countries,id'
         ];
     }
 
@@ -37,12 +39,14 @@ class CurrenciesController extends Controller
 
     public function create()
     {
-        return view('till.currencies.create');
+        $countries = Country::all();
+        return view('till.currencies.create', compact('countries'));
     }
 
     public function store(Request $request)
     {
-        return Currency::create($request->validate($this->rules()));
+        Currency::create($request->validate($this->rules()));
+        return redirect(route('currencies.index'));
     }
 
     public function show($id)

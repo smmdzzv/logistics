@@ -29,7 +29,8 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="shortName" class="col-md-4 col-form-label text-md-right">Короткое обозначение</label>
+                                <label for="shortName" class="col-md-4 col-form-label text-md-right">Короткое
+                                    обозначение</label>
 
                                 <div class="col-md-6">
                                     <input id="shortName" type="text"
@@ -46,7 +47,8 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="isoName" class="col-md-4 col-form-label text-md-right">Обозначение ISO</label>
+                                <label for="isoName" class="col-md-4 col-form-label text-md-right">Обозначение
+                                    ISO</label>
 
                                 <div class="col-md-6">
                                     <input id="isoName" type="text"
@@ -62,6 +64,24 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <label for="country_id" class="col-md-4 col-form-label text-md-right">Страна</label>
+
+                                <div class="col-md-6">
+                                    <select id="country_id"
+                                            class="form-control @error('country_id') is-invalid @enderror"
+                                            name="country_id">
+                                        @foreach($countries as $country)
+                                            <option value="{{$country->id}}">{{$country->name}}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('country_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
 
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
