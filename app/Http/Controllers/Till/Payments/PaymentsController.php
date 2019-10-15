@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Till\Payments;
 
 use App\Models\Branch;
+use App\Models\LegalEntities\LegalEntity;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,6 +17,7 @@ class PaymentsController extends Controller
 
     public function index(){
         $branches = Branch::all();
-        return view('till.payments.index', compact('branches'));
+        $account = LegalEntity::first()->accounts()->with('currency')->first();
+        return view('till.payments.index', compact('branches', 'account'));
     }
 }

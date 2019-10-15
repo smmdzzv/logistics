@@ -58,6 +58,9 @@ Route::get('/payments/in/{branch}', 'Till\Payments\IncomingPaymentsController@fi
 Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
     ['except' => ['destroy']]);
 
+Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController',
+    ['only' => ['create', 'store']]);
+
 //StoredItems
 Route::get('/stored', 'StoredItemsController@index')->name('stored.index');
 Route::get('/stored/all', 'StoredItemsController@all')->name('stored.all');

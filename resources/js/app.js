@@ -41,6 +41,7 @@ Vue.component('TariffEditor', require('./components/tariffs/TariffEditor.vue').d
 Vue.component('TariffHistoriesViewer', require('./components/tariffs/TariffHistoriesViewer.vue').default);
 
 Vue.component('IncomingPaymentEditor', require('./components/till/payments/incoming/IncomingPaymentEditor.vue').default);
+Vue.component('OutgoingPaymentEditor', require('./components/till/payments/outgoing/OutgoingPaymentEditor.vue').default);
 
 Vue.component('PaymentItemsTable', require('./components/till/expenditures/PaymentItemsTable.vue').default);
 

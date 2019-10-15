@@ -29,6 +29,8 @@ class Payment extends BaseModel
         'amount' => 'double'
     ];
 
+    protected $guarded = [];
+
     public function cashier()
     {
         return $this->belongsTo(Cashier::class, 'cashierId');
