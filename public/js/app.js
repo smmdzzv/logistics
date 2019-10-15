@@ -11287,6 +11287,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PaymentsTable",
   mounted: function mounted() {
@@ -11294,6 +11303,10 @@ __webpack_require__.r(__webpack_exports__);
     this.getItems();
   },
   props: {
+    branches: {
+      type: Array,
+      required: false
+    },
     selectable: {
       type: Boolean,
       "default": false
@@ -11324,6 +11337,7 @@ __webpack_require__.r(__webpack_exports__);
       items: [],
       isBusy: false,
       customCells: [],
+      selectedBranch: null,
       fields: {
         created_at: {
           label: 'Дата',
@@ -11354,8 +11368,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     prepareUrl: function prepareUrl() {
-      var action = '/payments/' + this.type;
-      return action += '/all';
+      var action = '/payments/' + this.type + '/all';
+      if (this.selectedBranch) action = '/payments/in/' + this.selectedBranch.id;
+      return action;
     },
     getItems: function getItems() {
       var _this = this;
@@ -11374,6 +11389,11 @@ __webpack_require__.r(__webpack_exports__);
       })["finally"](this.$nextTick(function () {
         _this.isBusy = false;
       }));
+    }
+  },
+  watch: {
+    selectedBranch: function selectedBranch() {
+      this.getItems();
     }
   },
   components: {
@@ -81999,7 +82019,47 @@ var render = function() {
         fn: function() {
           return [
             _c("div", { staticClass: "card-header" }, [
-              _vm._v("\n            История платежей\n        ")
+              _c("div", { staticClass: "row align-items-baseline" }, [
+                _c("div", { staticClass: "pl-2 mr-auto" }, [
+                  _vm._v("История платежей")
+                ]),
+                _vm._v(" "),
+                _vm.branches
+                  ? _c(
+                      "div",
+                      { staticClass: "pr-2 ml-auto" },
+                      [
+                        _c(
+                          "b-select",
+                          {
+                            model: {
+                              value: _vm.selectedBranch,
+                              callback: function($$v) {
+                                _vm.selectedBranch = $$v
+                              },
+                              expression: "selectedBranch"
+                            }
+                          },
+                          [
+                            _c("option", { domProps: { value: null } }, [
+                              _vm._v("Все филиалы")
+                            ]),
+                            _vm._v(" "),
+                            _vm._l(_vm.branches, function(branch) {
+                              return _c(
+                                "option",
+                                { key: branch.id, domProps: { value: branch } },
+                                [_vm._v(_vm._s(branch.name))]
+                              )
+                            })
+                          ],
+                          2
+                        )
+                      ],
+                      1
+                    )
+                  : _vm._e()
+              ])
             ])
           ]
         },

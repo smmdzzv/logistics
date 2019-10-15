@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Till\Payments;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Till\PaymentRequest;
+use App\Models\Branch;
 use App\Models\Currency;
 use App\Models\LegalEntities\LegalEntity;
 use App\Models\Order;
@@ -27,6 +28,13 @@ class IncomingPaymentsController extends BaseController
             ->whereHas('paymentItem', function (Builder $query) {
                 $query->where('type', 'in');
             })->latest()->paginate($this->pagination());
+    }
+
+    public function filteredByBranch(Branch $branch)
+    {
+        return $branch->payments()
+            ->with('accountTo', 'payer', 'currency', 'paymentItem')
+            ->paginate($this->pagination());
     }
 
     public function create()

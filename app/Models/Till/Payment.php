@@ -3,6 +3,7 @@
 namespace App\Models\Till;
 
 use App\Models\BaseModel;
+use App\Models\Branch;
 use App\Models\Currency;
 use App\Models\Order;
 use App\Models\Users\Cashier;
@@ -53,6 +54,10 @@ class Payment extends BaseModel
 
     public function paymentItem(){
         return $this->belongsTo(PaymentItem::class, 'paymentItemId');
+    }
+
+    public function branch(){
+        return $this->belongsTo(Branch::class, 'branchId');
     }
 
     /**

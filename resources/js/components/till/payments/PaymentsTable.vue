@@ -10,7 +10,16 @@
         responsive>
         <template #header>
             <div class="card-header">
-                История платежей
+                <div class="row align-items-baseline">
+                    <div class="pl-2 mr-auto">История платежей</div>
+                    <div class="pr-2 ml-auto" v-if="branches">
+                        <b-select v-model="selectedBranch">
+                            <option :value="null">Все филиалы</option>
+                            <option v-for="branch in branches" :value="branch" :key="branch.id">{{branch.name}}</option>
+                        </b-select>
+                    </div>
+                </div>
+
             </div>
         </template>
 
@@ -36,6 +45,10 @@
             this.getItems();
         },
         props: {
+            branches:{
+                type:Array,
+                required:false
+            },
             selectable: {
                 type: Boolean,
                 default: false
@@ -66,6 +79,7 @@
                 items: [],
                 isBusy: false,
                 customCells: [],
+                selectedBranch:null,
                 fields: {
                     created_at: {
                         label: 'Дата',
@@ -96,8 +110,10 @@
         },
         methods: {
             prepareUrl() {
-                let action = '/payments/' + this.type;
-                return action += '/all';
+                let action = '/payments/' + this.type + '/all';
+                if(this.selectedBranch)
+                    action = '/payments/in/' + this.selectedBranch.id;
+                return action;
             },
             getItems(page = 1) {
                 if (this.trips)
@@ -128,6 +144,11 @@
                             this.isBusy = false;
                         })
                     );
+            }
+        },
+        watch:{
+            selectedBranch(){
+                this.getItems();
             }
         },
         components: {

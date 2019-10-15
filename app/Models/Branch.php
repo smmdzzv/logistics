@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Branches\Storage;
 use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemInfo;
+use App\Models\Till\Payment;
 use App\User;
 
 /**
@@ -51,5 +52,9 @@ class Branch extends BaseModel
 
     public function mainStorage(){
         return $this->hasOne(Storage::class);
+    }
+
+    public function payments(){
+        return $this->hasMany(Payment::class, 'branchId');
     }
 }
