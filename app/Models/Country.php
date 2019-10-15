@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Country extends BaseModel
 {
-    public function Branches(){
+    public function branches(){
         return $this->hasMany(Branch::class, 'country');
+    }
+
+    public function currencies(){
+        return $this->hasMany(Currency::class);
     }
 }

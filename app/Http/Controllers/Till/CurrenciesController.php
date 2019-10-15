@@ -12,7 +12,9 @@ class CurrenciesController extends Controller
     {
         $this->middleware('auth');
 
-        $this->middleware('role:admin');
+        $this->middleware('roles.allow:admin')->except('all');
+
+        $this->middleware('roles.deny:client')->only('all');
     }
 
     private function rules(){
@@ -23,9 +25,14 @@ class CurrenciesController extends Controller
         ];
     }
 
+    public function all(){
+        $paginate = request()->input('paginate') ?? 10;
+        return Currency::with('country')->paginate($paginate);
+    }
+
     public function index()
     {
-        //TODO not implemented
+        return view('till.currencies.index');
     }
 
     public function create()

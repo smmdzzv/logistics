@@ -8,7 +8,8 @@ use App\Models\Till\MoneyExchange;
 /**
  * @property string shortName
  * @property string name
- * @property mixed isoName
+ * @property string isoName
+ * @property string country_id
  */
 class Currency extends BaseModel
 {
@@ -24,5 +25,9 @@ class Currency extends BaseModel
 
     public function exchangesFrom(){
         return $this->hasMany(MoneyExchange::class, 'from');
+    }
+
+    public function country(){
+        return $this->belongsTo(Country::class);
     }
 }

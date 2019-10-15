@@ -79,8 +79,8 @@
                                 <a class="dropdown-item" href="{{route('payment-items.index')}}">Список статей</a>
                                 <div class="dropdown-divider"></div>
                                 <h6 class="dropdown-header">Валюта</h6>
-                                <a class="dropdown-item" href="#">Добавить</a>
-                                <a class="dropdown-item" href="#">Список</a>
+                                <a class="dropdown-item" href="{{route('currencies.create')}}">Добавить валюту</a>
+                                <a class="dropdown-item" href="{{route('currencies.index')}}">Список валют</a>
                             </div>
                         </li>
                         <!--Users-->

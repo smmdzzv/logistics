@@ -89,8 +89,10 @@ Route::resource('payment-items', 'Till\PaymentItemsController',
     ['except' => 'show'])->parameters(['payment-items' => 'paymentItem']);
 
 //Currency
+Route::get('/currencies/all', 'Till\CurrenciesController@all')->name('currencies.all');
 Route::resource('currencies', 'Till\CurrenciesController',
-    ['only' => ['create', 'store']])->parameters(['currencies' => 'currency']);
+    ['except' => ['destroy']])->parameters(['currencies' => 'currency']);
+
 
 Route::resource('money-exchanges', 'Till\MoneyExchangesController',
     ['only' => ['create', 'store']])->parameters(['money-exchanges' => 'exchange']);
@@ -102,7 +104,6 @@ Route::resource('items', 'ItemsController', ['only' => ['index', 'create', 'stor
 
 
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo');
-
 
 Route::get('/countries', 'CountriesController@all');
 

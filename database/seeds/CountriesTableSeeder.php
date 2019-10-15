@@ -19,5 +19,13 @@ class CountriesTableSeeder extends Seeder
         $tjk = new Country();
         $tjk->name = 'Таджикистан';
         $tjk->save();
+
+        $tjk = new Country();
+        $tjk->name = 'Россия';
+        $tjk->save();
+
+        $tjk = new Country();
+        $tjk->name = 'США';
+        $tjk->save();
     }
 }
