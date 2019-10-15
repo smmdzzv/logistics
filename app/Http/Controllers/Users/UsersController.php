@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Models\Branch;
+use App\Models\Currency;
 use App\Models\Position;
 use App\Models\Role;
+use App\Models\Till\Account;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -89,6 +91,14 @@ class UsersController extends Controller
             if (in_array($role->id, $data['roles']))
                 $role->users()->attach($user);
         }
+
+        //Create account
+        $account = new Account();
+        $account->currencyId = Currency::where('isoName', 'USD')->first()->id;
+        $account->balance = 0;
+        $account->description = 'Долларовый счет пользователя '.$user->name;
+
+        $user->accounts()->save($account);
 
         return redirect(route('users.index'));
     }

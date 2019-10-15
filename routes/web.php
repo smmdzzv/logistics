@@ -53,7 +53,7 @@ Route::post('/trip/{trip}/stored-items', 'Trips\TripStoredItemsController@associ
 //Payments
 Route::resource('payments', 'Till\Payments\PaymentsController', ['only' => 'index']);
 
-Route::get('/payments/in/all', 'Till\Payments\IncomingPaymentsController@all');
+Route::get('/payments/in/all', 'Till\Payments\IncomingPaymentsController@all')->name('payments.index');
 Route::get('/payments/in/{branch}', 'Till\Payments\IncomingPaymentsController@filteredByBranch');
 Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
     ['except' => ['destroy']]);

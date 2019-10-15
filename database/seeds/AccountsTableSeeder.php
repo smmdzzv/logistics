@@ -24,12 +24,16 @@ class AccountsTableSeeder extends Seeder
             'currencyId' => $currencyId
         ]);
 
-        $owner = User::where('code', '1345')->first();
 
-        $owner->accounts()->create([
-            'balance' => 100,
-            'description' => "Долларовый счет Бахтиерова",
-            'currencyId' => $currencyId
-        ]);
+        $users = User::all();
+
+        foreach ($users as $user){
+            $account = new Account();
+            $account->currencyId = Currency::where('isoName', 'USD')->first()->id;
+            $account->balance = 0;
+            $account->description = 'Долларовый счет пользователя '.$user->name;
+
+            $user->accounts()->save($account);
+        }
     }
 }

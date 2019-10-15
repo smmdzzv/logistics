@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Models\Till\MoneyExchange;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
+use App\User;
 use Illuminate\Database\Eloquent\Builder;
 
 class IncomingPaymentsController extends BaseController
@@ -46,13 +47,15 @@ class IncomingPaymentsController extends BaseController
 
     public function store(PaymentRequest $request)
     {
+        $accountTo = $this->getAccountTo($request);
+
         $payment = new Payment();
         $payment->branchId = auth()->user()->branch->id;
         $payment->cashierId = auth()->id();
         $payment->currencyId = $request->input('currencyId');
         $payment->payerId = $request->input('payerId');
         $payment->paymentItemId = $request->input('paymentItemId');
-        $payment->accountToId = $request->input('accountTo');
+        $payment->accountToId = $accountTo->id;
         $payment->exchangeId = $request->input('exchangeId');
         $payment->amount = round($request->input('amount'), 2);
         $payment->save();
@@ -73,5 +76,19 @@ class IncomingPaymentsController extends BaseController
             $order->payment()->associate($payment);
             $order->save();
         }
+
+        return redirect()->route('payments.index');
+    }
+
+    private function getAccountTo(PaymentRequest $request){
+        $accountTo = null;
+        $item = PaymentItem::find($request->input('paymentItemId'));
+
+        if($item->title === 'Пополнение баланса')
+            $accountTo = User::find($request->input('payerId'))->accounts()->first();
+        else
+            $accountTo = LegalEntity::first()->accounts()->first();
+
+        return $accountTo;
     }
 }
