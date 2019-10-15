@@ -33,11 +33,7 @@ class PaymentRequest extends FormRequest
         return [
             'payerId' => 'required|exists:users,id',
             'paymentItemId' => 'required|exists:payment_items,id',
-//            'currencyId' => 'required|exists:currencies,id',
-//            'accountTo' => 'required|exists:accounts,id',
             'amount' => 'required|numeric|min:1',
-//            'exchangeId' => 'nullable|exists:money_exchanges,id',
-//            'orderId' => 'nullable|exists:orders,id'
         ];
     }
 
@@ -55,11 +51,6 @@ class PaymentRequest extends FormRequest
             $currency = Currency::find($this->request->get('currencyId'));
 
             $client = Client::find($this->request->get('payerId'));
-
-//            $accountFromCount = $client->accounts()->where('isoName','USD')->count();
-//
-//            if(!$accountFromCount)
-//                return $validator->errors()->add('payerId', $client->name." не обладает долларовым аккаунтом в системе");
 
             if (!$currency)
                 return $validator->errors()->add('currencyId', 'Указанная валюта не используется системой');

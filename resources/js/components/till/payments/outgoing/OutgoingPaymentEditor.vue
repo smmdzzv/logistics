@@ -11,8 +11,12 @@
                             <div class="row">
                                 <div class="form-group col-md-12">
                                     <label>Тип операции</label>
-                                    <b-form-select v-model="paymentType" disabled>
+                                    <b-form-select v-model="paymentType">
+                                        <template v-slot:first>
+                                            <option :value="null" disabled>-- Выберите тип операции --</option>
+                                        </template>
                                         <option value="in">ПРИХОД</option>
+                                        <option value="out">РАСХОД</option>
                                     </b-form-select>
                                 </div>
                             </div>
@@ -211,7 +215,7 @@
     };
 
     export default {
-        name: "IncomingPaymentEditor",
+        name: "OutgoingPaymentEditor",
         mounted() {
             this.currency = this.currencies[0];
             this.paymentType = 'in'

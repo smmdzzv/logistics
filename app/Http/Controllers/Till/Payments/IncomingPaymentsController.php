@@ -16,7 +16,7 @@ class IncomingPaymentsController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('role:cashier, manager');
+        $this->middleware('roles.allow:cashier, manager');
     }
 
     public function create()
@@ -28,8 +28,6 @@ class IncomingPaymentsController extends Controller
 
     public function store(PaymentRequest $request)
     {
-
-
         $payment = new Payment();
         $payment->branchId = auth()->user()->branch->id;
         $payment->cashierId = auth()->id();

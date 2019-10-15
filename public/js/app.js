@@ -11461,10 +11461,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
 
 
 var validateAmount = function validateAmount(value, vm) {
@@ -81883,24 +81879,7 @@ var render = function() {
                       _c(
                         "b-form-select",
                         {
-                          scopedSlots: _vm._u([
-                            {
-                              key: "first",
-                              fn: function() {
-                                return [
-                                  _c(
-                                    "option",
-                                    {
-                                      attrs: { disabled: "" },
-                                      domProps: { value: null }
-                                    },
-                                    [_vm._v("-- Выберите тип операции --")]
-                                  )
-                                ]
-                              },
-                              proxy: true
-                            }
-                          ]),
+                          attrs: { disabled: "" },
                           model: {
                             value: _vm.paymentType,
                             callback: function($$v) {
@@ -81910,13 +81889,8 @@ var render = function() {
                           }
                         },
                         [
-                          _vm._v(" "),
                           _c("option", { attrs: { value: "in" } }, [
                             _vm._v("ПРИХОД")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "out" } }, [
-                            _vm._v("РАСХОД")
                           ])
                         ]
                       )
