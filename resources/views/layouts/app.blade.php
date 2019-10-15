@@ -72,7 +72,7 @@
                                 <a class="dropdown-item" href="{{route('incoming-payments.create')}}">Приход</a>
                                 <a class="dropdown-item" href="#">Расход</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Сформировать отчет</a>
+                                <a class="dropdown-item" href="{{route('payments.index')}}">Сформировать отчет</a>
                                 <div class="dropdown-divider"></div>
                                 <h6 class="dropdown-header">Статьи прихода/расхода</h6>
                                 <a class="dropdown-item" href="{{route('payment-items.create')}}">Добавить статью</a>

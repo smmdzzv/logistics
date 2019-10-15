@@ -51,6 +51,10 @@ class Payment extends BaseModel
         return $this->hasOne(Order::class,'paymentId');
     }
 
+    public function paymentItem(){
+        return $this->belongsTo(PaymentItem::class, 'paymentItemId');
+    }
+
     /**
      * Used for money transfer only, when accountFrom is null
      * @return BelongsTo

@@ -45,6 +45,7 @@ Vue.component('IncomingPaymentEditor', require('./components/till/payments/incom
 Vue.component('PaymentItemsTable', require('./components/till/expenditures/PaymentItemsTable.vue').default);
 
 Vue.component('CurrenciesTable', require('./components/till/currencies/CurrenciesTable.vue').default);
+Vue.component('PaymentsTable', require('./components/till/payments/PaymentsTable.vue').default);
 
 Vue.component('ItemsTable', require('./components/items/ItemsTable.vue').default);
 

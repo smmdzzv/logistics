@@ -47,6 +47,11 @@ Route::get('/trip/{branch}/stored-items/available', 'Trips\TripStoredItemsContro
 Route::post('/trip/{trip}/stored-items', 'Trips\TripStoredItemsController@associateToTrip');
 
 //Payments
+Route::get('/payments', function (){
+    return view('till.payments.index');
+})->middleware('roles.deny:client')->name('payments.index');
+
+Route::get('/payments/in/all', 'Till\Payments\IncomingPaymentsController@all');
 Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
     ['except' => ['destroy']]);
 
@@ -93,11 +98,12 @@ Route::get('/currencies/all', 'Till\CurrenciesController@all')->name('currencies
 Route::resource('currencies', 'Till\CurrenciesController',
     ['except' => ['destroy']])->parameters(['currencies' => 'currency']);
 
-
+//Money Exchange
 Route::resource('money-exchanges', 'Till\MoneyExchangesController',
     ['only' => ['create', 'store']])->parameters(['money-exchanges' => 'exchange']);
 Route::get('exchange-history/rate/{from}/{to}', 'Till\MoneyExchangesController@exchangeRate');
 
+//Items
 Route::get('/items/all', 'ItemsController@all');
 Route::get('/items/all/eager', 'ItemsController@allEager');
 Route::resource('items', 'ItemsController', ['only' => ['index', 'create', 'store']])->parameters(['items' => 'item']);
@@ -105,6 +111,7 @@ Route::resource('items', 'ItemsController', ['only' => ['index', 'create', 'stor
 
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo');
 
+//Countries
 Route::get('/countries', 'CountriesController@all');
 
 
