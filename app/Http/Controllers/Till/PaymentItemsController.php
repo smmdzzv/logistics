@@ -13,7 +13,7 @@ class PaymentItemsController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('role:admin');
+        $this->middleware('roles.allow:admin');
     }
 
     public function rules()
