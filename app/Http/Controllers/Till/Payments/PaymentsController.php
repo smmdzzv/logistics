@@ -27,13 +27,13 @@ class PaymentsController extends BaseController
 
     public function all()
     {
-        return Payment::with('accountTo', 'payer', 'currency', 'paymentItem')->latest()
+        return Payment::with('accountTo', 'cashier', 'payer', 'currency', 'paymentItem')->latest()
             ->paginate($this->pagination());
     }
 
     public function filtered()
     {
-        $query = Payment::with('accountTo', 'payer', 'currency', 'paymentItem')->latest();
+        $query = Payment::with('accountTo', 'cashier', 'payer', 'currency', 'paymentItem')->latest();
 
         $type = request()->input('type');
         $branch = request()->input('branch');

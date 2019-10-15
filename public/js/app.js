@@ -11376,6 +11376,10 @@ __webpack_require__.r(__webpack_exports__);
         'payment_item.title': {
           label: 'Статья',
           sortable: true
+        },
+        'cashier.name': {
+          label: 'Кассир',
+          sortable: true
         }
       }
     };
@@ -11393,7 +11397,7 @@ __webpack_require__.r(__webpack_exports__);
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       if (this.trips) return;
       this.isBusy = true;
-      var action = this.prepareUrl() + 'paginate=10&page=' + page;
+      var action = this.prepareUrl() + 'paginate=15&page=' + page;
       axios.get(action).then(function (response) {
         _this.pagination = response.data;
         if (_this.flowablePagination) response.data.data.forEach(function (item) {

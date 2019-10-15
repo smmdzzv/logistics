@@ -33,7 +33,7 @@ class Payment extends BaseModel
 
     public function cashier()
     {
-        return $this->belongsTo(Cashier::class, 'cashierId');
+        return $this->belongsTo(User::class, 'cashierId');
     }
 
     /**

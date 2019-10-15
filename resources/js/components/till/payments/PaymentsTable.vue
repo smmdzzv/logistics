@@ -113,7 +113,12 @@
                     'payment_item.title': {
                         label: 'Статья',
                         sortable: true
-                    }
+                    },
+
+                    'cashier.name': {
+                        label: 'Кассир',
+                        sortable: true
+                    },
                 }
             }
         },
@@ -134,7 +139,7 @@
 
                 this.isBusy = true;
 
-                let action = this.prepareUrl() + 'paginate=10&page=' + page;
+                let action = this.prepareUrl() + 'paginate=15&page=' + page;
 
                 axios.get(action)
                     .then(response => {
