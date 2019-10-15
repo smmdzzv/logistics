@@ -30,13 +30,17 @@ Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 
 //Order
 Route::get('/orders/all', 'OrdersController@all')->name('order.all');
-Route::resource('orders', 'OrdersController',
-    ['except' => ['delete', 'edit']]);
+
+Route::get('/orders/{client}/unpaid', 'Orders\OrderPaymentsController@unpaid');
+
+Route::resource('orders', 'OrdersController', ['except' => ['delete', 'edit']]);
+
 Route::get('branch/{branch}/orders', 'OrdersController@filteredByBranch');
 Route::get('user/{user}/orders', 'OrdersController@filteredByUser');
 
+
+
 //Trips
-//Route::get('/trips/{trip}/items', 'Trips\TripsController@storedItems')->name('trip.items');
 Route::get('/trips/all', 'Trips\TripsController@all');
 Route::resource('trips', 'Trips\TripsController',
     ['except' => ['destroy']]);

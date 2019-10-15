@@ -11720,7 +11720,7 @@ var validateOrder = function validateOrder(value, vm) {
                   break;
                 }
 
-                action = '/concrete/client/orders?client=' + this.client.id;
+                action = '/orders/' + this.client.id + '/unpaid';
                 _context.next = 8;
                 return axios.get(action);
 

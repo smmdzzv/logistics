@@ -23,4 +23,8 @@ class Client extends RoleUser
     {
         return $this->hasMany(Order::class, 'ownerId');
     }
+
+    public function unpaidOrders(){
+        return $this->orders()->where('paymentId',  null);
+    }
 }

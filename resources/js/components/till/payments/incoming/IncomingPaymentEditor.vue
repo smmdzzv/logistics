@@ -11,7 +11,7 @@
                             <div class="row">
                                 <div class="form-group col-md-12">
                                     <label>Тип операции</label>
-                                    <b-form-select v-model="paymentType" disabled>
+                                    <b-form-select disabled v-model="paymentType">
                                         <option value="in">ПРИХОД</option>
                                     </b-form-select>
                                 </div>
@@ -151,8 +151,8 @@
                                         id="rate"
                                         label="Курс"
                                         label-for="rate">
-                                        <b-form-input disabled id="rate"
-                                                      :class="{'is-invalid': errors.exchange}"
+                                        <b-form-input :class="{'is-invalid': errors.exchange}" disabled
+                                                      id="rate"
                                                       v-model="exchange.coefficient"></b-form-input>
 
                                         <span class="invalid-feedback" role="alert" v-if="errors.exchange">
@@ -204,7 +204,7 @@
     };
 
     const validateOrder = (value, vm) => {
-        if(vm.isOrderPayment)
+        if (vm.isOrderPayment)
             return vm.order && vm.order.id;
         else
             return true;
@@ -310,7 +310,7 @@
                 if (!this.client)
                     this.orders = [];
                 else if (this.isOrderPayment) {
-                    let action = '/concrete/client/orders?client=' + this.client.id;
+                    let action = '/orders/' + this.client.id + '/unpaid';
                     const response = await axios.get(action);
                     this.orders = response.data;//TODO
                 }
