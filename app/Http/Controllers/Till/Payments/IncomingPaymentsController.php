@@ -58,6 +58,7 @@ class IncomingPaymentsController extends BaseController
         $payment->accountToId = $accountTo->id;
         $payment->exchangeId = $request->input('exchangeId');
         $payment->amount = round($request->input('amount'), 2);
+        $payment->comment = $request->input('comment');
         $payment->save();
 
         //Change balance of account to

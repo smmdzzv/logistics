@@ -11377,6 +11377,9 @@ __webpack_require__.r(__webpack_exports__);
           label: 'Статья',
           sortable: true
         },
+        comment: {
+          label: "Комментарий"
+        },
         'cashier.name': {
           label: 'Кассир',
           sortable: true
@@ -11638,6 +11641,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validateAmount = function validateAmount(value, vm) {
@@ -11675,6 +11686,7 @@ var validateOrder = function validateOrder(value, vm) {
       currency: null,
       paymentItem: null,
       paymentType: null,
+      comment: null,
       needConverting: false,
       orders: [],
       order: null,
@@ -11861,7 +11873,8 @@ var validateOrder = function validateOrder(value, vm) {
                   accountTo: this.accountTo.id,
                   amount: this.amount,
                   exchangeId: this.exchange.id,
-                  orderId: this.order ? this.order.id : null
+                  orderId: this.order ? this.order.id : null,
+                  comment: this.comment
                 };
                 _context3.prev = 6;
                 _context3.next = 9;
@@ -12060,6 +12073,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var validateAmount = function validateAmount(value, vm) {
@@ -12092,6 +12113,7 @@ var validateAmount = function validateAmount(value, vm) {
       currency: null,
       paymentItem: null,
       paymentType: null,
+      comment: null,
       requiredAmount: null,
       errors: {
         amount: null,
@@ -12125,7 +12147,8 @@ var validateAmount = function validateAmount(value, vm) {
               case 5:
                 data = {
                   paymentItemId: this.paymentItem.id,
-                  amount: this.amount
+                  amount: this.amount,
+                  comment: this.comment
                 };
                 _context.prev = 6;
                 _context.next = 9;
@@ -83050,6 +83073,41 @@ var render = function() {
                     ],
                     1
                   )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "form-group col-12" }, [
+                    _c("label", { attrs: { for: "comment" } }, [
+                      _vm._v("Комментарий")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.comment,
+                          expression: "comment"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "comment",
+                        type: "text",
+                        placeholder:
+                          "Добавьте произвольный комментарий (необязательно)"
+                      },
+                      domProps: { value: _vm.comment },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.comment = $event.target.value
+                        }
+                      }
+                    })
+                  ])
                 ])
               ]),
               _vm._v(" "),
@@ -83429,6 +83487,41 @@ var render = function() {
                     ],
                     1
                   )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "form-group col-12" }, [
+                    _c("label", { attrs: { for: "comment" } }, [
+                      _vm._v("Комментарий")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.comment,
+                          expression: "comment"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "comment",
+                        type: "text",
+                        placeholder:
+                          "Добавьте произвольный комментарий (необязательно)"
+                      },
+                      domProps: { value: _vm.comment },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.comment = $event.target.value
+                        }
+                      }
+                    })
+                  ])
                 ])
               ]),
               _vm._v(" "),

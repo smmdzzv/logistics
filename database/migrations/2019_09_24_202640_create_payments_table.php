@@ -24,6 +24,7 @@ class CreatePaymentsTable extends Migration
             $table->char('accountFromId', 26)->nullable();
             $table->char('accountToId', 26)->nullable();
             $table->decimal('amount', 10, 2);
+            $table->string('comment')->nullable();
 
             $table->timestamps();
         });

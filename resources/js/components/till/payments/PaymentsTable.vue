@@ -114,7 +114,9 @@
                         label: 'Статья',
                         sortable: true
                     },
-
+                    comment: {
+                        label: "Комментарий"
+                    },
                     'cashier.name': {
                         label: 'Кассир',
                         sortable: true

@@ -37,7 +37,8 @@ class OutgoingPaymentsController extends Controller
             'currencyId' => $accountFrom->currency->id,
             'paymentItemId' => $request->input('paymentItemId'),
             'accountFromId' => $accountFrom->id,
-            'amount' => round($request->input('amount'), 2)
+            'amount' => round($request->input('amount'), 2),
+            'comment' =>  $request->input('comment')
         ]);
 
         //Change balance of account to

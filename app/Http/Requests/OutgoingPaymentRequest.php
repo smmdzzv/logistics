@@ -31,7 +31,8 @@ class OutgoingPaymentRequest extends FormRequest
         return [
             'paymentItemId' => 'required|exists:payment_items,id',
             'amount' => 'required|numeric|min:1',
-            'exchangeId' => 'nullable|exists:money_exchanges,id'
+            'exchangeId' => 'nullable|exists:money_exchanges,id',
+            'comment' => 'nullable|string'
         ];
     }
 }

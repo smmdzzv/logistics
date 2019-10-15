@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property double amount
  * @property Account accountTo
  * @property Account accountFrom
+ * @property string comment
  */
 class Payment extends BaseModel
 {

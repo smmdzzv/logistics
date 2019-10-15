@@ -88,6 +88,14 @@
                                     </span>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="form-group col-12">
+                                    <label for="comment">Комментарий</label>
+                                    <input class="form-control" id="comment" type="text" v-model="comment"
+                                           placeholder="Добавьте произвольный комментарий (необязательно)">
+                                </div>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <div class="form-group row mb-0">
@@ -139,6 +147,7 @@
                 currency: null,
                 paymentItem: null,
                 paymentType: null,
+                comment:null,
                 requiredAmount: null,
                 errors: {
                     amount: null,
@@ -154,7 +163,8 @@
                 else {
                     let data = {
                         paymentItemId: this.paymentItem.id,
-                        amount: this.amount
+                        amount: this.amount,
+                        comment: this.comment
                     };
 
                     try {

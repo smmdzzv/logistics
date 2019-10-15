@@ -34,6 +34,7 @@ class PaymentRequest extends FormRequest
             'payerId' => 'required|exists:users,id',
             'paymentItemId' => 'required|exists:payment_items,id',
             'amount' => 'required|numeric|min:1',
+            'comment' => 'nullable|string'
         ];
     }
 
