@@ -11296,6 +11296,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PaymentsTable",
   mounted: function mounted() {
@@ -11338,6 +11345,7 @@ __webpack_require__.r(__webpack_exports__);
       isBusy: false,
       customCells: [],
       selectedBranch: null,
+      selectedType: null,
       fields: {
         created_at: {
           label: 'Дата',
@@ -11368,8 +11376,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     prepareUrl: function prepareUrl() {
-      var action = '/payments/' + this.type + '/all';
-      if (this.selectedBranch) action = '/payments/in/' + this.selectedBranch.id;
+      var action = '/payments/filtered?';
+      if (this.selectedBranch) action += "branch=".concat(this.selectedBranch.id, "&");
+      if (this.selectedType) action += 'type=' + this.selectedType + '&';
       return action;
     },
     getItems: function getItems() {
@@ -11378,7 +11387,7 @@ __webpack_require__.r(__webpack_exports__);
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       if (this.trips) return;
       this.isBusy = true;
-      var action = this.prepareUrl() + '?paginate=10&page=' + page;
+      var action = this.prepareUrl() + 'paginate=10&page=' + page;
       axios.get(action).then(function (response) {
         _this.pagination = response.data;
         if (_this.flowablePagination) response.data.data.forEach(function (item) {
@@ -82285,14 +82294,51 @@ var render = function() {
           return [
             _c("div", { staticClass: "card-header" }, [
               _c("div", { staticClass: "row align-items-baseline" }, [
-                _c("div", { staticClass: "pl-2 mr-auto" }, [
-                  _vm._v("История платежей")
-                ]),
+                _c(
+                  "div",
+                  { staticClass: "pl-2 mb-1 col-12 col-sm-4 mr-auto" },
+                  [_vm._v("История платежей")]
+                ),
                 _vm._v(" "),
                 _vm.branches
                   ? _c(
                       "div",
-                      { staticClass: "pr-2 ml-auto" },
+                      { staticClass: "pl-2 pr-2 ml-md-auto" },
+                      [
+                        _c(
+                          "b-select",
+                          {
+                            model: {
+                              value: _vm.selectedType,
+                              callback: function($$v) {
+                                _vm.selectedType = $$v
+                              },
+                              expression: "selectedType"
+                            }
+                          },
+                          [
+                            _c("option", { domProps: { value: null } }, [
+                              _vm._v("Все типы")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "in" } }, [
+                              _vm._v("Доход")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "out" } }, [
+                              _vm._v("Расход")
+                            ])
+                          ]
+                        )
+                      ],
+                      1
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.branches
+                  ? _c(
+                      "div",
+                      { staticClass: "pr-2" },
                       [
                         _c(
                           "b-select",

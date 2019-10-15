@@ -11,8 +11,15 @@
         <template #header>
             <div class="card-header">
                 <div class="row align-items-baseline">
-                    <div class="pl-2 mr-auto">История платежей</div>
-                    <div class="pr-2 ml-auto" v-if="branches">
+                    <div class="pl-2 mb-1 col-12 col-sm-4 mr-auto">История платежей</div>
+                    <div class="pl-2 pr-2 ml-md-auto" v-if="branches">
+                        <b-select v-model="selectedType">
+                            <option :value="null">Все типы</option>
+                            <option value="in">Доход</option>
+                            <option value="out">Расход</option>
+                        </b-select>
+                    </div>
+                    <div class="pr-2" v-if="branches">
                         <b-select v-model="selectedBranch">
                             <option :value="null">Все филиалы</option>
                             <option v-for="branch in branches" :value="branch" :key="branch.id">{{branch.name}}</option>
@@ -80,6 +87,7 @@
                 isBusy: false,
                 customCells: [],
                 selectedBranch:null,
+                selectedType:null,
                 fields: {
                     created_at: {
                         label: 'Дата',
@@ -110,9 +118,13 @@
         },
         methods: {
             prepareUrl() {
-                let action = '/payments/' + this.type + '/all';
+                let action = '/payments/filtered?';
+
                 if(this.selectedBranch)
-                    action = '/payments/in/' + this.selectedBranch.id;
+                    action += `branch=${this.selectedBranch.id}&`;
+                if(this.selectedType)
+                    action += 'type=' + this.selectedType +'&';
+
                 return action;
             },
             getItems(page = 1) {
@@ -121,7 +133,7 @@
 
                 this.isBusy = true;
 
-                let action = this.prepareUrl() + '?paginate=10&page=' + page;
+                let action = this.prepareUrl() + 'paginate=10&page=' + page;
 
                 axios.get(action)
                     .then(response => {
