@@ -8,8 +8,6 @@ use App\Models\Branch;
 use App\Models\Currency;
 use App\Models\LegalEntities\LegalEntity;
 use App\Models\Till\Payment;
-use App\Models\Till\PaymentItem;
-use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use App\Data\RequestWriters\Payments\IncomingPaymentRequestWriter;
 use stdClass;

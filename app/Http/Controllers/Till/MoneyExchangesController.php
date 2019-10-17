@@ -13,7 +13,7 @@ class MoneyExchangesController extends Controller
     {
         $this->middleware('auth');
 
-        $this->middleware('role:admin');
+        $this->middleware('roles.deny:client');
     }
 
     private function rules(){

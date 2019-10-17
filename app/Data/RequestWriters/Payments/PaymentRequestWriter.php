@@ -3,6 +3,7 @@
 namespace App\Data\RequestWriters\Payments;
 
 use App\Data\RequestWriters\RequestWriter;
+use App\Models\LegalEntities\LegalEntity;
 use App\Models\Till\Payment;
 
 class PaymentRequestWriter extends RequestWriter
@@ -17,7 +18,13 @@ class PaymentRequestWriter extends RequestWriter
     {
         $this->input->payment['branchId'] = $this->input->branchId;
         $this->input->payment['cashierId'] = $this->input->cashierId;
-        $filter = ['orderId', 'accountTo'];
+
+        if (!isset($this->input->payment['currencyId'])) {
+            $this->data->duobAccount = LegalEntity::first()->accounts()->with('currency')->first();
+            $this->input->payment['currencyId'] = $this->data->duobAccount->currency->id;
+        }
+
+        $filter = ['orderId', 'accountTo', 'accountFrom'];
         $data = array_filter($this->input->payment, function ($key) use ($filter) {
             return !in_array($key, $filter);
         }, ARRAY_FILTER_USE_KEY);

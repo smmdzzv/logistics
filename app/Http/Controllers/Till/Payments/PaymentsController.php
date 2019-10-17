@@ -7,8 +7,6 @@ use App\Models\Branch;
 use App\Models\LegalEntities\LegalEntity;
 use App\Models\Till\Payment;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class PaymentsController extends BaseController
 {
