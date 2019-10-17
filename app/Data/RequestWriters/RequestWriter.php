@@ -4,12 +4,30 @@
 namespace App\Data\RequestWriters;
 
 
+use PhpParser\Node\Expr\Cast\Object_;
 use stdClass;
 
 abstract class RequestWriter
 {
+    /**
+     * Holds input data
+     *
+     * @var stdClass|array
+     */
     protected $input;
+
+    /**
+     *Object that holds intermediate data required for saving models (mostly relations)
+     *
+     * @var stdClass
+     */
     protected $data;
+
+    /**
+     * Object that holds data that was saved by RequestWriter
+     *
+     * @var stdClass
+     */
     protected $saved;
 
     protected function __construct($input)
@@ -19,5 +37,8 @@ abstract class RequestWriter
         $this->data = new stdClass();
     }
 
+    /**
+     * @return stdClass which contains saved models
+     */
     abstract function write();
 }
