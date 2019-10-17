@@ -12,13 +12,13 @@ class PaymentItemsTableSeeder extends Seeder
      */
     public function run()
     {
-        PaymentItem::create(
-            [
-                'title' => 'Оплата заказа',
-                'description' => 'Плата за принятый заказ',
-                'type' => 'in'
-            ]
-        );
+//        PaymentItem::create(
+//            [
+//                'title' => 'Оплата заказа',
+//                'description' => 'Плата за принятый заказ',
+//                'type' => 'in'
+//            ]
+//        );
 
         PaymentItem::create(
             [
