@@ -28,6 +28,7 @@
         "bootstrap-vue": "^2.0.0-rc.28",
         "laravel-vue-pagination": "^2.3.0",
         "vue": "^2.6.10",
+        "vue-easy-print": "0.0.8",
         "vuelidate": "^0.7.4"
     }
 }

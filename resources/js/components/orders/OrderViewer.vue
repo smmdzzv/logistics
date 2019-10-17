@@ -57,20 +57,20 @@
             </template>
         </b-table>
 
-        <!--        <stored-item-short-info v-for="item in itemsToShow" :storedItem="item" :key="item.id"></stored-item-short-info>-->
-
         <b-modal @hidden="onModalHidden()"
-                 cancel-title="Отменить"
-                 id="shortItemInfoModal"
-                 no-close-on-esc
-                 ok-title="Да"
-                 title="Распечатать бирки?">
-            <template v-for="item in itemsToShow">
-                <stored-item-short-info :key="stored.id"
-                                        :storedItemInfo="item"
-                                        :storedItem="stored"
-                                        v-for="stored in item.stored_items"/>
+                 hide-footer
+                 id="shortItemInfoModal">
+            <template v-slot:modal-header>
+                <button class="btn btn-primary" @click="printLabels">Печать</button>
             </template>
+            <vue-easy-print ref="easyPrint" :tableShow="true">
+                <template v-for="item in itemsToShow">
+                    <stored-item-short-info :key="stored.id"
+                                            :storedItemInfo="item"
+                                            :storedItem="stored"
+                                            v-for="stored in item.stored_items"/>
+                </template>
+            </vue-easy-print>
         </b-modal>
     </div>
 </template>
@@ -138,7 +138,6 @@
                 }
             },
             showShortInfo(data) {
-                console.log(data);
                 if (data)
                     this.itemsToShow.push(data.item);
                 else
@@ -147,6 +146,9 @@
             },
             onModalHidden(e) {
                 this.itemsToShow = [];
+            },
+            printLabels(){
+                this.$refs.easyPrint.print();
             }
         },
         components: {

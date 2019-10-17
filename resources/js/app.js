@@ -8,10 +8,12 @@ require('./bootstrap');
 
 let BootstrapVue = require('bootstrap-vue').default;
 let Vuelidate = require('vuelidate').default;
+let vueEasyPrint   = require('vue-easy-print');
 
 window.Vue = require('vue');
 window.Vue.use(BootstrapVue);
 window.Vue.use(Vuelidate);
+window.Vue.use(vueEasyPrint );
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
