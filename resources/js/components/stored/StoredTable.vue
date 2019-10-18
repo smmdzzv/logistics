@@ -3,28 +3,40 @@
         <slot name="header">
             <div class="card-header">
                 <div class="row align-items-baseline">
-                    <div class="col-6 col-md-4">
-                        <span v-if="branches">Товары на складе</span>
-                        <span v-else>Товары на всех складах</span>
-                    </div>
-                    <template v-if="branches">
-                        <label class="col-6 col-md-4 text-right" for="branch">Филиал</label>
-                        <div class="col-md-4">
-                            <select class="form-control custom-select" id="branch" v-model="selectedBranch">
-                                <option :value="null">--Все склады--</option>
-                                <option :key="branch.id" :value="branch" v-for="branch in branches">
-                                    {{branch.name}}
-                                </option>
-                            </select>
+                    <div :class="{'col-12' : !excelExport}" class="row align-items-baseline col-11">
+                        <div class="col-7 col-md-4">
+                            <span v-if="branches">Товары на складе</span>
+                            <span v-else>Товары на всех складах</span>
                         </div>
-                    </template>
+                        <template v-if="branches">
+                            <label class="col-5 col-md-4 text-right" for="branch">Филиал</label>
+                            <div class="col-md-4">
+                                <select class="form-control custom-select" id="branch" v-model="selectedBranch">
+                                    <option :value="null">--Все склады--</option>
+                                    <option :key="branch.id" :value="branch" v-for="branch in branches">
+                                        {{branch.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="ml-auto" v-if="excelExport">
+                        <vue-excel-xlsx
+                            :columns="excelColumns"
+                            :data="excelData"
+                            :sheetname="selectedBranch? selectedBranch.name : 'Все склады'"
+                            class="btn"
+                            filename="Список товаров">
+                            <img class="icon-btn-md" src="/svg/excel.svg">
+                        </vue-excel-xlsx>
+                    </div>
                 </div>
             </div>
         </slot>
 
         <b-table :busy="isBusy"
                  :fields="fields"
-                 :items="storedItems"
+                 :items="items"
                  :selectable="selectable"
                  :striped="striped"
                  :tbody-tr-class="rowClass"
@@ -48,18 +60,21 @@
         </b-table>
 
         <div class="card-footer">
-            <main-paginator :flowable="flowable" :onPageChange="getStoredItems"
+            <main-paginator :flowable="flowable" :onPageChange="getItems"
                             :pagination="pagination"></main-paginator>
         </div>
     </div>
 </template>
 
 <script>
+    import ExcelDataPreparatory from '../common/ExcelDataPreparatory.vue'
+
     export default {
         name: "StoredTable",
+        mixins: [ExcelDataPreparatory],
         mounted() {
             this.setItems();
-            this.getStoredItems();
+            this.getItems();
         },
         props: {
             branches: {
@@ -92,7 +107,7 @@
                 required: false,
                 default: '/stored/all'
             },
-            items: {
+            providedItems: {
                 type: Array,
                 required: false,
             },
@@ -113,23 +128,27 @@
             highlightRows: {
                 type: Boolean,
                 default: false
+            },
+            excelExport: {
+                type: Boolean,
+                default: false
             }
         },
         methods: {
             // Checks if item in all stored items array
-            isInStoredItems(item) {
-                return this.storedItems.find(function (stored) {
+            isInItems(item) {
+                return this.items.find(function (stored) {
                     return stored.id === item.id;
                 });
             },
             // Checks if item in provided list stored items,
             // which are items belonging to certain trip
             isInProvidedItems(item) {
-                return this.items.find(function (stored) {
+                return this.providedItems.find(function (stored) {
                     return stored.id === item.id;
                 });
             },
-            getStoredItems(page = 1) {
+            getItems(page = 1) {
                 if (!this.loadData)
                     return;
 
@@ -141,15 +160,15 @@
                     .then(response => {
                         this.pagination = response.data;
                         let items = response.data.data.filter(item => {
-                            return !this.isInStoredItems(item)
+                            return !this.isInItems(item)
                         });
 
                         if (this.flowable)
                             items.forEach(item => {
-                                this.storedItems.push(item);
+                                this.items.push(item);
                             });
                         else {
-                            this.storedItems = [...this.storedItems, ...items];
+                            this.items = [...this.items, ...items];
                         }
                         this.$nextTick(() => {
                             this.isBusy = false;
@@ -178,15 +197,15 @@
                     return 'table-danger';
             },
             setItems() {
-                if (this.items)
-                    for (let item of this.items) {
-                        this.storedItems.push(item);
+                if (this.providedItems)
+                    for (let item of this.providedItems) {
+                        this.items.push(item);
                     }
 
                 if (this.selectedItems)
                     for (let item of this.selectedItems) {
-                        if (!this.isInStoredItems(item))
-                            this.storedItems.push(item);
+                        if (!this.isInItems(item))
+                            this.items.push(item);
                     }
             }
         },
@@ -200,9 +219,9 @@
         },
         watch: {
             selectedBranch: function () {
-                this.storedItems.splice(0, this.storedItems.length);
+                this.items.splice(0, this.items.length);
                 this.setItems();
-                this.getStoredItems();
+                this.getItems();
             },
         },
         data() {
@@ -212,7 +231,7 @@
                     last_page: null,
                     current_page: null
                 },
-                storedItems: [],
+                items: [],
                 isBusy: false,
                 fields: {
                     'info.item.name': {

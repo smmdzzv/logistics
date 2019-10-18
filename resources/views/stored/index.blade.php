@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <stored-table class="shadow" :branches="{{$branches}}"></stored-table>
+        <stored-table class="shadow" flowable excel-export :branches="{{$branches}}"></stored-table>
     </div>
 @endsection
 

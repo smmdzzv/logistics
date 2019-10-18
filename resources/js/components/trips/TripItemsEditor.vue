@@ -30,8 +30,8 @@
 
             <div class="col-lg-8">
                 <stored-table :branches="branches"
-                              :items="trip.stored_items"
                               :prepareUrl="prepareUrl"
+                              :providedItems="trip.stored_items"
                               :selectedItems="storedItems"
                               @onItemSelected="onItemSelected"
                               @onItemUnselected="onItemUnselected"
