@@ -1,18 +1,35 @@
 <template>
     <div class="card">
-        <slot name="header">
-            <div class="card-header">
+        <div class="card-header">
+            <div class="row align-items-baseline">
+                <div class="col-11">
+                    <slot name="header">
 
+                    </slot>
+                </div>
+
+                <div class="ml-auto" v-if="excelColumns">
+                    <vue-excel-xlsx
+                        :columns="excelColumns"
+                        :data="excelData"
+                        :filename="excelFileName"
+                        :sheetname="excelSheetName"
+                        class="btn">
+                        <img class="icon-btn-md" src="/svg/excel.svg">
+                    </vue-excel-xlsx>
+                </div>
             </div>
-        </slot>
+
+        </div>
+
 
         <b-table :borderless="borderless"
                  :busy="isBusy"
                  :fields="fields"
+                 :fixed="fixed"
                  :items="items"
                  :primary-key="primaryKey"
                  :responsive="responsive"
-                 :fixed="fixed"
                  :select-mode="selectMode"
                  :selectable="selectable"
                  :sticky-header="tableHeight"
@@ -35,7 +52,7 @@
                 </span>
             </template>
 
-            <template v-for="cell in customCells" :slot="cell" slot-scope="data">
+            <template :slot="cell" slot-scope="data" v-for="cell in customCells">
                 <slot :name="cell" v-bind:item="data.item"></slot>
             </template>
         </b-table>
@@ -47,8 +64,11 @@
 </template>
 
 <script>
+    import ExcelDataPreparatory from './ExcelDataPreparatory.vue'
+
     export default {
         name: "TableCard",
+        mixins: [ExcelDataPreparatory],
         props: {
             tableHeight: {
                 type: String,
@@ -78,7 +98,7 @@
                 type: Boolean,
                 default: false
             },
-            borderless:{
+            borderless: {
                 type: Boolean,
                 default: false
             },
@@ -102,14 +122,30 @@
                 type: Boolean,
                 default: false
             },
-            customCells:{
+            customCells: {
                 type: Array,
-                default:()=>[]
+                default: () => []
+            },
+            // excelColumns: {
+            //     type: Array,
+            //     required: false
+            // },
+            // excelData: {
+            //     type: Array,
+            //     required: false
+            // },
+            excelSheetName: {
+                type: String,
+                required: false
+            },
+            excelFileName: {
+                type: String,
+                required: false
             }
         },
         methods: {
             onRowClick(item) {
-                if(!this.selectable)
+                if (!this.selectable)
                     return;
                 if (this.isSelected(item)) {
                     this.selected = this.selected.filter(function (stored) {
@@ -135,6 +171,6 @@
             return {
                 selected: []
             }
-        }
+        },
     }
 </script>

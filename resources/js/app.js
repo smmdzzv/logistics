@@ -8,12 +8,14 @@ require('./bootstrap');
 
 let BootstrapVue = require('bootstrap-vue').default;
 let Vuelidate = require('vuelidate').default;
-let vueEasyPrint   = require('vue-easy-print');
+let VueEasyPrint = require('vue-easy-print');
+let VueExcelXlsx = require('vue-excel-xlsx').default;
 
 window.Vue = require('vue');
 window.Vue.use(BootstrapVue);
 window.Vue.use(Vuelidate);
-window.Vue.use(vueEasyPrint );
+window.Vue.use(VueEasyPrint);
+window.Vue.use(VueExcelXlsx);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -69,8 +71,8 @@ Vue.component('QrCode', require('@chenfengyuan/vue-qrcode').default);
 
 window.app = new Vue({
     el: '#app',
-    methods:{
-        showErrorMsg(title, message){
+    methods: {
+        showErrorMsg(title, message) {
             this.$bvModal.msgBoxOk(message, {
                 centered: true,
                 okTitle: 'Закрыть',

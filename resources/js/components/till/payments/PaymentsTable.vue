@@ -1,47 +1,43 @@
 <template>
-    <table-card
-        :customCells="customCells"
-        :fields="fields"
-        :isBusy="isBusy"
-        :items="items"
-        :striped="striped"
-        class="shadow"
-        fixed
-        primary-key="id"
-        responsive>
-        <template #header>
-            <div class="card-header">
-                <div class="row align-items-baseline">
-                    <div class="pl-2 mb-1 col-12 col-sm-4 mr-auto">История платежей</div>
-                    <div class="pl-2 pr-2 ml-md-auto" v-if="branches">
-                        <b-select v-model="selectedType">
-                            <option :value="null">Все типы</option>
-                            <option value="in">Доход</option>
-                            <option value="out">Расход</option>
-                        </b-select>
+        <table-card
+            :customCells="customCells"
+            :fields="fields"
+            :isBusy="isBusy"
+            :items="items"
+            :striped="striped"
+            excelFileName="История платежей"
+            excelSheetName="Все платежи"
+            class="shadow"
+            fixed
+            primary-key="id"
+            responsive>
+            <template #header>
+                    <div class="row align-items-baseline">
+                        <div class="pl-2 mb-1 col-12 col-sm-4 mr-auto">История платежей</div>
+                        <div class="pl-2 pr-2 ml-md-auto" v-if="branches">
+                            <b-select v-model="selectedType">
+                                <option :value="null">Все типы</option>
+                                <option value="in">Доход</option>
+                                <option value="out">Расход</option>
+                            </b-select>
+                        </div>
+                        <div class="pr-2" v-if="branches">
+                            <b-select v-model="selectedBranch">
+                                <option :value="null">Все филиалы</option>
+                                <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}
+                                </option>
+                            </b-select>
+                        </div>
                     </div>
-                    <div class="pr-2" v-if="branches">
-                        <b-select v-model="selectedBranch">
-                            <option :value="null">Все филиалы</option>
-                            <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}</option>
-                        </b-select>
-                    </div>
+            </template>
+
+            <template #footer>
+                <div class="card-footer">
+                    <main-paginator :flowable="flowable" :onPageChange="getItems"
+                                    :pagination="pagination"></main-paginator>
                 </div>
-
-            </div>
-        </template>
-
-        <!--            <template slot="view" slot-scope="{item}">-->
-        <!--                <a :href="getDetailsUrl(item)" class="btn btn-outline-primary">Детали</a>-->
-        <!--            </template>-->
-
-        <template #footer>
-            <div class="card-footer">
-                <main-paginator :flowable="flowable" :onPageChange="getItems"
-                                :pagination="pagination"></main-paginator>
-            </div>
-        </template>
-    </table-card>
+            </template>
+        </table-card>
 </template>
 
 <script>
@@ -121,7 +117,7 @@
                         label: 'Кассир',
                         sortable: true
                     },
-                }
+                },
             }
         },
         methods: {
@@ -164,7 +160,7 @@
                             this.isBusy = false;
                         })
                     );
-            }
+            },
         },
         watch: {
             selectedBranch() {
@@ -172,7 +168,7 @@
             },
             selectedType() {
                 this.getItems();
-            }
+            },
         },
         components: {
             'MainPaginator': require('../../common/MainPaginator.vue').default,
