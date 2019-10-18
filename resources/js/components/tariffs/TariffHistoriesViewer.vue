@@ -1,32 +1,28 @@
 <template>
-    <div class="container col-12">
-        <div class="card shadow">
-            <div class="card-header">
-                История тарифных планов
-            </div>
-            <div class="">
-                <b-table :fields="fields"
-                         :items="items"
-                         :busy="isBusy"
-                         hover
-                         outlined
-                         primary-key="id"
-                         responsive
-                         striped>
+    <table-card
+        :isBusy="isBusy"
+        :fields="fields"
+        :items="items"
+        :striped="true"
+        excelFileName="История тарифных планов"
+        hover
+        class="shadow"
+        responsive
+        primary-key="id">
+        <template #header>
+            История тарифных планов
+        </template>
 
-                    <template v-slot:table-busy>
-                        <div class="text-center text-info my-2">
-                            <b-spinner class="align-middle"></b-spinner>
-                        </div>
-                    </template>
+        <template slot="view" slot-scope="{item}">
+            <a class="btn btn-outline-primary" :href="getDetailsUrl(item)">Детали</a>
+        </template>
 
-                </b-table>
-            </div>
+        <template #footer>
             <div class="card-footer">
                 <main-paginator :flowable="flowable" :onPageChange="getHistories" :pagination="pagination"></main-paginator>
             </div>
-        </div>
-    </div>
+        </template>
+    </table-card>
 </template>
 
 <script>
@@ -48,8 +44,8 @@
                     last_page: null,
                     current_page: null
                 },
-                items:[],
-                isBusy:false,
+                items: [],
+                isBusy: false,
                 fields: {
                     'tariff.name': {
                         label: 'Тариф',
@@ -102,13 +98,13 @@
                 }
             }
         },
-        methods:{
-            async getHistories(page = 1){
+        methods: {
+            async getHistories(page = 1) {
                 this.isBusy = true;
 
                 let action = '/tariff-price-histories/all?paginate=10&page=' + page;
 
-                try{
+                try {
                     const response = await axios.get(action);
                     this.pagination = response.data;
                     if (this.flowablePagination)
@@ -117,8 +113,7 @@
                         });
                     else
                         this.items = response.data.data;
-                }
-                catch (e) {
+                } catch (e) {
                     this.$root.showErrorMsg(
                         'Ошибка загрузки',
                         'Не удалось загрузить историю расценок. Попробуйте обновить список позднее'
@@ -140,10 +135,8 @@
         },
         components: {
             'MainPaginator': require('../common/MainPaginator.vue').default,
+            'TableCard': require('../common/TableCard.vue').default
         }
     }
 </script>
 
-<style scoped>
-
-</style>
