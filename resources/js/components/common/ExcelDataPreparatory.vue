@@ -44,6 +44,7 @@
         },
         watch: {
             items() {
+                this.excelData = [];
                 this.prepareExcelColumns();
                 this.prepareExcelData();
                 this.trimExcelColumnsFields();
