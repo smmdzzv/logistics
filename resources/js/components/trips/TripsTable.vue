@@ -10,9 +10,7 @@
     responsive
     primary-key="id">
         <template #header>
-            <div class="card-header">
                 Список рейсов
-            </div>
         </template>
 
         <template slot="view" slot-scope="{item}">
@@ -21,7 +19,7 @@
 
         <template #footer>
             <div class="card-footer">
-                <main-paginator :pagination="pagination" :onPageChange="getTrips" :flowable="flowablePagination" ></main-paginator>
+                <main-paginator :pagination="pagination" :onPageChange="getTrips" :flowable="flowable" ></main-paginator>
             </div>
         </template>
     </table-card>
@@ -45,7 +43,7 @@
                 type: Array,
                 required:false
             },
-            flowablePagination:{
+            flowable:{
                 type: Boolean,
                 default: false
             },
