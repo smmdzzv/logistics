@@ -64,7 +64,7 @@ class TripStoredItemsController extends Controller
 
     public function edit(Trip $trip)
     {
-        $trip->load('storedItems.info.item', 'storedItems.info.owner', 'car');
+        $trip->load('storedItems.info.item', 'storedItems.info.owner', 'storedItems.storageHistory.storage', 'car');
         $branches = Branch::all();
         return view('trips.edit-items-list', compact('trip', 'branches'));
     }
