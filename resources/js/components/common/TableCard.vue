@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header">
             <div class="row align-items-baseline">
-                <div class="col-11">
+                <div class="col-10 col-md-11">
                     <slot name="header">
 
                     </slot>
