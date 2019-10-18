@@ -38,6 +38,7 @@
                               class="shadow"
                               flowable
                               highlightRows
+                              hover
                               selectable/>
             </div>
 

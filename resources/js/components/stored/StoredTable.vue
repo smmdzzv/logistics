@@ -36,6 +36,7 @@
 
         <b-table :busy="isBusy"
                  :fields="fields"
+                 :hover="hover"
                  :items="items"
                  :selectable="selectable"
                  :striped="striped"
@@ -115,6 +116,10 @@
                 type: Boolean,
                 required: false,
                 default: true
+            },
+            hover: {
+                type: Boolean,
+                required: false,
             },
             prepareUrl: {
                 type: Function,
