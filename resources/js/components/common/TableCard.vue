@@ -19,7 +19,6 @@
                     </vue-excel-xlsx>
                 </div>
             </div>
-
         </div>
 
 
@@ -126,21 +125,13 @@
                 type: Array,
                 default: () => []
             },
-            // excelColumns: {
-            //     type: Array,
-            //     required: false
-            // },
-            // excelData: {
-            //     type: Array,
-            //     required: false
-            // },
             excelSheetName: {
                 type: String,
-                required: false
+                default: 'Лист 1'
             },
             excelFileName: {
                 type: String,
-                required: false
+                default: 'Ajoibot Logistics Export'
             }
         },
         methods: {

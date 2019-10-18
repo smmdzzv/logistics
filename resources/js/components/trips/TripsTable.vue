@@ -6,6 +6,7 @@
     :items="items"
     :customCells="customCells"
     :striped="striped"
+    excelFileName="Список рейсов"
     class="shadow"
     responsive
     primary-key="id">
