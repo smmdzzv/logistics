@@ -1,5 +1,4 @@
 <template>
-<div class="container">
     <table-card
     :isBusy="isBusy"
     :fields="fields"
@@ -24,7 +23,6 @@
             </div>
         </template>
     </table-card>
-</div>
 </template>
 
 <script>
