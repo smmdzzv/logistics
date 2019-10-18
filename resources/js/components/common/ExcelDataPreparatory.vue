@@ -21,16 +21,14 @@
                     let data = {};
                     this.excelColumns.forEach(column => {
                         let keys = column.field.split('.');
-                        let lastKey = this.getLastPropKey(column.field);
-                        data[lastKey] = this.getValue(keys, this.items[i]);
+                        data[column.field.replace('.', '')] = this.getValue(keys, this.items[i]);
                     }, this);
                     this.excelData.push(data);
                 }
             },
             trimExcelColumnsFields() {
                 this.excelColumns.forEach(column => {
-                    let fullKey = column.field;
-                    column.field = this.getLastPropKey(fullKey);
+                    column.field = column.field.replace('.', '');
                 }, this)
             },
             getValue(keys, obj) {
@@ -42,10 +40,6 @@
                 }, this);
 
                 return value;
-            },
-            getLastPropKey(fullKey) {
-                let keys = fullKey.split('.');
-                return keys[keys.length - 1];
             }
         },
         watch: {
