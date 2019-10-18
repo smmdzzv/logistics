@@ -1,43 +1,52 @@
 <template>
-        <table-card
-            :customCells="customCells"
-            :fields="fields"
-            :isBusy="isBusy"
-            :items="items"
-            :striped="striped"
-            excelFileName="История платежей"
-            excelSheetName="Все платежи"
-            class="shadow"
-            fixed
-            primary-key="id"
-            responsive>
-            <template #header>
-                    <div class="row align-items-baseline">
-                        <div class="pl-2 mb-1 col-12 col-sm-4 mr-auto">История платежей</div>
-                        <div class="pl-2 pr-2 ml-md-auto" v-if="branches">
-                            <b-select v-model="selectedType">
-                                <option :value="null">Все типы</option>
-                                <option value="in">Доход</option>
-                                <option value="out">Расход</option>
-                            </b-select>
-                        </div>
-                        <div class="pr-2" v-if="branches">
-                            <b-select v-model="selectedBranch">
-                                <option :value="null">Все филиалы</option>
-                                <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}
-                                </option>
-                            </b-select>
-                        </div>
+    <table-card
+        :customCells="customCells"
+        :fields="fields"
+        :isBusy="isBusy"
+        :items="items"
+        :striped="striped"
+        :tableHeight="tableHeight"
+        class="shadow"
+        excelFileName="История платежей"
+        excelSheetName="Все платежи"
+        primary-key="id"
+        responsive>
+        <template #header>
+            <div class="row align-items-baseline">
+                <div class="col-12 col-md-6 mb-3 mb-md-0">
+                    <div class=" mr-auto">История платежей</div>
+                    <div class="ml-md-auto">
+                        {{comment}}
                     </div>
-            </template>
-
-            <template #footer>
-                <div class="card-footer">
-                    <main-paginator :flowable="flowable" :onPageChange="getItems"
-                                    :pagination="pagination"></main-paginator>
                 </div>
-            </template>
-        </table-card>
+
+                <div class="row col-12  col-md-6">
+                    <div class="ml-auto" v-if="branches">
+                        <b-select v-model="selectedType">
+                            <option :value="null">Все типы</option>
+                            <option value="in">Доход</option>
+                            <option value="out">Расход</option>
+                        </b-select>
+                    </div>
+                    <div class="ml-3" v-if="branches">
+                        <b-select v-model="selectedBranch">
+                            <option :value="null">Все филиалы</option>
+                            <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}
+                            </option>
+                        </b-select>
+                    </div>
+                </div>
+
+            </div>
+        </template>
+
+        <template #footer>
+            <div class="card-footer">
+                <main-paginator :flowable="flowable" :onPageChange="getItems"
+                                :pagination="pagination"></main-paginator>
+            </div>
+        </template>
+    </table-card>
 </template>
 
 <script>
@@ -49,6 +58,9 @@
             this.getItems();
         },
         props: {
+            comment: {
+                type: String
+            },
             branches: {
                 type: Array,
                 required: false
@@ -72,6 +84,10 @@
             type: {
                 type: String,
                 default: 'in'
+            },
+            tableHeight: {
+                type: String,
+                default: '50vh'
             }
         },
         data() {

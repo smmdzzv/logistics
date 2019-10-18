@@ -71,7 +71,7 @@
         props: {
             tableHeight: {
                 type: String,
-                default: '500px'
+                default: '75vh'
             },
             items: {
                 type: Array,
