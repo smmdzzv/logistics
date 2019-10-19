@@ -74,7 +74,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row justify-content-center">
+                            <div class="form-group row justify-content-center" v-if="data.car.trailerNumber">
                                 <div class="input-group offset-md-2 col-md-6">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
@@ -219,6 +219,9 @@
             },
             async saveTrip() {
                 try {
+                    if(!this.data.hasTrailer)
+                        this.data.hasTrailer = false;
+
                     let data = {
                         code: this.data.code,
                         carId: this.data.car.id,
