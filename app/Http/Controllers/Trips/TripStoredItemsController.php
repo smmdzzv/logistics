@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Trips;
 
 
 use App\Data\MassWriters\Trip\StoredItemTripHistoryWriter;
+use App\Data\RequestWriters\Trips\AssociateToTripRequestWriter;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\StoredItems\StoredItem;
@@ -21,43 +22,49 @@ class TripStoredItemsController extends Controller
 
     public function associateToTrip(Trip $trip)
     {
-        $storedItems = request()->storedItems;
+//        $storedItems = request()->storedItems;
+        $data = new \stdClass();
+        $data->trip = $trip;
+        $data->storedItems = request()->storedItems;
+        $writer = new AssociateToTripRequestWriter($data);
+        $writer->write();
+
         $dissociate = [];
 
-        foreach ($trip->storedItems as $stored) {
-            if (!in_array($stored->id, $storedItems))
-                array_push($dissociate, $stored->id);
-        }
+//        foreach ($trip->storedItems as $stored) {
+//            if (!in_array($stored->id, $storedItems))
+//                array_push($dissociate, $stored->id);
+//        }
 
-        StoredItemTripHistory::where('trip_id', $trip->id)
-            ->whereIn('stored_item_id', $dissociate)
-            ->forceDelete();
+//        StoredItemTripHistory::where('trip_id', $trip->id)
+//            ->whereIn('stored_item_id', $dissociate)
+//            ->forceDelete();
+//
+//        $existingRecords = StoredItemTripHistory::where('trip_id', $trip->id)
+//            ->whereIn('stored_item_id', $storedItems)
+//            ->get();
 
-        $existingRecords = StoredItemTripHistory::where('trip_id', $trip->id)
-            ->whereIn('stored_item_id', $storedItems)
-            ->get();
-
-        $storedItems = array_filter($storedItems,
-            function ($stored) use ($existingRecords, $storedItems) {
-                foreach ($existingRecords as $history) {
-                    if ($history->stored_item_id === $stored)
-                        return false;
-                }
-                return true;
-            });
-
-        $items = array();
-
-        foreach ($storedItems as $stored) {
-            $items[] = new StoredItemTripHistory([
-                'trip_id' => $trip->id,
-                'stored_item_id' => $stored
-            ]);
-        }
-        if (count($items) > 0) {
-            $writer = new StoredItemTripHistoryWriter($items);
-            $writer->write();
-        }
+//        $storedItems = array_filter($storedItems,
+//            function ($stored) use ($existingRecords, $storedItems) {
+//                foreach ($existingRecords as $history) {
+//                    if ($history->stored_item_id === $stored)
+//                        return false;
+//                }
+//                return true;
+//            });
+//
+//        $items = array();
+//
+//        foreach ($storedItems as $stored) {
+//            $items[] = new StoredItemTripHistory([
+//                'trip_id' => $trip->id,
+//                'stored_item_id' => $stored
+//            ]);
+//        }
+//        if (count($items) > 0) {
+//            $writer = new StoredItemTripHistoryWriter($items);
+//            $writer->write();
+//        }
 
         return $trip;
     }
