@@ -8,7 +8,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-6">Детали рейса</div>
-                            @if($trip->isEditable)
+                            @if($trip->isEditable())
                                 <div class="col-6 text-right"><a href="/trips/{{$trip->id}}/edit">Изменить</a></div>
                             @endif
                         </div>
@@ -34,7 +34,7 @@
                               :selectable="false">
                     <template v-slot:header>
                         <div class="card-header text-right">
-                            @if($trip->isEditable)
+                            @if($trip->isEditable())
                                 <a href="{{route('trip.edit-items', $trip->id)}}">Изменить список товаров</a>
                             @endif
                         </div>

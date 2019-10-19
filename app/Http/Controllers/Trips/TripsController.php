@@ -37,7 +37,6 @@ class TripsController extends Controller
     public function show(Trip $trip)
     {
         $trip->load('driver', 'car', 'storedItems.info.owner', 'storedItems.info.item', 'storedItems.storageHistory.storage');
-        $trip->isEditable = $trip->departureDate > Carbon::now();
         return view('trips.show', compact('trip'));
     }
 

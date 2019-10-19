@@ -54,8 +54,7 @@ class TripRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             $trip = Trip::find(request()->get('id'));
-            $isEditable = $trip->departureDate > Carbon::now();
-            if(!$isEditable)
+            if(!$trip->isEditable())
                 $validator->errors()->add('departureDate', 'Невозможно редактировать рейс. Дата редактирования должна быть меньше даты отправления');
 
             $driverId = request()->get('driverId');
