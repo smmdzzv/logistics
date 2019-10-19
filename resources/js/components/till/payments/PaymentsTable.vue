@@ -15,7 +15,7 @@
         excelFileName="История платежей"
         excelSheetName="Все платежи"
         responsive
-        tablePrimaryKey="id">
+        primaryKey="id">
         <template #header>
             <div class="row align-items-baseline">
                 <div class="col-12 col-md-6 mb-3 mb-md-0">

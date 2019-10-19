@@ -27,7 +27,7 @@
                  :fields="fields"
                  :fixed="fixed"
                  :items="items"
-                 :primary-key="tablePrimaryKey"
+                 :primary-key="primaryKey"
                  :responsive="responsive"
                  :select-mode="selectMode"
                  :selectable="selectable"
@@ -79,7 +79,7 @@
                 type: Object,
                 required: true
             },
-            tablePrimaryKey: {
+            primaryKey: {
                 type: String,
                 required:true
             },

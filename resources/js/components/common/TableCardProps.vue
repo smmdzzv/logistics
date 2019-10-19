@@ -6,7 +6,7 @@
                 type: String,
                 default: '75vh'
             },
-            tablePrimaryKey: {
+            primaryKey: {
                 type: String,
                 default: 'id'
             },
