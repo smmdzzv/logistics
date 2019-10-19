@@ -14,6 +14,7 @@
                             :class="{'text-danger': totalCubage > maxCubage}">{{totalCubage}}</span> из {{maxCubage}}
                             м<sup>3</sup>
                         </p>
+                        <small v-if="trip.hasTrailer" class="text-muted">С учетом кубатуры и грузоподъемности прицепа</small>
                     </div>
                     <div class="card-footer">
                         <div class="form-group row mb-0">
@@ -61,9 +62,6 @@
             }
         },
         mounted() {
-            // this.storedItems = this.trip.stored_items.filter(function () {
-            //     return true;
-            // });
         },
         data() {
             return {
@@ -93,10 +91,16 @@
                 return Math.round(total * 100) / 100;
             },
             maxWeight() {
-                return this.trip.car.maxWeight
+                let weight = this.trip.car.maxWeight;
+                if (this.trip.hasTrailer)
+                    weight += this.trip.car.maxWeight + this.trip.car.trailerMaxWeight;
+                return weight
             },
             maxCubage() {
-                return this.trip.car.maxCubage
+                let cubage = this.trip.car.maxCubage;
+                if (this.trip.hasTrailer)
+                    cubage += this.trip.car.maxCubage + this.trip.car.trailerMaxCubage;
+                return cubage;
             },
             action() {
                 return '/trips/' + this.trip.id + '/items'
