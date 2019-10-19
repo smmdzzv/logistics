@@ -39,7 +39,6 @@ Route::get('branch/{branch}/orders', 'OrdersController@filteredByBranch');
 Route::get('user/{user}/orders', 'OrdersController@filteredByUser');
 
 
-
 //Trips
 Route::get('/trips/all', 'Trips\TripsController@all');
 Route::resource('trips', 'Trips\TripsController',
@@ -88,12 +87,12 @@ Route::get('/tariff-price-histories/{tariff}', "TariffPriceHistoriesController@l
 
 //Cars
 Route::get('/cars/all', 'CarsController@all');
-Route::resource('cars', 'CarsController');
+Route::resource('cars', 'CarsController')->parameters(['cars' => 'car']);
 
 //Branches
 Route::get('/branches/all', "BranchesController@all");
 Route::resource('branches', 'BranchesController',
-    ['except' => ['create', 'edit', 'show']])->parameters(['branches' => 'branch']);;
+    ['except' => ['create', 'edit', 'show']])->parameters(['branches' => 'branch']);
 
 //PaymentItems
 Route::get('/payment-items/all', 'Till\PaymentItemsController@all');

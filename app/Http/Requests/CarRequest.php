@@ -26,13 +26,15 @@ class CarRequest extends FormRequest
         return [
             'id' => 'string',
             'number' => 'required|string|max:20',
-            'trailerNumber' => 'string|max:20',
             'length' => 'numeric',
             'height' => 'numeric',
             'width' => 'numeric',
             'maxCubage' => 'required|numeric',
             'maxWeight' => 'required|numeric',
-            'serial' => 'string|max:40'
+            'serial' => 'string|max:40',
+            'trailerNumber' => 'nullable|string|max:20',
+            'trailerMaxCubage' => 'required_with:trailerNumber|numeric',
+            'trailerMaxWeight' => 'required_with:trailerNumber|numeric',
         ];
     }
 }

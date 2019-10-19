@@ -16,13 +16,15 @@ class CreateCarsTable extends Migration
         Schema::create('cars', function (Blueprint $table) {
             $table->char('id', 26)->primary();;
             $table->string('number', 20)->unique();
-            $table->string('trailerNumber', 20)->unique()->nullable();
             $table->double('length', 10)->nullable();
             $table->double('height', 10)->nullable();
             $table->double('width', 10)->nullable();
             $table->double('maxCubage', 10);
             $table->double('maxWeight', 10);
             $table->string('serial', 40)->unique()->nullable();
+            $table->string('trailerNumber', 20)->unique()->nullable();
+            $table->double('trailerMaxCubage', 10)->nullable();
+            $table->double('trailerMaxWeight', 10)->nullable();
             $table->timestamps();
 
             $table->index('number');

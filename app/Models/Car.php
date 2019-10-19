@@ -7,16 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Car extends BaseModel
 {
-    protected $fillable = [
-        'number',
-        'trailerNumber',
-        'length',
-        'height',
-        'width',
-        'maxCubage',
-        'maxWeight',
-        'serial'
-    ];
+    protected $guarded = [];
 
     protected $casts =[
       'maxWeight' => 'double',

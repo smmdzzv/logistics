@@ -27,22 +27,6 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="trailerNumber" class="col-md-4 col-form-label text-md-right">Номер прицепа</label>
-                                <div class="col-md-6">
-                                    <input id="trailerNumber" placeholder="гос. номер прицепа" type="text"
-                                           class="form-control @error('trailerNumber') is-invalid @enderror"
-                                           name="trailerNumber" value="{{ old('trailerNumber') }}" required
-                                           autocomplete="trailerNumber" autofocus>
-
-                                    @error('trailerNumber')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
                                 <label for="length" class="col-md-4 col-form-label text-md-right">Длина</label>
                                 <div class="col-md-6">
                                     <input id="length" placeholder="в метрах" type="text"
@@ -107,13 +91,16 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="maxWeight" class="col-md-4 col-form-label text-md-right">Грузоподъемность</label>
+                                <label for="maxWeight"
+                                       class="col-md-4 col-form-label text-md-right">Грузоподъемность</label>
                                 <div class="col-md-6">
                                     <input id="maxWeight" placeholder="в килограммах" type="text"
                                            class="form-control @error('maxWeight') is-invalid @enderror"
                                            name="maxWeight" value="{{ old('maxWeight') }}" required
                                            autocomplete="maxWeight" autofocus>
-                                    <small id="maxWeightHelp" class="form-text text-muted">При наличии прицепа, необходимо ввести сумарную грузоподъемность</small>
+                                    <small id="maxWeightHelp" class="form-text text-muted">
+                                        Необходимо ввести грузопдъемность машины без учета прицепа
+                                    </small>
 
                                     @error('maxWeight')
                                     <span class="invalid-feedback" role="alert">
@@ -124,15 +111,77 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="maxCubage" class="col-md-4 col-form-label text-md-right">Объем кузова</label>
+                                <label for="maxCubage" class="col-md-4 col-form-label text-md-right">Объем
+                                    кузова</label>
                                 <div class="col-md-6">
                                     <input id="maxCubage" placeholder="в кубах" type="text"
                                            class="form-control @error('maxCubage') is-invalid @enderror"
                                            name="maxCubage" value="{{ old('maxCubage') }}" required
                                            autocomplete="maxCubage" autofocus>
-                                    <small id="maxCubageHelp" class="form-text text-muted">При наличии прицепа, необходимо ввести сумарный объем</small>
+                                    <small id="maxCubageHelp" class="form-text text-muted">
+                                        Необходимо ввести объем машины без учета прицепа
+                                    </small>
 
                                     @error('maxCubage')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row text-center pt-2 pb-4">
+                                <h5 class="col-12">Прицеп</h5>
+                                <small class="form-text col-12 text-muted">
+                                    Необязательно к заполнение
+                                </small>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="trailerNumber" class="col-md-4 col-form-label text-md-right">Номер
+                                    прицепа</label>
+                                <div class="col-md-6">
+                                    <input id="trailerNumber" placeholder="гос. номер прицепа" type="text"
+                                           class="form-control @error('trailerNumber') is-invalid @enderror"
+                                           name="trailerNumber" value="{{ old('trailerNumber') }}"
+                                           autocomplete="trailerNumber" autofocus>
+
+                                    @error('trailerNumber')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="trailerMaxWeight"
+                                       class="col-md-4 col-form-label text-md-right">Грузоподъемность</label>
+                                <div class="col-md-6">
+                                    <input id="trailerMaxWeight" placeholder="в килограммах" type="text"
+                                           class="form-control @error('trailerMaxWeight') is-invalid @enderror"
+                                           name="trailerMaxWeight" value="{{ old('trailerMaxWeight') }}"
+                                           autocomplete="trailerMaxWeight" autofocus>
+
+                                    @error('trailerMaxWeight')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="trailerMaxCubage" class="col-md-4 col-form-label text-md-right">Объем
+                                    кузова</label>
+                                <div class="col-md-6">
+                                    <input id="trailerMaxCubage" placeholder="в кубах" type="text"
+                                           class="form-control @error('trailerMaxCubage') is-invalid @enderror"
+                                           name="trailerMaxCubage" value="{{ old('trailerMaxCubage') }}"
+                                           autocomplete="trailerMaxCubage" autofocus>
+
+                                    @error('trailerMaxCubage')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
