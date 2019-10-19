@@ -35,4 +35,8 @@ class FuelConsumption extends BaseModel
     public function car(){
         return $this->belongsToMany(Car::class);
     }
+
+    public function destination(){
+        return $this->belongsTo(Country::class);
+    }
 }

@@ -27,6 +27,7 @@ class CarsController extends Controller
     }
 
     public function show(Car $car){
+        $car->load('toChinaConsumption', 'fromChinaConsumption');
         return view('cars.show', compact('car'));
     }
 
