@@ -33,8 +33,8 @@ class CarRequest extends FormRequest
             'maxWeight' => 'required|numeric',
             'serial' => 'string|max:40',
             'trailerNumber' => 'nullable|string|max:20',
-            'trailerMaxCubage' => 'required_with:trailerNumber|numeric',
-            'trailerMaxWeight' => 'required_with:trailerNumber|numeric',
+            'trailerMaxCubage' => 'required_with:trailerNumber|nullable|numeric',
+            'trailerMaxWeight' => 'required_with:trailerNumber|nullable|numeric',
         ];
     }
 }

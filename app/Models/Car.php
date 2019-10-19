@@ -16,7 +16,7 @@ class Car extends BaseModel
 
     public function fuelConsumptions()
     {
-        return $this->belongsToMany(FuelConsumption::class);
+        return $this->hasMany(FuelConsumption::class);
     }
 
     public function trips(){

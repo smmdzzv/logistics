@@ -1,29 +1,51 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container col-lg-8 col-xl-6">
-        <div class="card">
+    <div class="container">
+        <div class="card ">
             <div class="card-header">
                 <div class="md-6">Обзор машины</div>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <h5 class="col-12 col-sm-6">Номер машины: {{$car->number}}</h5>
-                    <div class="text-left text-sm-right col-12 col-sm-6 align-items-baseline">
-                        <a href="{{route('cars.edit', $car)}}" class="pr-md-0 pr-lg-4">Редактировать</a>
-                        <button class="btn btn-link" onclick="destroyCar()">Удалить</button>
+                <!--Car main info-->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <h5>Номер машины: {{$car->number}}</h5>
+                        </div>
+                        <div class="row col-md-6">
+                            <a class="btn btn-link ml-md-auto" href="{{route('cars.edit', $car)}}">Редактировать</a>
+                            <button class="btn btn-link" onclick="destroyCar()">Удалить</button>
+                        </div>
                     </div>
-                    <div class="jumbotron col-10 offset-1 mt-4">
-                        <h5 class="mb-3">Машина</h5>
-                        <p>Серийный номер: {{$car->serial}}</p>
-                        <p>Длина: {{$car->length}} | Ширина: {{$car->width}} | Высота: {{$car->height}} </p>
-                        <p>Грузоподъемность: {{$car->maxWeight}} кг | Кубатура: {{$car->maxCubage}} м<sup>3</sup></p>
-                        <hr>
-                        @if($car->trailerNumber)
-                            <h5 class="mb-3">Прицеп</h5>
-                            <p>Номер: {{$car->trailerNumber}}</p>
-                            <p>Грузоподъемность: {{$car->trailerMaxWeight}} | Кубатура:{{$car->trailerMaxCubage}} </p>
-                        @endif
+                    <div class="row">
+                        <div class="jumbotron col-10 offset-1 mt-4">
+                            <h5 class="mb-3">Машина</h5>
+                            <p>Серийный номер: {{$car->serial}}</p>
+                            <p>Длина: {{$car->length}} | Ширина: {{$car->width}} | Высота: {{$car->height}} </p>
+                            <p>Грузоподъемность: {{$car->maxWeight}} кг | Кубатура: {{$car->maxCubage}} м<sup>3</sup>
+                            </p>
+                            <hr>
+                            @if($car->trailerNumber)
+                                <h5 class="mb-3">Прицеп</h5>
+                                <p>Номер: {{$car->trailerNumber}}</p>
+                                <p>Грузоподъемность: {{$car->trailerMaxWeight}} |
+                                    Кубатура:{{$car->trailerMaxCubage}} </p>
+                            @endif
+                        </div>
+                    </div>
+
+                </div>
+                <!--Fuel consumption info-->
+                <hr>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <h5>Расход топлива</h5>
+                        </div>
+                        <div class="row col-md-6">
+                            <a class="btn btn-link ml-md-auto" href="{{route('car-fuel-consumption.edit', $car)}}">Редактировать</a>
+                        </div>
                     </div>
                 </div>
             </div>

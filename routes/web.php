@@ -89,6 +89,10 @@ Route::get('/tariff-price-histories/{tariff}', "TariffPriceHistoriesController@l
 Route::get('/cars/all', 'CarsController@all');
 Route::resource('cars', 'CarsController')->parameters(['cars' => 'car']);
 
+//FuelConsumption
+Route::resource('car-fuel-consumption', 'Cars\CarFuelConsumptionsController',
+    ['only' => ['edit',  'update']])->parameters(['car-fuel-consumption' => 'car']);
+
 //Branches
 Route::get('/branches/all', "BranchesController@all");
 Route::resource('branches', 'BranchesController',
