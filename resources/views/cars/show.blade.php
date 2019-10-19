@@ -6,10 +6,6 @@
             <div class="card-header">
                 <div class="md-6">Обзор машины</div>
             </div>
-            {{--            <form id="deleteCar" name="deleteCar" method="post" action="{{route('cars.destroy', $car)}}">--}}
-            {{--                @csrf--}}
-            {{--                @method('delete')--}}
-            {{--            </form>--}}
             <div class="card-body">
                 <div class="row">
                     <h5 class="col-12 col-sm-6">Номер машины: {{$car->number}}</h5>
@@ -18,9 +14,16 @@
                         <button class="btn btn-link" onclick="destroyCar()">Удалить</button>
                     </div>
                     <div class="jumbotron col-10 offset-1 mt-4">
+                        <h5 class="mb-3">Машина</h5>
                         <p>Серийный номер: {{$car->serial}}</p>
                         <p>Длина: {{$car->length}} | Ширина: {{$car->width}} | Высота: {{$car->height}} </p>
-                        <p>Грузподъемность: {{$car->maxWeight}} кг | Общий объем: {{$car->maxCubage}} м<sup>3</sup></p>
+                        <p>Грузоподъемность: {{$car->maxWeight}} кг | Кубатура: {{$car->maxCubage}} м<sup>3</sup></p>
+                        <hr>
+                        @if($car->trailerNumber)
+                            <h5 class="mb-3">Прицеп</h5>
+                            <p>Номер: {{$car->trailerNumber}}</p>
+                            <p>Грузоподъемность: {{$car->trailerMaxWeight}} | Кубатура:{{$car->trailerMaxCubage}} </p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -28,7 +31,7 @@
     </div>
 @endsection
 <script>
-    async function destroyCar(car) {
+    async function destroyCar() {
         let confirm = await window.app.$bvModal.msgBoxConfirm(`Вы уверены что хотите удалить машину {{$car->number}}?`,
             {
                 centered: true,
