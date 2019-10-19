@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Car;
 use App\Models\Users\Driver;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Validation\Rule;
 
 class TripRequest extends FormRequest
@@ -42,7 +44,7 @@ class TripRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param  \Illuminate\Validation\Validator  $validator
+     * @param \Illuminate\Validation\Validator $validator
      * @return void
      */
     public function withValidator($validator)
@@ -50,8 +52,22 @@ class TripRequest extends FormRequest
         $validator->after(function ($validator) {
             $driverId = request()->get('driverId');
             $driver = Driver::find($driverId);
-            if($driver === null)
+            if ($driver === null)
                 $validator->errors()->add('driverId', 'Указанный пользователь не является водителем');
+
+            $car = Car::with('fromChinaConsumption', 'toChinaConsumption')->find(request()->get('carId'));
+
+            if (!$car->toChinaConsumption)
+                $validator->errors()->add('carId', 'Для указанной машины не утсановлен расход топлива в Китай');
+
+
+            if (!$car->fromChinaConsumption)
+                $validator->errors()->add('carId', 'Для указанной машины не утсановлен расход топлива из Китая');
+
+            Input::merge([
+                'to_consumption_id' => $car->toChinaConsumption->id,
+                'from_consumption_id' => $car->fromChinaConsumption->id,
+            ]);
         });
     }
 }

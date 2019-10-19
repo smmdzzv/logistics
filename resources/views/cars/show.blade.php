@@ -48,30 +48,37 @@
                             <a class="btn btn-link ml-md-auto" href="{{route('car-fuel-consumption.edit', $car)}}">Редактировать</a>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="jumbotron col-10 offset-1 mt-2">
-                            <div class="row text-center">
-                                <h5 class="col-12">В Китай</h5>
+                    @if($car->toChinaConsumption)
+                        <div class="row">
+                            <div class="jumbotron col-10 offset-1 mt-2">
+                                <div class="row text-center">
+                                    <h5 class="col-12">В Китай</h5>
+                                </div>
+                                <p> Расход для пустой машины: {{$car->toChinaConsumption->forEmpty}} л</p>
+                                <p> Расход для загруженной машины: {{$car->toChinaConsumption->forLoaded}} л</p>
+                                <p> Расход для пустой машины c прицепом: {{$car->toChinaConsumption->forEmptyTrailer}}
+                                    л</p>
+                                <p> Расход для загруженной машины с
+                                    прицепом: {{$car->toChinaConsumption->forLoadedTrailer}} л</p>
                             </div>
-                            <p> Расход для пустой машины: {{$car->toChinaConsumption->forEmpty}} л</p>
-                            <p> Расход для загруженной машины: {{$car->toChinaConsumption->forLoaded}} л</p>
-                            <p> Расход для пустой машины c прицепом: {{$car->toChinaConsumption->forEmptyTrailer}} л</p>
-                            <p> Расход для загруженной машины с прицепом: {{$car->toChinaConsumption->forLoadedTrailer}} л</p>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="jumbotron col-10 offset-1 mt-2">
-                            <div class="row text-center">
-                                <h5 class="col-12">Из Китая</h5>
+                    @endif
+                    @if($car->fromChinaConsumption)
+                        <div class="row">
+                            <div class="jumbotron col-10 offset-1 mt-2">
+                                <div class="row text-center">
+                                    <h5 class="col-12">Из Китая</h5>
+                                </div>
+                                <p> Расход для пустой машины: {{$car->fromChinaConsumption->forEmpty}} л</p>
+                                <p> Расход для загруженной машины: {{$car->fromChinaConsumption->forLoaded}} л</p>
+                                <p> Расход для пустой машины c прицепом: {{$car->fromChinaConsumption->forEmptyTrailer}}
+                                    л</p>
+                                <p> Расход для загруженной машины с
+                                    прицепом: {{$car->fromChinaConsumption->forLoadedTrailer}} л</p>
                             </div>
-                            <p> Расход для пустой машины: {{$car->fromChinaConsumption->forEmpty}} л</p>
-                            <p> Расход для загруженной машины: {{$car->fromChinaConsumption->forLoaded}} л</p>
-                            <p> Расход для пустой машины c прицепом: {{$car->fromChinaConsumption->forEmptyTrailer}} л</p>
-                            <p> Расход для загруженной машины с прицепом: {{$car->fromChinaConsumption->forLoadedTrailer}} л</p>
                         </div>
-                    </div>
+                    @endif
+
                 </div>
             </div>
         </div>

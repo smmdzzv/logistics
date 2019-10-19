@@ -13,39 +13,47 @@ class CarsController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
+    public function index()
+    {
         $cars = Car::all();
         return view('cars.index', compact('cars'));
     }
 
-    public function all(){
+    public function all()
+    {
         return Car::all();
     }
 
-    public function create(){
+    public function create()
+    {
         return view('cars.create');
     }
 
-    public function show(Car $car){
+    public function show(Car $car)
+    {
         $car->load('toChinaConsumption', 'fromChinaConsumption');
         return view('cars.show', compact('car'));
     }
 
-    public function edit(Car $car){
+    public function edit(Car $car)
+    {
         return view('cars.edit', compact('car'));
     }
 
-    public function destroy(Car $car){
+    public function destroy(Car $car)
+    {
         $car->delete();
         return;
     }
 
-    public function store(CarRequest $request){
+    public function store(CarRequest $request)
+    {
         $car = Car::create($request->all());
         return redirect(route('cars.show', $car));
     }
 
-    public function update(CarRequest $request){
+    public function update(CarRequest $request)
+    {
         $data = $request->all();
         $car = Car::findOrFail($data['id']);
         $car->fill($data);

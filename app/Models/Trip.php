@@ -8,7 +8,7 @@ use App\Models\Users\Driver;
 
 class Trip extends BaseModel
 {
-    protected $fillable = ['code', 'driverId', 'carId', 'departureDate', 'returnDate'];
+    protected $guarded = [];
 
     public function driver()
     {
