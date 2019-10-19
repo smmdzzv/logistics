@@ -74,6 +74,24 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row justify-content-center">
+                                <div class="input-group offset-md-2 col-md-6">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" v-model="data.hasTrailer" name="hasTrailer">
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control"
+                                           value="С прицепом" disabled>
+
+                                    <span class="invalid-feedback" role="alert"
+                                          v-if="errors.hasTrailer">
+                                        <strong>Необходимо выбрать водителя.</strong>
+                                        <strong v-for="message in errors.hasTrailer">{{message}}.</strong>
+                                    </span>
+                                </div>
+                            </div>
+
                             <div class="form-group row">
                                 <label class="col-md-4 col-form-label text-md-right" for="departureDate">Дата
                                     отправления</label>
@@ -175,7 +193,8 @@
                     driver: null,
                     car: null,
                     departureDate: null,
-                    returnDate: null
+                    returnDate: null,
+                    hasTrailer: null
                 }
             }
         },
@@ -206,6 +225,7 @@
                         driverId: this.data.driver.id,
                         departureDate: this.data.departureDate,
                         returnDate: this.data.returnDate,
+                        hasTrailer: this.data.hasTrailer,
                         id: this.data.id
                     };
 
@@ -223,6 +243,7 @@
                         this.errors.driver = e.response.data.errors.driverId;
                         this.errors.departureDate = e.response.data.errors.departureDate;
                         this.errors.returnDate = e.response.data.errors.returnDate;
+                        this.errors.hasTrailer = e.response.data.errors.hasTrailer;
                     } else {
                         this.$root.showErrorMsg(
                             "Ошибка сохранения",

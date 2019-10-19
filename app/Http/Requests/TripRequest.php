@@ -31,6 +31,7 @@ class TripRequest extends FormRequest
             'returnDate' => 'required|date',
             'departureDate' => 'required|date',
             'carId' => 'required|exists:cars,id',
+            'hasTrailer' => 'required|boolean',
             'driverId' => 'required',
             'code' => [
                 'required',
@@ -58,11 +59,11 @@ class TripRequest extends FormRequest
             $car = Car::with('fromChinaConsumption', 'toChinaConsumption')->find(request()->get('carId'));
 
             if (!$car->toChinaConsumption)
-                $validator->errors()->add('carId', 'Для указанной машины не утсановлен расход топлива в Китай');
+                return $validator->errors()->add('carId', 'Для указанной машины не утсановлен расход топлива в Китай');
 
 
             if (!$car->fromChinaConsumption)
-                $validator->errors()->add('carId', 'Для указанной машины не утсановлен расход топлива из Китая');
+                return $validator->errors()->add('carId', 'Для указанной машины не утсановлен расход топлива из Китая');
 
             Input::merge([
                 'to_consumption_id' => $car->toChinaConsumption->id,
