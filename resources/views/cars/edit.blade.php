@@ -29,23 +29,6 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="trailerNumber" class="col-md-4 col-form-label text-md-right">Номер
-                                    прицепа</label>
-                                <div class="col-md-6">
-                                    <input id="trailerNumber" placeholder="гос. номер прицепа" type="text"
-                                           class="form-control @error('trailerNumber') is-invalid @enderror"
-                                           name="trailerNumber" value="{{ old('trailerNumber') ?? $car->trailerNumber}}" required
-                                           autocomplete="trailerNumber" autofocus>
-
-                                    @error('trailerNumber')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
                                 <label for="length" class="col-md-4 col-form-label text-md-right">Длина</label>
                                 <div class="col-md-6">
                                     <input id="length" placeholder="в метрах" type="text"
@@ -140,6 +123,66 @@
                                         необходимо ввести сумарный объем</small>
 
                                     @error('maxCubage')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row text-center pt-2 pb-4">
+                                <h5 class="col-12">Прицеп</h5>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="trailerNumber" class="col-md-4 col-form-label text-md-right">Номер
+                                    прицепа</label>
+                                <div class="col-md-6">
+                                    <input id="trailerNumber" placeholder="гос. номер прицепа" type="text"
+                                           class="form-control @error('trailerNumber') is-invalid @enderror"
+                                           name="trailerNumber" value="{{ old('trailerNumber') ?? $car->trailerNumber}}" required
+                                           autocomplete="trailerNumber" autofocus>
+
+                                    @error('trailerNumber')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="trailerMaxWeight"
+                                       class="col-md-4 col-form-label text-md-right">Грузоподъемность</label>
+                                <div class="col-md-6">
+                                    <input id="trailerMaxWeight" placeholder="в килограммах" type="text"
+                                           class="form-control @error('trailerMaxWeight') is-invalid @enderror"
+                                           name="trailerMaxWeight" value="{{ old('trailerMaxWeight') ?? $car->trailerMaxWeight }}" required
+                                           autocomplete="trailerMaxWeight" autofocus>
+                                    <small id="trailerMaxWeightHelp" class="form-text text-muted">При наличии прицепа,
+                                        необходимо ввести сумарную грузоподъемность</small>
+
+                                    @error('trailerMaxWeight')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="trailerMaxCubage" class="col-md-4 col-form-label text-md-right">Объем
+                                    кузова</label>
+                                <div class="col-md-6">
+                                    <input id="trailerMaxCubage" placeholder="в кубах" type="text"
+                                           class="form-control @error('trailerMaxCubage') is-invalid @enderror"
+                                           name="trailerMaxCubage" value="{{ old('trailerMaxCubage') ?? $car->trailerMaxCubage}}" required
+                                           autocomplete="trailerMaxCubage" autofocus>
+                                    <small id="trailerMaxCubageHelp" class="form-text text-muted">При наличии прицепа,
+                                        необходимо ввести сумарный объем</small>
+
+                                    @error('trailerMaxCubage')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
