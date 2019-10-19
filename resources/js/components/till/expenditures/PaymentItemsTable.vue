@@ -7,13 +7,12 @@
             :items="items"
             :selectable="selectable"
             :striped="striped"
+            excelFileName="Статьи расходов и доходов"
             class="shadow"
             primary-key="id"
             responsive>
             <template #header>
-                <div class="card-header">
                     Статьи расходов/доходов
-                </div>
             </template>
 
             <template slot="type" slot-scope="{item}">
