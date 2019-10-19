@@ -13,6 +13,11 @@ class Car extends BaseModel
     protected $casts = [
         'maxWeight' => 'double',
         'maxCubage' => 'double',
+        'length' => 'double',
+        'height' => 'double',
+        'width' => 'double',
+        'trailerMaxCubage' => 'double',
+        'trailerMaxWeight' => 'double',
     ];
 
     public function toChinaConsumption()

@@ -10,6 +10,10 @@ class Trip extends BaseModel
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'hasTrailer' => 'boolean'
+    ];
+
     public function driver()
     {
         return $this->belongsTo(Driver::class, 'driverId');

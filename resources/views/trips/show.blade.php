@@ -15,6 +15,11 @@
                         <p>Номер рейса: <span class="font-weight-bold">{{$trip->code}}</span></p>
                         <p>Водитель: <span class="font-weight-bold">{{$trip->driver->name}}</span></p>
                         <p>Машина: <span class="font-weight-bold">{{$trip->car->number}}</span></p>
+                        @if($trip->hasTrailer)
+                            <p>С прицепом</p>
+                        @else
+                            <p>Без прицепа</p>
+                        @endif
                         <p>Дата отправления: <span class="font-weight-bold">{{$trip->departureDate}}</span></p>
                         <p>Дата возвращения: <span class="font-weight-bold">{{$trip->returnDate}}</span></p>
                         <p>Факт. дата отправления: </p>
@@ -23,7 +28,8 @@
                 </div>
             </div>
             <div class="col-lg-8">
-                <stored-table class="shadow" :load-data="false" :provided-items="{{$trip->storedItems}}" :selectable="false">
+                <stored-table class="shadow" :load-data="false" :provided-items="{{$trip->storedItems}}"
+                              :selectable="false">
                     <template v-slot:header>
                         <div class="card-header text-right">
                             <a href="{{route('trip.edit-items', $trip->id)}}">Изменить список товаров</a>
