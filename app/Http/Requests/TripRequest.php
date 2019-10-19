@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Models\Car;
+use App\Models\Trip;
 use App\Models\Users\Driver;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Validation\Rule;
@@ -51,6 +53,11 @@ class TripRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
+            $trip = Trip::find(request()->get('id'));
+            $isEditable = $trip->departureDate > Carbon::now();
+            if(!$isEditable)
+                $validator->errors()->add('departureDate', 'Невозможно редактировать рейс. Дата редактирования должна быть меньше даты отправления');
+
             $driverId = request()->get('driverId');
             $driver = Driver::find($driverId);
             if ($driver === null)

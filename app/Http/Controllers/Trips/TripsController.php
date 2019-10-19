@@ -7,6 +7,7 @@ use App\Http\Requests\TripRequest;
 use App\Models\Branch;
 use App\Models\Car;
 use App\Models\Trip;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TripsController extends Controller
@@ -36,6 +37,7 @@ class TripsController extends Controller
     public function show(Trip $trip)
     {
         $trip->load('driver', 'car', 'storedItems.info.owner', 'storedItems.info.item', 'storedItems.storageHistory.storage');
+        $trip->isEditable = $trip->departureDate > Carbon::now();
         return view('trips.show', compact('trip'));
     }
 
