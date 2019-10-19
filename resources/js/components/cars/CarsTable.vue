@@ -1,24 +1,33 @@
 <template>
     <div>
-        <b-table :fields="fields"
+        <b-table :busy="isBusy"
+                 :fields="fields"
                  :items="items"
                  borderless
                  primary-key="id"
-                 striped
-                 :busy="isBusy"
-                 responsive>
+                 responsive
+                 striped>
             <template v-slot:table-busy>
                 <div class="text-center text-info my-2">
                     <b-spinner class="align-middle"></b-spinner>
                 </div>
             </template>
 
-            <template slot="edit" slot-scope="data">
-                <a :href="getEditUrl(data.item)" class="btn btn-outline-secondary">Изменить</a>
-            </template>
+            <template slot="buttons" slot-scope="data">
+                <div class="row">
+                    <a :href="getShowUrl(data.item)" class="btn">
+                        <img class="icon-btn-sm" src="/svg/file.svg" alt="car details">
+                    </a>
 
-            <template slot="delete" slot-scope="data">
-                <a href="#" @click.prevent="deleteCar(data.item)" class="btn btn-primary">Удалить</a>
+                    <a :href="getEditUrl(data.item)" class="btn">
+                        <img class="icon-btn-sm" src="/svg/edit.svg" alt="edit car">
+                    </a>
+
+                    <a @click.prevent="deleteCar(data.item)" class="btn" href="#">
+                        <img class="icon-btn-sm" src="/svg/delete.svg" alt="delete car">
+                    </a>
+                </div>
+
             </template>
         </b-table>
     </div>
@@ -36,7 +45,7 @@
         data() {
             return {
                 items: this.cars,
-                isBusy:false,
+                isBusy: false,
                 fields: {
                     number: {
                         label: 'Гос. номер'
@@ -62,20 +71,20 @@
                     maxCubage: {
                         label: 'Объем, куб'
                     },
-                    'edit': {
-                        label: ''
-                    },
-                    'delete': {
+                    'buttons': {
                         label: ''
                     }
                 }
             }
         },
-        methods:{
-            getEditUrl(car){
+        methods: {
+            getEditUrl(car) {
                 return `/cars/${car.id}/edit`;
             },
-            async deleteCar(car){
+            getShowUrl(car){
+                return `/cars/${car.id}`;
+            },
+            async deleteCar(car) {
                 this.isBusy = true;
                 let confirm = await this.$bvModal.msgBoxConfirm(`Вы уверены что хотите удалить машину ${car.number}?`, {
                     centered: true,
@@ -85,23 +94,22 @@
                     title: 'Подтверждение удаления'
                 });
 
-                if(confirm){
-                    try{
-                        const response = axios.delete('/cars/'+car.id);
-                        this.items = $.grep(this.items, function(item){
+                if (confirm) {
+                    try {
+                        const response = axios.delete('/cars/' + car.id);
+                        this.items = $.grep(this.items, function (item) {
                             return item.id !== car.id;
                         });
-                    }
-                    catch (e) {
-                       await this.$bvModal.msgBoxOk(`Не удалось удалить машину  ${car.number}. Перезагрузите страницу и попробуйте еще раз`,{
-                            centered:true,
-                            okTitle:'Закрыть',
+                    } catch (e) {
+                        await this.$bvModal.msgBoxOk(`Не удалось удалить машину  ${car.number}. Перезагрузите страницу и попробуйте еще раз`, {
+                            centered: true,
+                            okTitle: 'Закрыть',
                             footerClass: 'border-0',
                             title: 'Сообщение об ошибке'
                         });
                     }
                 }
-                this.$nextTick(()=>{
+                this.$nextTick(() => {
                     this.isBusy = false;
                 })
             }
