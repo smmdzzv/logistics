@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container col-12 col-md-11 col-lg-9">
         <div class="card">
             <div class="card-header">
                 <div class="md-6">Обзор машины</div>
@@ -13,21 +13,25 @@
                         <div class="mr-auto">
                             <span>Номер машины: {{$car->number}}</span>
                         </div>
-                        <div class="">
+                        <div>
                             <a class="btn btn-link pl-0" href="{{route('cars.edit', $car)}}">Редактировать</a>
                             <a href="#" class="btn btn-link" onclick="destroyCar()">Удалить</a>
                         </div>
                     </div>
                     <div class="row">
                         <div class="jumbotron col-10 offset-1 mt-2">
-                            <h5 class="mb-3">Машина</h5>
+                            <div class="row text-center">
+                                <h5 class="col-12 mb-4">Машина</h5>
+                            </div>
                             <p>Серийный номер: {{$car->serial}}</p>
                             <p>Длина: {{$car->length}} | Ширина: {{$car->width}} | Высота: {{$car->height}} </p>
                             <p>Грузоподъемность: {{$car->maxWeight}} кг | Кубатура: {{$car->maxCubage}} м<sup>3</sup>
                             </p>
                             @if($car->trailerNumber)
                                 <hr>
-                                <h5 class="mb-3">Прицеп</h5>
+                                <div class="row text-center">
+                                    <h5 class="col-12 my-4">Прицеп</h5>
+                                </div>
                                 <p>Номер: {{$car->trailerNumber}}</p>
                                 <p>Грузоподъемность: {{$car->trailerMaxWeight}} |
                                     Кубатура:{{$car->trailerMaxCubage}} </p>
@@ -52,7 +56,7 @@
                         <div class="row">
                             <div class="jumbotron col-10 offset-1 mt-2">
                                 <div class="row text-center">
-                                    <h5 class="col-12">В Китай</h5>
+                                    <h5 class="col-12 mb-4">В Китай</h5>
                                 </div>
                                 <p> Расход для пустой машины: {{$car->toChinaConsumption->forEmpty}} л</p>
                                 <p> Расход для загруженной машины: {{$car->toChinaConsumption->forLoaded}} л</p>
@@ -67,7 +71,7 @@
                         <div class="row">
                             <div class="jumbotron col-10 offset-1 mt-2">
                                 <div class="row text-center">
-                                    <h5 class="col-12">Из Китая</h5>
+                                    <h5 class="col-12 mb-4">Из Китая</h5>
                                 </div>
                                 <p> Расход для пустой машины: {{$car->fromChinaConsumption->forEmpty}} л</p>
                                 <p> Расход для загруженной машины: {{$car->fromChinaConsumption->forLoaded}} л</p>
