@@ -16,9 +16,9 @@
                         <p>Водитель: <span class="font-weight-bold">{{$trip->driver->name}}</span></p>
                         <p>Машина: <span class="font-weight-bold">{{$trip->car->number}}</span></p>
                         @if($trip->hasTrailer)
-                            <p>С прицепом</p>
+                            <p class="text-success">С прицепом</p>
                         @else
-                            <p>Без прицепа</p>
+                            <p class="text-danger">Без прицепа</p>
                         @endif
                         <p>Дата отправления: <span class="font-weight-bold">{{$trip->departureDate}}</span></p>
                         <p>Дата возвращения: <span class="font-weight-bold">{{$trip->returnDate}}</span></p>
