@@ -1,20 +1,19 @@
 <template>
     <div class="container">
         <table-card
+            :customCells="customCells"
             :fields="fields"
             :isBusy="isBusy"
             :items="items"
-            :customCells="customCells"
+            excelFileName="Список наименований"
             class="shadow"
             primary-key="id"
             responsive
             striped>
             <template #header>
-                <div class="card-header">
-                    <div class="row align-items-baseline">
-                        <div class="col-md-4">Список наименований</div>
-                        <div class="col-md-8 text-right"><a class="btn btn-primary" href="/items/create">Добавить</a></div>
-                    </div>
+                <div class="row align-items-baseline">
+                    <div class="col-md-4 mb-2 mb-md-0" >Список наименований</div>
+                    <div class="col-md-8 text-md-right"><a class="btn btn-primary" href="/items/create">Добавить</a></div>
                 </div>
             </template>
 
@@ -23,7 +22,7 @@
             </template>
 
             <template slot="applyDiscount" slot-scope="{item}">
-               <b-check :checked="item.applyDiscount" disabled></b-check>
+                <b-check :checked="item.applyDiscount" disabled></b-check>
             </template>
 
             <template #footer>
@@ -56,7 +55,7 @@
                 },
                 items: [],
                 isBusy: false,
-                customCells:['applyDiscount', 'onlyCustomPrice'],
+                customCells: ['applyDiscount', 'onlyCustomPrice'],
                 fields: {
                     name: {
                         label: 'Наименование',
