@@ -1,6 +1,16 @@
 <script>
     export default {
         name: "ExcelDataPreparatory",
+        props:{
+            excelSheetName: {
+                type: String,
+                default: 'Лист 1'
+            },
+            excelFileName: {
+                type: String,
+                default: 'Ajoibot Logistics Export'
+            }
+        },
         data() {
             return {
                 excelColumns: [],

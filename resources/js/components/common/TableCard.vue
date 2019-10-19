@@ -23,16 +23,17 @@
 
 
         <b-table :borderless="borderless"
-                 :busy="isBusy"
+                 :busy="tableBusy"
                  :fields="fields"
                  :fixed="fixed"
                  :items="items"
-                 :primary-key="primaryKey"
+                 :primary-key="tablePrimaryKey"
                  :responsive="responsive"
                  :select-mode="selectMode"
                  :selectable="selectable"
                  :sticky-header="tableHeight"
                  :striped="striped"
+                 :hover="hover"
                  :tbody-tr-class="rowClass"
                  @row-clicked="onRowClick">
 
@@ -51,7 +52,7 @@
                 </span>
             </template>
 
-            <template :slot="cell" slot-scope="data" v-for="cell in customCells">
+            <template :slot="cell" slot-scope="data" v-for="cell in tableCustomCells">
                 <slot :name="cell" v-bind:item="data.item"></slot>
             </template>
         </b-table>
@@ -64,15 +65,12 @@
 
 <script>
     import ExcelDataPreparatory from './ExcelDataPreparatory.vue'
+    import TableCardProps from './TableCardProps.vue'
 
     export default {
         name: "TableCard",
-        mixins: [ExcelDataPreparatory],
-        props: {
-            tableHeight: {
-                type: String,
-                default: '75vh'
-            },
+        mixins: [ExcelDataPreparatory, TableCardProps],
+        props:{
             items: {
                 type: Array,
                 required: true
@@ -81,58 +79,10 @@
                 type: Object,
                 required: true
             },
-            primaryKey: {
+            tablePrimaryKey: {
                 type: String,
-                required: true
+                required:true
             },
-            selectable: {
-                type: Boolean,
-                default: false
-            },
-            selectMode: {
-                type: String,
-                default: 'single'
-            },
-            striped: {
-                type: Boolean,
-                default: false
-            },
-            borderless: {
-                type: Boolean,
-                default: false
-            },
-            responsive: {
-                type: Boolean,
-                default: false
-            },
-            fixed: {
-                type: Boolean,
-                default: false
-            },
-            selectedRowClass: {
-                type: String,
-                default: 'table-success'
-            },
-            checkedClass: {
-                type: String,
-                default: 'text-success'
-            },
-            isBusy: {
-                type: Boolean,
-                default: false
-            },
-            customCells: {
-                type: Array,
-                default: () => []
-            },
-            excelSheetName: {
-                type: String,
-                default: 'Лист 1'
-            },
-            excelFileName: {
-                type: String,
-                default: 'Ajoibot Logistics Export'
-            }
         },
         methods: {
             onRowClick(item) {

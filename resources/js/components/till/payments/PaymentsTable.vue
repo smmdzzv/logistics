@@ -1,16 +1,21 @@
 <template>
     <table-card
-        :customCells="customCells"
+        :borderless="borderless"
         :fields="fields"
-        :isBusy="isBusy"
+        :fixed="fixed"
+        :hover="hover"
         :items="items"
+        :responsive="responsive"
+        :select-mode="selectMode"
+        :selectable="selectable"
+        :sticky-header="tableHeight"
         :striped="striped"
-        :tableHeight="tableHeight"
+        :tableBusy="isBusy"
         class="shadow"
         excelFileName="История платежей"
         excelSheetName="Все платежи"
-        primary-key="id"
-        responsive>
+        responsive
+        tablePrimaryKey="id">
         <template #header>
             <div class="row align-items-baseline">
                 <div class="col-12 col-md-6 mb-3 mb-md-0">
@@ -50,8 +55,11 @@
 </template>
 
 <script>
+    import TableCardProps from '../../common/TableCardProps.vue'
+
     export default {
         name: "PaymentsTable",
+        mixins: [TableCardProps],
         mounted() {
             if (this.payments)
                 this.items = this.payments;
@@ -65,10 +73,10 @@
                 type: Array,
                 required: false
             },
-            selectable: {
-                type: Boolean,
-                default: false
-            },
+            // selectable: {
+            //     type: Boolean,
+            //     default: false
+            // },
             payments: {
                 type: Array,
                 required: false
@@ -77,18 +85,18 @@
                 type: Boolean,
                 default: false
             },
-            striped: {
-                type: Boolean,
-                default: false
-            },
+            // striped: {
+            //     type: Boolean,
+            //     default: false
+            // },
             type: {
                 type: String,
                 default: 'in'
             },
-            tableHeight: {
-                type: String,
-                default: '50vh'
-            }
+            // tableHeight: {
+            //         type: String,
+            //         default: '50vh'
+            //     }
         },
         data() {
             return {
