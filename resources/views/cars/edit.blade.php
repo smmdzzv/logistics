@@ -100,8 +100,7 @@
                                            class="form-control @error('maxWeight') is-invalid @enderror"
                                            name="maxWeight" value="{{ old('maxWeight') ?? $car->maxWeight }}" required
                                            autocomplete="maxWeight" autofocus>
-                                    <small id="maxWeightHelp" class="form-text text-muted">При наличии прицепа,
-                                        необходимо ввести сумарную грузоподъемность</small>
+                                    <small id="maxWeightHelp" class="form-text text-muted">Введите грузоподъемность машины (без учета прицепа)</small>
 
                                     @error('maxWeight')
                                     <span class="invalid-feedback" role="alert">
@@ -119,8 +118,7 @@
                                            class="form-control @error('maxCubage') is-invalid @enderror"
                                            name="maxCubage" value="{{ old('maxCubage') ?? $car->maxCubage}}" required
                                            autocomplete="maxCubage" autofocus>
-                                    <small id="maxCubageHelp" class="form-text text-muted">При наличии прицепа,
-                                        необходимо ввести сумарный объем</small>
+                                    <small id="trailerMaxWeightHelp" class="form-text text-muted">Введите объем машины (без учета прицепа)</small>
 
                                     @error('maxCubage')
                                     <span class="invalid-feedback" role="alert">
@@ -161,7 +159,7 @@
                                            name="trailerMaxWeight" value="{{ old('trailerMaxWeight') ?? $car->trailerMaxWeight }}"
                                            autocomplete="trailerMaxWeight" autofocus>
                                     <small id="trailerMaxWeightHelp" class="form-text text-muted">При наличии прицепа,
-                                        необходимо ввести сумарную грузоподъемность</small>
+                                        необходимо ввести грузоподъемность без учета машины</small>
 
                                     @error('trailerMaxWeight')
                                     <span class="invalid-feedback" role="alert">
@@ -180,7 +178,7 @@
                                            name="trailerMaxCubage" value="{{ old('trailerMaxCubage') ?? $car->trailerMaxCubage}}"
                                            autocomplete="trailerMaxCubage" autofocus>
                                     <small id="trailerMaxCubageHelp" class="form-text text-muted">При наличии прицепа,
-                                        необходимо ввести сумарный объем</small>
+                                        необходимо ввести объем без учета машины</small>
 
                                     @error('trailerMaxCubage')
                                     <span class="invalid-feedback" role="alert">
