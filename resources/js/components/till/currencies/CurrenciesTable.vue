@@ -3,15 +3,14 @@
         :fields="fields"
         :isBusy="isBusy"
         :items="items"
+        excelFileName="Список валют"
         class="shadow"
         flowable
         primary-key="id"
         responsive
         striped>
         <template #header>
-            <div class="card-header">
-                Список валют
-            </div>
+            Список валют
         </template>
 
         <template #footer>
