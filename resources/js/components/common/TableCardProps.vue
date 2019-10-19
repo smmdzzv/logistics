@@ -45,17 +45,6 @@
             hover: {
                 type: Boolean,
                 default: false
-            },
-            tableBusy: {
-                type: Boolean,
-                default: false
-            },
-            tableCustomCells: {
-                type: Array,
-                default: () => []
-            },
-            tableProperties: {
-                type: Object
             }
         },
     }

@@ -23,7 +23,7 @@
 
 
         <b-table :borderless="borderless"
-                 :busy="tableBusy"
+                 :busy="isBusy"
                  :fields="fields"
                  :fixed="fixed"
                  :items="items"
@@ -52,7 +52,7 @@
                 </span>
             </template>
 
-            <template :slot="cell" slot-scope="data" v-for="cell in tableCustomCells">
+            <template :slot="cell" slot-scope="data" v-for="cell in customCells">
                 <slot :name="cell" v-bind:item="data.item"></slot>
             </template>
         </b-table>
@@ -83,6 +83,14 @@
                 type: String,
                 required:true
             },
+            isBusy: {
+                type: Boolean,
+                default: false
+            },
+            customCells: {
+                type: Array,
+                default: () => []
+            }
         },
         methods: {
             onRowClick(item) {
