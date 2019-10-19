@@ -8,14 +8,14 @@
             </div>
             <div class="card-body">
                 <!--Car main info-->
-                <div class="container mt-3">
-                    <div class="row col-10 offset-1">
-                        <div class="col-12 col-md-6">
-                            <h5>Номер машины: {{$car->number}}</h5>
+                <div class=" mt-3">
+                    <div class="row col-10 offset-1 align-items-baseline">
+                        <div class="mr-auto">
+                            <span>Номер машины: {{$car->number}}</span>
                         </div>
-                        <div class="row col-md-6">
-                            <a class="btn btn-link ml-md-auto" href="{{route('cars.edit', $car)}}">Редактировать</a>
-                            <button class="btn btn-link" onclick="destroyCar()">Удалить</button>
+                        <div class="">
+                            <a class="btn btn-link pl-0" href="{{route('cars.edit', $car)}}">Редактировать</a>
+                            <a href="#" class="btn btn-link" onclick="destroyCar()">Удалить</a>
                         </div>
                     </div>
                     <div class="row">
@@ -38,14 +38,14 @@
                 </div>
                 <!--Fuel consumption info-->
                 <hr>
-                <div class="container">
-                    <div class="row col-10 offset-1">
-                        <div class="col-12 col-md-6">
-                            <h5>Расход топлива</h5>
+                <div>
+                    <div class="row col-10 offset-1 align-items-baseline">
+                        <div class="mr-auto">
+                            <h6>Расход топлива</h6>
                         </div>
 
-                        <div class="row col-md-6">
-                            <a class="btn btn-link ml-md-auto" href="{{route('car-fuel-consumption.edit', $car)}}">Редактировать</a>
+                        <div class=" ">
+                            <a class="btn btn-link pl-0" href="{{route('car-fuel-consumption.edit', $car)}}">Редактировать</a>
                         </div>
                     </div>
                     @if($car->toChinaConsumption)
