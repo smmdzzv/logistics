@@ -3,14 +3,26 @@
 @section('content')
     <div class="container" xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
         <div class="row justify-content-center">
-            <div class="col-sm-8 col-md-6 col-lg-5 col-xl-4 mb-4">
+            <div class="col-sm-10 col-md-8 col-lg-6 col-xl-4 mb-4">
                 <div class="card shadow">
                     <div class="card-header">
                         <div class="row">
                             <div class="col-6">Детали рейса</div>
-                            @if($trip->isEditable())
-                                <div class="col-6 text-right"><a href="/trips/{{$trip->id}}/edit">Изменить</a></div>
-                            @endif
+                            <div class="col-6 text-right">
+                                @if(auth()->user()->hasRole('admin'))
+                                <a  href="{{route('trip.edit-loaded', $trip)}}">
+                                    <img class="icon-btn-sm" src="/svg/car-loading.svg">
+                                </a>
+                                <a class="pl-3"  href="#">
+                                    <img class="icon-btn-sm" src="/svg/car-unloading.svg">
+                                </a>
+                                @endif
+                                @if($trip->isEditable())
+                                    <a class="pl-3" href="/trips/{{$trip->id}}/edit">
+                                        <img class="icon-btn-sm" src="/svg/edit.svg">
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -29,7 +41,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8">
+            <div class="col-12 col-lg-8">
                 <stored-table class="shadow" :load-data="false" :provided-items="{{$trip->storedItems}}"
                               :selectable="false">
                     <template v-slot:header>

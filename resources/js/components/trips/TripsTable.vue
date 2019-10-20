@@ -13,8 +13,10 @@
                 Список рейсов
         </template>
 
-        <template slot="view" slot-scope="{item}">
-            <a class="btn btn-outline-primary" :href="getDetailsUrl(item)">Детали</a>
+        <template slot="buttons" slot-scope="{item}">
+            <a class="btn" :href="getDetailsUrl(item)">
+                <img class="icon-btn-sm" src="/svg/file.svg">
+            </a>
         </template>
 
         <template #footer>
@@ -59,7 +61,7 @@
                 },
                 items:[],
                 isBusy: false,
-                customCells:['view'],
+                customCells:['buttons'],
                 fields: {
                     code: {
                         label: 'Номер',
@@ -81,7 +83,7 @@
                         label: 'Дата возрващения',
                         sortable: true
                     },
-                    'view':{
+                    'buttons':{
                         label:''
                     }
                 }

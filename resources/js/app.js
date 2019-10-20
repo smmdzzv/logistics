@@ -37,6 +37,7 @@ Vue.component('OrderViewer', require('./components/orders/OrderViewer.vue').defa
 
 Vue.component('TripsEditor', require('./components/trips/TripsEditor.vue').default);
 Vue.component('TripItemsEditor', require('./components/trips/TripItemsEditor.vue').default);
+Vue.component('LoadedItemsEditor', require('./components/trips/LoadedItemsEditor.vue').default);
 Vue.component('TripsTable', require('./components/trips/TripsTable.vue').default);
 
 Vue.component('CarsTable', require('./components/cars/CarsTable.vue').default);

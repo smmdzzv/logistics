@@ -4,12 +4,11 @@
 namespace App\Http\Controllers\Trips;
 
 
-use App\Data\MassWriters\Trip\StoredItemTripHistoryWriter;
 use App\Data\RequestWriters\Trips\AssociateToTripRequestWriter;
+use App\Data\RequestWriters\Trips\LoadItemsToCarRequestWriter;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\StoredItems\StoredItem;
-use App\Models\StoredItems\StoredItemTripHistory;
 use App\Models\Trip;
 
 class TripStoredItemsController extends Controller
@@ -17,56 +16,36 @@ class TripStoredItemsController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('roles.deny:client');
+        $this->middleware('roles.deny:client,cashier,driver')->except('loadToCar');
+        $this->middleware('roles.allow:admin')->only('editLoaded', 'updateLoaded');
     }
 
     public function associateToTrip(Trip $trip)
     {
-//        $storedItems = request()->storedItems;
         $data = new \stdClass();
         $data->trip = $trip;
         $data->storedItems = request()->storedItems;
         $writer = new AssociateToTripRequestWriter($data);
         $writer->write();
 
-        $dissociate = [];
-
-//        foreach ($trip->storedItems as $stored) {
-//            if (!in_array($stored->id, $storedItems))
-//                array_push($dissociate, $stored->id);
-//        }
-
-//        StoredItemTripHistory::where('trip_id', $trip->id)
-//            ->whereIn('stored_item_id', $dissociate)
-//            ->forceDelete();
-//
-//        $existingRecords = StoredItemTripHistory::where('trip_id', $trip->id)
-//            ->whereIn('stored_item_id', $storedItems)
-//            ->get();
-
-//        $storedItems = array_filter($storedItems,
-//            function ($stored) use ($existingRecords, $storedItems) {
-//                foreach ($existingRecords as $history) {
-//                    if ($history->stored_item_id === $stored)
-//                        return false;
-//                }
-//                return true;
-//            });
-//
-//        $items = array();
-//
-//        foreach ($storedItems as $stored) {
-//            $items[] = new StoredItemTripHistory([
-//                'trip_id' => $trip->id,
-//                'stored_item_id' => $stored
-//            ]);
-//        }
-//        if (count($items) > 0) {
-//            $writer = new StoredItemTripHistoryWriter($items);
-//            $writer->write();
-//        }
-
         return $trip;
+    }
+
+    public function editLoaded(Trip $trip)
+    {
+        $trip->load('storedItems.info.item', 'storedItems.info.owner', 'storedItems.storageHistory.storage', 'car');
+        return view('trips.load-items', compact('trip'));
+    }
+
+    public function updateLoaded(Trip $trip)
+    {
+        $data = new \stdClass();
+        $data->storedItems = StoredItem::whereIn('id', request()->all())->get();
+
+        $writer = new LoadItemsToCarRequestWriter($data);
+        $writer->write();
+
+        return;
     }
 
     public function edit(Trip $trip)

@@ -8,24 +8,34 @@ use App\Models\Branches\Storage;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Users\Employee;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int deleted_at
+ */
 class StorageHistory extends BaseModel
 {
+    use SoftDeletes;
+
     protected $guarded = [];
 
-    public function storage(){
+    public function storage()
+    {
         return $this->belongsTo(Storage::class);
     }
 
-    public function branch(){
+    public function branch()
+    {
         return $this->hasOneThrough(Branch::class, Storage::class);
     }
 
-    public function storedItem(){
+    public function storedItem()
+    {
         return $this->belongsTo(StoredItem::class);
     }
 
-    public function registeredBy(){
+    public function registeredBy()
+    {
         return $this->belongsTo(Employee::class, 'registeredById');
     }
 }

@@ -119,6 +119,19 @@
                                 <a class="dropdown-item" href="{{route('branches.index')}}">Управлять</a>
                             </div>
                         </li>
+
+                        <!--Storage-->
+{{--                        <li class="nav-item dropdown">--}}
+{{--                            <a id="storageMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"--}}
+{{--                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>--}}
+{{--                                Склад <span class="caret"></span>--}}
+{{--                            </a>--}}
+{{--                            <div class="dropdown-menu" aria-labelledby="storageMenuDropdown">--}}
+{{--                                <h6 class="dropdown-header">Рейсы</h6>--}}
+{{--                                <a class="dropdown-item" href="{{route('branches.index')}}">Приемка с рейса</a>--}}
+{{--                                <a class="dropdown-item" href="{{route('trip.edit-loaded')}}">Загрузка на рейс</a>--}}
+{{--                            </div>--}}
+{{--                        </li>--}}
                     </ul>
             @endauth
             <!-- Right Side Of Navbar -->
