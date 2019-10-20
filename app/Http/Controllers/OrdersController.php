@@ -57,6 +57,7 @@ class OrdersController extends Controller
         $data = new stdClass();
         $data->client = Client::findOrFail($request->input('clientId'));
         $data->branch = Branch::findOrFail(auth()->user()->branch->id);
+        $data->employee = auth()->user();
 
         foreach ($request->input('storedItemInfos') as $itemData) {
             $data->storedItemInfos[] = new StoredItemInfo([

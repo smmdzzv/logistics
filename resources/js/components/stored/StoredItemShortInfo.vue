@@ -9,7 +9,7 @@
         </div>
 
         <div style="width:100px">
-            <barcode :options='{displayValue:false, height:50, width:1}' :value="storedItem.id" tag="svg"></barcode>
+            <barcode :options='{displayValue:false, height:50, width:1}' :value="storedItem.code" tag="svg"></barcode>
         </div>
     </div>
 </template>

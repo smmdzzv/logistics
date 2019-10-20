@@ -98,9 +98,18 @@ class OrderRequestWriter extends RequestWriter
         $isUnique = false;
         $code = "";
 
+        $pattern = '!\d+!';
+
+        preg_match_all($pattern, $this->input->employee->id, $eMatches);
+        $employeeMark =  substr(implode("", $eMatches[0]), 0, 3);
+
+        preg_match_all($pattern, $this->input->client->id, $oMatches);
+        $orderMark = substr(implode("", $oMatches[0]), 0, 3);
+
         while (!$isUnique) {
             $date = Carbon::now();
-            $code = $date->isoFormat('YY') . $date->isoFormat('D') . random_int(1000, 9999);
+            $dateMark = substr($date->isoFormat('x'),7);
+            $code = $date->isoFormat('YY').$dateMark.$employeeMark.$orderMark. random_int(1000, 9999);
             $isUnique = !in_array($code, $this->data->codes);
         }
         $this->data->codes[] = $code;
@@ -118,7 +127,7 @@ class OrderRequestWriter extends RequestWriter
             $this->data->storageHistories[] = new StorageHistory([
                 'stored_item_id' => $item->id,
                 'storage_id' => $storageId,
-                'registeredById' => auth()->id()
+                'registeredById' => $this->input->employee->id
             ]);
         }
 
