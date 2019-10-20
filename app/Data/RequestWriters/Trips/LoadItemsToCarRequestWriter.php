@@ -6,6 +6,7 @@ namespace App\Data\RequestWriters\Trips;
 
 use App\Data\RequestWriters\RequestWriter;
 use App\StoredItems\StorageHistory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use stdClass;
 
@@ -41,6 +42,9 @@ class LoadItemsToCarRequestWriter extends RequestWriter
             return $item->id;
         });
 
-        StorageHistory::whereIn('id', $deleted->toArray())->delete();
+        StorageHistory::whereIn('id', $deleted->toArray())->update([
+            'deleted_at' => Carbon::now(),
+            'deletedById' => $this->input->employee->id
+        ]);
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Trip;
+use Illuminate\Database\Eloquent\Builder;
 
 class TripStoredItemsController extends Controller
 {
@@ -40,7 +41,11 @@ class TripStoredItemsController extends Controller
     public function updateLoaded(Trip $trip)
     {
         $data = new \stdClass();
-        $data->storedItems = StoredItem::whereIn('id', request()->all())->get();
+        $data->storedItems = StoredItem::whereHas('tripHistory', function (Builder $query) use ($trip) {
+                $query->where('trip_id',   $trip->id);
+            })->whereIn('id', request()->all())->get();
+
+        $data->employee = auth()->user();
 
         $writer = new LoadItemsToCarRequestWriter($data);
         $writer->write();

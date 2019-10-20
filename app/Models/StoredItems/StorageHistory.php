@@ -6,8 +6,7 @@ use App\Models\BaseModel;
 use App\Models\Branch;
 use App\Models\Branches\Storage;
 use App\Models\StoredItems\StoredItem;
-use App\Models\Users\Employee;
-use Illuminate\Database\Eloquent\Model;
+use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -36,6 +35,10 @@ class StorageHistory extends BaseModel
 
     public function registeredBy()
     {
-        return $this->belongsTo(Employee::class, 'registeredById');
+        return $this->belongsTo(User::class, 'registeredById');
+    }
+
+    public function deletedBy(){
+        return $this->belongsTo(User::class, 'deletedById');
     }
 }
