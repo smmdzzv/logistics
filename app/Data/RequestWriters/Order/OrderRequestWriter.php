@@ -11,6 +11,7 @@ use App\Data\MassWriters\Order\StoredItemsWriter;
 use App\Data\RequestWriters\RequestWriter;
 use App\Models\Order;
 use App\StoredItems\StorageHistory;
+use Carbon\Carbon;
 use stdClass;
 
 class OrderRequestWriter extends RequestWriter
@@ -22,6 +23,7 @@ class OrderRequestWriter extends RequestWriter
 
     /**
      * @return stdClass, which contains saved models
+     * @throws \Exception
      */
     function write()
     {
@@ -66,12 +68,14 @@ class OrderRequestWriter extends RequestWriter
 
     /**
      *Creates and saves for each StoredItemInfo related array of StoredItems
+     * @throws \Exception
      */
     private function createStoredItems()
     {
         foreach ($this->saved->storedItemInfos as $info) {
             $items = $info->getStoredItems();
             foreach ($items as $item) {
+                $item->code = $this->generateCode();
                 $this->data->storedItems[] = $item;
             }
         }
@@ -79,6 +83,28 @@ class OrderRequestWriter extends RequestWriter
         $storedWriter = new StoredItemsWriter($this->data->storedItems);
         $this->saved->storedItems = $storedWriter->write();
         $this->data->storedItems = [];
+    }
+
+    /**
+     * Generates unique (in terms of order) codes
+     * to distinguish same items visually
+     * @throws \Exception
+     */
+    private function generateCode()
+    {
+        if (!isset($this->data->codes))
+            $this->data->codes = [];
+
+        $isUnique = false;
+        $code = "";
+
+        while (!$isUnique) {
+            $date = Carbon::now();
+            $code = $date->isoFormat('YY') . $date->isoFormat('D') . random_int(1000, 9999);
+            $isUnique = !in_array($code, $this->data->codes);
+        }
+        $this->data->codes[] = $code;
+        return $code;
     }
 
     /**

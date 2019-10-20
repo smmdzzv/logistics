@@ -2,6 +2,7 @@
     <div class="container border-bottom pt-3">
         <div class="container">
             <p>{{`Тип: ${storedItemInfo.item.name}`}}</p>
+            <p>{{`Код: ${storedItem.code}`}}</p>
             <p>{{`ШхВхД: ${storedItemInfo.width}x${storedItemInfo.height}x${storedItemInfo.length}`}}</p>
             <p>{{`Вес: ${storedItemInfo.weight} кг`}} </p>
             <p>{{`Принят: ${storedItem.created_at}`}} </p>
