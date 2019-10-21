@@ -22,7 +22,8 @@
                     <div class="ml-2">
                         <b-select :class="{'is-invalid': selectedBranch === null}" v-model="selectedBranch">
                             <option :value="null" disabled>--Выберите филиал--</option>
-                            <option v-for="branch in branches" :value="branch.id" :key="branch.id">{{branch.name}}</option>
+                            <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}
+                            </option>
                         </b-select>
                         <span class="invalid-feedback" role="alert">
                             <strong>Необходимо выбрать филиал</strong>
@@ -58,9 +59,9 @@
             title: {
                 type: String
             },
-            branches:{
-                type:Array,
-                required:true
+            branches: {
+                type: Array,
+                required: true
             }
         },
         data() {
@@ -76,16 +77,19 @@
                 this.selectedItems = items;
             },
             async submit() {
-                if(!this.selectedBranch || this.selectedItems.length === 0)
+                if (!this.selectedBranch || this.selectedItems.length === 0)
                     return;
                 try {
-                    let data = this.selectedItems.map((selected) => {
-                        return selected.id;
-                    });
+                    let data = {
+                        storedItems: this.selectedItems.map((selected) => {
+                            return selected.id;
+                        }),
+                        branch: this.selectedBranch.id
+                    };
 
                     let action = `/trip/${this.trip.id}/stored-items/unload`;
                     const response = await axios.post(action, data);
-                    // window.location = `/trips/${this.trip.id}`;
+                    window.location = `/trips/${this.trip.id}`;
                 } catch (e) {
                     this.$root.showErrorMsg(
                         'Ошибка сохранения',

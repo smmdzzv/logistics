@@ -39,7 +39,7 @@ class AssociateToTripRequestWriter extends RequestWriter
             return $this->saved->tripHistories;
         }
 
-        return $this->saved->tripHistories;
+        return $this->saved;
     }
 
     private function filterRemovedItems()
@@ -113,7 +113,7 @@ class AssociateToTripRequestWriter extends RequestWriter
         $ids = $this->data->loadedStoredItemsHistories->map(function ($item, $key) {
             return $item->id;
         });
-
+//TODO deleted by
         StoredItemTripHistory::destroy($ids);
     }
 
@@ -139,7 +139,8 @@ class AssociateToTripRequestWriter extends RequestWriter
         foreach ($this->data->storedItems as $stored) {
             $this->data->tripHiestories[] = new StoredItemTripHistory([
                 'trip_id' => $this->input->trip->id,
-                'stored_item_id' => $stored
+                'stored_item_id' => $stored,
+                'registered_by_id' => $this->input->employee->id
             ]);
         }
     }

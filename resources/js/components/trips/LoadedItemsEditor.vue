@@ -16,7 +16,7 @@
         />
         <div class="row my-4">
             <div class="col-12 text-center">
-                <button class="btn btn-primary" @click="submit">Сохранить</button>
+                <button @click="submit" class="btn btn-primary">Сохранить</button>
             </div>
         </div>
     </div>
@@ -54,17 +54,18 @@
             onItemsSelected(items) {
                 this.selectedItems = items;
             },
-            async submit(){
-                try{
-                    let data = this.selectedItems.map((selected)=>{
-                        return selected.id;
-                    });
+            async submit() {
+                try {
+                    let data = {
+                        storedItems: this.selectedItems.map((selected) => {
+                            return selected.id;
+                        })
+                    };
 
                     let action = `/trip/${this.trip.id}/stored-items/load`;
-                    const response = await  axios.post(action, data);
+                    const response = await axios.post(action, data);
                     window.location = `/trips/${this.trip.id}`;
-                }
-                catch (e) {
+                } catch (e) {
                     this.$root.showErrorMsg(
                         'Ошибка сохранения',
                         'Не удалось загрузить товары на рейс. Повторите после обновления страницы'
