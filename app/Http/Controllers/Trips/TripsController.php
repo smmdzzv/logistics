@@ -42,7 +42,7 @@ class TripsController extends Controller
 
     public function store(TripRequest $request)
     {
-        return Trip::create($request->all());
+        return Trip::create(array_merge($request->all(), ['status' => 'created']));
     }
 
     public function edit(Trip $trip)
@@ -55,7 +55,7 @@ class TripsController extends Controller
 
     public function update(TripRequest $request, Trip $trip)
     {
-        $trip->fill($request->all());
+        $trip->fill(array_merge($request->all(), ['status' => 'created']));
         $trip->save();
         return $trip;
     }

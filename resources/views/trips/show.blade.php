@@ -10,12 +10,15 @@
                             <div class="col-6">Детали рейса</div>
                             <div class="col-6 text-right">
                                 @if(auth()->user()->hasRole('admin'))
-                                <a  href="{{route('trip.edit-loaded', $trip)}}">
-                                    <img class="icon-btn-sm" src="/svg/car-loading.svg">
-                                </a>
-                                <a class="pl-3"  href="{{route('trip.edit-unloaded', $trip)}}">
-                                    <img class="icon-btn-sm" src="/svg/car-unloading.svg">
-                                </a>
+                                    <a href="{{route('trip.edit-loaded', $trip)}}">
+                                        <img class="icon-btn-sm" src="/svg/car-loading.svg">
+                                    </a>
+                                    <a class="pl-3" href="{{route('trip.edit-unloaded', $trip)}}">
+                                        <img class="icon-btn-sm" src="/svg/car-unloading.svg">
+                                    </a>
+                                    <a class="pl-3" href="{{route('trip.change-items-trip', $trip)}}">
+                                        <img class="icon-btn-sm" src="/svg/car-sending.svg">
+                                    </a>
                                 @endif
                                 @if($trip->isEditable())
                                     <a class="pl-3" href="/trips/{{$trip->id}}/edit">

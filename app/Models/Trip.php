@@ -40,7 +40,13 @@ class Trip extends BaseModel
             ->withTimestamps();
     }
 
-    public function isEditable(){
+    public function loadedItems()
+    {
+        return $this->storedItems()->doesntHave('storageHistory');
+    }
+
+    public function isEditable()
+    {
         return $this->departureDate > Carbon::now();
     }
 }

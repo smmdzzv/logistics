@@ -53,6 +53,13 @@ class TripStoredItemsController extends Controller
         return;
     }
 
+    private function getTripItemsFromRequest(Trip $trip)
+    {
+        return StoredItem::whereHas('tripHistory', function (Builder $query) use ($trip) {
+            $query->where('trip_id', $trip->id);
+        })->whereIn('id', request()->get('storedItems'))->get();
+    }
+
     public function editUnloaded(Trip $trip)
     {
         $trip->load('storedItems.info.item', 'storedItems.info.owner', 'storedItems.storageHistory.storage', 'car');
@@ -73,18 +80,24 @@ class TripStoredItemsController extends Controller
         return;
     }
 
-    private function getTripItemsFromRequest(Trip $trip)
-    {
-        return StoredItem::whereHas('tripHistory', function (Builder $query) use ($trip) {
-            $query->where('trip_id', $trip->id);
-        })->whereIn('id', request()->get('storedItems'))->get();
-    }
-
     public function edit(Trip $trip)
     {
         $trip->load('storedItems.info.item', 'storedItems.info.owner', 'storedItems.storageHistory.storage', 'car');
         $branches = Branch::all();
         return view('trips.edit-items-list', compact('trip', 'branches'));
+    }
+
+    public function exchangeItems(){
+        dd(request());
+    }
+
+    public function changeItemsTrip(Trip $trip){
+        $trips = Trip::where('status', '!=', 'finished')->get();
+        $trips = $trips->reject(function ($item) use($trip){
+            return $trip->id === $item->id;
+        });
+        $trip->load('loadedItems.info.item', 'loadedItems.info.owner', 'loadedItems.storageHistory.storage');
+        return view('trips.change-items-trip', compact('trip', 'trips'));
     }
 
     public function availableItems()

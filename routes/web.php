@@ -52,6 +52,8 @@ Route::get('/trip/{trip}/stored-items/load', 'Trips\TripStoredItemsController@ed
 Route::post('/trip/{trip}/stored-items/load', 'Trips\TripStoredItemsController@updateLoaded')->name('trip.update-loaded');
 Route::get('/trip/{trip}/stored-items/unload', 'Trips\TripStoredItemsController@editUnloaded')->name('trip.edit-unloaded');
 Route::post('/trip/{trip}/stored-items/unload', 'Trips\TripStoredItemsController@updateUnloaded')->name('trip.update-unloaded');
+Route::get('/trip/{trip}/exchange/stored-items', 'Trips\TripStoredItemsController@changeItemsTrip')->name('trip.change-items-trip');
+Route::post('/trip/{trip}/exchange/stored-items', 'Trips\TripStoredItemsController@exchangeItems')->name('trip.exchange-items');
 
 //Payments
 

@@ -39,6 +39,7 @@ Vue.component('TripsEditor', require('./components/trips/TripsEditor.vue').defau
 Vue.component('TripItemsEditor', require('./components/trips/TripItemsEditor.vue').default);
 Vue.component('LoadedItemsEditor', require('./components/trips/LoadedItemsEditor.vue').default);
 Vue.component('UnloadedItemsEditor', require('./components/trips/UnloadedItemsEditor.vue').default);
+Vue.component('TripExchangeItemsEditor', require('./components/trips/TripExchangeItemsEditor.vue').default);
 Vue.component('TripsTable', require('./components/trips/TripsTable.vue').default);
 
 Vue.component('CarsTable', require('./components/cars/CarsTable.vue').default);

@@ -20,6 +20,7 @@ class CreateTripsTable extends Migration
             $table->char('to_consumption_id', 26);
             $table->char('from_consumption_id', 26);
             $table->string('code', 20)->unique();
+            $table->char('status', 15);
             $table->date('departureDate');
             $table->date('returnDate');
             $table->date('hasTrailer');
