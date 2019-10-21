@@ -8,6 +8,7 @@ use App\Data\MassWriters\Order\StorageHistoriesWriter;
 use App\Data\MassWriters\Trip\StoredItemTripHistoryWriter;
 use App\Data\RequestWriters\RequestWriter;
 use App\Models\StoredItems\StoredItemTripHistory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 class AssociateToTripRequestWriter extends RequestWriter
@@ -113,8 +114,11 @@ class AssociateToTripRequestWriter extends RequestWriter
         $ids = $this->data->loadedStoredItemsHistories->map(function ($item, $key) {
             return $item->id;
         });
-//TODO deleted by
-        StoredItemTripHistory::destroy($ids);
+
+        StoredItemTripHistory::whereIn('id', $ids->all())->update([
+            'deleted_at' => Carbon::now(),
+            'deleted_by_id' => $this->input->employee->id
+        ]);
     }
 
     private function filterExistingHistoryRecords()
