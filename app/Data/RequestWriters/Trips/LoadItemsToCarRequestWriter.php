@@ -42,7 +42,7 @@ class LoadItemsToCarRequestWriter extends RequestWriter
             return $item->id;
         });
 
-        StorageHistory::whereIn('id', $deleted->toArray())->update([
+        StorageHistory::whereIn('id', $deleted->all())->update([
             'deleted_at' => Carbon::now(),
             'deletedById' => $this->input->employee->id
         ]);

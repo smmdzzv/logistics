@@ -47,6 +47,7 @@ class StoredItem extends BaseModel
             'stored_item_id',
             'trip_id')
             ->using('App\Models\Pivots\BasePivot')
+            ->wherePivot('deleted_at', null)
             ->withTimestamps();
     }
 
