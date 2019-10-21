@@ -42,10 +42,10 @@
                 </div>
             </div>
             <div class="col-12 col-lg-8">
-                <stored-table class="shadow" :load-data="false" :provided-items="{{$trip->storedItems}}"
+                <stored-table class="shadow" :load-data="false" excel-export :provided-items="{{$trip->storedItems}}"
                               :selectable="false">
                     <template v-slot:header>
-                        <div class="card-header text-right">
+                        <div class="text-right">
                             @if($trip->isEditable())
                                 <a href="{{route('trip.edit-items', $trip->id)}}">Изменить список товаров</a>
                             @endif

@@ -1,16 +1,15 @@
 <template>
     <div class="card">
-        <slot name="header">
-            <div class="card-header">
-                <div class="row align-items-baseline">
-                    <div :class="{'col-12' : !excelExport}" class="row align-items-baseline col-11">
-                        <div class="col-7 col-md-4">
+        <div class="card-header">
+            <div :class="{'col-12' : !excelExport}" class="row align-items-baseline">
+                <slot name="header">
+                    <div class="row align-items-baseline col-12">
+                        <div>
                             <span v-if="branches">Товары на складе</span>
                             <span v-else>Товары на всех складах</span>
                         </div>
                         <template v-if="branches">
-                            <label class="col-5 col-md-4 text-right" for="branch">Филиал</label>
-                            <div class="col-md-4">
+                            <div class="ml-0 ml-sm-auto">
                                 <select class="form-control custom-select" id="branch" v-model="selectedBranch">
                                     <option :value="null">--Все склады--</option>
                                     <option :key="branch.id" :value="branch" v-for="branch in branches">
@@ -20,19 +19,20 @@
                             </div>
                         </template>
                     </div>
-                    <div class="ml-auto" v-if="excelExport">
-                        <vue-excel-xlsx
-                            :columns="excelColumns"
-                            :data="excelData"
-                            :sheetname="selectedBranch? selectedBranch.name : 'Все склады'"
-                            class="btn"
-                            filename="Список товаров">
-                            <img class="icon-btn-md" src="/svg/excel.svg">
-                        </vue-excel-xlsx>
-                    </div>
+                </slot>
+                <div class="ml-auto" v-if="excelExport">
+                    <vue-excel-xlsx
+                        :columns="excelColumns"
+                        :data="excelData"
+                        :sheetname="selectedBranch? selectedBranch.name : 'Все склады'"
+                        class="btn"
+                        filename="Список товаров">
+                        <img class="icon-btn-md" src="/svg/excel.svg">
+                    </vue-excel-xlsx>
                 </div>
             </div>
-        </slot>
+        </div>
+
 
         <b-table :busy="isBusy"
                  :fields="fields"
