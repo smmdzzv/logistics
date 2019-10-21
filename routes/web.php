@@ -50,6 +50,8 @@ Route::get('/trip/{branch}/stored-items/available', 'Trips\TripStoredItemsContro
 Route::post('/trip/{trip}/stored-items', 'Trips\TripStoredItemsController@associateToTrip');
 Route::get('/trip/{trip}/stored-items/load', 'Trips\TripStoredItemsController@editLoaded')->name('trip.edit-loaded');
 Route::post('/trip/{trip}/stored-items/load', 'Trips\TripStoredItemsController@updateLoaded')->name('trip.update-loaded');
+Route::get('/trip/{trip}/stored-items/unload', 'Trips\TripStoredItemsController@editUnloaded')->name('trip.edit-unloaded');
+Route::post('/trip/{trip}/stored-items/unload', 'Trips\TripStoredItemsController@updateUnloaded')->name('trip.update-unloaded');
 
 //Payments
 

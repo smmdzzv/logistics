@@ -17,7 +17,9 @@
         responsive>
 
         <template #header>
-            {{title}}
+            <slot name="header">
+                {{title}}
+            </slot>
         </template>
     </table-card>
 </template>

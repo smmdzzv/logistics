@@ -38,6 +38,7 @@ Vue.component('OrderViewer', require('./components/orders/OrderViewer.vue').defa
 Vue.component('TripsEditor', require('./components/trips/TripsEditor.vue').default);
 Vue.component('TripItemsEditor', require('./components/trips/TripItemsEditor.vue').default);
 Vue.component('LoadedItemsEditor', require('./components/trips/LoadedItemsEditor.vue').default);
+Vue.component('UnloadedItemsEditor', require('./components/trips/UnloadedItemsEditor.vue').default);
 Vue.component('TripsTable', require('./components/trips/TripsTable.vue').default);
 
 Vue.component('CarsTable', require('./components/cars/CarsTable.vue').default);
@@ -58,7 +59,6 @@ Vue.component('ItemsTable', require('./components/items/ItemsTable.vue').default
 Vue.component('BranchViewer', require('./components/branches/BranchViewer.vue').default);
 Vue.component('Barcode', require('@xkeshi/vue-barcode').default);
 Vue.component('QrCode', require('@chenfengyuan/vue-qrcode').default);
-//Vue.component('search-user-dropdown', require('./components/SearchUserDropdown.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

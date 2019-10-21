@@ -13,7 +13,7 @@
                                 <a  href="{{route('trip.edit-loaded', $trip)}}">
                                     <img class="icon-btn-sm" src="/svg/car-loading.svg">
                                 </a>
-                                <a class="pl-3"  href="#">
+                                <a class="pl-3"  href="{{route('trip.edit-unloaded', $trip)}}">
                                     <img class="icon-btn-sm" src="/svg/car-unloading.svg">
                                 </a>
                                 @endif

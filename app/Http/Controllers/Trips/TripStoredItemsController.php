@@ -53,6 +53,16 @@ class TripStoredItemsController extends Controller
         return;
     }
 
+    public function editUnloaded(Trip $trip){
+        $trip->load('storedItems.info.item', 'storedItems.info.owner', 'storedItems.storageHistory.storage', 'car');
+        $branches = Branch::all();
+        return view('trips.unload-items', compact('trip', 'branches'));
+    }
+
+    public function updateUnloaded(){
+        dd(request());
+    }
+
     public function edit(Trip $trip)
     {
         $trip->load('storedItems.info.item', 'storedItems.info.owner', 'storedItems.storageHistory.storage', 'car');
