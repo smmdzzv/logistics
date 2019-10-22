@@ -53,8 +53,8 @@
             },
             async submitData() {
                 if (this.client && this.storedItems.length > 0) {
-                    this.$bvModal.show('busyModal');
-
+                    // this.$bvModal.show('busyModal');
+                    tShowSpinner();
                     try {
                         const response = await axios.post('/orders', {
                             storedItemInfos: this.storedItems,
@@ -63,6 +63,7 @@
 
                         window.location.href = '/orders/' + response.data.id;
                     } catch (e) {
+                        tHideSpinner()
                         this.$root.showErrorMsg(
                             'Ошибка сохранения',
                             'Не удалось сохранить заказ. Попробуйте принять заказ позже'
@@ -70,7 +71,8 @@
                     }
                 } else if (!this.client)
                     this.clientError = true;
-                this.$bvModal.hide('busyModal');
+                // this.$bvModal.hide('busyModal');
+
             },
             onStoredItemsChange(items) {
                 if (items)
