@@ -45,6 +45,7 @@ Route::resource('trips', 'Trips\TripsController',
     ['except' => ['destroy']]);
 
 Route::get('/trip/{trip}/stored-items/edit', 'Trips\TripStoredItemsController@edit')->name('trip.edit-items');
+Route::post('/trip/{trip}/status', 'Trips\TripStoredItemsController@changeStatus')->name('trip.status');
 Route::get('/trip/stored-items/available', 'Trips\TripStoredItemsController@availableItems');
 Route::get('/trip/{branch}/stored-items/available', 'Trips\TripStoredItemsController@availableItemsAtBranch');
 Route::post('/trip/{trip}/stored-items', 'Trips\TripStoredItemsController@associateToTrip');

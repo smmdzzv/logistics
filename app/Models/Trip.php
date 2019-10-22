@@ -9,6 +9,9 @@ use Carbon\Carbon;
 
 /**
  * @property string departureDate
+ * @property string departureAt
+ * @property string returnedAt
+ * @property string status
  */
 class Trip extends BaseModel
 {
@@ -47,6 +50,6 @@ class Trip extends BaseModel
 
     public function isEditable()
     {
-        return $this->departureDate > Carbon::now();
+        return $this->departureDate > Carbon::now() && $this->status === 'created';
     }
 }

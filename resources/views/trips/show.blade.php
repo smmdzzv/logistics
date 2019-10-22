@@ -32,15 +32,54 @@
                         <p>Номер рейса: <span class="font-weight-bold">{{$trip->code}}</span></p>
                         <p>Водитель: <span class="font-weight-bold">{{$trip->driver->name}}</span></p>
                         <p>Машина: <span class="font-weight-bold">{{$trip->car->number}}</span></p>
-                        @if($trip->hasTrailer)
-                            <p class="text-success">С прицепом</p>
-                        @else
-                            <p class="text-danger">Без прицепа</p>
-                        @endif
+                        <p>Статус:
+                            @switch($trip->status)
+                                @case('created')
+                                <span>В ожидании загрузки</span>
+                                @break
+                                @case('active')
+                                <span class="text-success">В пути</span>
+                                @break
+                                @case('finished')
+                                <span class="text-danger">Завершен</span>
+                                @break
+                            @endswitch
+                        </p>
+                        <p> Прицеп:
+                            @if($trip->hasTrailer)
+                                <span class="text-success">С прицепом</span>
+                            @else
+                                <span class="text-danger">Без прицепа</span>
+                            @endif
+                        </p>
+
                         <p>Дата отправления: <span class="font-weight-bold">{{$trip->departureDate}}</span></p>
                         <p>Дата возвращения: <span class="font-weight-bold">{{$trip->returnDate}}</span></p>
-                        <p>Факт. дата отправления: </p>
-                        <p>Факт. дата возвращения: </p>
+                        <p>Факт. дата отправления: <span class="font-weight-bold">{{$trip->departureAt}}</span></p>
+                        <p>Факт. дата возвращения: <span class="font-weight-bold">{{$trip->returnedAt}}</span></p>
+
+                        <form method="post" action="{{route('trip.status', $trip)}}">
+                            @csrf
+                            <input type="hidden" name="status"
+                               @switch($trip->status)
+                                   @case('created')
+                                   value="active"
+                                   @break
+                                   @case('active')
+                                   value="finished"
+                                   @break
+                                @endswitch
+                            >
+
+                            @switch($trip->status)
+                                @case('created')
+                                <button class="btn btn-primary">Начать рейс</button>
+                                @break
+                                @case('active')
+                                <button class="btn btn-success">Завершить рейс</button>
+                                @break
+                            @endswitch
+                        </form>
                     </div>
                 </div>
             </div>

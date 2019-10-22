@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Trip;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 class TripStoredItemsController extends Controller
@@ -19,8 +20,9 @@ class TripStoredItemsController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('roles.deny:client,cashier,driver')->except('loadToCar');
-        $this->middleware('roles.allow:admin')->only('editLoaded', 'updateLoaded');
+        $adminOnly = ['editLoaded', 'updateLoaded', 'editUnloaded', 'updateUnloaded', 'exchangeItems', 'changeItemsTrip'];
+        $this->middleware('roles.deny:client,cashier,driver')->except($adminOnly);
+        $this->middleware('roles.allow:admin')->only($adminOnly);
     }
 
     public function associateToTrip(Trip $trip)
@@ -88,7 +90,8 @@ class TripStoredItemsController extends Controller
         return view('trips.edit-items-list', compact('trip', 'branches'));
     }
 
-    public function exchangeItems(Trip $trip){
+    public function exchangeItems(Trip $trip)
+    {
 
         $data = new \stdClass();
         $data->trip = $trip;
@@ -100,13 +103,28 @@ class TripStoredItemsController extends Controller
         $writer->write();
     }
 
-    public function changeItemsTrip(Trip $trip){
+    public function changeItemsTrip(Trip $trip)
+    {
         $trips = Trip::where('status', '!=', 'finished')->get();
-        $trips = $trips->reject(function ($item) use($trip){
+        $trips = $trips->reject(function ($item) use ($trip) {
             return $trip->id === $item->id;
         });
         $trip->load('loadedItems.info.item', 'loadedItems.info.owner', 'loadedItems.storageHistory.storage');
         return view('trips.change-items-trip', compact('trip', 'trips'));
+    }
+
+    public function changeStatus(Trip $trip){
+        $status = request()->input('status');
+
+        if($status === 'active')
+            $trip->departureAt = Carbon::now();
+        if($status === 'finished')
+            $trip->returnedAt = Carbon::now();
+        $trip->status = $status;
+
+        $trip->save();
+
+        return redirect(route('trips.show', $trip));
     }
 
     public function availableItems()
