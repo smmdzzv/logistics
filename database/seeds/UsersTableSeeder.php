@@ -101,5 +101,16 @@ class UsersTableSeeder extends Seeder
         ]);
 
         $user->roles()->attach($roleCashier);
+
+        $user = User::create([
+            'name'=>'Джалолов Шамс',
+            'branch_id' => $branchId,
+            'phone' => '+92656565656565',
+            'password' => Hash::make('asdf1234'),
+            'email' => 'duob@test.com',
+            'code'=>'111111'
+        ]);
+
+        $user->roles()->attach($roleAdmin);
     }
 }
