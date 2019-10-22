@@ -84,9 +84,3 @@ window.app = new Vue({
         }
     }
 });
-
-if (process.env.MIX_ENV_MODE === 'production') {
-    window.Vue.config.devtools = false;
-    window.Vue.config.debug = false;
-    window.Vue.config.silent = true;
-}
