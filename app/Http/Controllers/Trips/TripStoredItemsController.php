@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Trips;
 
 
 use App\Data\RequestWriters\Trips\AssociateToTripRequestWriter;
+use App\Data\RequestWriters\Trips\ChangeItemsTripRequest;
 use App\Data\RequestWriters\Trips\LoadItemsToCarRequestWriter;
 use App\Data\RequestWriters\Trips\UnloadItemsToCarRequestWriter;
 use App\Http\Controllers\Controller;
@@ -87,8 +88,16 @@ class TripStoredItemsController extends Controller
         return view('trips.edit-items-list', compact('trip', 'branches'));
     }
 
-    public function exchangeItems(){
-        dd(request());
+    public function exchangeItems(Trip $trip){
+
+        $data = new \stdClass();
+        $data->trip = $trip;
+        $data->targetTrip = Trip::findOrFail(request()->get('targetTrip'));
+        $data->employee = auth()->user();
+        $data->storedItems = $this->getTripItemsFromRequest($trip);
+
+        $writer = new ChangeItemsTripRequest($data);
+        $writer->write();
     }
 
     public function changeItemsTrip(Trip $trip){

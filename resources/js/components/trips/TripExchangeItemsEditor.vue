@@ -78,14 +78,14 @@
                 this.selectedItems = items;
             },
             async submit() {
-                if (!this.selectedBranch || this.selectedItems.length === 0)
+                if (!this.selectedTrip || this.selectedItems.length === 0)
                     return;
                 try {
                     let data = {
                         storedItems: this.selectedItems.map((selected) => {
                             return selected.id;
                         }),
-                        branch: this.selectedBranch.id
+                        targetTrip: this.selectedTrip.id
                     };
 
                     let action = `/trip/${this.trip.id}/exchange/stored-items`;
