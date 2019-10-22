@@ -108,8 +108,9 @@ class OrderRequestWriter extends RequestWriter
 
         while (!$isUnique) {
             $date = Carbon::now();
-            $dateMark = substr($date->isoFormat('x'),7);
-            $code = $date->isoFormat('YY').$dateMark.$employeeMark.$orderMark. random_int(1000, 9999);
+            preg_match_all($pattern, $date->isoFormat('x'), $dateMatches);
+            $dateMark = substr(implode("", $dateMatches[0]),7,6);
+            $code = $date->isoFormat('YY').$dateMark.$employeeMark.$orderMark. random_int(10000, 99999);
             $isUnique = !in_array($code, $this->data->codes);
         }
         $this->data->codes[] = $code;
