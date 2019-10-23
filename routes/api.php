@@ -15,6 +15,6 @@ use Illuminate\Http\Request;
 
 Route::post('/login', 'Auth\ApiTokenController@login');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::patch('/token/refresh', 'Auth\ApiTokenController@update');
+
+Route::get('/user', 'Api\User\UserController@authenticated');

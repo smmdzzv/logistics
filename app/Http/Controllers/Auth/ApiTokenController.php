@@ -5,9 +5,15 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ApiTokenController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api')->except('login');
+    }
+
     /**
      * Authenticate user
      *
@@ -22,7 +28,7 @@ class ApiTokenController extends Controller
                 auth()->user()->forceFill([
                     'api_token' => hash('sha256', Str::random(60)),
                 ])->save();
-            return auth()->user()->api_token;
+            return ['token' => auth()->user()->api_token];
         }
     }
 
