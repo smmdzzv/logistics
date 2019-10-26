@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/login', 'Auth\ApiTokenController@login');
+Route::post('/authorize', 'Auth\ApiTokenController@login');
 
 Route::patch('/token/refresh', 'Auth\ApiTokenController@update');
 

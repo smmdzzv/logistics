@@ -13,6 +13,6 @@ class UserController extends Controller
     }
 
     public function authenticated(Request $request){
-        return $request->user();
+        return $request->user()->load('branch');
     }
 }
