@@ -41,11 +41,10 @@ class TripsController extends Controller
     {
         $item = StoredItem::whereHas('tripHistory', function (Builder $query) use ($trip) {
             $query->where('trip_id', $trip->id);
-        })->where('id', request()->get('stored_item'))->first();
+        })->where('code', request()->get('stored_item'))->first();
 
         if (!$item)
-            abort(400, 'Не переданы идентификаторы товаров');
-
+            abort(400, 'Не передан код товаров');
         return $item;
     }
 }
