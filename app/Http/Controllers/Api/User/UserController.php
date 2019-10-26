@@ -10,6 +10,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api');
+        $this->middleware('roles.allow:employee');
     }
 
     public function authenticated(Request $request){

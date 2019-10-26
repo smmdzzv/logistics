@@ -7,7 +7,7 @@ namespace App\Http\Controllers\Trips;
 use App\Data\RequestWriters\Trips\AssociateToTripRequestWriter;
 use App\Data\RequestWriters\Trips\ChangeItemsTripRequest;
 use App\Data\RequestWriters\Trips\LoadItemsToCarRequestWriter;
-use App\Data\RequestWriters\Trips\UnloadItemsToCarRequestWriter;
+use App\Data\RequestWriters\Trips\UnloadItemsFromCarRequestWriter;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\StoredItems\StoredItem;
@@ -77,7 +77,7 @@ class TripStoredItemsController extends Controller
         $data->branch = Branch::findOrFail(request()->input('branch'));
         $data->employee = auth()->user();
 
-        $writer = new UnloadItemsToCarRequestWriter($data);
+        $writer = new UnloadItemsFromCarRequestWriter($data);
         $writer->write();
 
         return;

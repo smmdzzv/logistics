@@ -18,3 +18,6 @@ Route::post('/authorize', 'Auth\ApiTokenController@login');
 Route::patch('/token/refresh', 'Auth\ApiTokenController@update');
 
 Route::get('/user', 'Api\User\UserController@authenticated');
+
+Route::get('/trips', 'Api\Trip\TripsController@activeTrips');
+Route::post('/trip/{trip}/unload', 'Api\Trip\TripsController@unloadItem');

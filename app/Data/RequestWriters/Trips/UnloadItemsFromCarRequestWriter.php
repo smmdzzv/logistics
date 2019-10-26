@@ -11,7 +11,7 @@ use App\StoredItems\StorageHistory;
 use Carbon\Carbon;
 use stdClass;
 
-class UnloadItemsToCarRequestWriter extends RequestWriter
+class UnloadItemsFromCarRequestWriter extends RequestWriter
 {
     public function __construct($input)
     {
