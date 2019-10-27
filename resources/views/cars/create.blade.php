@@ -79,7 +79,7 @@
                                 <div class="col-md-6">
                                     <input id="serial" placeholder="VIN - идентификационный номер" type="text"
                                            class="form-control @error('serial') is-invalid @enderror"
-                                           name="serial" value="{{ old('serial') }}" required
+                                           name="serial" value="{{ old('serial') }}"
                                            autocomplete="serial" autofocus>
 
                                     @error('serial')
