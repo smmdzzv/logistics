@@ -5,7 +5,10 @@
                 <p> Клиент: <span class="font-weight-bold">{{order.owner.name}}</span></p>
             </div>
             <div class="col-12 col-sm-6 text-left text-sm-right">
-                <p class="badge badge-primary p-2">
+                <p class="badge badge-primary p-2" v-if="order.status !== 'completed'">
+                    Статус: <span class="text">{{getStatus()}}</span>
+                </p>
+                <p class="badge badge-secondary p-2" v-else>
                     Статус: <span class="text">{{getStatus()}}</span>
                 </p>
             </div>
