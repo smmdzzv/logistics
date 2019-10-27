@@ -78,11 +78,17 @@
                                             v-for="tariff in tariffs">
                                             <div :key="tariff.id" class="row">
                                                 <div class="col-md-3"> {{tariff.name}}</div>
-                                                <div class="col-md-8"> {{tariff.description}}</div>
-                                                <div class="col-md-1">
-                                                    <img @click="removeFromList(tariff)" alt="delete-item"
-                                                         class="icon-btn-sm"
-                                                         src="/svg/delete.svg">
+                                                <div class="col-md-7"> {{tariff.description}}</div>
+                                                <div class="col-md-2">
+                                                    <div class="row mt-2 mt-md-0">
+                                                        <img @click="editTariffPricing(tariff)" alt="delete-item"
+                                                             class="icon-btn-sm ml-auto"
+                                                             src="/svg/edit.svg">
+                                                        <img @click="removeFromList(tariff)" alt="delete-item"
+                                                             class="icon-btn-sm mx-auto"
+                                                             src="/svg/delete.svg">
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </li>
@@ -185,6 +191,9 @@
                     //TODO
                 }
                 this.hideBusy();
+            },
+            editTariffPricing(tariff){
+                window.location = `tariff-price-histories/create?tariff=${tariff.id}`;
             }
         },
         validations: {

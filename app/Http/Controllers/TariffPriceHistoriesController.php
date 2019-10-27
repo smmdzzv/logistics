@@ -35,7 +35,8 @@ class TariffPriceHistoriesController extends Controller
     public function create()
     {
         $tariffs = Tariff::all();
-        return view('tariff-price-histories.create', compact('tariffs'));
+        $selectedTariff = $tariffs->firstWhere('id', \request()->get('tariff'));
+        return view('tariff-price-histories.create', compact('tariffs', 'selectedTariff'));
     }
 
     public function store(TariffPriceHistoryRequest $request)

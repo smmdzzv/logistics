@@ -16,14 +16,19 @@
                                     <select id="tariff" placeholder="в кг"
                                             class="form-control @error('tariff') is-invalid @enderror"
                                             name="tariff_id" value="{{ old('tariff') }}" required
+                                            @if($selectedTariff) disabled @endif
                                             autocomplete="tariff" autofocus>
-                                        @foreach($tariffs as $tariff)
-                                            <option value="{{$tariff->id}}">{{$tariff->name}}</option>
-                                        @endforeach
+                                        @if($selectedTariff)
+                                            <option value="{{$selectedTariff->id}}">{{$selectedTariff->name}}</option>
+                                        @else
+                                            @foreach($tariffs as $tariff)
+                                                <option value="{{$tariff->id}}">{{$tariff->name}}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
 
-                                        @error('tariff')
-                                        <span class="invalid-feedback" role="alert">
+                                    @error('tariff')
+                                    <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                     @enderror
