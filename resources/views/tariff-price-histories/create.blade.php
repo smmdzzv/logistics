@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-12">
                 <div class="card">
                     <div class="card-header">Создать тарифный план</div>
                     <div class="card-body p-4">
@@ -77,7 +77,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group form-row align-items-baseline">
+                            <div class="form-group row align-items-baseline">
                                 <div class="col-sm-3">
                                     <label for="pricePerCube" class="col-form-label">Цена за куб</label>
                                     <input id="pricePerCube" placeholder="в долларах" type="text"
@@ -121,38 +121,8 @@
                                 </div>
 
                                 <div class="col-sm-3">
-                                    <label for="pricePerExtraKg" class="col-form-label">Цена за кг</label>
-                                    <input id="pricePerExtraKg" placeholder="сверх нормы" type="text"
-                                           class="form-control @error('pricePerExtraKg') is-invalid @enderror"
-                                           name="pricePerExtraKg" value="{{ old('pricePerExtraKg') }}" required
-                                           autocomplete="pricePerExtraKg" autofocus>
-
-                                    @error('pricePerExtraKg')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group form-row align-items-baseline">
-                                <div class="col-sm-3">
-                                    <label for="agreedPricePerKg" class="col-form-label">Цена за кг</label>
-                                    <input id="agreedPricePerKg" placeholder="договорная" type="text"
-                                           class="form-control @error('agreedPricePerKg') is-invalid @enderror"
-                                           name="agreedPricePerKg" value="{{ old('agreedPricePerKg') }}" required
-                                           autocomplete="agreedPricePerKg" autofocus>
-
-                                    @error('agreedPricePerKg')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-
-                                <div class="col-sm-3">
                                     <label for="maxWeightPerCube" class="col-form-label">Макс. вес куба</label>
-                                    <input id="maxWeightPerCube" placeholder="в кг" type="text"
+                                    <input id="maxWeightPerCube" placeholder="норма в кг" type="text"
                                            class="form-control @error('maxWeightPerCube') is-invalid @enderror"
                                            name="maxWeightPerCube" value="{{ old('maxWeightPerCube') }}" required
                                            autocomplete="maxWeightPerCube" autofocus>
@@ -164,14 +134,37 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-sm-3">
-                                    <label for="maxWeight" class="col-form-label">Макс. вес</label>
-                                    <input id="maxWeight" placeholder="рейса" type="text"
-                                           class="form-control @error('maxWeight') is-invalid @enderror"
-                                           name="maxWeight" value="{{ old('maxWeight') }}" required
-                                           autocomplete="maxWeight" autofocus>
+                            </div>
 
-                                    @error('maxWeight')
+                            <div class="form-group row align-items-baseline">
+                                <div class="col-sm-3">
+                                    <label for="agreedPricePerKg" class="col-form-label">Цена за кг</label>
+                                    <input id="agreedPricePerKg"
+                                           onchange="updatePricePerExtraKg(this)"
+                                           placeholder="договорная"
+                                           type="text"
+                                           class="form-control @error('agreedPricePerKg') is-invalid @enderror"
+                                           name="agreedPricePerKg"
+                                           value="{{ old('agreedPricePerKg') }}"
+                                           required
+                                           autocomplete="agreedPricePerKg"
+                                           autofocus>
+
+                                    @error('agreedPricePerKg')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <label for="pricePerExtraKg" class="col-form-label">Цена за кг</label>
+                                    <input id="pricePerExtraKg" placeholder="сверх нормы" type="text"
+                                           class="form-control @error('pricePerExtraKg') is-invalid @enderror"
+                                           name="pricePerExtraKg" value="{{ old('pricePerExtraKg') }}" required
+                                           autocomplete="pricePerExtraKg" autofocus>
+
+                                    @error('pricePerExtraKg')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -186,6 +179,21 @@
                                            autocomplete="maxCubage" autofocus>
 
                                     @error('maxCubage')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+
+
+                                <div class="col-sm-3">
+                                    <label for="maxWeight" class="col-form-label">Макс. вес</label>
+                                    <input id="maxWeight" placeholder="рейса" type="text"
+                                           class="form-control @error('maxWeight') is-invalid @enderror"
+                                           name="maxWeight" value="{{ old('maxWeight') }}" required
+                                           autocomplete="maxWeight" autofocus>
+
+                                    @error('maxWeight')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -207,4 +215,21 @@
         </div>
     </div>
 @endsection
+
+<script>
+    function updatePricePerExtraKg(element) {
+        let maxWeightPerCube = parseFloat($('#maxWeightPerCube').val());
+        let upperLimit = parseFloat($('#upperLimit').val());
+        let pricePerCube = parseFloat($('#pricePerCube').val());
+        let agreedPrice = parseFloat($(element).val());
+
+        let diff = maxWeightPerCube - upperLimit;
+        if (diff !== 0) {
+            let result = (agreedPrice * maxWeightPerCube - pricePerCube) / diff;
+            result = result > 0 ? result : 0;
+            $('#pricePerExtraKg').val(result.toFixed(2));
+        }
+
+    }
+</script>
 
