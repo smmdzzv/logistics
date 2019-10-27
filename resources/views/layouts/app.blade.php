@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Duob Logistics</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -28,7 +28,7 @@
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/home') }}">
-                {{ config('app.name', 'Laravel') }}
+                Duob Logistics
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -58,11 +58,12 @@
                                 <h6 class="dropdown-header">Расценка тарифов</h6>
                                 <a class="dropdown-item" href="{{route('tariff-price-histories.create')}}">Обновить
                                     расценки</a>
-                                <a class="dropdown-item" href="{{route('tariff-price-histories.index')}}">История цен</a>
+                                <a class="dropdown-item" href="{{route('tariff-price-histories.index')}}">История
+                                    цен</a>
                                 <div class="dropdown-divider"></div>
                                 <h6 class="dropdown-header">Наименования</h6>
                                 <a class="dropdown-item" href="{{route('items.create')}}">Добавить наименование</a>
-                                <a class="dropdown-item" href="{{route('items.index')}}">Список  наименований</a>
+                                <a class="dropdown-item" href="{{route('items.index')}}">Список наименований</a>
                             </div>
                         </li>
                         <!--Till-->
@@ -125,17 +126,17 @@
                         </li>
 
                         <!--Storage-->
-{{--                        <li class="nav-item dropdown">--}}
-{{--                            <a id="storageMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"--}}
-{{--                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>--}}
-{{--                                Склад <span class="caret"></span>--}}
-{{--                            </a>--}}
-{{--                            <div class="dropdown-menu" aria-labelledby="storageMenuDropdown">--}}
-{{--                                <h6 class="dropdown-header">Рейсы</h6>--}}
-{{--                                <a class="dropdown-item" href="{{route('branches.index')}}">Приемка с рейса</a>--}}
-{{--                                <a class="dropdown-item" href="{{route('trip.edit-loaded')}}">Загрузка на рейс</a>--}}
-{{--                            </div>--}}
-{{--                        </li>--}}
+                        {{--                        <li class="nav-item dropdown">--}}
+                        {{--                            <a id="storageMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"--}}
+                        {{--                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>--}}
+                        {{--                                Склад <span class="caret"></span>--}}
+                        {{--                            </a>--}}
+                        {{--                            <div class="dropdown-menu" aria-labelledby="storageMenuDropdown">--}}
+                        {{--                                <h6 class="dropdown-header">Рейсы</h6>--}}
+                        {{--                                <a class="dropdown-item" href="{{route('branches.index')}}">Приемка с рейса</a>--}}
+                        {{--                                <a class="dropdown-item" href="{{route('trip.edit-loaded')}}">Загрузка на рейс</a>--}}
+                        {{--                            </div>--}}
+                        {{--                        </li>--}}
                     </ul>
             @endauth
             <!-- Right Side Of Navbar -->
@@ -145,11 +146,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">Вход</a>
                         </li>
-{{--                        @if (Route::has('register'))--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a class="nav-link" href="{{ route('register') }}">Регистрация</a>--}}
-{{--                            </li>--}}
-{{--                        @endif--}}
+                        {{--                        @if (Route::has('register'))--}}
+                        {{--                            <li class="nav-item">--}}
+                        {{--                                <a class="nav-link" href="{{ route('register') }}">Регистрация</a>--}}
+                        {{--                            </li>--}}
+                        {{--                        @endif--}}
                     @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
