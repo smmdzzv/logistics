@@ -9,6 +9,7 @@ use App\Models\Till\Payment;
 use App\Models\Users\Client;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use mysql_xdevapi\Collection;
 
 /**
  * @property double totalCubage
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property double totalPrice
  * @property double totalDiscount
  * @property double totalCount
+ * @property Collection storedItems
  */
 class Order extends BaseModel
 {

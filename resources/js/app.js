@@ -34,6 +34,7 @@ Vue.component('StoredTable', require('./components/stored/StoredTable.vue').defa
 Vue.component('OrdersTable', require('./components/orders/OrdersTable.vue').default);
 Vue.component('OrderEditor', require('./components/orders/OrderEditor.vue').default);
 Vue.component('OrderViewer', require('./components/orders/OrderViewer.vue').default);
+Vue.component('OrderItemsListEditor', require('./components/orders/OrderItemsListEditor.vue').default);
 
 Vue.component('TripsEditor', require('./components/trips/TripsEditor.vue').default);
 Vue.component('TripItemsEditor', require('./components/trips/TripItemsEditor.vue').default);

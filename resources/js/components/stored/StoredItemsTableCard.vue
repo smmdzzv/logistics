@@ -11,9 +11,9 @@
         :sticky-header="tableHeight"
         :striped="striped"
         :tableBusy="isBusy"
+        @itemsSelected="onItemsSelected"
         excelFileName="Список товаров рейса"
         primaryKey="id"
-        @itemsSelected="onItemsSelected"
         responsive>
 
         <template #header>
@@ -88,8 +88,13 @@
                     return selected.id === item.id;
                 });
             },
-            onItemsSelected(items){
+            onItemsSelected(items) {
                 this.$emit('itemsSelected', items)
+            }
+        },
+        watch: {
+            storedItems() {
+                this.items = this.storedItems
             }
         },
         components: {

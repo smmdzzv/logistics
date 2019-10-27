@@ -30,9 +30,13 @@ Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 
 //Order
 Route::get('/orders/all', 'OrdersController@all')->name('order.all');
+Route::get('/orders/{client}/active', 'OrdersController@activeOrders');
+
 Route::get('/orders/items/edit', 'Orders\OrderItemsController@edit')->name('order-items.edit');
+Route::get('/order/{order}/items', 'Orders\OrderItemsController@storedItems');
 
 Route::get('/orders/{client}/unpaid', 'Orders\OrderPaymentsController@unpaid');
+
 
 Route::resource('orders', 'OrdersController', ['except' => ['delete', 'edit']]);
 

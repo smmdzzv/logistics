@@ -4,7 +4,11 @@ namespace App\Models\Users;
 
 use App\Models\Order;
 use App\Models\StoredItems\StoredItem;
+use mysql_xdevapi\Collection;
 
+/**
+ * @property Collection activeOrders
+ */
 class Client extends RoleUser
 {
     public function getRoles()
@@ -26,5 +30,9 @@ class Client extends RoleUser
 
     public function unpaidOrders(){
         return $this->orders()->where('paymentId',  null);
+    }
+
+    public function activeOrders(){
+        return $this->orders()->where('status','!=',"finished");
     }
 }

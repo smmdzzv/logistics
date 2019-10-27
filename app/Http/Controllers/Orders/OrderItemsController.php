@@ -17,4 +17,8 @@ class OrderItemsController extends Controller
     public function edit(){
         return view('orders.edit-items-list');
     }
+
+    public function storedItems(Order $order){
+        return $order->storedItems()->with('info', 'info.item', 'info.owner', 'storageHistory.storage')->get();
+    }
 }

@@ -89,6 +89,10 @@ class OrdersController extends Controller
         return Order::with(['owner', 'registeredBy'])->paginate($paginate);
     }
 
+    public function activeOrders(Client $client){
+        return $client->activeOrders;
+    }
+
     public function filteredByBranch(Branch $branch)
     {
         $paginate = request()->paginate ?? 10;
