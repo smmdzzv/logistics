@@ -18,6 +18,10 @@ class OrderItemsController extends Controller
         return view('orders.edit-items-list');
     }
 
+    public function update(Order $order){
+        dd(\request()->all());
+    }
+
     public function storedItems(Order $order){
         return $order->storedItems()->with('info', 'info.item', 'info.owner', 'storageHistory.storage')->get();
     }

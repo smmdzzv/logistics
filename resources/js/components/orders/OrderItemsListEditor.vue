@@ -37,7 +37,7 @@
         </div>
 
         <div class="col-12 text-center">
-            <button class="btn btn-primary">Выдать</button>
+            <button class="btn btn-primary" @click="submit">Выдать</button>
         </div>
     </div>
 
@@ -68,6 +68,23 @@
             },
             onItemsSelected(items) {
                 this.selectedItems = items
+            },
+            async submit(){
+                let data = {
+                    items: this.selectedItems.map((item) => {
+                        return item.id
+                    })
+                };
+
+                let action = `/order/${this.selectedOrder.id}/items`;
+
+                try{
+                    const response = await axios.post(action, data)
+                }
+                catch (e) {
+
+                }
+
             }
         },
         watch: {
