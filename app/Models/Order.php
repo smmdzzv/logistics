@@ -88,4 +88,9 @@ class Order extends BaseModel
         $this->totalDiscount = round($this->totalDiscount, 2);
         $this->totalCount = round($this->totalCount, 2);
     }
+
+    public function complete(){
+        $this->status = "completed";
+        $this->save();
+    }
 }

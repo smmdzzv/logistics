@@ -33,6 +33,6 @@ class Client extends RoleUser
     }
 
     public function activeOrders(){
-        return $this->orders()->where('status','!=',"finished");
+        return $this->orders()->where('status','!=',"completed");
     }
 }

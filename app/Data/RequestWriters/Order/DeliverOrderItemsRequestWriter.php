@@ -71,8 +71,9 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
         $this->input->order->save();
     }
 
-    private function deliverItems(){
-        $ids = $this->input->storedItems->map(function ($item){
+    private function deliverItems()
+    {
+        $ids = $this->input->storedItems->map(function ($item) {
             return $item->id;
         });
 
@@ -82,12 +83,10 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
         ]);
     }
 
-    private function changeOrderStatus(){
-        if($this->input->order->storedItems()->count() === 0)
-        {
-            $this->input->order->status = "finished";
-            $this->input->order->save();
-        }
+    private function changeOrderStatus()
+    {
+        if ($this->input->order->storedItems()->count() === 0)
+            $this->input->order->complete();
     }
 
 }
