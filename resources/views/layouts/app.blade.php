@@ -40,7 +40,7 @@
             @auth
                 <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav ml-4 mr-auto">
-                        <!--Orders-->
+                        {{--Orders--}}
                         <li class="nav-item dropdown">
                             <a id="ordersMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -51,6 +51,7 @@
                                 <a class="dropdown-item" href="{{route('orders.index')}}">Список заказов</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{route('stored.index')}}">Принятые товары</a>
+                                <a class="dropdown-item" href="{{route('order-items.edit')}}">Выдать товары</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{route('tariffs.index')}}">Управление тарифами</a>
                                 <div class="dropdown-divider"></div>
