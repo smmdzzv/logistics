@@ -33,6 +33,7 @@ class TariffPriceHistoriesTableSeeder extends Seeder
         $newPrice->maxWeight = 27000;
         $newPrice->branch_id = $branchId;
         $newPrice->tariff_id = $this->getId('Обувь-У');
+        $newPrice->totalMoney = 21306.96;
         $newPrice->save();
 
         $tariff=$this->getId('Пресс-У');
@@ -49,7 +50,8 @@ class TariffPriceHistoriesTableSeeder extends Seeder
             'maxCubage'=>108,
             'maxWeight'=>27000,
             'branch_id'=>$branchId,
-            'tariff_id'=>$tariff
+            'tariff_id'=>$tariff,
+            'totalMoney' => 21306.96
         ]);
 
         $tariff=$this->getId('Запчасти-У');
@@ -66,7 +68,8 @@ class TariffPriceHistoriesTableSeeder extends Seeder
             'maxCubage'=>108,
             'maxWeight'=>27000,
             'branch_id'=>$branchId,
-            'tariff_id'=>$tariff
+            'tariff_id'=>$tariff,
+            'totalMoney' => 21306.96
         ]);
 
         $tariff=$this->getId('Договорной-У');
@@ -83,7 +86,8 @@ class TariffPriceHistoriesTableSeeder extends Seeder
             'maxCubage'=>108,
             'maxWeight'=>27000,
             'branch_id'=>$branchId,
-            'tariff_id'=>$tariff
+            'tariff_id'=>$tariff,
+            'totalMoney' => 21306.96
         ]);
 
         $tariff=$this->getId('Кашкар');
@@ -100,7 +104,8 @@ class TariffPriceHistoriesTableSeeder extends Seeder
             'maxCubage'=>108,
             'maxWeight'=>27000,
             'branch_id'=>$branchId,
-            'tariff_id'=>$tariff
+            'tariff_id'=>$tariff,
+            'totalMoney' => 21306.96
         ]);
     }
 

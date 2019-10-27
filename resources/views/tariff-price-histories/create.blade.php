@@ -13,13 +13,15 @@
                             <div class="form-group row align-items-baseline">
                                 <div class="col-sm-3">
                                     <label for="tariff" class="col-form-label">Тариф</label>
-                                    <select id="tariff" placeholder="в кг"
-                                            class="form-control @error('tariff') is-invalid @enderror"
-                                            name="tariff_id" value="{{ old('tariff') }}" required
-                                            @if($selectedTariff) disabled @endif
+                                    <select id="tariff"
+                                            placeholder="в кг"
+                                            class="form-control
+                                            @error('tariff') is-invalid @enderror"
+                                            name="tariff_id"
+                                            required
                                             autocomplete="tariff" autofocus>
                                         @if($selectedTariff)
-                                            <option value="{{$selectedTariff->id}}">{{$selectedTariff->name}}</option>
+                                            <option value="{{$selectedTariff->id}}" selected="selected">{{$selectedTariff->name}}</option>
                                         @else
                                             @foreach($tariffs as $tariff)
                                                 <option value="{{$tariff->id}}">{{$tariff->name}}</option>
@@ -221,6 +223,16 @@
                                     @enderror
                                 </div>
                             </div>
+
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
 
                             <div class="form-group row mb-0">
                                 <div class="col-12 text-center pt-3">
