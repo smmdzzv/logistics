@@ -64,13 +64,13 @@
                  hide-footer
                  id="shortItemInfoModal">
             <template v-slot:modal-header>
-                <button class="btn btn-primary" @click="printLabels">Печать</button>
+                <button @click="printLabels" class="btn btn-primary">Печать</button>
             </template>
-            <vue-easy-print ref="easyPrint" :tableShow="true">
+            <vue-easy-print :tableShow="true" ref="easyPrint">
                 <template v-for="item in itemsToShow">
                     <stored-item-short-info :key="stored.id"
-                                            :storedItemInfo="item"
                                             :storedItem="stored"
+                                            :storedItemInfo="item"
                                             v-for="stored in item.stored_items"/>
                 </template>
             </vue-easy-print>
@@ -145,12 +145,18 @@
                     this.itemsToShow.push(data.item);
                 else
                     this.itemsToShow = this.order.stored_item_infos;
-                this.$bvModal.show('shortItemInfoModal');
+
+                this.itemsToShow = this.itemsToShow.filter(function (item) {
+                    return item.stored_items.length > 0;
+                });
+
+                if (this.itemsToShow.length > 0)
+                    this.$bvModal.show('shortItemInfoModal');
             },
             onModalHidden(e) {
                 this.itemsToShow = [];
             },
-            printLabels(){
+            printLabels() {
                 this.$refs.easyPrint.print();
             }
         },
