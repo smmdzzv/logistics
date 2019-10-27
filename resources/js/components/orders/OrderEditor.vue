@@ -3,11 +3,11 @@
         <div class="row justify-content-center mb-4">
             <div class="col-12">
                 <label class="col-12" for="user">Клиент</label>
-                <search-user-dropdown class="col-12"
-                                      :selected="onUserSelected"
-                                      url="/concrete/client/filter?userInfo="
+                <search-user-dropdown :selected="onUserSelected"
+                                      class="col-12"
+                                      id="user"
                                       placeholder="Введите ФИО или код клиента"
-                                      id="user"/>
+                                      url="/concrete/client/filter?userInfo="/>
 
                 <b-popover
                     :show.sync="clientError"
@@ -17,18 +17,18 @@
                     triggers="null"
                     variant="danger"/>
             </div>
-
         </div>
 
         <order-items-box :tariffs="tariffs" :user="user"
-                         v-on:onStoredItemsChange="onStoredItemsChange"></order-items-box>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 text-right pt-4" v-if="storedItems.length > 0">
-                    <button @click.stop.prevent.capture="submitData()" class="btn btn-primary">Оформить заказ</button>
-                </div>
+                         v-on:onStoredItemsChange="onStoredItemsChange"/>
+
+
+        <div class="row">
+            <div class="col-md-12 text-right pt-4" v-if="storedItems.length > 0">
+                <button @click.stop.prevent.capture="submitData()" class="btn btn-primary col-12">Оформить заказ</button>
             </div>
         </div>
+
     </div>
 </template>
 

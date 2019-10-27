@@ -1,161 +1,168 @@
 <template>
-    <div>
-        <b-modal id="addItemModal"
-                 ref="modal"
-                 size="xl"
-                 no-close-on-esc
-                 title="Добавить новый товар"
-                 ok-title="Добавить"
-                 cancel-title="Отменить"
-                 @close="clearForm"
-                 @cancel="clearForm"
-                 @ok.prevent="onAdded">
-            <form id="addItemForm">
-                <div class="d-block">
-                    <div class="container pt-4">
-                        <div class="row">
-                            <div class="form-group col-md-3">
-                                <label for="width" class="col-form-label text-md-right">Ширина</label>
-                                <input v-model.number="storedItem.width"
-                                       name="width"
-                                       @blur="$v.storedItem.width.$touch()"
-                                       maxlength="6"
-                                       class="form-control"
-                                       id="width"
-                                       placeholder="в метрах"
-                                       required>
-                                <b-popover
-                                    :show.sync="$v.storedItem.width.$error"
-                                    variant="danger"
-                                    target="width"
-                                    placement="bottom"
-                                    content="Введите ширину в метрах"
-                                    triggers="null"/>
-                            </div>
-
-                            <div class="form-group col-md-3">
-                                <label for="height" class="col-form-label text-md-right">Высота</label>
-                                <input v-model.number="storedItem.height"
-                                       name="height"
-                                       @blur="$v.storedItem.height.$touch()"
-                                       maxlength="6"
-                                       class="form-control"
-                                       id="height"
-                                       placeholder="в метрах" required>
-                                <b-popover
-                                    :show.sync="$v.storedItem.height.$error"
-                                    variant="danger"
-                                    target="height"
-                                    placement="bottom"
-                                    content="Введите высоту в метрах"
-                                    triggers="null"/>
-                            </div>
-
-
-                            <div class="form-group col-md-3">
-                                <label for="length" class="col-form-label text-md-right">Длина</label>
-                                <input v-model.number="storedItem.length"
-                                       name="length"
-                                       @blur="$v.storedItem.length.$touch()"
-                                       maxlength="6"
-                                       class="form-control"
-                                       id="length"
-                                       placeholder="в метрах" required>
-                                <b-popover
-                                    :show.sync="$v.storedItem.length.$error"
-                                    variant="danger"
-                                    target="length"
-                                    placement="bottom"
-                                    content="Введите длину в метрах"
-                                    triggers="null"/>
-                            </div>
-
-                            <div class="form-group col-md-3">
-                                <label for="weight" class="col-form-label text-md-right">Вес</label>
-                                <input v-model.number="storedItem.weight"
-                                       name="weight"
-                                       @blur="$v.storedItem.weight.$touch()"
-                                       maxlength="6"
-                                       class="form-control"
-                                       id="weight"
-                                       placeholder="в кг"
-                                       required>
-                                <b-popover
-                                    :show.sync="$v.storedItem.weight.$error"
-                                    variant="danger"
-                                    target="weight"
-                                    placement="bottom"
-                                    content="Введите вес в килограммах"
-                                    triggers="null"/>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="item" class="col-form-label text-md-right">Наименование товара</label>
-                                <suggestions-input id="item"
-                                                   placeholder="Введите название товара"
-                                                   keyPropertyName="id"
-                                                   displayPropertyName="name"
-                                                   :onItemSearchInputChange="onItemSearchInputChange"
-                                                   :onSelected="onItemSelected"
-                                                   v-bind:options="filteredItems"
-                                                   required/>
-                                <b-popover
-                                    :show.sync="$v.storedItem.item.$error"
-                                    variant="danger"
-                                    target="item"
-                                    placement="bottom"
-                                    content="Найдите товар по имени"
-                                    triggers="null"/>
-                            </div>
-
-                            <div class="form-group col-md-2">
-                                <label for="tariff" class="col-form-label text-md-right">Тариф</label>
-                                <select id="tariff"
-                                        v-model="tariff"
-                                        class="form-control custom-select" required>
-                                    <option v-model="tariffs"
-                                            v-for="tariff in tariffs"
-                                    :value="tariff">{{tariff.name}}
-                                    </option>
-                                </select>
-                                <b-popover
-                                    :show.sync="$v.tariff.$error"
-                                    variant="danger"
-                                    target="tariff"
-                                    placement="bottom"
-                                    content="Выберите тариф из списка"
-                                    triggers="null"/>
-                            </div>
-
-                            <div class="form-group col-md-2">
-                                <label for="count" class="col-form-label text-md-right">Кол-во</label>
-                                <input class="form-control"
-                                       v-model.number="storedItem.count"
-                                       @blur="$v.storedItem.count.$touch()"
-                                       id="count"
-                                       maxlength="4"
-                                       name="count"
-                                       placeholder="в ед. товара" required>
-                                <b-popover
-                                    :show.sync="$v.storedItem.count.$error"
-                                    variant="danger"
-                                    target="count"
-                                    placement="bottom"
-                                    content="Определите количество товаров"
-                                    triggers="null"/>
-                            </div>
-
-                            <div class="form-group col-md-2">
-                                <label for="branch" class="col-form-label text-md-right">Филиал</label>
-                                <input class="form-control" v-model="branch.name" name="branch" id="branch" disabled>
-                            </div>
-                        </div>
-                    </div>
+    <form @submit.prevent id="addItemForm">
+        <div class="container">
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label class="col-form-label text-md-right" for="width">Ширина</label>
+                    <input @blur="$v.storedItem.width.$touch()"
+                           class="form-control"
+                           id="width"
+                           maxlength="6"
+                           name="width"
+                           placeholder="в метрах"
+                           required
+                           v-model.number="storedItem.width">
+                    <b-popover
+                        :show.sync="$v.storedItem.width.$error"
+                        content="Введите ширину в метрах"
+                        placement="bottom"
+                        target="width"
+                        triggers="null"
+                        variant="danger"/>
                 </div>
-            </form>
-        </b-modal>
-    </div>
+
+                <div class="form-group col-md-3">
+                    <label class="col-form-label text-md-right" for="height">Высота</label>
+                    <input @blur="$v.storedItem.height.$touch()"
+                           class="form-control"
+                           id="height"
+                           maxlength="6"
+                           name="height"
+                           placeholder="в метрах"
+                           required v-model.number="storedItem.height">
+                    <b-popover
+                        :show.sync="$v.storedItem.height.$error"
+                        content="Введите высоту в метрах"
+                        placement="bottom"
+                        target="height"
+                        triggers="null"
+                        variant="danger"/>
+                </div>
+
+
+                <div class="form-group col-md-3">
+                    <label class="col-form-label text-md-right" for="length">Длина</label>
+                    <input @blur="$v.storedItem.length.$touch()"
+                           class="form-control"
+                           id="length"
+                           maxlength="6"
+                           name="length"
+                           placeholder="в метрах"
+                           required v-model.number="storedItem.length">
+                    <b-popover
+                        :show.sync="$v.storedItem.length.$error"
+                        content="Введите длину в метрах"
+                        placement="bottom"
+                        target="length"
+                        triggers="null"
+                        variant="danger"/>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label class="col-form-label text-md-right" for="weight">Вес</label>
+                    <input @blur="$v.storedItem.weight.$touch()"
+                           class="form-control"
+                           id="weight"
+                           maxlength="6"
+                           name="weight"
+                           placeholder="в кг"
+                           required
+                           v-model.number="storedItem.weight">
+                    <b-popover
+                        :show.sync="$v.storedItem.weight.$error"
+                        content="Введите вес в килограммах"
+                        placement="bottom"
+                        target="weight"
+                        triggers="null"
+                        variant="danger"/>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label class="col-form-label text-md-right" for="item">Наименование товара</label>
+                    <suggestions-input :onItemSearchInputChange="onItemSearchInputChange"
+                                       :onSelected="onItemSelected"
+                                       displayPropertyName="name"
+                                       id="item"
+                                       keyPropertyName="id"
+                                       placeholder="Введите название товара"
+                                       required
+                                       v-bind:options="filteredItems"/>
+                    <b-popover
+                        :show.sync="$v.storedItem.item.$error"
+                        content="Найдите товар по имени"
+                        placement="bottom"
+                        target="item"
+                        triggers="null"
+                        variant="danger"/>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label class="col-form-label text-md-right" for="tariff">Тариф</label>
+                    <select class="form-control custom-select"
+                            id="tariff"
+                            required v-model="tariff">
+                        <option :value="tariff"
+                                v-for="tariff in tariffs"
+                                v-model="tariffs">{{tariff.name}}
+                        </option>
+                    </select>
+                    <b-popover
+                        :show.sync="$v.tariff.$error"
+                        content="Выберите тариф из списка"
+                        placement="bottom"
+                        target="tariff"
+                        triggers="null"
+                        variant="danger"/>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label class="col-form-label text-md-right" for="placeCount">Кол-во мест</label>
+                    <input @blur="$v.storedItem.placeCount.$touch()"
+                           class="form-control"
+                           id="placeCount"
+                           maxlength="4"
+                           name="placeCount"
+                           placeholder="в ед. товара"
+                           required v-model.number="storedItem.placeCount">
+                    <b-popover
+                        :show.sync="$v.storedItem.placeCount.$error"
+                        content="Определите количество занимаемых мест единице товара"
+                        placement="bottom"
+                        target="placeCount"
+                        triggers="null"
+                        variant="danger"/>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label class="col-form-label text-md-right" for="count">Кол-во</label>
+                    <input @blur="$v.storedItem.count.$touch()"
+                           class="form-control"
+                           id="count"
+                           maxlength="4"
+                           name="count"
+                           placeholder="в ед. товара"
+                           required v-model.number="storedItem.count">
+                    <b-popover
+                        :show.sync="$v.storedItem.count.$error"
+                        content="Определите количество товаров"
+                        placement="bottom"
+                        target="count"
+                        triggers="null"
+                        variant="danger"/>
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label class="col-form-label text-md-right" for="branch">Филиал</label>
+                    <input class="form-control" disabled id="branch" name="branch" v-model="branch.name">
+                </div>
+            </div>
+
+            <div class="col-12 text-center pt-2">
+                <button @click="onAdded" class="btn btn-primary">Добавить</button>
+            </div>
+        </div>
+    </form>
 
 </template>
 
@@ -167,12 +174,12 @@
         props: {
             branch: {
                 type: Object,
-                required:false,
+                required: false,
                 default: function () {
                     return {name: ''}
                 }
             },
-            tariffs:Array,
+            tariffs: Array,
             onStoredItemAdded: {
                 type: Function,
                 required: true
@@ -192,38 +199,39 @@
                     weight: null,
                     count: null,
                     branch: this.$props.branch,
-                    item: null
+                    item: null,
+                    placeCount: null
                 },
                 tariff: null
             }
         },
         methods: {
-            async getItems(){
-                try{
+            async getItems() {
+                try {
                     const response = await axios.get('/items/all/eager');
                     this.items = response.data;
-                }
-                catch (e) {
+                } catch (e) {
                     this.$root.showErrorMsg(
                         'Ошибка загрузки',
                         'Не удалось загрузить список наименований. Повторите попытку после перезагрузки страницы'
                     )
                 }
             },
-            async getPricing(){
+            async getPricing() {
+                tShowSpinner();
                 let stored = $.extend(true, {}, this.storedItem);
-                try{
+                try {
                     const response = await axios.get('/tariff-price-histories/' + this.tariff.id)
                     stored.tariffPricing = response.data;
                     this.onStoredItemAdded(stored);
                     this.clearForm(null);
-                }
-                catch (e) {
+                } catch (e) {
                     this.$root.showErrorMsg(
                         'Ошибка загрузки',
                         'Не удалось загрузить расценки для выбранного тарифа. Убедитесь, что расценки заданы в системе'
                     )
                 }
+                tHideSpinner();
             },
             onItemSearchInputChange(query) {
                 if (query === "")
@@ -242,12 +250,13 @@
                 this.storedItem.length = '';
                 this.storedItem.width = '';
                 this.storedItem.count = '';
+                this.storedItem.placeCount = '';
                 this.storedItem.item = null;
                 this.filteredItems = [];
                 this.tariff = null;
                 this.$nextTick(() => {
                     this.$v.$reset();
-                    this.$refs.modal.hide()
+                    // this.$refs.modal.hide()
                 })
             },
             async onAdded(e) {
@@ -257,16 +266,6 @@
                     this.$v.$touch();
                 else {
                     await this.getPricing();
-                    // let stored = $.extend(true, {}, this.storedItem);
-                    //
-                    // axios.get('/tariff-price-history/' + this.tariff.id)
-                    //     .then(result => {
-                    //         stored.tariffPricing = result.data;
-                    //     })
-                    //     .then(result=>{
-                    //         this.onStoredItemAdded(stored);
-                    //         this.clearForm(null);
-                    //     });
                 }
             }
         },
@@ -302,6 +301,10 @@
                 },
                 item: {
                     required
+                },
+                placeCount: {
+                    required,
+                    integer
                 }
             },
             tariff: {

@@ -67,6 +67,7 @@ class OrdersController extends Controller
                 'weight' => $itemData['weight'],
                 'count' => $itemData['count'],
                 'item_id' => $itemData['item']['id'],
+                'placeCount' => $itemData['placeCount'],
                 'ownerId' => $data->client->id,
                 'branch_id' => $data->branch->id
             ]);

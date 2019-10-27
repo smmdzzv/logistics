@@ -1,14 +1,16 @@
 <template>
-    <div class="container">
+    <div>
+        <stored-item-box class="pb-4" :branch="user.branch" :onStoredItemAdded="onStoredItemAdded"
+                         :tariffs="tariffs"></stored-item-box>
         <div class="card">
             <div class="card-header bg-info">
                 <div class="row">
                     <div class="text-light col-6 col-md-4 h5">Список товаров</div>
-                    <div class="text-right col-6 col-md-8">
-                        <button @click="showModal" class="btn btn-light">
-                            Добавить
-                        </button>
-                    </div>
+<!--                    <div class="text-right col-6 col-md-8">-->
+<!--                        <button @click="showModal" class="btn btn-light">-->
+<!--                            Добавить-->
+<!--                        </button>-->
+<!--                    </div>-->
                 </div>
             </div>
             <div>
@@ -28,11 +30,9 @@
                         </div>
                     </li>
 
-                    <li class="list-group-item" v-if="storedItems.length === 0">Для приема товара необходимо нажать
-                        кнопку
-                        добавить
+                    <li class="list-group-item" v-if="storedItems.length === 0">
+                        Список товаров пока пуст
                     </li>
-
                 </ul>
             </div>
             <div class="card-footer" v-if="storedItems.length > 0">
@@ -45,8 +45,7 @@
                 </div>
             </div>
         </div>
-        <stored-item-box :branch="user.branch" :onStoredItemAdded="onStoredItemAdded"
-                         :tariffs="tariffs"></stored-item-box>
+
     </div>
 </template>
 

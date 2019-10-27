@@ -28,14 +28,9 @@ class StoreOrderRequest extends FormRequest
         $rules['storedItemInfos.*.totalCubage'] = 'required|numeric';
         $rules['storedItemInfos.*.totalWeight'] = 'required|numeric';
         $rules['storedItemInfos.*.price'] = 'required|numeric';
-
-//            $rules['storedItemInfos.*.branch'] = 'required|array';
-//            $rules['storedItemInfos.*.branch.id'] = 'required|exists:branches,id';
-
+        $rules['storedItemInfos.*.placeCount'] = 'required|numeric';
         $rules['storedItemInfos.*.tariffPricing'] = 'required|array';
         $rules['storedItemInfos.*.tariffPricing.id'] = 'required|exists:tariff_price_histories,id';
-
-
         $rules['storedItemInfos.*.item'] = 'required|array';
         $rules['storedItemInfos.*.item.id'] = 'required|exists:items,id';
 
