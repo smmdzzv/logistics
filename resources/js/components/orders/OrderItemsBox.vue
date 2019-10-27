@@ -1,29 +1,42 @@
 <template>
     <div>
-        <stored-item-box class="pb-4" :branch="user.branch" :onStoredItemAdded="onStoredItemAdded"
-                         :tariffs="tariffs"></stored-item-box>
+        <stored-item-box :branch="user.branch" :onStoredItemAdded="onStoredItemAdded" :tariffs="tariffs"
+                         class="pb-4"></stored-item-box>
         <div class="card">
             <div class="card-header bg-info">
                 <div class="row">
                     <div class="text-light col-6 col-md-4 h5">Список товаров</div>
-<!--                    <div class="text-right col-6 col-md-8">-->
-<!--                        <button @click="showModal" class="btn btn-light">-->
-<!--                            Добавить-->
-<!--                        </button>-->
-<!--                    </div>-->
+                    <!--                    <div class="text-right col-6 col-md-8">-->
+                    <!--                        <button @click="showModal" class="btn btn-light">-->
+                    <!--                            Добавить-->
+                    <!--                        </button>-->
+                    <!--                    </div>-->
                 </div>
             </div>
             <div>
                 <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-md-3"> Тип товара</div>
+                            <div class="col-md-2"> Общий Объем</div>
+                            <div class="col-md-2"> Общий Вес</div>
+                            <div class="col-md-2"> Цена за ед</div>
+                            <div class="col-md-2"> Сумма</div>
+                            <div class="col-md-1">
+
+                            </div>
+                        </div>
+                    </li>
                     <li class="list-group-item"
                         v-for="stored in storedItems"
                         v-model="storedItems">
                         <div :key="stored.id" class="row">
-                            <div class="col-md-4"> {{stored.item.name}}</div>
+                            <div class="col-md-3"> {{stored.item.name}}</div>
                             <div class="col-md-2"> {{getCubage(stored, true)}} м<sup>3</sup></div>
                             <div class="col-md-2"> {{getWeight(stored, true)}} кг</div>
+                            <div class="col-md-2"> {{getPriceForOne(stored)}} $</div>
                             <div class="col-md-2"> {{getPrice(stored)}} $</div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <img @click="removeFromList(stored)" alt="delete-item" class="icon-btn-sm"
                                      src="/svg/delete.svg">
                             </div>
@@ -37,11 +50,12 @@
             </div>
             <div class="card-footer" v-if="storedItems.length > 0">
                 <div class="row">
-                    <div class="col-md-4"> Итого</div>
+                    <div class="col-md-3"> Итого</div>
                     <div :property="storedItems" class="col-md-2">{{getTotalCubage()}} м<sup>3</sup></div>
                     <div :property="storedItems" class="col-md-2"> {{getTotalWeight()}} кг</div>
-                    <div :property="storedItems" class="col-md-2">{{getTotalPrice()}} $</div>
                     <div class="col-md-2"></div>
+                    <div :property="storedItems" class="col-md-2">{{getTotalPrice()}} $</div>
+                    <div class="col-md-1"></div>
                 </div>
             </div>
         </div>
@@ -116,6 +130,10 @@
                 stored.price = price * stored.totalCubage;
                 stored.price = Math.round(stored.price * 100) / 100;
                 return stored.price;
+            },
+            getPriceForOne(stored) {
+                let price = this.getPrice(stored) / stored.count;
+                return price.toFixed(2);
             },
             getTotalPrice() {
                 let sum = 0;
