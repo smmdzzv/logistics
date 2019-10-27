@@ -140,7 +140,6 @@
                                 <div class="col-sm-3">
                                     <label for="agreedPricePerKg" class="col-form-label">Цена за кг</label>
                                     <input id="agreedPricePerKg"
-                                           onchange="updatePricePerExtraKg()"
                                            placeholder="договорная"
                                            type="text"
                                            class="form-control @error('agreedPricePerKg') is-invalid @enderror"
@@ -249,7 +248,7 @@
         let upperLimit = parseFloat($('#upperLimit').val());
         let pricePerCube = parseFloat($('#pricePerCube').val());
         let agreedPricePerKg = parseFloat($('#agreedPricePerKg').val());
-debugger;
+
         let diff = maxWeightPerCube - upperLimit;
         if (diff !== 0) {
             let result = (agreedPricePerKg * maxWeightPerCube - pricePerCube) / diff;
