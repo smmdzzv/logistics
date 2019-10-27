@@ -67,6 +67,12 @@
                             </form>
                         </section>
                         <section>
+                            <div class="row">
+                                <div class="col-12 text-right">
+                                    <a href="tariff-price-histories/create">Обновить расценки</a>
+
+                                </div>
+                            </div>
                             <div class="card">
                                 <div class="card-header bg-secondary">
                                     <div class="text-light p-1">Список тарифов</div>
@@ -81,14 +87,16 @@
                                                 <div class="col-md-7"> {{tariff.description}}</div>
                                                 <div class="col-md-2">
                                                     <div class="row mt-2 mt-md-0">
-                                                        <img @click="editTariffPricing(tariff)" alt="delete-item"
+                                                        <img :id="tariff.id" @click="editTariffPricing(tariff)" alt="delete-item"
                                                              class="icon-btn-sm ml-auto"
                                                              src="/svg/edit.svg">
+                                                        <b-tooltip :target="tariff.id" triggers="hover">
+                                                            Редактировать цены
+                                                        </b-tooltip>
                                                         <img @click="removeFromList(tariff)" alt="delete-item"
                                                              class="icon-btn-sm mx-auto"
                                                              src="/svg/delete.svg">
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </li>

@@ -53,11 +53,10 @@
                                 <a class="dropdown-item" href="{{route('stored.index')}}">Принятые товары</a>
                                 <a class="dropdown-item" href="{{route('order-items.edit')}}">Выдать товары</a>
                                 <div class="dropdown-divider"></div>
+                                <h6 class="dropdown-header">Тарифы и расценки</h6>
                                 <a class="dropdown-item" href="{{route('tariffs.index')}}">Управление тарифами</a>
-                                <div class="dropdown-divider"></div>
-                                <h6 class="dropdown-header">Расценка тарифов</h6>
-                                <a class="dropdown-item" href="{{route('tariff-price-histories.create')}}">Обновить
-                                    расценки</a>
+                                {{--                                <a class="dropdown-item" href="{{route('tariff-price-histories.create')}}">Обновить--}}
+                                {{--                                    расценки</a>--}}
                                 <a class="dropdown-item" href="{{route('tariff-price-histories.index')}}">История
                                     цен</a>
                                 <div class="dropdown-divider"></div>
