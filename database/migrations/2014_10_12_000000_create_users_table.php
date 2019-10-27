@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->char('id', 26)->primary();
             $table->char('position_id', 26)->nullable();
             $table->char('branch_id', 26)->nullable();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('code')->unique()->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
