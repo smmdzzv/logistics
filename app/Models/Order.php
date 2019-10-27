@@ -49,7 +49,7 @@ class Order extends BaseModel
 
     public function owner()
     {
-        return $this->belongsTo(Client::class, 'ownerId');
+        return $this->belongsTo(User::class, 'ownerId');
     }
 
     public function registeredBy()

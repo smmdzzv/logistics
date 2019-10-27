@@ -16,7 +16,7 @@ class CreatePaymentItemsTable extends Migration
         Schema::create('payment_items', function (Blueprint $table) {
             $table->char('id', 26)->primary();
             $table->string('title', 255)->unique();
-            $table->char('type', 5);
+            $table->char('type', 20);
             $table->string('description', 500)->nullable();
             $table->timestamps();
         });

@@ -37,7 +37,7 @@
         </div>
 
         <div class="col-12 text-center">
-            <button class="btn btn-primary" @click="submit">Выдать</button>
+            <button @click="submit" class="btn btn-primary">Выдать</button>
         </div>
     </div>
 
@@ -69,7 +69,7 @@
             onItemsSelected(items) {
                 this.selectedItems = items
             },
-            async submit(){
+            async submit() {
                 let data = {
                     items: this.selectedItems.map((item) => {
                         return item.id
@@ -78,13 +78,16 @@
 
                 let action = `/order/${this.selectedOrder.id}/items`;
 
-                try{
+                try {
                     const response = await axios.post(action, data)
+                } catch (e) {
+                    if (e.response.status === 400) {
+                         this.$root.showErrorMsg(
+                             "Ошибка оплаты",
+                             "Недостаточно средств для оплаты. Пополните баланс"
+                         );
+                    }
                 }
-                catch (e) {
-
-                }
-
             }
         },
         watch: {
