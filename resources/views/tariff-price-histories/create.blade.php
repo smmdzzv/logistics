@@ -252,6 +252,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         $('#maxWeight').change(updateData);
+        $('#maxCubage').change(updateData);
         $('#agreedPricePerKg').change(updatePricePerExtraKg)
     });
 

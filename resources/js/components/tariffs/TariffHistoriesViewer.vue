@@ -1,25 +1,26 @@
 <template>
     <table-card
-        :isBusy="isBusy"
         :fields="fields"
+        :isBusy="isBusy"
         :items="items"
         :striped="true"
+        class="shadow"
         excelFileName="История тарифных планов"
         hover
-        class="shadow"
-        responsive
-        primary-key="id">
+        primary-key="id"
+        responsive>
         <template #header>
             История тарифных планов
         </template>
 
         <template slot="view" slot-scope="{item}">
-            <a class="btn btn-outline-primary" :href="getDetailsUrl(item)">Детали</a>
+            <a :href="getDetailsUrl(item)" class="btn btn-outline-primary">Детали</a>
         </template>
 
         <template #footer>
             <div class="card-footer">
-                <main-paginator :flowable="flowable" :onPageChange="getHistories" :pagination="pagination"></main-paginator>
+                <main-paginator :flowable="flowable" :onPageChange="getHistories"
+                                :pagination="pagination"></main-paginator>
             </div>
         </template>
     </table-card>
@@ -47,6 +48,10 @@
                 items: [],
                 isBusy: false,
                 fields: {
+                    created_at: {
+                        label: 'Дата',
+                        sortable: true
+                    },
                     'tariff.name': {
                         label: 'Тариф',
                         sortable: true
@@ -93,6 +98,10 @@
                     },
                     maxCubage: {
                         label: 'Общая кубатура',
+                        sortable: true
+                    },
+                    totalMoney: {
+                        label: 'Сумма',
                         sortable: true
                     }
                 }
