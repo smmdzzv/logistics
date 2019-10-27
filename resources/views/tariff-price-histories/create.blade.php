@@ -10,7 +10,7 @@
                         <form method="POST" action="{{route('tariff-price-histories.store')}}">
                             @csrf
 
-                            <div class="form-group row">
+                            <div class="form-group row align-items-baseline">
                                 <div class="col-sm-3">
                                     <label for="tariff" class="col-form-label">Тариф</label>
                                     <select id="tariff" placeholder="в кг"
@@ -140,7 +140,7 @@
                                 <div class="col-sm-3">
                                     <label for="agreedPricePerKg" class="col-form-label">Цена за кг</label>
                                     <input id="agreedPricePerKg"
-                                           onchange="updatePricePerExtraKg(this)"
+                                           onchange="updatePricePerExtraKg()"
                                            placeholder="договорная"
                                            type="text"
                                            class="form-control @error('agreedPricePerKg') is-invalid @enderror"
@@ -201,6 +201,28 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <label for="totalMoney" class="col-form-label">Сумма</label>
+                                    <input id="totalMoney"
+                                           placeholder="в долларах"
+                                           type="text"
+                                           class="form-control
+                                            @error('totalMoney') is-invalid @enderror"
+                                           name="totalMoney"
+                                           value="{{ old('totalMoney') }}"
+                                           required
+                                           autocomplete="totalMoney"
+                                           autofocus>
+
+                                    @error('totalMoney')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <div class="form-group row mb-0">
                                 <div class="col-12 text-center pt-3">
                                     <button type="submit" class="btn btn-primary">
@@ -217,19 +239,62 @@
 @endsection
 
 <script>
-    function updatePricePerExtraKg(element) {
+    document.addEventListener("DOMContentLoaded", function () {
+        $('#maxWeight').change(updateData);
+        $('#agreedPricePerKg').change(updatePricePerExtraKg)
+    });
+
+    function updatePricePerExtraKg() {
         let maxWeightPerCube = parseFloat($('#maxWeightPerCube').val());
         let upperLimit = parseFloat($('#upperLimit').val());
         let pricePerCube = parseFloat($('#pricePerCube').val());
-        let agreedPrice = parseFloat($(element).val());
-
+        let agreedPricePerKg = parseFloat($('#agreedPricePerKg').val());
+debugger;
         let diff = maxWeightPerCube - upperLimit;
         if (diff !== 0) {
-            let result = (agreedPrice * maxWeightPerCube - pricePerCube) / diff;
+            let result = (agreedPricePerKg * maxWeightPerCube - pricePerCube) / diff;
             result = result > 0 ? result : 0;
             $('#pricePerExtraKg').val(result.toFixed(2));
         }
+    }
 
+    function updateData() {
+        let pricePerCube = parseFloat($('#pricePerCube').val());
+        let maxCubage = parseFloat($('#maxCubage').val());
+        let maxWeight = parseFloat($('#maxWeight').val());
+        let upperLimit = parseFloat($('#upperLimit').val());
+        let pricePerExtraKg = parseFloat($('#pricePerExtraKg').val());
+
+        let price = pricePerCube + (maxWeight / maxCubage - upperLimit) * pricePerExtraKg;
+        let totalMoney = price * maxCubage;
+        $('#totalMoney').val(totalMoney.toFixed(2));
+
+        let agreedPricePerKg = totalMoney / maxWeight;
+        $('#agreedPricePerKg').val(agreedPricePerKg.toFixed(2));
+
+        let maxWeightPerCube = calculateMaxWeightPerCube(pricePerCube, upperLimit, pricePerExtraKg, agreedPricePerKg);
+        $('#maxWeightPerCube').val(maxWeightPerCube.toFixed(2));
+    }
+
+    //TODO analyze this
+    function calculateMaxWeightPerCube(pricePerCube, upperLimit, pricePerExtraKg, agreedPricePerKg, step = 0.1) {
+        let m = upperLimit + step;
+        let s = pricePerCube + (m - upperLimit) * pricePerExtraKg;
+
+        if (m !== 0 && agreedPricePerKg !== 0 && pricePerExtraKg < agreedPricePerKg && agreedPricePerKg < s / m) {
+            s = pricePerCube + (m + upperLimit) + pricePerExtraKg;
+            let sn = s / m;
+            let i = 0;
+            while (agreedPricePerKg < sn && i < 10000) // sn - agreedPricePerKg > 0.001
+            {
+                m = m + step;
+                s = pricePerCube + (m - upperLimit) * pricePerExtraKg;
+                i = i + 1;
+                sn = s / m;
+            }
+        }
+
+        return m;
     }
 </script>
 
