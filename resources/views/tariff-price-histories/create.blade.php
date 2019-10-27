@@ -140,7 +140,7 @@
 
                             <div class="form-group row align-items-baseline">
                                 <div class="col-sm-3">
-                                    <label for="agreedPricePerKg" class="col-form-label">Цена за кг</label>
+                                    <label for="agreedPricePerKg" class="col-form-label">Цена за кг (дог-ная)</label>
                                     <input id="agreedPricePerKg"
                                            placeholder="договорная"
                                            type="text"
@@ -159,7 +159,7 @@
                                 </div>
 
                                 <div class="col-sm-3">
-                                    <label for="pricePerExtraKg" class="col-form-label">Цена за кг</label>
+                                    <label for="pricePerExtraKg" class="col-form-label">Цена за кг (сверхнор-ая)</label>
                                     <input id="pricePerExtraKg" placeholder="сверх нормы" type="text"
                                            class="form-control @error('pricePerExtraKg') is-invalid @enderror"
                                            name="pricePerExtraKg" value="{{ old('pricePerExtraKg') }}" required
