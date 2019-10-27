@@ -8,9 +8,12 @@ use App\Models\Branch;
 use App\Models\Branches\Storage;
 use App\Models\Trip;
 use App\StoredItems\StorageHistory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StoredItem extends BaseModel
 {
+    use SoftDeletes;
+
     protected $guarded = [];
 
     public function info(){

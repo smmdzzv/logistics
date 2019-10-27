@@ -7,8 +7,11 @@ namespace App\Data\RequestWriters\Order;
 use App\Data\RequestWriters\Payments\IncomingPaymentRequestWriter;
 use App\Data\RequestWriters\RequestWriter;
 use App\Models\Currency;
+use App\Models\StoredItems\StoredItem;
+use App\Models\StoredItems\StoredItemTripHistory;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
+use Carbon\Carbon;
 use stdClass;
 
 class DeliverOrderItemsRequestWriter extends RequestWriter
@@ -21,6 +24,10 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
     function write()
     {
         $this->checkPayment();
+
+        $this->deliverItems();
+
+        $this->changeOrderStatus();
 
         return $this->saved;
     }
@@ -64,5 +71,23 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
         $this->input->order->save();
     }
 
+    private function deliverItems(){
+        $ids = $this->input->storedItems->map(function ($item){
+            return $item->id;
+        });
+
+        StoredItem::whereIn('id', $ids->all())->update([
+            'deleted_at' => Carbon::now(),
+            'deleted_by_id' => $this->input->employee->id
+        ]);
+    }
+
+    private function changeOrderStatus(){
+        if($this->input->order->storedItems()->count() === 0)
+        {
+            $this->input->order->status = "finished";
+            $this->input->order->save();
+        }
+    }
 
 }
