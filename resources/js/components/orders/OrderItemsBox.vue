@@ -115,7 +115,7 @@
 
                 let weightPerCube = stored.totalWeight / stored.totalCubage;
 
-                if (stored.item.onlyCustomPrice || weightPerCube >= tariff.maxWeightPerCube) {
+                if (stored.item.onlyAgreedPrice || weightPerCube >= tariff.maxWeightPerCube) {
                     stored.price = tariff.agreedPricePerKg * stored.totalWeight;
                     stored.price = Math.round(stored.price * 100) / 100;
                     return stored.price

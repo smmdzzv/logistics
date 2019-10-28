@@ -90,7 +90,7 @@ class StoredItemInfo extends BaseModel
         $billingInfo->discountPerCube = 0;
         $billingInfo->count = $this->count;
 
-        if ($this->item->onlyCustomPrice || $billingInfo->weightPerCube >= $tariffPricing->maxWeightPerCube) {
+        if ($this->item->onlyAgreedPrice || $billingInfo->weightPerCube >= $tariffPricing->maxWeightPerCube) {
             $billingInfo->pricePerItem = $tariffPricing->agreedPricePerKg * $billingInfo->totalWeight;
         } elseif ($this->item->applyDiscount) {
             if ($tariffPricing->lowerLimit > 0 && $billingInfo->weightPerCube <= $tariffPricing->lowerLimit) {
