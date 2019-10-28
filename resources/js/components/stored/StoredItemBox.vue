@@ -123,7 +123,7 @@
                            id="placeCount"
                            maxlength="4"
                            name="placeCount"
-                           placeholder="в ед. товара"
+                           placeholder=""
                            required v-model.number="storedItem.placeCount">
                     <b-popover
                         :show.sync="$v.storedItem.placeCount.$error"
