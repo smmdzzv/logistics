@@ -111,6 +111,9 @@
                 if (!stored)
                     return null;
 
+                if(stored.price)
+                    return stored.price.toFixed(2);
+
                 let tariff = stored.tariffPricing;
 
                 let weightPerCube = stored.totalWeight / stored.totalCubage;
