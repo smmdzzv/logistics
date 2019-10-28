@@ -171,6 +171,8 @@
             @hidden="resetModal"
             @ok="handleOk"
             @show="resetModal"
+            ok-title="Сохранить"
+            cancel-title="Отменить"
             id="customPriceModal"
             ref="customPriceModal"
             title="Введите ручную цену за единицу товара"
