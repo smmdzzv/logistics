@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\StoredItems\Item;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -24,6 +25,6 @@ class Tariff extends BaseModel
     }
 
     public function lastPriceHistory(){
-        return $this->hasOne(TariffPriceHistory::class)->latest();
+        return $this->hasOne(TariffPriceHistory::class)->latest()->where('created_at', '<', Carbon::now());
     }
 }
