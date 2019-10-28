@@ -87,16 +87,19 @@ Route::post('/settings/branch', 'AppSettingsController@storeBranch');
 Route::post('/settings/position', 'AppSettingsController@storePosition');
 
 //Tariffs
+Route::get('tariff/{tariff}/pricing', 'TariffsController@pricing');
 Route::resource('tariffs', 'TariffsController', [
     'only' => ['index', 'store', 'destroy']
 ])->parameters(['tariffs' => 'tariff']);
+
+
 
 //Tariff price histories
 Route::get('/tariff-price-histories/all', "TariffPriceHistoriesController@all");
 Route::resource('tariff-price-histories', 'TariffPriceHistoriesController', [
     'only' => ['index', 'create', 'store']
 ])->parameters(['tariff-price-histories' => 'history']);
-Route::get('/tariff-price-histories/{tariff}', "TariffPriceHistoriesController@lastByTariff");
+//Route::get('/tariff-price-histories/{tariff}', "TariffPriceHistoriesController@lastByTariff");
 
 //Cars
 Route::get('/cars/all', 'CarsController@all');

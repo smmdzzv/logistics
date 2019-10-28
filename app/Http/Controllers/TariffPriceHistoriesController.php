@@ -48,8 +48,8 @@ class TariffPriceHistoriesController extends Controller
     }
 
     //TODO move to tariff controller
-    public function lastByTariff(Tariff $tariff)
-    {
-        return $tariff->lastPriceHistory;
-    }
+//    public function lastByTariff(Tariff $tariff)
+//    {
+//        return $tariff->lastPriceHistory;
+//    }
 }

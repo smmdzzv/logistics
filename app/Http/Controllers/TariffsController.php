@@ -36,4 +36,9 @@ class TariffsController extends Controller
     public function destroy(Tariff $tariff){
         $tariff->delete();
     }
+
+    public function pricing(Tariff $tariff)
+    {
+        return $tariff->lastPriceHistory;
+    }
 }

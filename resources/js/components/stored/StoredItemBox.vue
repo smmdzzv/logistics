@@ -253,7 +253,8 @@
             async getPricing() {
                 tShowSpinner();
                 try {
-                    const response = await axios.get('/tariff-price-histories/' + this.tariff.id);
+                    let action = `tariff/${this.tariff.id}/pricing`;
+                    const response = await axios.get(action);
                     this.storedItem.tariffPricing = response.data;
                 } catch (e) {
                     this.$root.showErrorMsg(
