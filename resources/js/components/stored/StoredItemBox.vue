@@ -39,7 +39,6 @@
                         variant="danger"/>
                 </div>
 
-
                 <div class="form-group col-md-3">
                     <label class="col-form-label text-md-right" for="length">Длина</label>
                     <input @blur="$v.storedItem.length.$touch()"
@@ -77,6 +76,7 @@
                         variant="danger"/>
                 </div>
             </div>
+
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label class="col-form-label text-md-right" for="item">Наименование товара</label>
@@ -87,6 +87,7 @@
                                        keyPropertyName="id"
                                        placeholder="Введите название товара"
                                        required
+                                       ref="suggestionInput"
                                        v-bind:options="filteredItems"/>
                     <b-popover
                         :show.sync="$v.storedItem.item.$error"
@@ -254,6 +255,7 @@
                 this.storedItem.item = null;
                 this.filteredItems = [];
                 this.tariff = null;
+                this.$refs.suggestionInput.query = '';
                 this.$nextTick(() => {
                     this.$v.$reset();
                     // this.$refs.modal.hide()
