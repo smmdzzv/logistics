@@ -87,7 +87,7 @@
                 <stored-table class="shadow" :load-data="false" excel-export :provided-items="{{$trip->storedItems}}"
                               :selectable="false">
                     <template v-slot:header>
-                        <div class="text-right">
+                        <div class="text-right pl-3">
                             @if($trip->isEditable())
                                 <a href="{{route('trip.edit-items', $trip->id)}}">Изменить список товаров</a>
                             @endif
