@@ -27,36 +27,54 @@
                 <span>{{item.count}} ({{item.item.unit}})</span>
             </template>
 
-            <template slot="FOOT[item.name]" slot-scope="data">
+            <template slot="FOOT[item.name]">
                 <span>Итого</span>
             </template>
-            <template slot="FOOT[count]" slot-scope="data">
+            <template slot="FOOT[count]">
                 <span> </span>
             </template>
-            <template slot="FOOT[billing_info.totalWeight]" slot-scope="data">
+            <template slot="FOOT[placeCount]">
+                <span> </span>
+            </template>
+            <template slot="FOOT[pricePerPlaceCount]">
+                <span> </span>
+            </template>
+            <template slot="FOOT[billing_info.totalWeight]">
                 <span>{{order.totalWeight}}</span>
             </template>
-            <template slot="HEAD[billing_info.totalCubage]" slot-scope="data">
-                <span>Общая кубатура, м<sup>3</sup></span>
+            <template slot="HEAD[billing_info.totalCubage]">
+                <span>Объем, м<sup>3</sup></span>
             </template>
-            <template slot="FOOT[billing_info.totalCubage]" slot-scope="data">
+            <template slot="FOOT[billing_info.totalCubage]">
                 <span>{{order.totalCubage}}</span>
             </template>
-            <template slot="FOOT[billing_info.totalDiscount]" slot-scope="data">
+            <template slot="FOOT[billing_info.totalDiscount]">
                 <span>{{order.totalDiscount}}</span>
             </template>
-            <template slot="FOOT[billing_info.totalPrice]" slot-scope="data">
+            <template slot="FOOT[billing_info.totalPrice]">
                 <span>{{order.totalPrice}}</span>
+            </template>
+
+            <template slot="id" slot-scope="data">
+                <img @click="showShortInfo(data)" class="icon-btn-sm" src="/svg/barcode.svg">
             </template>
 
             <template slot="HEAD[id]">
                 <img @click="showShortInfo()" class="icon-btn-sm" src="/svg/barcode.svg">
             </template>
+
             <template slot="id" slot-scope="data">
                 <img @click="showShortInfo(data)" class="icon-btn-sm" src="/svg/barcode.svg">
             </template>
-            <template slot="FOOT[id]">
-                <span></span>
+
+            <template slot="HEAD[pricePerPlaceCount]">
+                <span id="pricePerPlaceCountTitle">Цена</span>
+                <b-tooltip target="pricePerPlaceCountTitle" triggers="hover">
+                    Цена в расчете на единицу места
+                </b-tooltip>
+            </template>
+            <template slot="pricePerPlaceCount" slot-scope="data">
+                <span>{{pricePerCountPlace(data)}}</span>
             </template>
         </b-table>
 
@@ -93,19 +111,26 @@
             return {
                 fields: {
                     'item.name': {
-                        label: 'Наименование',
+                        label: 'Тип',
                         sortable: true
                     },
                     count: {
                         label: 'Кол-во',
                         sortable: true
                     },
+                    placeCount: {
+                        label: 'Кол-во мест',
+                        sortable: true
+                    },
+                    'pricePerPlaceCount': {
+                        label: 'Цена'
+                    },
                     'billing_info.totalWeight': {
-                        label: 'Общий вес, кг',
+                        label: 'Вес, кг',
                         sortable: true
                     },
                     'billing_info.totalCubage': {
-                        label: 'Общая кубатура, м3',
+                        label: 'Объем, м3',
                         sortable: true
                     },
                     'billing_info.totalDiscount': {
@@ -158,6 +183,13 @@
             },
             printLabels() {
                 this.$refs.easyPrint.print();
+            },
+            pricePerCountPlace(data) {
+                if (data && data.item.placeCount) {
+
+                    let price = data.item.billing_info.totalPrice / (data.item.count * data.item.placeCount);
+                    return price.toFixed(2);
+                }
             }
         },
         components: {

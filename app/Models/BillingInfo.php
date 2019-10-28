@@ -20,6 +20,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class BillingInfo extends BaseModel
 {
+    protected $casts = [
+        'totalWeight' => 'double',
+        'totalCubage' => 'double',
+        'weightPerCube' => 'double',
+        'pricePerItem' => 'double',
+        'discountPerCube' => 'double',
+        'totalDiscount' => 'double',
+        'totalPrice' => 'double',
+        'count' => 'double',
+    ];
+
     public function tariffPricing(){
         return $this->belongsTo(TariffPriceHistory::class, 'tariff_price_history_id');
     }

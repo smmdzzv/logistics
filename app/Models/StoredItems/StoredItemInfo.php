@@ -15,11 +15,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property double height
  * @property double width
  * @property double length
- * @property int item_id
- * @property int branch_id
+ * @property string item_id
+ * @property string branch_id
  * @property string ownerId
  * @property Item item
- * @property int count
+ * @property double count
+ * @property double placeCount
  */
 class StoredItemInfo extends BaseModel
 {
@@ -30,6 +31,8 @@ class StoredItemInfo extends BaseModel
         'height' => 'double',
         'length' => 'double',
         'width' => 'double',
+        'count' => 'double',
+        'placeCount' => 'double'
     ];
 
     public function item()
