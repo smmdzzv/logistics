@@ -16,15 +16,20 @@ class Tariff extends BaseModel
 
     protected $guarded = [];
 
-    public function items(){
+    public function items()
+    {
         return $this->hasMany(Item::class, 'tariffId');
     }
 
-    public function priceHistories(){
+    public function priceHistories()
+    {
         return $this->hasMany(TariffPriceHistory::class);
     }
 
-    public function lastPriceHistory(){
-        return $this->hasOne(TariffPriceHistory::class)->latest()->where('created_at', '<', Carbon::now());
+    public function lastPriceHistory()
+    {
+        return $this->hasOne(TariffPriceHistory::class)
+            ->latest()
+            ->where('created_at', '<', Carbon::now());
     }
 }
