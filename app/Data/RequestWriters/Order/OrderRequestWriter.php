@@ -143,8 +143,14 @@ class OrderRequestWriter extends RequestWriter
      */
     private function createBillingInfos()
     {
+        $priceIndex = 0;
+
         foreach ($this->saved->storedItemInfos as $info) {
-            $this->data->billingInfos[] = $info->getBillingInfo();
+            $price = $this->input->customPrices[$priceIndex];
+
+            $this->data->billingInfos[] = $info->getBillingInfo($price);
+
+            $priceIndex++;
         }
 
         $billingsWriter = new BillingInfosWriter($this->data->billingInfos);

@@ -58,7 +58,7 @@ class OrdersController extends Controller
         $data->client = Client::findOrFail($request->input('clientId'));
         $data->branch = Branch::findOrFail(auth()->user()->branch->id);
         $data->employee = auth()->user();
-
+        $itemIndex = 0;
         foreach ($request->input('storedItemInfos') as $itemData) {
             $data->storedItemInfos[] = new StoredItemInfo([
                 'width' => $itemData['width'],
@@ -71,6 +71,10 @@ class OrdersController extends Controller
                 'ownerId' => $data->client->id,
                 'branch_id' => $data->branch->id
             ]);
+
+            $data->customPrices[$itemIndex] = $itemData['price'];
+
+            $itemIndex++;
         }
 
         $orderWriter = new OrderRequestWriter($data);
@@ -90,7 +94,8 @@ class OrdersController extends Controller
         return Order::with(['owner', 'registeredBy'])->paginate($paginate);
     }
 
-    public function activeOrders(Client $client){
+    public function activeOrders(Client $client)
+    {
         return $client->activeOrders;
     }
 

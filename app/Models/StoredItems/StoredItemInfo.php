@@ -8,7 +8,6 @@ use App\Models\Branch;
 use App\Models\Order;
 use App\Models\Trip;
 use App\Models\Users\Client;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property double weight
@@ -45,7 +44,8 @@ class StoredItemInfo extends BaseModel
         return $this->belongsTo(Client::class, 'ownerId', 'id', 'users');
     }
 
-    public function branch(){
+    public function branch()
+    {
         return $this->belongsTo(Branch::class);
     }
 
@@ -73,9 +73,10 @@ class StoredItemInfo extends BaseModel
 
     /**
      * Finds and creates new BillingInfo for StoredItem
+     * @param double $customPrice
      * @return BillingInfo
      */
-    public function getBillingInfo()
+    public function getBillingInfo($customPrice = null)
     {
         $tariffPricing = $this->item->tariff->lastPriceHistory;
 
@@ -90,25 +91,14 @@ class StoredItemInfo extends BaseModel
         $billingInfo->discountPerCube = 0;
         $billingInfo->count = $this->count;
 
-        if ($this->item->onlyAgreedPrice || $billingInfo->weightPerCube >= $tariffPricing->maxWeightPerCube) {
-            $billingInfo->pricePerItem = $tariffPricing->agreedPricePerKg * $billingInfo->totalWeight;
-        } elseif ($this->item->applyDiscount) {
-            if ($tariffPricing->lowerLimit > 0 && $billingInfo->weightPerCube <= $tariffPricing->lowerLimit) {
-                $billingInfo->pricePerItem = $tariffPricing->pricePerCube - $tariffPricing->discountForLowerLimit;
-                $billingInfo->discountPerCube = $tariffPricing->discountForLowerLimit;
-            } elseif ($tariffPricing->mediumLimit > 0 && $billingInfo->weightPerCube <= $tariffPricing->mediumLimit) {
-                $billingInfo->pricePerItem = $tariffPricing->pricePerCube - $tariffPricing->discountForMediumLimit;
-                $billingInfo->discountPerCube = $tariffPricing->discountForMediumLimit;
-            }
-        } elseif ($billingInfo->weightPerCube > $tariffPricing->upperLimit)
-            $billingInfo->pricePerItem = $tariffPricing->pricePerCube + ($billingInfo->weightPerCube - $tariffPricing->upperLimit) * $tariffPricing->pricePerExtraKg;
-        else
-            $billingInfo->pricePerItem = $tariffPricing->pricePerCube;
+        if ($this->item->onlyCustomPrice) {
+            if (!$customPrice)
+                self::throwBadMethodCallException('Custom Price is not provided');
+            $billingInfo->setCustomPrice($customPrice);
 
-        $billingInfo->totalDiscount = $billingInfo->discountPerCube * $this->count;
-        $billingInfo->totalPrice = $billingInfo->pricePerItem * $billingInfo->totalCubage;
+        } else
+            $billingInfo->calculatePrice($this);
 
-        $billingInfo->roundData();
         return $billingInfo;
     }
 
@@ -118,7 +108,7 @@ class StoredItemInfo extends BaseModel
      */
     public function getStoredItems()
     {
-        $items  = array();
+        $items = array();
         for ($i = 0; $i < $this->count; $i++) {
             $items[] = new StoredItem(['stored_item_info_id' => $this->id]);
         }
