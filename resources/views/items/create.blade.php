@@ -69,21 +69,48 @@
 
                             <div class="form-group row justify-content-center">
                                 <div class="input-group offset-md-2 col-md-6">
-                                    <div class="input-group-prepend">
+                                    <div id="onlyCustomPrice" class="input-group-prepend">
                                         <div class="input-group-text">
                                             <input type="hidden" name="onlyCustomPrice" value="0">
                                             <input type="checkbox" name="onlyCustomPrice"
-                                                   @if(old('onlyCustomPrice'))checked @endif
+                                                   @if(old('onlyCustomPrice')) checked @endif
+                                                   value="1"
+                                                   aria-label="Radio button for following text input">
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control @error('onlyCustomPrice') is-invalid @enderror"
+                                           aria-label="Text input with radio button"
+                                           value="Ручная цена" disabled>
+
+                                    <b-tooltip target="onlyCustomPrice" triggers="hover">
+                                        Данный пукт обладает наивысшим приоритетом при формировании цены
+                                    </b-tooltip>
+
+                                    @error('onlyCustomPrice')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row justify-content-center">
+                                <div class="input-group offset-md-2 col-md-6">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="hidden" name="onlyAgreedPrice" value="0">
+                                            <input type="checkbox" name="onlyAgreedPrice"
+                                                   @if(old('onlyAgreedPrice'))checked @endif
                                                    value="1"
                                                    aria-label="Radio button for following text input">
                                         </div>
                                     </div>
                                     <input type="text"
-                                           class="form-control @error('onlyCustomPrice') is-invalid @enderror"
+                                           class="form-control @error('onlyAgreedPrice') is-invalid @enderror"
                                            aria-label="Text input with radio button"
                                            value="Всегда использовать договорную цену" disabled>
 
-                                    @error('onlyCustomPrice')
+                                    @error('onlyAgreedPrice')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

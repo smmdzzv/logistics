@@ -19,6 +19,7 @@ class CreateItemsTable extends Migration
             $table->string('name', 255)->unique();
             $table->char('unit', 10);
             $table->boolean('onlyCustomPrice')->default(false);
+            $table->boolean('onlyAgreedPrice')->default(false);
             $table->boolean('applyDiscount')->default(false);
             $table->timestamps();
         });
