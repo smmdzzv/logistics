@@ -222,6 +222,30 @@
                                     </span>
                                     @enderror
                                 </div>
+
+                                <div class="col-sm-5 col-md-3">
+                                    <label for="created_at" class="col-form-label">Дата начала</label>
+                                    <input id="created_at"
+                                           placeholder="в долларах"
+                                           type="date"
+                                           class="form-control
+                                            @error('created_at') is-invalid @enderror"
+                                           name="created_at"
+                                           value="{{ old('created_at') }}"
+                                           required
+                                           autocomplete="created_at"
+                                           autofocus>
+
+                                    <b-tooltip target="created_at" triggers="hover">
+                                        Обновленные расценки будут применяться с указанной даты
+                                    </b-tooltip>
+
+                                    @error('created_at')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
                             </div>
 
                             @if ($errors->any())
