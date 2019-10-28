@@ -20,6 +20,7 @@ class Item extends BaseModel
 
     protected $casts = [
         'onlyCustomPrice' => 'boolean',
+        'onlyAgreedPrice' => 'boolean',
         'applyDiscount' => 'boolean'
     ];
 

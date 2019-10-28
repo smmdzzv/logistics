@@ -21,6 +21,10 @@
                 <b-check :checked="item.onlyCustomPrice" disabled></b-check>
             </template>
 
+            <template slot="onlyAgreedPrice" slot-scope="{item}">
+                <b-check :checked="item.onlyAgreedPrice" disabled></b-check>
+            </template>
+
             <template slot="applyDiscount" slot-scope="{item}">
                 <b-check :checked="item.applyDiscount" disabled></b-check>
             </template>
@@ -55,7 +59,7 @@
                 },
                 items: [],
                 isBusy: false,
-                customCells: ['applyDiscount', 'onlyCustomPrice'],
+                customCells: ['applyDiscount', 'onlyCustomPrice', 'onlyAgreedPrice'],
                 fields: {
                     name: {
                         label: 'Наименование',
@@ -70,7 +74,11 @@
                         sortable: true
                     },
                     onlyCustomPrice: {
-                        label: 'Всегда дог-ная цена',
+                        label: 'Ручная цена',
+                        sortable: true
+                    },
+                    onlyAgreedPrice:{
+                        label: 'Дог-ная цена',
                         sortable: true
                     },
                     applyDiscount: {
