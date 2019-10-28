@@ -34,7 +34,8 @@ class TariffPriceHistoryRequest extends FormRequest
             'agreedPricePerKg' => 'required|numeric',
             'maxWeightPerCube' => 'required|numeric',
             'maxCubage' => 'required|numeric',
-            'tariff_id' => 'required|exists:tariffs,id'
+            'tariff_id' => 'required|exists:tariffs,id',
+            'created_at' => 'required|date'
         ];
     }
 }

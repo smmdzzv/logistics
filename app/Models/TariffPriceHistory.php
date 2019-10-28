@@ -35,7 +35,8 @@ class TariffPriceHistory extends BaseModel
         'pricePerExtraKg' => 'double',
         'maxWeightPerCube' => 'double',
         'maxCubage' => 'double',
-        'maxWeight' => 'double'
+        'maxWeight' => 'double',
+        'created_at' => 'datetime:Y-m-d'
     ];
 
     public function branch(){
