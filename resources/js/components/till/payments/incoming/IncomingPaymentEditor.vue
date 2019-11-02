@@ -9,10 +9,18 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-6">
                                     <label>Тип операции</label>
                                     <b-form-select disabled v-model="paymentType">
                                         <option value="in">ПРИХОД</option>
+                                    </b-form-select>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label>Статус операции</label>
+                                    <b-form-select  v-model="status">
+                                        <option value="draft">ЗАЯВКА</option>
+                                        <option value="completed">ПРОВЕДЕННАЯ</option>
                                     </b-form-select>
                                 </div>
                             </div>
@@ -33,18 +41,20 @@
                                     </span>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="accountTo">Счет зачисления</label>
-                                    <input class="form-control" disabled id="accountTo" type="text"
-                                           v-model="accountTo.description">
+                                    <label>Счет зачисления</label>
+                                    <b-form-select id="accountTo" v-model="accountTo">
+                                        <option :value="null">-- Выберите счет зачисления --</option>
+                                        <option v-for="accountTo in accountsTo" :value="accountTo" :key="accountTo.id">{{accountTo.description}}</option>
+                                    </b-form-select>
                                 </div>
 
-                                <!--                        <span class="invalid-feedback" role="alert" v-if="$v.accountTo.$error">-->
-                                <!--                            <strong>Необходимо выбрать </strong>-->
-                                <!--                        </span>-->
+                                <span class="invalid-feedback" role="alert" v-if="$v.accountTo.$error">
+                                    <strong>Необходимо выбрать </strong>
+                                </span>
 
-                                <!--                        <span class="invalid-feedback" role="alert" v-if="errors.accountTo">-->
-                                <!--                             <strong v-for="message in errors.accountTo">{{message}}</strong>-->
-                                <!--                        </span>-->
+                                <span class="invalid-feedback" role="alert" v-if="errors.accountTo">
+                                     <strong v-for="message in errors.accountTo">{{message}}</strong>
+                                </span>
                             </div>
 
                             <div class="row">
@@ -225,8 +235,8 @@
             this.paymentType = 'in'
         },
         props: {
-            accountTo: {
-                type: Object,
+            accountsTo: {
+                type: Array,
                 required: false
             },
             currencies: {
@@ -246,19 +256,22 @@
                 orders: [],
                 order: null,
                 requiredAmount: null,
+                accountTo:null,
                 exchange: {
                     coefficient: null,
                     to_currency: {
                         isoName: null
                     }
                 },
+                status:'draft',
                 errors: {
                     client: null,
                     amount: null,
                     currency: null,
                     paymentItem: null,
                     order: null,
-                    exchange: null
+                    exchange: null,
+                    status: null
                 },
                 paymentItems: []
             }
@@ -266,6 +279,7 @@
         watch: {
             paymentType() {
                 this.$bvModal.show('busyModal');
+                // tShowSpinner();
                 this.requiredAmount = null;
                 this.paymentItem = null;
                 this.order = null;
@@ -282,14 +296,16 @@
 
                 this.$nextTick(
                     () => {
-                        this.$bvModal.hide('busyModal')
+                        this.$bvModal.hide('busyModal');
+                        // tHideSpinner();
                     }
                 )
             },
+            accountTo(){
+                this.convertIfNeeded();
+            },
             currency() {
-                this.needConverting = this.currency.id !== this.accountTo.currency.id;
-                if (this.needConverting)
-                    this.convert()
+                this.convertIfNeeded();
             },
             paymentItem() {
                 this.order = null;
@@ -311,6 +327,11 @@
             }
         },
         methods: {
+            convertIfNeeded(){
+                this.needConverting = this.accountTo && this.currency.id !== this.accountTo.currency.id;
+                if (this.needConverting)
+                    this.convert()
+            },
             clientSelected(client) {
                 this.client = client;
                 this.getOrders();
@@ -325,7 +346,8 @@
                 }
             },
             async convert() {
-                this.$bvModal.show('busyModal');
+                // this.$bvModal.show('busyModal');
+                tShowSpinner();
                 let action = `exchange-history/rate/${this.currency.id}/${this.accountTo.currency.id}`;
                 try {
                     const result = await axios.get(action);
@@ -337,7 +359,8 @@
 
                 this.$nextTick(
                     () => {
-                        this.$bvModal.hide('busyModal');
+                        // this.$bvModal.hide('busyModal');
+                        tHideSpinner();
                     }
                 )
             },
@@ -349,6 +372,7 @@
                     let data = {
                         payerId: this.client.id,
                         paymentItemId: this.paymentItem.id,
+                        status: this.status,
                         currencyId: this.currency.id,
                         accountTo: this.accountTo.id,
                         amount: this.amount,
@@ -368,6 +392,7 @@
                             this.errors.currency = e.response.data.errors.currencyId;
                             this.errors.paymentItem = e.response.data.errors.paymentItemId;
                             this.errors.exchange = e.response.data.errors.exchangeId;
+                            this.errors.status = e.response.data.errors.status;
                         } else {
                             this.$root.showErrorMsg('Ошибка соранения',
                                 'Не удалось провести платеж. Обновите странице и повторите попытку')
@@ -399,8 +424,11 @@
                 decimal,
                 validateAmount
             },
-            order: {
-                validateOrder
+            // order: {
+            //     validateOrder
+            // },
+            accountTo:{
+                required
             }
         }
     }

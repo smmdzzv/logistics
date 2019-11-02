@@ -37,9 +37,9 @@ class IncomingPaymentsController extends BaseController
 
     public function create()
     {
-        $accountTo = LegalEntity::first()->accounts()->with('currency')->first();
+        $accountsTo = LegalEntity::first()->accounts()->with('currency')->get();
         $currencies = Currency::all();
-        return view('till.payments.incoming.create', compact('accountTo', 'currencies'));
+        return view('till.payments.incoming.create', compact('accountsTo', 'currencies'));
     }
 
     //All incoming payments are transferred to Duob main account immediately.
