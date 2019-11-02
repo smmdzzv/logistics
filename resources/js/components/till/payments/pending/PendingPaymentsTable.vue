@@ -11,11 +11,12 @@
         :sticky-header="tableHeight"
         :striped="striped"
         :tableBusy="isBusy"
+        :customCells = cells
         class="shadow"
         excelFileName="История платежей"
         excelSheetName="Все платежи"
-        responsive
-        primaryKey="id">
+        primaryKey="id"
+        responsive>
         <template #header>
             <div class="row align-items-baseline">
                 <div class="col-12 col-md-6 mb-3 mb-md-0">
@@ -43,6 +44,15 @@
                 </div>
 
             </div>
+        </template>
+
+        <template slot="buttons" slot-scope="{item}">
+            <div class="row">
+                <a @click.prevent="cancelPayment(item)" class="btn" href="#">
+                    <img alt="delete car" class="icon-btn-sm" src="/svg/delete.svg">
+                </a>
+            </div>
+
         </template>
 
         <template #footer>
@@ -73,10 +83,6 @@
                 type: Array,
                 required: false
             },
-            // selectable: {
-            //     type: Boolean,
-            //     default: false
-            // },
             payments: {
                 type: Array,
                 required: false
@@ -85,18 +91,10 @@
                 type: Boolean,
                 default: false
             },
-            // striped: {
-            //     type: Boolean,
-            //     default: false
-            // },
             type: {
                 type: String,
                 default: 'in'
             },
-            // tableHeight: {
-            //         type: String,
-            //         default: '50vh'
-            //     }
         },
         data() {
             return {
@@ -106,7 +104,7 @@
                 },
                 items: [],
                 isBusy: false,
-                customCells: [],
+                cells: ['buttons'],
                 selectedBranch: null,
                 selectedType: null,
                 fields: {
@@ -134,12 +132,8 @@
                         label: 'Статья',
                         sortable: true
                     },
-                    comment: {
-                        label: "Комментарий"
-                    },
-                    'cashier.name': {
-                        label: 'Кассир',
-                        sortable: true
+                    'buttons': {
+                        label: ''
                     },
                 },
             }
@@ -185,6 +179,9 @@
                         })
                     );
             },
+            cancelPayment(item){
+                console.log(item)
+            }
         },
         watch: {
             selectedBranch() {
