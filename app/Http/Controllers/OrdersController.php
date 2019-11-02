@@ -36,6 +36,7 @@ class OrdersController extends Controller
     {
         $order->load([
             'storedItemInfos',
+            'storedItemInfos.owner',
             'storedItemInfos.billingInfo',
             'storedItemInfos.item',
             'storedItemInfos.storedItems',

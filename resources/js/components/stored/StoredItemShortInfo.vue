@@ -6,6 +6,7 @@
             <p>{{`ШхВхД: ${storedItemInfo.width}x${storedItemInfo.height}x${storedItemInfo.length}`}}</p>
             <p>{{`Вес: ${storedItemInfo.weight} кг`}} </p>
             <p>{{`Принят: ${storedItem.created_at}`}} </p>
+            <p>{{`Владелец: ${storedItemInfo.owner.code}`}} </p>
         </div>
 
         <div>
