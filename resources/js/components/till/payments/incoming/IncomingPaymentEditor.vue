@@ -320,7 +320,8 @@
         },
         computed: {
             convertedAmount() {
-                return this.amount * this.exchange.coefficient;
+                let amount = this.amount * this.exchange.coefficient;
+                return amount.toFixed(2);
             },
             isOrderPayment() {
                 return this.paymentItem && this.paymentItem.title.toLowerCase() === 'оплата заказа'

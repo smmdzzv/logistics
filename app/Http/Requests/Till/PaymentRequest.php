@@ -34,7 +34,8 @@ class PaymentRequest extends FormRequest
             'payerId' => 'required|exists:users,id',
             'paymentItemId' => 'required|exists:payment_items,id',
             'amount' => 'required|numeric|min:1',
-            'comment' => 'nullable|string'
+            'comment' => 'nullable|string',
+            'status' => 'required|string'
         ];
     }
 
@@ -48,10 +49,10 @@ class PaymentRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             $amount = $this->request->get('amount');
-            $convertedPrice = null;
+//            $convertedPrice = null;
             $currency = Currency::find($this->request->get('currencyId'));
 
-            $client = Client::find($this->request->get('payerId'));
+//            $client = Client::find($this->request->get('payerId'));
 
             if (!$currency)
                 return $validator->errors()->add('currencyId', 'Указанная валюта не используется системой');
@@ -67,23 +68,23 @@ class PaymentRequest extends FormRequest
                 if ($exchange->fromCurrency->id !== $currency->id || $exchange->toCurrency->id !== $accountTo->currency->id)
                     return $validator->errors()->add('exchangeId', 'Указанный курс не соотвествует конвертируемым валютам');
 
-                $convertedPrice = $amount * $exchange->coefficient;
+//                $convertedPrice = $amount * $exchange->coefficient;
             }
 
-            $orderId = $this->request->get('orderId');
-            if ($orderId) {
-                $order = Order::find($orderId);
-                if (!$order)
-                    return $validator->errors()->add('orderId', 'Указанный заказ не найден');
-
-                if($order->payment)
-                    return $validator->errors()->add('orderId', 'Заказ от '.$order->created_at.' оплачен');
-
-                $paid = $convertedPrice ?? $amount;
-
-                if ($order->totalPrice !== (double)$paid)
-                    return $validator->errors()->add('orderId', 'Внесенная сумма не равна сумме заказа');
-            }
+//            $orderId = $this->request->get('orderId');
+//            if ($orderId) {
+//                $order = Order::find($orderId);
+//                if (!$order)
+//                    return $validator->errors()->add('orderId', 'Указанный заказ не найден');
+//
+//                if($order->payment)
+//                    return $validator->errors()->add('orderId', 'Заказ от '.$order->created_at.' оплачен');
+//
+//                $paid = $convertedPrice ?? $amount;
+//
+//                if ($order->totalPrice !== (double)$paid)
+//                    return $validator->errors()->add('orderId', 'Внесенная сумма не равна сумме заказа');
+//            }
         });
     }
 }
