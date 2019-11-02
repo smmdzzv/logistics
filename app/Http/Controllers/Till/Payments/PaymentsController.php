@@ -35,7 +35,9 @@ class PaymentsController extends BaseController
 
     public function filtered()
     {
-        $query = Payment::with('accountTo', 'cashier', 'payer', 'currency', 'paymentItem')->latest();
+        $query = Payment::with('accountTo', 'cashier', 'payer', 'currency', 'paymentItem')
+            ->where('status', 'completed')
+            ->latest();
 
         $type = request('type');
         $item = request('item');
