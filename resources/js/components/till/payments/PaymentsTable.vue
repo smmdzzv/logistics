@@ -14,34 +14,64 @@
         class="shadow"
         excelFileName="История платежей"
         excelSheetName="Все платежи"
-        responsive
-        primaryKey="id">
+        primaryKey="id"
+        responsive>
         <template #header>
-            <div class="row align-items-baseline">
-                <div class="col-12 col-md-6 mb-3 mb-md-0">
-                    <div class=" mr-auto">История платежей</div>
-                    <div class="ml-md-auto">
-                        {{comment}}
-                    </div>
-                </div>
+            <div class="form-row align-items-baseline">
+                <!--                <div class="col-12 col-md-2 mb-3 mb-md-0">-->
+                <!--                    <div class=" mr-auto">История платежей</div>-->
+                <!--                </div>-->
 
-                <div class="row col-12  col-md-6">
-                    <div class="ml-auto" v-if="branches">
+                <div class="form-row form-group col-12 ">
+                    <div class="col-12 mb-3 mb-md-0 col-md-2">
+                        <label>Плательщик</label>
+                        <search-user-dropdown :selected="userSelected"
+                                              id="user"
+                                              placeholder="Введите ФИО или код пользователя"
+                                              url="/user/find?userInfo="/>
+                    </div>
+
+                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2" v-if="branches">
+                        <label>Тип</label>
                         <b-select v-model="selectedType">
                             <option :value="null">Все типы</option>
                             <option value="in">Доход</option>
                             <option value="out">Расход</option>
                         </b-select>
                     </div>
-                    <div class="ml-3" v-if="branches">
+
+                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2" v-if="branches">
+                        <label>Филиал</label>
                         <b-select v-model="selectedBranch">
                             <option :value="null">Все филиалы</option>
                             <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}
                             </option>
                         </b-select>
                     </div>
-                </div>
 
+                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2" v-if="branches">
+                        <label>Валюта</label>
+                        <b-select v-model="selectedCurrency">
+                            <option :value="null">Все валюты</option>
+                            <option :key="currency.id" :value="currency" v-for="currency in currencies">
+                                {{currency.isoName}}
+                            </option>
+                        </b-select>
+                    </div>
+
+                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
+                        <label>От</label>
+                        <input class="form-control" type="date" v-model="dateFrom">
+                    </div>
+
+                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
+                        <label>До</label>
+                        <input class="form-control" type="date" v-model="dateTo">
+                    </div>
+                </div>
+                <div class="form-row">
+
+                </div>
             </div>
         </template>
 
@@ -73,10 +103,10 @@
                 type: Array,
                 required: false
             },
-            // selectable: {
-            //     type: Boolean,
-            //     default: false
-            // },
+            currencies: {
+                type: Array,
+                required: false
+            },
             payments: {
                 type: Array,
                 required: false
@@ -85,18 +115,10 @@
                 type: Boolean,
                 default: false
             },
-            // striped: {
-            //     type: Boolean,
-            //     default: false
-            // },
             type: {
                 type: String,
                 default: 'in'
-            },
-            // tableHeight: {
-            //         type: String,
-            //         default: '50vh'
-            //     }
+            }
         },
         data() {
             return {
@@ -109,6 +131,10 @@
                 customCells: [],
                 selectedBranch: null,
                 selectedType: null,
+                selectedUser: null,
+                selectedCurrency: null,
+                dateFrom: null,
+                dateTo: null,
                 fields: {
                     created_at: {
                         label: 'Дата',
@@ -152,8 +178,19 @@
                     action += `branch=${this.selectedBranch.id}&`;
                 if (this.selectedType)
                     action += 'type=' + this.selectedType + '&';
-
+                if(this.selectedUser)
+                    action += 'user=' + this.selectedUser.id + '&';
+                if(this.selectedCurrency)
+                    action += 'currency=' + this.selectedCurrency.id + '&';
+                if(this.dateFrom)
+                    action += 'from=' + this.dateFrom + '&';
+                if(this.dateTo)
+                    action += 'to=' + this.dateTo + '&';
                 return action;
+            },
+            userSelected(user) {
+                this.selectedUser = user;
+                this.getItems();
             },
             getItems(page = 1) {
                 if (this.trips)
@@ -193,10 +230,26 @@
             selectedType() {
                 this.getItems();
             },
+            selectedUser() {
+                this.getItems();
+            },
+            selectedCurrency() {
+                this.getItems();
+            },
+            dateFrom() {
+                this.getItems();
+            },
+            dateTo() {
+                this.getItems();
+            }
         },
         components: {
-            'MainPaginator': require('../../common/MainPaginator.vue').default,
-            'TableCard': require('../../common/TableCard.vue').default
+            'MainPaginator':
+            require('../../common/MainPaginator.vue').default,
+            'TableCard':
+            require('../../common/TableCard.vue').default,
+            'SearchUserDropdown':
+            require('../../users/SearchUserDropdown.vue').default,
         }
     }
 </script>

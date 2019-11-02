@@ -24,6 +24,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/users/all', 'Users\UsersController@all')->name('users.all');
 Route::resource('users', 'Users\UsersController')->parameters(['users' => 'user']);
 Route::get('/concrete/{roleName}/{action}', 'Users\ConcreteUsersRoutesController');
+Route::get('/user/find', 'Users\UsersController@find');
 
 //Profile
 Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
