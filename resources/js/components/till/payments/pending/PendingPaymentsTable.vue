@@ -146,7 +146,7 @@
         },
         methods: {
             prepareUrl() {
-                let action = '/payments/filtered?';
+                let action = '/pending-payments/filtered?';
 
                 if (this.selectedBranch)
                     action += `branch=${this.selectedBranch.id}&`;

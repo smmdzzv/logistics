@@ -68,6 +68,7 @@ Route::post('/trip/{trip}/exchange/stored-items', 'Trips\TripStoredItemsControll
 Route::resource('payments', 'Till\Payments\PaymentsController', ['only' => 'index']);
 
 Route::get('/pending-payments', 'Till\Payments\PendingPaymentsController@index')->name('pending-payments.index');
+Route::get('/pending-payments/filtered', 'Till\Payments\PendingPaymentsController@filtered');
 
 Route::get('/payments/all', 'Till\Payments\PaymentsController@all')->name('payments.all');
 Route::get('/payments/filtered', 'Till\Payments\PaymentsController@filtered');

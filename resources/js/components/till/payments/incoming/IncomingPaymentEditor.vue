@@ -19,7 +19,7 @@
                                 <div class="form-group col-md-6">
                                     <label>Статус операции</label>
                                     <b-form-select  v-model="status">
-                                        <option value="draft">ЗАЯВКА</option>
+                                        <option value="pending">ЗАЯВКА</option>
                                         <option value="completed">ПРОВЕДЕННАЯ</option>
                                     </b-form-select>
                                 </div>
@@ -263,7 +263,7 @@
                         isoName: null
                     }
                 },
-                status:'draft',
+                status:'pending',
                 errors: {
                     client: null,
                     amount: null,
