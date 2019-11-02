@@ -16,20 +16,26 @@ class AccountsTableSeeder extends Seeder
     public function run()
     {
         $owner = LegalEntity::first();
-        $currencyId = Currency::where('isoName', 'USD')->first()->id;
+        $usdId = Currency::where('isoName', 'USD')->first()->id;
 
-        $owner->accounts()->create([
-            'balance' => 0,
-            'description' => "Основной счет Дуоб",
-            'currencyId' => $currencyId
-        ]);
+        $currencies = Currency::all();
+
+        $accounts = $currencies->map(function ($currency){
+            return new Account([
+                'balance' => 0,
+                'description' => "Cчет Дуоб {$currency->isoName} ({$currency->name})",
+                'currencyId' => $currency->id
+            ]);
+        });
+
+        $owner->accounts()->saveMany($accounts);
 
 
         $users = User::all();
 
         foreach ($users as $user){
             $account = new Account();
-            $account->currencyId = Currency::where('isoName', 'USD')->first()->id;
+            $account->currencyId = $usdId;
             $account->balance = 0;
             $account->description = 'Долларовый счет пользователя '.$user->name;
 

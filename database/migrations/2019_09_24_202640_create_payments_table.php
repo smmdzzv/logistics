@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreatePaymentsTable extends Migration
 {
@@ -25,6 +25,7 @@ class CreatePaymentsTable extends Migration
             $table->char('accountToId', 26)->nullable();
             $table->decimal('amount', 10, 2);
             $table->string('comment')->nullable();
+            $table->char('status', 15);
 
             $table->timestamps();
         });
