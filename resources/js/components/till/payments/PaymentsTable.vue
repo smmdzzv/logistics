@@ -31,7 +31,7 @@
                                               url="/user/find?userInfo="/>
                     </div>
 
-                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2" v-if="branches">
+                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
                         <label>Тип</label>
                         <b-select v-model="selectedType">
                             <option :value="null">Все типы</option>
@@ -40,21 +40,25 @@
                         </b-select>
                     </div>
 
-                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2" v-if="branches">
+                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
+                        <label>Статья</label>
+                        <b-select id="item" v-model="selectedPaymentItem">
+                            <option :value="null">Все статьи</option>
+                            <option :key="item.id" :value="item" v-for="item in paymentItems">
+                                {{item.title}}
+                            </option>
+                        </b-select>
+                        <b-tooltip target="item" triggers="hover">
+                            При несовпадении статьи и типа операции.
+                            Предпочтение отдается статье
+                        </b-tooltip>
+                    </div>
+
+                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
                         <label>Филиал</label>
                         <b-select v-model="selectedBranch">
                             <option :value="null">Все филиалы</option>
                             <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}
-                            </option>
-                        </b-select>
-                    </div>
-
-                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2" v-if="branches">
-                        <label>Валюта</label>
-                        <b-select v-model="selectedCurrency">
-                            <option :value="null">Все валюты</option>
-                            <option :key="currency.id" :value="currency" v-for="currency in currencies">
-                                {{currency.isoName}}
                             </option>
                         </b-select>
                     </div>
@@ -69,8 +73,34 @@
                         <input class="form-control" type="date" v-model="dateTo">
                     </div>
                 </div>
-                <div class="form-row">
 
+                <div class="form-row form-group col-12">
+                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
+                        <label>Мин. сумма</label>
+                        <input class="form-control" step="0.01" type="number" v-model.lazy="minAmount">
+                    </div>
+
+                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
+                        <label>Макс. сумма</label>
+                        <input class="form-control" step="0.01" type="number" v-model.lazy="maxAmount">
+                    </div>
+
+                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2" v-if="branches">
+                        <label>Валюта</label>
+                        <b-select v-model="selectedCurrency">
+                            <option :value="null">Все валюты</option>
+                            <option :key="currency.id" :value="currency" v-for="currency in currencies">
+                                {{currency.isoName}}
+                            </option>
+                        </b-select>
+                    </div>
+
+                    <div class="col-12 mb-3 mb-md-0 col-md-2">
+                        <label>Кассир</label>
+                        <search-user-dropdown :selected="cashierSelected"
+                                              placeholder="Введите ФИО или код пользователя"
+                                              url="/user/find?userInfo="/>
+                    </div>
                 </div>
             </div>
         </template>
@@ -107,6 +137,9 @@
                 type: Array,
                 required: false
             },
+            paymentItems: {
+                type: Array
+            },
             payments: {
                 type: Array,
                 required: false
@@ -131,10 +164,14 @@
                 customCells: [],
                 selectedBranch: null,
                 selectedType: null,
+                selectedPaymentItem: null,
                 selectedUser: null,
+                selectedCashier: null,
                 selectedCurrency: null,
                 dateFrom: null,
                 dateTo: null,
+                minAmount: null,
+                maxAmount: null,
                 fields: {
                     created_at: {
                         label: 'Дата',
@@ -178,18 +215,30 @@
                     action += `branch=${this.selectedBranch.id}&`;
                 if (this.selectedType)
                     action += 'type=' + this.selectedType + '&';
-                if(this.selectedUser)
+                if (this.selectedPaymentItem)
+                    action += 'item=' + this.selectedPaymentItem.id + '&';
+                if (this.selectedUser)
                     action += 'user=' + this.selectedUser.id + '&';
-                if(this.selectedCurrency)
+                if (this.selectedCashier)
+                    action += 'cashier=' + this.selectedCashier.id + '&';
+                if (this.selectedCurrency)
                     action += 'currency=' + this.selectedCurrency.id + '&';
-                if(this.dateFrom)
+                if (this.dateFrom)
                     action += 'from=' + this.dateFrom + '&';
-                if(this.dateTo)
+                if (this.dateTo)
                     action += 'to=' + this.dateTo + '&';
+                if (this.minAmount)
+                    action += 'min=' + this.minAmount + '&';
+                if (this.maxAmount)
+                    action += 'max=' + this.maxAmount + '&';
                 return action;
             },
             userSelected(user) {
                 this.selectedUser = user;
+                this.getItems();
+            },
+            cashierSelected(cashier) {
+                this.selectedCashier = cashier;
                 this.getItems();
             },
             getItems(page = 1) {
@@ -230,6 +279,9 @@
             selectedType() {
                 this.getItems();
             },
+            selectedPaymentItem() {
+                this.getItems();
+            },
             selectedUser() {
                 this.getItems();
             },
@@ -240,6 +292,12 @@
                 this.getItems();
             },
             dateTo() {
+                this.getItems();
+            },
+            minAmount() {
+                this.getItems();
+            },
+            maxAmount() {
                 this.getItems();
             }
         },

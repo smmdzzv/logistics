@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Till\Payments;
 use App\Http\Controllers\BaseController;
 use App\Models\Branch;
 use App\Models\Currency;
-use App\Models\LegalEntities\LegalEntity;
 use App\Models\Till\Payment;
+use App\Models\Till\PaymentItem;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -22,8 +22,9 @@ class PaymentsController extends BaseController
     {
         $branches = Branch::all();
         $currencies = Currency::all();
-        $account = LegalEntity::first()->accounts()->with('currency')->first();
-        return view('till.payments.index', compact('branches', 'account', 'currencies'));
+//        $account = LegalEntity::first()->accounts()->with('currency')->first();
+        $paymentItems = PaymentItem::all();
+        return view('till.payments.index', compact('branches', 'currencies', 'paymentItems'));
     }
 
     public function all()
@@ -37,13 +38,21 @@ class PaymentsController extends BaseController
         $query = Payment::with('accountTo', 'cashier', 'payer', 'currency', 'paymentItem')->latest();
 
         $type = request('type');
+        $item = request('item');
         $branch = request('branch');
         $user = request('user');
         $currency = request('currency');
         $from = request('from');
         $to = request('to');
+        $cashier = request('cashier');
+        $min = request('min');
+        $max = request('max');
 
-        if ($type)
+        if ($item)
+            $query->whereHas('paymentItem', function (Builder $query) use ($item) {
+                $query->where('id', $item);
+            });
+        else if ($type)
             $query->whereHas('paymentItem', function (Builder $query) use ($type) {
                 $query->where('type', $type);
             });
@@ -53,18 +62,33 @@ class PaymentsController extends BaseController
                 $query->where('id', $branch);
             });
 
-        if($user)
+        if ($user)
             $query->whereHas('payer', function (Builder $query) use ($user) {
                 $query->where('id', $user);
             });
-        if($currency)
+
+        if ($currency)
             $query->whereHas('currency', function (Builder $query) use ($currency) {
                 $query->where('id', $currency);
             });
-        if($from)
-            $query->where('created_at','>', Carbon::createFromDate($from));
-        if($to)
-            $query->where('created_at','<', Carbon::createFromDate($to)->addDay());
+
+        if ($from)
+            $query->where('created_at', '>', Carbon::createFromDate($from));
+
+        if ($to)
+            $query->where('created_at', '<', Carbon::createFromDate($to)->addDay());
+
+        if ($cashier)
+            $query->whereHas('cashier', function (Builder $query) use ($cashier) {
+                $query->where('id', $cashier);
+            });
+
+        if ($min)
+            $query->where('amount', '>=', $min);
+
+        if ($max)
+            $query->where('amount', '<=', $max);
+
         return $query->paginate($this->pagination());
     }
 }
