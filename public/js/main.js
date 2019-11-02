@@ -36,6 +36,12 @@ async function getOrderItems(orderId) {
     return axios.get(action);
 }
 
+function disableForm(){
+    $( "input" ).prop( "disabled", true );
+}
+
+
+//Switch focus on enter
 // register jQuery extension
 jQuery.extend(jQuery.expr[':'], {
     focusable: function (el, index, selector) {

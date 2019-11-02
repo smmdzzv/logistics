@@ -62,9 +62,11 @@ Route::post('/trip/{trip}/stored-items/unload', 'Trips\TripStoredItemsController
 Route::get('/trip/{trip}/exchange/stored-items', 'Trips\TripStoredItemsController@changeItemsTrip')->name('trip.change-items-trip');
 Route::post('/trip/{trip}/exchange/stored-items', 'Trips\TripStoredItemsController@exchangeItems')->name('trip.exchange-items');
 
-//Payments
+//Till
 
 Route::resource('payments', 'Till\Payments\PaymentsController', ['only' => 'index']);
+
+Route::get('/pending-payments', 'Till\Payments\PendingPaymentsController@index')->name('pending-payments.index');
 
 Route::get('/payments/all', 'Till\Payments\PaymentsController@all')->name('payments.all');
 Route::get('/payments/filtered', 'Till\Payments\PaymentsController@filtered');
