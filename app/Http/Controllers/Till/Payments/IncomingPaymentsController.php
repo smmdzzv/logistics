@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Till\Payments;
 
+use App\Data\RequestWriters\Payments\IncomingPaymentRequestWriter;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Till\PaymentRequest;
 use App\Models\Branch;
@@ -9,7 +10,6 @@ use App\Models\Currency;
 use App\Models\LegalEntities\LegalEntity;
 use App\Models\Till\Payment;
 use Illuminate\Database\Eloquent\Builder;
-use App\Data\RequestWriters\Payments\IncomingPaymentRequestWriter;
 use stdClass;
 
 class IncomingPaymentsController extends BaseController
@@ -28,12 +28,12 @@ class IncomingPaymentsController extends BaseController
             })->latest()->paginate($this->pagination());
     }
 
-    public function filteredByBranch(Branch $branch)
-    {
-        return $branch->payments()
-            ->with('accountTo', 'payer', 'currency', 'paymentItem')
-            ->paginate($this->pagination());
-    }
+//    public function filteredByBranch(Branch $branch)
+//    {
+//        return $branch->payments()
+//            ->with('accountTo', 'payer', 'currency', 'paymentItem')
+//            ->paginate($this->pagination());
+//    }
 
     public function create()
     {
@@ -55,5 +55,13 @@ class IncomingPaymentsController extends BaseController
         $paymentWriter->write();
 
         return redirect()->route('payments.index');
+    }
+
+    public function edit(Payment $payment){
+        if($payment->paymentItem->type !== 'in')
+            abort(403, 'Указанный платеж не является входящим');
+        $payment->load('payer', 'accountTo.currency', 'exchange.toCurrency', 'currency');
+
+        return view('till.payments.incoming.edit', compact('payment'));
     }
 }

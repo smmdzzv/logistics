@@ -48,6 +48,9 @@
 
         <template slot="buttons" slot-scope="{item}">
             <div class="row">
+                <a class="btn" :href="getEditUrl(item)">
+                    <img alt="delete car" class="icon-btn-sm" src="/svg/edit.svg">
+                </a>
                 <a @click.prevent="cancelPayment(item)" class="btn" href="#">
                     <img alt="delete car" class="icon-btn-sm" src="/svg/delete.svg">
                 </a>
@@ -181,6 +184,10 @@
             },
             cancelPayment(item){
                 console.log(item)
+            },
+            getEditUrl(item){
+                if(item.payment_item.type === 'in')
+                    return '/incoming-payments/' + item.id + '/edit';
             }
         },
         watch: {

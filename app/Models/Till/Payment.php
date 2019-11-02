@@ -76,4 +76,8 @@ class Payment extends BaseModel
     {
         return $this->belongsTo(Account::class, 'accountToId');
     }
+
+    public function exchange(){
+        return $this->belongsTo(MoneyExchange::class, 'exchangeId');
+    }
 }

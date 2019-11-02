@@ -74,7 +74,7 @@ Route::get('/payments/all', 'Till\Payments\PaymentsController@all')->name('payme
 Route::get('/payments/filtered', 'Till\Payments\PaymentsController@filtered');
 
 Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
-    ['except' => ['destroy']]);
+    ['except' => ['destroy']])->parameters(['incoming-payments' => 'payment']);
 
 Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController',
     ['only' => ['create', 'store']]);
