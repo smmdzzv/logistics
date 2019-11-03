@@ -44,8 +44,23 @@ class OutgoingPaymentsController extends Controller
     {
         if ($payment->paymentItem->type !== 'out')
             abort(403, 'Указанный платеж не является исходящим');
-        $payment->load('payer', 'accountTo.currency', 'exchange.toCurrency', 'currency');
+        $payment->load( 'accountFrom.currency', 'currency');
 
         return view('till.payments.outgoing.edit', compact('payment'));
+    }
+
+    public function update(OutgoingPaymentRequest $request, Payment $payment){
+        if($payment->status === 'completed')
+            abort(403, 'Проведенные операции нельзя редактировать');
+
+        $data = new stdClass();
+        $data->payment = $request->all();
+        $data->branchId = auth()->user()->branch->id;
+        $data->cashierId = auth()->id();
+
+        $paymentWriter = new OutgoingPaymentRequestWriter($data);
+        $paymentWriter->write();
+
+        return;
     }
 }

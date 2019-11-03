@@ -76,8 +76,7 @@ Route::get('/payments/filtered', 'Till\Payments\PaymentsController@filtered');
 Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
     ['except' => ['destroy']])->parameters(['incoming-payments' => 'payment']);
 
-Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController',
-    ['only' => ['create', 'store']]);
+Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController')->parameters(['outgoing-payments' => 'payment']);
 
 //StoredItems
 Route::get('/stored', 'StoredItemsController@index')->name('stored.index');

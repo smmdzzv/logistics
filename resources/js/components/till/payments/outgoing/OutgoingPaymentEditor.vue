@@ -104,7 +104,8 @@
                             <div class="row">
                                 <div class="form-group col-12">
                                     <label for="comment">Комментарий</label>
-                                    <input class="form-control" id="comment" placeholder="Добавьте произвольный комментарий (необязательно)" type="text"
+                                    <input class="form-control" id="comment"
+                                           placeholder="Добавьте произвольный комментарий (необязательно)" type="text"
                                            v-model="comment">
                                 </div>
                             </div>
@@ -135,8 +136,13 @@
     export default {
         name: "OutgoingPaymentEditor",
         mounted() {
-            // this.currency = this.accountFrom.currency;
             this.paymentType = 'out';
+
+            if (this.disable)
+                this.disableForm();
+
+            if (this.payment)
+                this.setInitialData();
 
             if (this.accountsFrom && this.accountsFrom.length > 0)
                 this.accountFrom = this.accountsFrom[0]
@@ -148,16 +154,16 @@
             },
             currencies: {
                 type: Array,
-                required: true
             },
             paymentItems: {
                 type: Array,
-                required: true
             },
-            payment:{
-                type:Object
+            payment: {
+                type: Object
+            },
+            disable: {
+                type: Boolean
             }
-
         },
         data() {
             return {
@@ -168,7 +174,7 @@
                 paymentType: null,
                 comment: null,
                 requiredAmount: null,
-                status:'pending',
+                status: 'pending',
                 errors: {
                     amount: null,
                     paymentItem: null,
@@ -176,6 +182,24 @@
             }
         },
         methods: {
+            disableForm() {
+                $("input").prop("disabled", true);
+                $("select").prop("disabled", true);
+                $("#status").prop("disabled", false);
+            },
+            setInitialData() {
+                this.currencies = [this.payment.currency];
+                this.paymentItems = [this.payment.payment_item];
+                this.accountsFrom = [this.payment.account_from];
+                this.paymentType = this.payment.payment_item.type;
+
+                this.paymentItem = this.payment.payment_item;
+                this.status = this.payment.status;
+                this.currency = this.payment.currency;
+                this.accountFrom = this.payment.account_from;
+                this.amount = this.payment.amount;
+                this.comment = this.payment.comment;
+            },
             async submitForm() {
                 this.$bvModal.show('busyModal');
                 if (this.$v.$invalid)
@@ -188,20 +212,23 @@
                         comment: this.comment,
                         status: this.status,
                         accountFrom: this.accountFrom.id,
-                        id: this.payment? this.payment.id : null
+                        id: this.payment ? this.payment.id : null
                     };
 
                     try {
-                        const result = await axios.post('/outgoing-payments', data)
+                        if (this.payment)
+                            await axios.patch('/outgoing-payments/' + this.payment.id, data);
+                        else
+                            await axios.post('/outgoing-payments', data);
                         window.location.href = '/payments'
                     } catch (e) {
-                        console.log(e)
+                        console.log(e);
                         if (e.response.status === 422) {
                             this.errors.amount = e.response.data.errors.amount;
                             this.errors.paymentItem = e.response.data.errors.paymentItemId;
                         } else {
                             this.$root.showErrorMsg('Ошибка сохранения',
-                                'Не удалось провести платеж. Обновите странице и повторите попытку')
+                                'Не удалось провести платеж. Обновите странице и повторите попытку.' + e.response.data.message)
                         }
                     }
                 }
@@ -212,8 +239,8 @@
 
             },
         },
-        watch:{
-            accountFrom(){
+        watch: {
+            accountFrom() {
                 this.currency = this.accountFrom.currency;
             }
         },
