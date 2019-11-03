@@ -29,9 +29,12 @@ class OutgoingPaymentRequest extends FormRequest
     public function rules()
     {
         return [
+            'id' => 'nullable|string',
             'paymentItemId' => 'required|exists:payment_items,id',
+            'accountFrom' => 'required|string',
             'amount' => 'required|numeric|min:1',
             'exchangeId' => 'nullable|exists:money_exchanges,id',
+            'status' => 'required|string',
             'comment' => 'nullable|string'
         ];
     }

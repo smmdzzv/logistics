@@ -9,19 +9,31 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-6">
                                     <label>Тип операции</label>
-                                    <b-form-select v-model="paymentType" disabled>
+                                    <b-form-select disabled v-model="paymentType">
                                         <option value="out">РАСХОД</option>
+                                    </b-form-select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Статус операции</label>
+                                    <b-form-select id="status" v-model="status">
+                                        <option value="pending">ЗАЯВКА</option>
+                                        <option value="completed">ПРОВЕДЕННАЯ</option>
                                     </b-form-select>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="form-group col-md-12">
-                                    <label for="accountFrom">Счет списания</label>
-                                    <input class="form-control" disabled id="accountFrom" type="text"
-                                           v-model="accountFrom.description">
+                                    <label>Счет списания</label>
+                                    <!--                                    <input class="form-control" disabled id="accountFrom" type="text"-->
+                                    <!--                                           v-model="accountFrom.description">-->
+                                    <b-select v-model="accountFrom">
+                                        <option :key="account.id" :value="account" v-for="account in accountsFrom">
+                                            {{account.description}}
+                                        </option>
+                                    </b-select>
                                 </div>
                             </div>
 
@@ -73,7 +85,7 @@
                                 <div class="form-group col-6 col-md-2">
                                     <label>Валюта</label>
                                     <b-form-select :class="{'is-invalid':$v.currency.$error  || errors.currency}"
-                                                   v-model="currency" disabled>
+                                                   disabled v-model="currency">
                                         <option :key="currency.id" :value="currency" v-for="currency in currencies">
                                             {{currency.name.toUpperCase()}}
                                         </option>
@@ -92,8 +104,8 @@
                             <div class="row">
                                 <div class="form-group col-12">
                                     <label for="comment">Комментарий</label>
-                                    <input class="form-control" id="comment" type="text" v-model="comment"
-                                           placeholder="Добавьте произвольный комментарий (необязательно)">
+                                    <input class="form-control" id="comment" placeholder="Добавьте произвольный комментарий (необязательно)" type="text"
+                                           v-model="comment">
                                 </div>
                             </div>
                         </div>
@@ -117,18 +129,21 @@
     import {required, decimal} from 'vuelidate/lib/validators';
 
     const validateAmount = (value, vm) => {
-            return vm.amount > 0;
+        return vm.amount > 0;
     };
 
     export default {
         name: "OutgoingPaymentEditor",
         mounted() {
-            this.currency = this.accountFrom.currency;
-            this.paymentType = 'out'
+            // this.currency = this.accountFrom.currency;
+            this.paymentType = 'out';
+
+            if (this.accountsFrom && this.accountsFrom.length > 0)
+                this.accountFrom = this.accountsFrom[0]
         },
         props: {
-            accountFrom: {
-                type: Object,
+            accountsFrom: {
+                type: Array,
                 required: false
             },
             currencies: {
@@ -138,17 +153,22 @@
             paymentItems: {
                 type: Array,
                 required: true
+            },
+            payment:{
+                type:Object
             }
 
         },
         data() {
             return {
                 amount: 0,
+                accountFrom: 0,
                 currency: null,
                 paymentItem: null,
                 paymentType: null,
-                comment:null,
+                comment: null,
                 requiredAmount: null,
+                status:'pending',
                 errors: {
                     amount: null,
                     paymentItem: null,
@@ -162,9 +182,13 @@
                     this.$v.$touch();
                 else {
                     let data = {
+                        currencyId: this.currency.id,
                         paymentItemId: this.paymentItem.id,
                         amount: this.amount,
-                        comment: this.comment
+                        comment: this.comment,
+                        status: this.status,
+                        accountFrom: this.accountFrom.id,
+                        id: this.payment? this.payment.id : null
                     };
 
                     try {
@@ -181,12 +205,17 @@
                         }
                     }
                 }
-                this.$nextTick(()=>{
-                    this.$bvModal.hide('busyModal')
+                this.$nextTick(() => {
+                        this.$bvModal.hide('busyModal')
                     }
                 );
 
             },
+        },
+        watch:{
+            accountFrom(){
+                this.currency = this.accountFrom.currency;
+            }
         },
         components: {
             'SearchUserDropdown': require('../../../users/SearchUserDropdown.vue').default,

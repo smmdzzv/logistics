@@ -2,7 +2,7 @@
 
 namespace App\Data\RequestWriters\Payments;
 
-use App\Models\LegalEntities\LegalEntity;
+use App\Models\Till\Account;
 
 class OutgoingPaymentRequestWriter extends PaymentRequestWriter
 {
@@ -17,7 +17,10 @@ class OutgoingPaymentRequestWriter extends PaymentRequestWriter
         parent::write();
 
         $this->updateAccountFrom();
-        $this->updateAccountsBalance();
+
+        if ($this->saved->payment->status === 'completed')
+            $this->updateAccountsBalance();
+
         return $this->saved;
     }
 
@@ -26,10 +29,11 @@ class OutgoingPaymentRequestWriter extends PaymentRequestWriter
      */
     private function updateAccountFrom()
     {
-        if(!isset($this->data->duobAccount))
-            $this->data->duobAccount = LegalEntity::first()->accounts()->with('currency')->first();
-        $this->saved->payment->accountFromId = $this->data->duobAccount->id;
+//        if(!isset($this->data->duobAccount))
+//            $this->data->duobAccount = LegalEntity::first()->accounts()->with('currency')->first();
+        $this->data->accountFrom = Account::with('currency')->findOrFail($this->input->payment['accountFrom']);
 
+        $this->saved->payment->accountFromId = $this->data->accountFrom->id;
         $this->saved->payment->save();
     }
 
@@ -40,7 +44,7 @@ class OutgoingPaymentRequestWriter extends PaymentRequestWriter
     private function updateAccountsBalance()
     {
         $sum = $this->saved->payment->amount;
-        $this->data->duobAccount->balance -= $sum;
-        $this->data->duobAccount->save();
+        $this->data->accountFrom->balance -= $sum;
+        $this->data->accountFrom->save();
     }
 }

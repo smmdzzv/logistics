@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <outgoing-payment-editor :currencies="{{$currencies}}"  :payment-items="{{$paymentItems}}":account-from="{{$accountFrom}}"></outgoing-payment-editor>
+            <outgoing-payment-editor :currencies="{{$currencies}}"  :payment-items="{{$paymentItems}}":accounts-from="{{$accountsFrom}}"></outgoing-payment-editor>
         </div>
     </div>
 @endsection

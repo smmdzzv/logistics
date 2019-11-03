@@ -419,7 +419,7 @@
                         accountTo: this.accountTo.id,
                         amount: this.amount,
                         exchangeId: this.exchange.id,
-                        orderId: this.order ? this.order.id : null,
+                        // orderId: this.order ? this.order.id : null,
                         comment: this.comment,
                         id: this.payment? this.payment.id : null
                     };

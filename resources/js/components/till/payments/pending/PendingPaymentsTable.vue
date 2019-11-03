@@ -188,6 +188,8 @@
             getEditUrl(item){
                 if(item.payment_item.type === 'in')
                     return '/incoming-payments/' + item.id + '/edit';
+                if(item.payment_item.type === 'out')
+                    return '/outgoing-payments/' + item.id + '/edit';
             }
         },
         watch: {
