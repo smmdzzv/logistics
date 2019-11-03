@@ -222,22 +222,17 @@
             return vm.amount > 0;
     };
 
-    // const validateOrder = (value, vm) => {
-    //     if (vm.isOrderPayment)
-    //         return vm.order && vm.order.id;
-    //     else
-    //         return true;
-    // };
-
     export default {
         name: "IncomingPaymentEditor",
         mounted() {
             if(this.currencies)
                 this.currency = this.currencies[0];
+
             if (this.payment)
                 this.setInitialData();
             else
                 this.paymentType = 'in';
+
             if(this.disable)
                 this.disableForm()
         },
@@ -323,26 +318,13 @@
             },
             currency() {
                 this.convertIfNeeded();
-            },
-            // paymentItem() {
-            //     this.order = null;
-            //     this.getOrders();
-            // },
-            // order() {
-            //     if (this.order)
-            //         this.requiredAmount = this.order.totalPrice;
-            //     else
-            //         this.requiredAmount = null;
-            // }
+            }
         },
         computed: {
             convertedAmount() {
                 let amount = this.amount * this.exchange.coefficient;
                 return amount.toFixed(2);
             },
-            // isOrderPayment() {
-            //     return this.paymentItem && this.paymentItem.title.toLowerCase() === 'оплата заказа'
-            // }
         },
         methods: {
             convertIfNeeded() {
@@ -425,7 +407,12 @@
                     };
 
                     try {
-                        const result = await axios.post('/incoming-payments', data)
+                        // const result = await axios.post('/incoming-payments', data)
+                        if (this.payment)
+                            await axios.patch('/incoming-payments/' + this.payment.id, data);
+                        else
+                            await axios.post('/incoming-payments', data);
+
                         window.location.href = '/payments'
                     } catch (e) {
                         if (e.response.status === 422) {

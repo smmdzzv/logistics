@@ -63,4 +63,19 @@ class IncomingPaymentsController extends BaseController
 
         return view('till.payments.incoming.edit', compact('payment'));
     }
+
+    public function update(PaymentRequest $request, Payment $payment){
+        if($payment->status === 'completed')
+            abort(403, 'Проведенные операции нельзя редактировать');
+
+        $data = new stdClass();
+        $data->payment = $request->all();
+        $data->branchId = auth()->user()->branch->id;
+        $data->cashierId = auth()->id();
+
+        $paymentWriter = new IncomingPaymentRequestWriter($data);
+        $paymentWriter->write();
+
+        return;
+    }
 }
