@@ -397,7 +397,8 @@
                 this.currency = this.payment.currency;
                 this.accountTo = this.payment.account_to;
                 this.amount = this.payment.amount;
-                this.exchange = this.payment.exchange;
+                if(this.payment.exchange)
+                    this.exchange = this.payment.exchange;
                 this.comment = this.payment.comment;
             },
             disableForm(){
@@ -419,7 +420,8 @@
                         amount: this.amount,
                         exchangeId: this.exchange.id,
                         orderId: this.order ? this.order.id : null,
-                        comment: this.comment
+                        comment: this.comment,
+                        id: this.payment? this.payment.id : null
                     };
 
                     try {

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Till\Payments;
 use App\Data\RequestWriters\Payments\IncomingPaymentRequestWriter;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Till\PaymentRequest;
-use App\Models\Branch;
 use App\Models\Currency;
 use App\Models\LegalEntities\LegalEntity;
 use App\Models\Till\Payment;

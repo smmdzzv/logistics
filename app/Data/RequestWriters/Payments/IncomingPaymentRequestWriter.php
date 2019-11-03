@@ -37,10 +37,10 @@ class IncomingPaymentRequestWriter extends PaymentRequestWriter
         $this->data->duobAccount = LegalEntity::first()->accounts()->where('id', $this->input->payment['accountTo'])->first();
         $this->data->userAccount = User::find($this->input->payment['payerId'])->accounts()->first();
 
-        if ($this->data->item->title === 'Пополнение баланса')
-            $this->saved->payment->accountToId = $this->data->userAccount->id;
-        else
-            $this->saved->payment->accountToId = $this->data->duobAccount->id;
+//        if ($this->data->item->title === 'Пополнение баланса')
+//            $this->saved->payment->accountToId = $this->data->userAccount->id;
+//        else
+        $this->saved->payment->accountToId = $this->data->duobAccount->id;
 
         $this->saved->payment->save();
     }

@@ -28,6 +28,14 @@ class PaymentRequestWriter extends RequestWriter
         $data = array_filter($this->input->payment, function ($key) use ($filter) {
             return !in_array($key, $filter);
         }, ARRAY_FILTER_USE_KEY);
-        $this->saved->payment = Payment::create($data);
+
+        if(isset($data['id'])){
+            $this->saved->payment = Payment::findOrFail($data['id']);
+            $this->saved->payment->fill($data);
+        }
+        else
+            $this->saved->payment = new Payment($data);
+
+        $this->saved->payment->save();
     }
 }

@@ -31,6 +31,7 @@ class PaymentRequest extends FormRequest
     public function rules()
     {
         return [
+            'id' => 'nullable|string',
             'payerId' => 'required|exists:users,id',
             'paymentItemId' => 'required|exists:payment_items,id',
             'amount' => 'required|numeric|min:1',
