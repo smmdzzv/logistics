@@ -30,7 +30,7 @@ abstract class RequestWriter
      */
     protected $saved;
 
-    protected function __construct($input)
+    public function __construct($input)
     {
         $this->input = $input;
         $this->saved = new stdClass();

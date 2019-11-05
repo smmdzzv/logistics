@@ -43,5 +43,21 @@ class PaymentItemsTableSeeder extends Seeder
                 'type' => 'out'
             ]
         );
+
+        PaymentItem::create(
+            [
+                'title' => 'Прием наличных',
+                'description' => 'Прием наличных на счет Дуоб',
+                'type' => 'in'
+            ]
+        );
+
+        PaymentItem::create(
+            [
+                'title' => 'Выдача наличных',
+                'description' => 'Выдача наличных со счета Дуоб',
+                'type' => 'out'
+            ]
+        );
     }
 }
