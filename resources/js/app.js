@@ -57,6 +57,8 @@ Vue.component('CurrenciesTable', require('./components/till/currencies/Currencie
 Vue.component('PaymentsTable', require('./components/till/payments/PaymentsTable.vue').default);
 Vue.component('PendingPaymentsTable', require('./components/till/payments/pending/PendingPaymentsTable.vue').default);
 
+Vue.component('MoneyExchanger', require('./components/till/exchange/MoneyExchanger.vue').default);
+
 Vue.component('ItemsTable', require('./components/items/ItemsTable.vue').default);
 
 Vue.component('BranchViewer', require('./components/branches/BranchViewer.vue').default);

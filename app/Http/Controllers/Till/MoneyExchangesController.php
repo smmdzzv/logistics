@@ -48,6 +48,11 @@ class MoneyExchangesController extends Controller
         ];
     }
 
+    public function exchanger(){
+        $currencies = Currency::all();
+        return view('till.money-exchanges.exchanger', compact('currencies'));
+    }
+
     public function exchange()
     {
         $data = new \stdClass();

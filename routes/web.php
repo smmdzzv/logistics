@@ -132,7 +132,11 @@ Route::resource('currencies', 'Till\CurrenciesController',
 //Money Exchange
 Route::resource('money-exchanges', 'Till\MoneyExchangesController',
     ['only' => ['create', 'store']])->parameters(['money-exchanges' => 'exchange']);
-Route::get('exchange-history/rate/{from}/{to}', 'Till\MoneyExchangesController@exchangeRate');
+
+Route::get('/exchange-history/rate/{from}/{to}', 'Till\MoneyExchangesController@exchangeRate');
+
+Route::post('/exchange-money',  'Till\MoneyExchangesController@exchange')->name('money-exchange.exchange');
+Route::get('/exchange-money',  'Till\MoneyExchangesController@exchanger')->name('money-exchange.exchanger');
 
 //Items
 Route::get('/items/all', 'ItemsController@all');
