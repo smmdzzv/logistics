@@ -6,7 +6,6 @@ use App\Data\RequestWriters\Payments\ExchangeMoneyRequestWriter;
 use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use App\Models\Till\MoneyExchange;
-use App\User;
 use Illuminate\Http\Request;
 
 class MoneyExchangesController extends Controller
@@ -59,8 +58,8 @@ class MoneyExchangesController extends Controller
         $data->from = \request('from');
         $data->to = \request('to');
         $data->amount = \request('amount');
+        $data->comment = \request('comment');
         $data->cashier = auth()->user();
-        $data->client = User::find(\request('client'));
 
         $writer = new ExchangeMoneyRequestWriter($data);
         $writer->write();

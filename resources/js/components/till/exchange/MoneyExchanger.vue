@@ -31,18 +31,22 @@
         </div>
 
         <div class="row">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3">
                 <label for="rate">Курс</label>
                 <input :value="rate.coefficient" class="form-control" disabled id="rate" type="number">
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3">
                 <label for="converted">Сумма к выдаче</label>
                 <input :value="converted" class="form-control" disabled id="converted" type="number">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="comment">Комментарий</label>
+                <input v-model="comment" class="form-control" id="comment" type="text">
             </div>
         </div>
 
         <div class="row justify-content-center mt-4">
-            <button class="btn btn-primary">Обменять</button>
+            <button @click="submit" class="btn btn-primary">Обменять</button>
         </div>
     </div>
 </template>
@@ -64,7 +68,8 @@
                     coefficient: 0
                 },
                 amount: 0,
-                converted: 0
+                converted: 0,
+                comment: null
             }
         },
         watch: {
@@ -102,6 +107,30 @@
             },
             convert() {
                 this.converted = (this.rate.coefficient * this.amount).toFixed(2);
+            },
+            async submit() {
+                if (!this.to || !this.from || !this.amount)
+                    return;
+
+                tShowSpinner();
+
+                try {
+                    let data = {
+                        from: this.from.id,
+                        to: this.to.id,
+                        amount: this.amount,
+                        comment: this.comment
+                    };
+
+                    const response = await axios.post('/exchange-money', data);
+                    window.location = '/payments';
+                } catch (e) {
+                    this.$root.showErrorMsg(
+                        'Ошибка сохранения',
+                        'Не удалось провести операцию. Повторите попытку после перезагрузки страницы')
+                }
+
+                tHideSpinner();
             }
         }
     }

@@ -36,11 +36,11 @@ class ExchangeMoneyRequestWriter extends RequestWriter
         $this->data->duob = LegalEntity::first();
 
         $this->data->accountFrom = $this->data->duob->accounts()
-            ->where('currencyId', $this->data->to)
+            ->where('currencyId', $this->input->to)
             ->firstOrFail();
 
         $this->data->accountTo = $this->data->duob->accounts()
-            ->where('currencyId', $this->data->from)
+            ->where('currencyId', $this->input->from)
             ->firstOrFail();
 
         $this->data->paymentItemIn = PaymentItem::where('title', 'Прием наличных')->firstOrFail();
@@ -50,7 +50,9 @@ class ExchangeMoneyRequestWriter extends RequestWriter
 
     public function writeOff()
     {
-        $this->data->accountFrom->balance -= $this->input->amount;
+        $amount = $this->input->amount * $this->data->rate->coefficient;
+
+        $this->data->accountFrom->balance -= $amount;
         $this->data->accountFrom->save();
 
         $this->saved->paymetOut = Payment::create([
@@ -59,9 +61,10 @@ class ExchangeMoneyRequestWriter extends RequestWriter
             'currencyId' => $this->data->rate->to,
             'paymentItemId' => $this->data->paymentItemOut->id,
             'accountFromId' => $this->data->accountFrom->id,
-            'amount' => $this->input->amount,
+            'exchangeId' => $this->data->rate->id,
+            'amount' => round($amount, 2),
             'status' => 'completed',
-            'comment' => 'Обмен валют (списание)'
+            'comment' => 'Обмен валют (списание) ' . $this->input->comment
         ]);
     }
 
@@ -69,18 +72,15 @@ class ExchangeMoneyRequestWriter extends RequestWriter
         $this->data->accountTo->balance += $this->input->amount;
         $this->data->accountTo->save();
 
-        $amount = $this->input->amount * $this->data->rate->coefficient;
-
         $this->saved->paymetOut = Payment::create([
             'branchId' => $this->input->cashier->branch->id,
             'cashierId' => $this->input->cashier->id,
             'currencyId' => $this->data->rate->from,
             'paymentItemId' => $this->data->paymentItemIn->id,
             'accountToId' => $this->data->accountTo->id,
-            'exchangeId' => $this->data->rate->id,
-            'amount' => round($amount, 2),
+            'amount' => $this->input->amount,
             'status' => 'completed',
-            'comment' => 'Обмен валют (зачисление)'
+            'comment' => 'Обмен валют (зачисление) ' . $this->input->comment
         ]);
     }
 }
