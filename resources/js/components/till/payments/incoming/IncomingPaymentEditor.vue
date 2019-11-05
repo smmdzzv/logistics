@@ -26,20 +26,31 @@
                             </div>
 
                             <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="client">Плательщик</label>
-                                    <search-user-dropdown :isInvalid="$v.client.$error || errors.client"
-                                                          :preselectedUser="client"
-                                                          :selected="clientSelected"
-                                                          placeholder="Введите ФИО или код клиента"
-                                                          url="/concrete/client/filter?userInfo="></search-user-dropdown>
-                                    <input class="is-invalid form-control" id="client" type="hidden">
-                                    <span class="invalid-feedback" role="alert"
-                                          v-if="$v.client.$error || errors.client">
+                                <div class="form-row col-md-6">
+                                    <div
+                                        :class="{'col-md-8': clientTotalDebt !== null, 'col-md-12': clientTotalDebt === null}"
+                                        class="form-group">
+                                        <label for="client">Плательщик</label>
+                                        <search-user-dropdown :isInvalid="$v.client.$error || errors.client"
+                                                              :preselectedUser="client"
+                                                              :selected="clientSelected"
+                                                              placeholder="Введите ФИО или код клиента"
+                                                              url="/concrete/client/filter?userInfo="></search-user-dropdown>
+                                        <input class="is-invalid form-control" id="client" type="hidden">
+                                        <span class="invalid-feedback" role="alert"
+                                              v-if="$v.client.$error || errors.client">
                                         <strong>Необходимо выбрать клиента.</strong>
                                         <strong v-for="message in errors.client">{{message}}.</strong>
                                     </span>
+                                    </div>
+
+                                    <div class="col-md-4" v-if="clientTotalDebt !== null">
+                                        <label for="debt">Задолженность</label>
+                                        <input :value="clientTotalDebt" class="form-control" disabled id="debt"
+                                               type="text">
+                                    </div>
                                 </div>
+
                                 <div class="form-group col-md-6">
                                     <label>Счет зачисления</label>
                                     <b-form-select id="accountTo" v-model="accountTo">
@@ -128,34 +139,34 @@
                             </div>
 
                             <div class="row">
-<!--                                <div class="col-md-6" v-if="isOrderPayment">-->
-<!--                                    <b-form-group label="Заказ" label-for="order">-->
-<!--                                        <b-form-select-->
-<!--                                            :class="{'is-invalid':$v.order.$error  || errors.order}"-->
-<!--                                            id="order"-->
-<!--                                            v-model="order">-->
-<!--                                            <template v-slot:first>-->
-<!--                                                <option :value="null">-->
-<!--                                                    <span v-if="orders.length > 0">&#45;&#45;Выберите заказ&#45;&#45;</span>-->
-<!--                                                    <span v-else>&#45;&#45;Заказов нет&#45;&#45;</span>-->
-<!--                                                </option>-->
-<!--                                            </template>-->
+                                <!--                                <div class="col-md-6" v-if="isOrderPayment">-->
+                                <!--                                    <b-form-group label="Заказ" label-for="order">-->
+                                <!--                                        <b-form-select-->
+                                <!--                                            :class="{'is-invalid':$v.order.$error  || errors.order}"-->
+                                <!--                                            id="order"-->
+                                <!--                                            v-model="order">-->
+                                <!--                                            <template v-slot:first>-->
+                                <!--                                                <option :value="null">-->
+                                <!--                                                    <span v-if="orders.length > 0">&#45;&#45;Выберите заказ&#45;&#45;</span>-->
+                                <!--                                                    <span v-else>&#45;&#45;Заказов нет&#45;&#45;</span>-->
+                                <!--                                                </option>-->
+                                <!--                                            </template>-->
 
-<!--                                            <option :key="order.id" :value="order"-->
-<!--                                                    v-for="order in orders">-->
-<!--                                                {{order.totalPrice}} USD {{order.created_at}}-->
-<!--                                            </option>-->
-<!--                                        </b-form-select>-->
+                                <!--                                            <option :key="order.id" :value="order"-->
+                                <!--                                                    v-for="order in orders">-->
+                                <!--                                                {{order.totalPrice}} USD {{order.created_at}}-->
+                                <!--                                            </option>-->
+                                <!--                                        </b-form-select>-->
 
-<!--                                        <span class="invalid-feedback" role="alert" v-if="$v.order.$error">-->
-<!--                                            <strong>Необходимо выбрать заказ</strong>-->
-<!--                                        </span>-->
+                                <!--                                        <span class="invalid-feedback" role="alert" v-if="$v.order.$error">-->
+                                <!--                                            <strong>Необходимо выбрать заказ</strong>-->
+                                <!--                                        </span>-->
 
-<!--                                        <span class="invalid-feedback" role="alert" v-if="errors.order">-->
-<!--                                             <strong v-for="message in errors.order">{{message}}</strong>-->
-<!--                                        </span>-->
-<!--                                    </b-form-group>-->
-<!--                                </div>-->
+                                <!--                                        <span class="invalid-feedback" role="alert" v-if="errors.order">-->
+                                <!--                                             <strong v-for="message in errors.order">{{message}}</strong>-->
+                                <!--                                        </span>-->
+                                <!--                                    </b-form-group>-->
+                                <!--                                </div>-->
 
                                 <div class="col-md-3" v-show="needConverting">
                                     <b-form-group
@@ -189,7 +200,8 @@
                             <div class="row">
                                 <div class="form-group col-12">
                                     <label for="comment">Комментарий</label>
-                                    <input class="form-control" id="comment" placeholder="Добавьте произвольный комментарий (необязательно)" type="text"
+                                    <input class="form-control" id="comment"
+                                           placeholder="Добавьте произвольный комментарий (необязательно)" type="text"
                                            v-model="comment">
                                 </div>
                             </div>
@@ -225,7 +237,7 @@
     export default {
         name: "IncomingPaymentEditor",
         mounted() {
-            if(this.currencies)
+            if (this.currencies)
                 this.currency = this.currencies[0];
 
             if (this.payment)
@@ -233,7 +245,7 @@
             else
                 this.paymentType = 'in';
 
-            if(this.disable)
+            if (this.disable)
                 this.disableForm()
         },
         props: {
@@ -248,14 +260,15 @@
             payment: {
                 type: Object
             },
-            disable:{
-                type:Boolean,
-                default:false
+            disable: {
+                type: Boolean,
+                default: false
             }
         },
         data() {
             return {
                 client: null,
+                clientTotalDebt: null,
                 amount: 0,
                 currency: null,
                 paymentItem: null,
@@ -287,7 +300,7 @@
         },
         watch: {
             paymentType() {
-                if(this.disabled)
+                if (this.disabled)
                     return;
 
                 this.$bvModal.show('busyModal');
@@ -333,22 +346,33 @@
                     this.convert()
             },
             clientSelected(client) {
+                if (this.client && client && this.client.id === client.id)
+                    return;
+
                 this.client = client;
-                // this.getOrders();
+                this.getClientTotalDebt();
             },
-            // async getOrders() {
-            //     if (!this.client)
-            //         this.orders = [];
-            //     else if (this.isOrderPayment) {
-            //         let action = '/orders/' + this.client.id + '/unpaid';
-            //         const response = await axios.get(action);
-            //         this.orders = response.data;//TODO
-            //     }
-            // },
+            async getClientTotalDebt() {
+                if (!this.client)
+                {
+                    this.clientTotalDebt = null;
+                    return;
+                }
+
+
+                try {
+                    let action = "/orders/" + this.client.id + "/debt";
+                    const response = await axios.get(action);
+                    this.clientTotalDebt = response.data + " USD";
+                } catch (e) {
+                    console.log(e)
+                    this.$root.showErrorMsg('Ошибка загрузки',
+                        'Не удалось загрузить задолженность клиента.')
+                }
+            },
             async convert() {
-                // this.$bvModal.show('busyModal');
                 // tShowSpinner();
-                if(this.disable)
+                if (this.disable)
                     return;
 
                 let action = `exchange-history/rate/${this.currency.id}/${this.accountTo.currency.id}`;
@@ -360,12 +384,11 @@
                         'Не удалось загрузить курс валют. Убедитесь, что курс для данной валюты создан.')
                 }
 
-                this.$nextTick(
-                    () => {
-                        // this.$bvModal.hide('busyModal');
-                        // tHideSpinner();
-                    }
-                )
+                // this.$nextTick(
+                //     () => {
+                //         tHideSpinner();
+                //     }
+                // )
             },
             setInitialData() {
                 this.currencies = [this.payment.currency];
@@ -379,14 +402,14 @@
                 this.currency = this.payment.currency;
                 this.accountTo = this.payment.account_to;
                 this.amount = this.payment.amount;
-                if(this.payment.exchange)
+                if (this.payment.exchange)
                     this.exchange = this.payment.exchange;
                 this.comment = this.payment.comment;
             },
-            disableForm(){
-                $( "input" ).prop( "disabled", true );
-                $( "select" ).prop( "disabled", true );
-                $( "#status" ).prop( "disabled", false );
+            disableForm() {
+                $("input").prop("disabled", true);
+                $("select").prop("disabled", true);
+                $("#status").prop("disabled", false);
             },
             async submitForm() {
                 this.$bvModal.show('busyModal');
@@ -403,7 +426,7 @@
                         exchangeId: this.exchange.id,
                         // orderId: this.order ? this.order.id : null,
                         comment: this.comment,
-                        id: this.payment? this.payment.id : null
+                        id: this.payment ? this.payment.id : null
                     };
 
                     try {

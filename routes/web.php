@@ -37,7 +37,8 @@ Route::get('/orders/items/edit', 'Orders\OrderItemsController@edit')->name('orde
 Route::get('/order/{order}/items', 'Orders\OrderItemsController@storedItems');
 Route::post('/order/{order}/items', 'Orders\OrderItemsController@update');
 
-Route::get('/orders/{client}/unpaid', 'Orders\OrderPaymentsController@unpaid');
+Route::get('/orders/{client}/unpaid', 'Orders\ClientOrdersController@unpaid');
+Route::get('/orders/{client}/debt', 'Orders\ClientOrdersController@totalDebt');
 
 
 Route::resource('orders', 'OrdersController', ['except' => ['delete', 'edit']]);
