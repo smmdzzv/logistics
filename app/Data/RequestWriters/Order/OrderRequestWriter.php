@@ -16,10 +16,6 @@ use stdClass;
 
 class OrderRequestWriter extends RequestWriter
 {
-    public function __construct($input)
-    {
-        parent::__construct($input);
-    }
 
     /**
      * @return stdClass, which contains saved models

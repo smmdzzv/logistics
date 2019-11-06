@@ -14,7 +14,7 @@ abstract class MassWriter
     protected $entityClass;
     private $ulidGenerator;
 
-    protected function __construct(Array $entities)
+    public function __construct(Array $entities)
     {
         $this->ulidGenerator = new Ulid();
         $this->entities = $entities;

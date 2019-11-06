@@ -7,11 +7,6 @@ use App\Models\Till\Account;
 class OutgoingPaymentRequestWriter extends PaymentRequestWriter
 {
 
-    public function __construct($input)
-    {
-        parent::__construct($input);
-    }
-
     function write()
     {
         parent::write();

@@ -14,11 +14,6 @@ use Illuminate\Database\Eloquent\Builder;
 class AssociateToTripRequestWriter extends RequestWriter
 {
 
-    public function __construct($input)
-    {
-        parent::__construct($input);
-    }
-
     function write()
     {
         $this->filterRemovedItems();

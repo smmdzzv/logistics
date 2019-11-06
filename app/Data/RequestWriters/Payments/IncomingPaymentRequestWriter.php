@@ -11,11 +11,6 @@ use App\User;
 class IncomingPaymentRequestWriter extends PaymentRequestWriter
 {
 
-    public function __construct($input)
-    {
-        parent::__construct($input);
-    }
-
     function write()
     {
         parent::write();

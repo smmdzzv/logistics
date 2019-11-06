@@ -14,11 +14,6 @@ use Carbon\Carbon;
 
 class DeliverOrderItemsRequestWriter extends RequestWriter
 {
-    public function __construct($input)
-    {
-        parent::__construct($input);
-    }
-
     function write()
     {
         $this->checkPayment();

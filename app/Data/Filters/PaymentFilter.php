@@ -9,11 +9,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class PaymentFilter extends Filter
 {
-    public function __construct($filters, $query)
-    {
-        parent::__construct($filters, $query);
-    }
-
     function filter()
     {
         $filters = $this->filters;

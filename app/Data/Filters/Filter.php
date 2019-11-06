@@ -12,7 +12,7 @@ abstract class Filter
 
     protected $query;
 
-    protected function __construct($filters, $query)
+    public function __construct($filters, $query)
     {
         $this->filters = $filters;
         $this->query = $query;
