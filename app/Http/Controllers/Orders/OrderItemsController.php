@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Orders;
 use App\Data\RequestWriters\Order\DeliverOrderItemsRequestWriter;
 use App\Models\Order;
 use App\Models\StoredItems\StoredItem;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class OrderItemsController extends Controller

@@ -4,15 +4,13 @@
 namespace App\Data\RequestWriters\Order;
 
 
-use App\Data\RequestWriters\Payments\IncomingPaymentRequestWriter;
 use App\Data\RequestWriters\RequestWriter;
 use App\Models\Currency;
 use App\Models\StoredItems\StoredItem;
-use App\Models\StoredItems\StoredItemTripHistory;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
+use App\Models\Users\TrustedUser;
 use Carbon\Carbon;
-use stdClass;
 
 class DeliverOrderItemsRequestWriter extends RequestWriter
 {
@@ -38,12 +36,35 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
         $this->data->client = $order->owner;
 
         if (!$order->payment) {
+
             $this->data->account = $this->data->client->accounts()->first();
-            if ($this->data->account->balance < $order->totalPrice)
+
+            if ($this->data->account->balance < $order->totalPrice
+                && !$this->checkForDebtPossibility())
                 abort(400, "Недостаточно средств на балансе");
             else
                 $this->createPayment();
         }
+    }
+
+    private function checkForDebtPossibility(): bool
+    {
+        $trusted = TrustedUser::where('user_id', $this->data->client->id)
+            ->where('to', '>=', Carbon::now()->toDateString())
+            ->first();
+
+        if (!$trusted)
+            return false;
+
+        $overallDebt = $this->data->account->balance - $this->input->order->totalPrice;
+        if (abs($overallDebt) > $trusted->maxDebt)
+            abort(400,
+                "Суммарный долг доверенного клиента превыщает максимально допустимый.
+                 Текущая задолженность " . abs($overallDebt) . " USD. 
+                 Из них стоимость заказа " . $this->input->order->totalPrice . " USD"
+            );
+
+        return true;
     }
 
     private function createPayment()
@@ -61,6 +82,7 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
             ])->id,
             'accountFromId' => $this->data->account->id,
             'amount' => $this->input->order->totalPrice,
+            'status' => 'completed',
             'comment' => 'Списание денег с баланса в счет оплаты заказа'
         ]);
 

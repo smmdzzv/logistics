@@ -84,7 +84,7 @@
                     if (e.response.status === 400) {
                          this.$root.showErrorMsg(
                              "Ошибка оплаты",
-                             "Недостаточно средств для оплаты. Пополните баланс"
+                             e.response.data.message
                          );
                     }
                 }
