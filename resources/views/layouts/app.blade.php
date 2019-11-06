@@ -63,6 +63,8 @@
                                 <h6 class="dropdown-header">Наименования</h6>
                                 <a class="dropdown-item" href="{{route('items.create')}}">Добавить наименование</a>
                                 <a class="dropdown-item" href="{{route('items.index')}}">Список наименований</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{route('customs-code.index')}}">Таможенные коды</a>
                             </div>
                         </li>
                         <!--Till-->

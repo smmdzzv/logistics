@@ -6,5 +6,5 @@ use App\Models\BaseModel;
 
 class CustomsCode extends BaseModel
 {
-    //
+    protected $guarded = [];
 }

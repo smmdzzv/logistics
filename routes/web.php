@@ -66,6 +66,9 @@ Route::post('/trip/{trip}/stored-items/unload', 'Trips\TripStoredItemsController
 Route::get('/trip/{trip}/exchange/stored-items', 'Trips\TripStoredItemsController@changeItemsTrip')->name('trip.change-items-trip');
 Route::post('/trip/{trip}/exchange/stored-items', 'Trips\TripStoredItemsController@exchangeItems')->name('trip.exchange-items');
 
+//Customs
+Route::resource('customs-code', 'Customs\CustomsCodeController')->parameters(['customs-code' => 'code']);
+
 //Till
 
 Route::resource('payments', 'Till\Payments\PaymentsController', ['only' => 'index']);
