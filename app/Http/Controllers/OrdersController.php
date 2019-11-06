@@ -92,7 +92,7 @@ class OrdersController extends Controller
     public function all()
     {
         $paginate = request()->paginate ?? 10;
-        return Order::with(['owner', 'registeredBy'])->paginate($paginate);
+        return Order::with(['owner', 'registeredBy'])->latest()->paginate($paginate);
     }
 
     public function activeOrders(Client $client)
