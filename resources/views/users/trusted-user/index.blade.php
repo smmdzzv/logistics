@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="container">
-        <div class="col-md-10">
+        <div class="col-md-10 mx-auto">
             <div class="card">
                 <div class="card-header">
                     Доверенные пользователи
