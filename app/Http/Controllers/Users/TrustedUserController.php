@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\Users\TrustedUser;
+use Carbon\Carbon;
 
 class TrustedUserController extends Controller
 {
@@ -24,7 +25,10 @@ class TrustedUserController extends Controller
     }
 
     public function index(){
-        $trustedUsers = TrustedUser::with('user')->latest()->paginate(10);
+        $trustedUsers = TrustedUser::with('user')
+            ->where('to', '>=', Carbon::now()->toDateString())
+            ->latest()
+            ->paginate(10);
         return view('users.trusted-user.index', compact('trustedUsers'));
     }
 
