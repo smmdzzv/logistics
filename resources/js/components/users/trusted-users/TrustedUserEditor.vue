@@ -21,6 +21,7 @@
             <div class="form-group col-md-4">
                 <label for="from">Дата начала</label>
                 <input :class="{'is-invalid':$v.from.$error  || errors.from}"
+                       v-model="from"
                        class="form-control"
                        id="from"
                        type="date">
@@ -28,13 +29,14 @@
                 <span class="invalid-feedback"
                       role="alert"
                       v-if="$v.from.$error || errors.from">
-                            <strong>Необходимо выбрать клиента.</strong>
+                            <strong>Необходимо определить дату начала.</strong>
                             <strong v-for="message in errors.from">{{message}}.</strong>
             </span>
             </div>
             <div class="form-group col-md-4">
                 <label for="to">Дата конца</label>
                 <input :class="{'is-invalid':$v.to.$error  || errors.to}"
+                       v-model="to"
                        class="form-control"
                        id="to"
                        type="date">
@@ -42,13 +44,14 @@
                 <span class="invalid-feedback"
                       role="alert"
                       v-if="$v.to.$error || errors.to">
-                            <strong>Необходимо выбрать клиента.</strong>
+                            <strong>Необходимо определить дату конца.</strong>
                             <strong v-for="message in errors.to">{{message}}.</strong>
             </span>
             </div>
             <div class="form-group col-md-4">
                 <label for="maxDebt">Макс. допустимый долг</label>
                 <input :class="{'is-invalid':$v.maxDebt.$error  || errors.maxDebt}"
+                       v-model="maxDebt"
                        class="form-control"
                        id="maxDebt"
                        placeholder="в долларах (USD)"
@@ -58,7 +61,7 @@
                 <span class="invalid-feedback"
                       role="alert"
                       v-if="$v.maxDebt.$error || errors.maxDebt">
-                            <strong>Необходимо выбрать клиента.</strong>
+                            <strong>Необходимо определить максимально допустимый долг клиента.</strong>
                             <strong v-for="message in errors.maxDebt">{{message}}.</strong>
                 </span>
             </div>
@@ -107,7 +110,7 @@
 
                 try {
                     let data = {
-                        client: this.client,
+                        user_id: this.client.id,
                         from: this.from,
                         to: this.to,
                         maxDebt: this.maxDebt

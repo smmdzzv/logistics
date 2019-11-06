@@ -16,9 +16,10 @@ class TrustedUserController extends Controller
     private function rules()
     {
         return [
-            'user_id' => 'required|string|exists:user,id',
+            'user_id' => 'required|string|exists:users,id',
             'from' => 'required|date',
-            'to' => 'required|date'
+            'to' => 'required|date',
+            'maxDebt' => 'required|numeric|min:1'
         ];
     }
 
