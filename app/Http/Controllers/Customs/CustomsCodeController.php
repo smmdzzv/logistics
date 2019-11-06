@@ -24,7 +24,7 @@ class CustomsCodeController extends Controller
             'rate' => 'required|numeric',
             'percentage' => 'required|numeric',
             'vat' => 'required|numeric',
-            'calculateByPiece' => 'required|numeric'
+            'calculateByPiece' => 'required'
         ];
     }
 

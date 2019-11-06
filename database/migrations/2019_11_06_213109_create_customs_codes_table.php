@@ -17,7 +17,7 @@ class CreateCustomsCodesTable extends Migration
             $table->char('id', 26)->primary();
             $table->char('name', 255);
             $table->char('shortName', 255);
-            $table->char('internationalName', 255);
+            $table->char('internationalName', 255)->nullable();
             $table->char('code', 15)->unique();
             $table->double('price');
             $table->double('rate');
