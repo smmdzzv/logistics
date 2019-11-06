@@ -14,7 +14,7 @@ class CreateLegalEntitiesTable extends Migration
     public function up()
     {
         Schema::create('legal_entities', function (Blueprint $table) {
-            $table->char('id', 26);
+            $table->char('id', 26)->primary();
             $table->string('type',255);
             $table->string('name', 255);
             $table->timestamps();

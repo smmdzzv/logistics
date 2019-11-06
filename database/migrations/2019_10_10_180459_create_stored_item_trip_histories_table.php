@@ -14,7 +14,7 @@ class CreateStoredItemTripHistoriesTable extends Migration
     public function up()
     {
         Schema::create('stored_item_trip_histories', function (Blueprint $table) {
-            $table->char('id', 26)->unique();
+            $table->char('id', 26)->primary();
             $table->char('stored_item_id', 26);
             $table->char('trip_id', 26);
             $table->char('registered_by_id', 26);

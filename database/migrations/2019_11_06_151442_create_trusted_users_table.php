@@ -14,7 +14,7 @@ class CreateTrustedUsersTable extends Migration
     public function up()
     {
         Schema::create('trusted_users', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->char('id', 26)->primary();
             $table->char('user_id',26);
             $table->date('from');
             $table->date('to');
