@@ -21,10 +21,10 @@
             <div class="form-group col-md-4">
                 <label for="from">Дата начала</label>
                 <input :class="{'is-invalid':$v.from.$error  || errors.from}"
-                       v-model="from"
                        class="form-control"
                        id="from"
-                       type="date">
+                       type="date"
+                       v-model="from">
 
                 <span class="invalid-feedback"
                       role="alert"
@@ -36,10 +36,10 @@
             <div class="form-group col-md-4">
                 <label for="to">Дата конца</label>
                 <input :class="{'is-invalid':$v.to.$error  || errors.to}"
-                       v-model="to"
                        class="form-control"
                        id="to"
-                       type="date">
+                       type="date"
+                       v-model="to">
 
                 <span class="invalid-feedback"
                       role="alert"
@@ -51,12 +51,12 @@
             <div class="form-group col-md-4">
                 <label for="maxDebt">Макс. допустимый долг</label>
                 <input :class="{'is-invalid':$v.maxDebt.$error  || errors.maxDebt}"
-                       v-model="maxDebt"
                        class="form-control"
                        id="maxDebt"
                        placeholder="в долларах (USD)"
                        step="0.01"
-                       type="number">
+                       type="number"
+                       v-model="maxDebt">
 
                 <span class="invalid-feedback"
                       role="alert"
@@ -107,7 +107,7 @@
                     this.$v.$touch();
                     return;
                 }
-
+                tShowSpinner();
                 try {
                     let data = {
                         user_id: this.client.id,
@@ -117,8 +117,9 @@
                     };
 
                     const response = await axios.post('/trusted-user', data);
-
+                    window.location = '/trusted-user';
                 } catch (e) {
+                    tHideSpinner();
                     if (e.response.status === 422) {
                         this.errors.client = e.response.data.errors.client;
                         this.errors.from = e.response.data.errors.from;

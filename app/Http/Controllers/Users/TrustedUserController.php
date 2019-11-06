@@ -24,7 +24,7 @@ class TrustedUserController extends Controller
     }
 
     public function index(){
-        $trustedUsers = TrustedUser::latest()->paginate(10);
+        $trustedUsers = TrustedUser::with('user')->latest()->paginate(10);
         return view('users.trusted-user.index', compact('trustedUsers'));
     }
 
@@ -38,5 +38,10 @@ class TrustedUserController extends Controller
         $data = request()->validate($this->rules());
         TrustedUser::create($data);
         return redirect(route('trusted-user.index'));
+    }
+
+    public function destroy(TrustedUser $trustedUser){
+        $trustedUser->delete();
+        return;
     }
 }
