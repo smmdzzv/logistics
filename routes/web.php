@@ -26,6 +26,8 @@ Route::resource('users', 'Users\UsersController')->parameters(['users' => 'user'
 Route::get('/concrete/{roleName}/{action}', 'Users\ConcreteUsersRoutesController');
 Route::get('/user/find', 'Users\UsersController@find');
 
+Route::resource('trusted-user', 'Users\TrustedUserController');
+
 //Profile
 Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 

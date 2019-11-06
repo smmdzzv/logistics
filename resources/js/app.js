@@ -29,6 +29,8 @@ window.Vue.use(VueExcelXlsx);
 Vue.component('Profile', require('./components/users/Profile.vue').default);
 
 Vue.component('UsersTable', require('./components/users/UsersTable.vue').default);
+Vue.component('TrustedUserEditor', require('./components/users/trusted-users/TrustedUserEditor.vue').default);
+
 Vue.component('StoredTable', require('./components/stored/StoredTable.vue').default);
 
 Vue.component('OrdersTable', require('./components/orders/OrdersTable.vue').default);
