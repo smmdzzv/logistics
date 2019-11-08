@@ -70,7 +70,8 @@ class OrdersController extends Controller
                 'item_id' => $itemData['item']['id'],
                 'placeCount' => $itemData['placeCount'],
                 'ownerId' => $data->client->id,
-                'branch_id' => $data->branch->id
+                'branch_id' => $data->branch->id,
+                'customs_code_id' => $itemData['customsCode']['id']
             ]);
 
             $data->customPrices[$itemIndex] = $itemData['price'];

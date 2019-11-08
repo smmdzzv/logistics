@@ -19,6 +19,7 @@ class CreateStoredItemInfosTable extends Migration
             $table->char('ownerId',26);
             $table->char('branch_id',26);
             $table->char('order_id',26);
+            $table->char('customs_code_id',26);
             $table->integer('count');
             $table->double('weight');
             $table->double('height');

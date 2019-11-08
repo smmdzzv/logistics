@@ -33,6 +33,7 @@ class StoreOrderRequest extends FormRequest
         $rules['storedItemInfos.*.tariffPricing.id'] = 'required|exists:tariff_price_histories,id';
         $rules['storedItemInfos.*.item'] = 'required|array';
         $rules['storedItemInfos.*.item.id'] = 'required|exists:items,id';
+        $rules['storedItemInfos.*.customsCode.id'] = 'required|exists:customs_codes,id';
 
         return $rules;
     }

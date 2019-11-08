@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-5">
                         <label class="col-form-label text-md-right" for="item">Наименование товара</label>
                         <suggestions-input :onItemSearchInputChange="onItemSearchInputChange"
                                            :onSelected="onItemSelected"
@@ -99,18 +99,18 @@
                             variant="danger"/>
                     </div>
 
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label class="col-form-label text-md-right" for="customs-code">Таможенный код</label>
                         <select class="form-control custom-select"
                                 id="customs-code"
-                                required v-model="customsCode">
+                                required v-model="storedItem.customsCode">
                             <option :value="customsCode"
                                     v-for="customsCode in customsCodes"
-                                    >{{customsCode.name}}
+                            >{{customsCode.name}}
                             </option>
                         </select>
                         <b-popover
-                            :show.sync="$v.customsCode.$error"
+                            :show.sync="$v.storedItem.customsCode.$error"
                             content="Выберите таможенный код из списка"
                             placement="bottom"
                             target="customs-code"
@@ -125,7 +125,7 @@
                                 required v-model="tariff">
                             <option :value="tariff"
                                     v-for="tariff in tariffs"
-                                    >{{tariff.name}}
+                            >{{tariff.name}}
                             </option>
                         </select>
                         <b-popover
@@ -154,7 +154,8 @@
                             triggers="null"
                             variant="danger"/>
                     </div>
-
+                </div>
+                <div class="row">
                     <div class="form-group col-md-2">
                         <label class="col-form-label text-md-right" for="count">Кол-во</label>
                         <input @blur="$v.storedItem.count.$touch()"
@@ -230,7 +231,7 @@
                 }
             },
             tariffs: Array,
-            customsCodes:[],
+            customsCodes: [],
             onStoredItemAdded: {
                 type: Function,
                 required: true
@@ -243,16 +244,16 @@
             return {
                 items: [],
                 filteredItems: [],
-                customsCode:null,
                 storedItem: {
                     width: null,
                     height: null,
                     length: null,
                     weight: null,
                     count: null,
-                    branch: this.$props.branch,
+                    branch: this.branch,
                     item: null,
-                    placeCount: null
+                    placeCount: null,
+                    customsCode: null,
                 },
                 tariff: null,
                 customPrice: 0,
@@ -307,7 +308,9 @@
                 this.storedItem.item = null;
                 this.filteredItems = [];
                 this.storedItem.price = null;
+                this.storedItem.customsCode = null;
                 this.tariff = null;
+                this.customsCodes = [];
                 this.$refs.suggestionInput.query = '';
                 this.$nextTick(() => {
                     this.$v.$reset();
@@ -410,10 +413,10 @@
                 placeCount: {
                     required,
                     integer
+                },
+                customsCode: {
+                    required
                 }
-            },
-            customsCode:{
-                required
             },
             tariff: {
                 required

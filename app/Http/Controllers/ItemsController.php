@@ -44,7 +44,7 @@ class ItemsController extends Controller
     }
 
     public function store(Request $request)
-    { 
+    {
         $data = $request->validate($this->rules());
         $item = Item::create($data);
         $item->codes()->attach($request->get('customsCodes'));
