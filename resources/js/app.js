@@ -63,6 +63,8 @@ Vue.component('MoneyExchanger', require('./components/till/exchange/MoneyExchang
 
 Vue.component('ItemsTable', require('./components/items/ItemsTable.vue').default);
 
+Vue.component('CustomsCodesTable', require('./components/customs/CustomsCodesTable.vue').default);
+
 Vue.component('BranchViewer', require('./components/branches/BranchViewer.vue').default);
 Vue.component('Barcode', require('@xkeshi/vue-barcode').default);
 Vue.component('QrCode', require('@chenfengyuan/vue-qrcode').default);
