@@ -30,6 +30,9 @@
             <template slot="FOOT[item.name]">
                 <span>Итого</span>
             </template>
+            <template slot="FOOT[customs_code.code]">
+                <span></span>
+            </template>
             <template slot="FOOT[count]">
                 <span> </span>
             </template>
@@ -53,6 +56,13 @@
             </template>
             <template slot="FOOT[billing_info.totalPrice]">
                 <span>{{order.totalPrice}}</span>
+            </template>
+
+            <template slot="HEAD[customs_code.code]">
+                <span id="code">Код</span>
+                <b-tooltip target="code" trigger="hover">
+                    Таможенный код
+                </b-tooltip>
             </template>
 
             <template slot="id" slot-scope="data">
@@ -112,6 +122,10 @@
                 fields: {
                     'item.name': {
                         label: 'Тип',
+                        sortable: true
+                    },
+                    'customs_code.code': {
+                        label: 'Код',
                         sortable: true
                     },
                     count: {
