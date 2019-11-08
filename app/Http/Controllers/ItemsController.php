@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customs\CustomsCode;
 use App\Models\StoredItems\Item;
 use App\Models\Tariff;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class ItemsController extends Controller
 
     public function allEager()
     {
-        return Item::with('tariff')->get();
+        return Item::with('codes')->get();
     }
 
     public function index()
@@ -38,13 +39,15 @@ class ItemsController extends Controller
     public function create()
     {
         $tariffs = Tariff::all();
-        return view('items.create', compact('tariffs'));
+        $customsCodes = CustomsCode::all();
+        return view('items.create', compact('tariffs', 'customsCodes'));
     }
 
     public function store(Request $request)
-    {
+    { 
         $data = $request->validate($this->rules());
-        Item::create($data);
+        $item = Item::create($data);
+        $item->codes()->attach($request->get('customsCodes'));
         return redirect()->route('items.index');
     }
 

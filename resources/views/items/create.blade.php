@@ -67,6 +67,30 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <label for="customsCodes" class="col-md-4 col-form-label text-md-right">Таможенные коды</label>
+                                <div class="col-md-6">
+                                    <select id="customsCodes" name="customsCodes[]"
+                                            multiple
+                                            class="form-control @error('customsCodes') is-invalid @enderror">
+                                        <option value="null" disabled>--Выберите коды--</option>
+
+                                        @foreach($customsCodes as $code)
+                                            <option value="{{$code->id}}"
+                                                    @if($code->id === old('customsCodes')) selected @endif>
+                                                {{$code->name}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    @error('customsCodes')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <div class="form-group row justify-content-center">
                                 <div class="input-group offset-md-2 col-md-6">
                                     <div id="onlyCustomPrice" class="input-group-prepend">

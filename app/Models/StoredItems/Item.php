@@ -3,6 +3,7 @@
 namespace App\Models\StoredItems;
 
 use App\Models\BaseModel;
+use App\Models\Customs\CustomsCode;
 use App\Models\Tariff;
 use Illuminate\Database\Eloquent\Model;
 
@@ -33,5 +34,15 @@ class Item extends BaseModel
     public function tariff()
     {
         return $this->belongsTo(Tariff::class, 'tariffId');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany to CustomsCodes
+     */
+    public function codes()
+    {
+        return $this->belongsToMany(CustomsCode::class)
+            ->using('App\Models\Pivots\BasePivot')
+            ->withTimestamps();
     }
 }

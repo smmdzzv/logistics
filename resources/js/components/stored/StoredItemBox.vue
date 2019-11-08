@@ -100,13 +100,32 @@
                     </div>
 
                     <div class="form-group col-md-2">
+                        <label class="col-form-label text-md-right" for="customs-code">Таможенный код</label>
+                        <select class="form-control custom-select"
+                                id="customs-code"
+                                required v-model="customsCode">
+                            <option :value="customsCode"
+                                    v-for="customsCode in customsCodes"
+                                    >{{customsCode.name}}
+                            </option>
+                        </select>
+                        <b-popover
+                            :show.sync="$v.customsCode.$error"
+                            content="Выберите таможенный код из списка"
+                            placement="bottom"
+                            target="customs-code"
+                            triggers="null"
+                            variant="danger"/>
+                    </div>
+
+                    <div class="form-group col-md-2">
                         <label class="col-form-label text-md-right" for="tariff">Тариф</label>
                         <select class="form-control custom-select"
                                 id="tariff"
                                 required v-model="tariff">
                             <option :value="tariff"
                                     v-for="tariff in tariffs"
-                                    v-model="tariffs">{{tariff.name}}
+                                    >{{tariff.name}}
                             </option>
                         </select>
                         <b-popover
@@ -211,6 +230,7 @@
                 }
             },
             tariffs: Array,
+            customsCodes:[],
             onStoredItemAdded: {
                 type: Function,
                 required: true
@@ -223,6 +243,7 @@
             return {
                 items: [],
                 filteredItems: [],
+                customsCode:null,
                 storedItem: {
                     width: null,
                     height: null,
@@ -273,6 +294,7 @@
             },
             onItemSelected(item) {
                 this.storedItem.item = item;
+                this.customsCodes = item.codes;
             },
             clearForm(e) {
                 if (e) e.preventDefault();
@@ -389,6 +411,9 @@
                     required,
                     integer
                 }
+            },
+            customsCode:{
+                required
             },
             tariff: {
                 required
