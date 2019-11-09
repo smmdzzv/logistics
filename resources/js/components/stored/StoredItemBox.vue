@@ -99,6 +99,33 @@
                             variant="danger"/>
                     </div>
 
+                    <div class="form-group col-md-2" id="tariff-wrapper">
+                        <label class="col-form-label text-md-right" for="tariff">Тариф</label>
+                        <input class="form-control" type="text" id="tariff" :value="tariff.name" disabled>
+                        <b-tooltip target="tariff-wrapper" triggers="hover">
+                            Определенно в свойствах наименования
+                        </b-tooltip>
+                    </div>
+
+                    <!--                    <div class="form-group col-md-2">-->
+                    <!--                        <label class="col-form-label text-md-right" for="tariff">Тариф</label>-->
+                    <!--                        <select class="form-control custom-select"-->
+                    <!--                                id="tariff"-->
+                    <!--                                required v-model="tariff">-->
+                    <!--                            <option :value="tariff"-->
+                    <!--                                    v-for="tariff in tariffs"-->
+                    <!--                            >{{tariff.name}}-->
+                    <!--                            </option>-->
+                    <!--                        </select>-->
+                    <!--                        <b-popover-->
+                    <!--                            :show.sync="$v.tariff.$error"-->
+                    <!--                            content="Выберите тариф из списка"-->
+                    <!--                            placement="bottom"-->
+                    <!--                            target="tariff"-->
+                    <!--                            triggers="null"-->
+                    <!--                            variant="danger"/>-->
+                    <!--                    </div>-->
+
                     <div class="form-group col-md-3">
                         <label class="col-form-label text-md-right" for="customs-code">Таможенный код</label>
                         <select class="form-control custom-select"
@@ -114,25 +141,6 @@
                             content="Выберите таможенный код из списка"
                             placement="bottom"
                             target="customs-code"
-                            triggers="null"
-                            variant="danger"/>
-                    </div>
-
-                    <div class="form-group col-md-2">
-                        <label class="col-form-label text-md-right" for="tariff">Тариф</label>
-                        <select class="form-control custom-select"
-                                id="tariff"
-                                required v-model="tariff">
-                            <option :value="tariff"
-                                    v-for="tariff in tariffs"
-                            >{{tariff.name}}
-                            </option>
-                        </select>
-                        <b-popover
-                            :show.sync="$v.tariff.$error"
-                            content="Выберите тариф из списка"
-                            placement="bottom"
-                            target="tariff"
                             triggers="null"
                             variant="danger"/>
                     </div>
@@ -231,7 +239,6 @@
                 }
             },
             tariffs: Array,
-            customsCodes: [],
             onStoredItemAdded: {
                 type: Function,
                 required: true
@@ -244,6 +251,7 @@
             return {
                 items: [],
                 filteredItems: [],
+                customsCodes: [],
                 storedItem: {
                     width: null,
                     height: null,
@@ -255,7 +263,7 @@
                     placeCount: null,
                     customsCode: null,
                 },
-                tariff: null,
+                tariff: {name: null},
                 customPrice: 0,
                 customPriceState: null
             }
@@ -295,6 +303,7 @@
             },
             onItemSelected(item) {
                 this.storedItem.item = item;
+                this.tariff = this.tariffs.find(x => x.id === item.tariffId);
                 this.customsCodes = item.codes;
             },
             clearForm(e) {
@@ -309,7 +318,7 @@
                 this.filteredItems = [];
                 this.storedItem.price = null;
                 this.storedItem.customsCode = null;
-                this.tariff = null;
+                this.tariff = {name: null};
                 this.customsCodes = [];
                 this.$refs.suggestionInput.query = '';
                 this.$nextTick(() => {
@@ -418,9 +427,9 @@
                     required
                 }
             },
-            tariff: {
-                required
-            }
+            // tariff: {
+            //     required
+            // }
         }
     }
 </script>
