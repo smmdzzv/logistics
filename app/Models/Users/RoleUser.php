@@ -22,4 +22,9 @@ abstract class RoleUser extends User
     }
 
     abstract function getRoles();
+
+    public function getMorphClass()
+    {
+        return 'users';
+    }
 }

@@ -148,6 +148,8 @@ Route::get('/items/all', 'ItemsController@all');
 Route::get('/items/all/eager', 'ItemsController@allEager');
 Route::resource('items', 'ItemsController', ['only' => ['index', 'create', 'store']])->parameters(['items' => 'item']);
 
+//Lost and found
+Route::resource('lost-items', 'LostAndFound\LostItemsController')->parameters(['lost-items' => 'item']);
 
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo');
 
