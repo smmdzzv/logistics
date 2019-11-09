@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TariffPriceHistoryRequest;
 use App\Models\Tariff;
 use App\Models\TariffPriceHistory;
-use Illuminate\Http\Request;
 
 class TariffPriceHistoriesController extends Controller
 {
@@ -47,9 +46,16 @@ class TariffPriceHistoriesController extends Controller
         return redirect()->route('tariff-price-histories.index');
     }
 
-    //TODO move to tariff controller
-//    public function lastByTariff(Tariff $tariff)
-//    {
-//        return $tariff->lastPriceHistory;
-//    }
+    public function edit(TariffPriceHistory $history)
+    {
+        $history->load('tariff');
+        $tariffs = Tariff::all();
+        return view('tariff-price-histories.edit', compact('history', 'tariffs'));
+    }
+
+    public function update(TariffPriceHistoryRequest $request){
+        TariffPriceHistory::find($request->get('id'))->update($request->all());
+        return redirect()->route('tariff-price-histories.index');
+    }
 }
+

@@ -4,6 +4,7 @@
         :isBusy="isBusy"
         :items="items"
         :striped="true"
+        :customCells="['edit']"
         class="shadow"
         excelFileName="История тарифных планов"
         hover
@@ -13,8 +14,8 @@
             История тарифных планов
         </template>
 
-        <template slot="view" slot-scope="{item}">
-            <a :href="getDetailsUrl(item)" class="btn btn-outline-primary">Детали</a>
+        <template slot="edit" slot-scope="{item}">
+            <a :href="getEditUrl(item)"><img class="icon-btn-sm" src="/svg/edit.svg" alt=""></a>
         </template>
 
         <template #footer>
@@ -103,11 +104,17 @@
                     totalMoney: {
                         label: 'Сумма',
                         sortable: true
+                    },
+                    'edit':{
+                        label:''
                     }
                 }
             }
         },
         methods: {
+            getEditUrl(item){
+                return '/tariff-price-histories/' + item.id + '/edit';
+            },
             async getHistories(page = 1) {
                 this.isBusy = true;
 

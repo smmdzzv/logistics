@@ -24,6 +24,7 @@ class TariffPriceHistoryRequest extends FormRequest
     public function rules()
     {
         return [
+            'id' => 'nullable|string',
             'lowerLimit' => 'required|numeric',
             'mediumLimit' => 'required|numeric',
             'upperLimit' => 'required|numeric',

@@ -102,11 +102,10 @@ Route::resource('tariffs', 'TariffsController', [
 ])->parameters(['tariffs' => 'tariff']);
 
 
-
 //Tariff price histories
 Route::get('/tariff-price-histories/all', "TariffPriceHistoriesController@all");
 Route::resource('tariff-price-histories', 'TariffPriceHistoriesController', [
-    'only' => ['index', 'create', 'store']
+    'except' => ['destroy']
 ])->parameters(['tariff-price-histories' => 'history']);
 //Route::get('/tariff-price-histories/{tariff}', "TariffPriceHistoriesController@lastByTariff");
 
@@ -116,7 +115,7 @@ Route::resource('cars', 'CarsController')->parameters(['cars' => 'car']);
 
 //FuelConsumption
 Route::resource('car-fuel-consumption', 'Cars\CarFuelConsumptionsController',
-    ['only' => ['edit',  'update']])->parameters(['car-fuel-consumption' => 'car']);
+    ['only' => ['edit', 'update']])->parameters(['car-fuel-consumption' => 'car']);
 
 //Branches
 Route::get('/branches/all', "BranchesController@all");
@@ -140,8 +139,8 @@ Route::resource('money-exchanges', 'Till\MoneyExchangesController',
 
 Route::get('/exchange-history/rate/{from}/{to}', 'Till\MoneyExchangesController@exchangeRate');
 
-Route::post('/exchange-money',  'Till\MoneyExchangesController@exchange')->name('money-exchange.exchange');
-Route::get('/exchange-money',  'Till\MoneyExchangesController@exchanger')->name('money-exchange.exchanger');
+Route::post('/exchange-money', 'Till\MoneyExchangesController@exchange')->name('money-exchange.exchange');
+Route::get('/exchange-money', 'Till\MoneyExchangesController@exchanger')->name('money-exchange.exchanger');
 
 //Items
 Route::get('/items/all', 'ItemsController@all');
