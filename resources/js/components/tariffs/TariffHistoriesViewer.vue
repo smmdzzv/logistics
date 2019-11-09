@@ -15,12 +15,24 @@
         </template>
 
         <template slot="edit" slot-scope="{item}">
-            <a :href="getEditUrl(item)"><img class="icon-btn-sm" src="/svg/edit.svg" alt=""></a>
+            <a :id="'up' + item.id" href="#" @click.prevent="updateOrdersPrices(item)">
+                <img class="icon-btn-sm" src="/svg/refresh.svg" alt="">
+            </a>
+            <b-tooltip :target="'up' + item.id" trigger="hover">
+                Обновить стоимость заказов рассчитаных с данным тарифным планом
+            </b-tooltip>
+            <a :id="'e' + item.id" :href="getEditUrl(item)">
+                <img class="icon-btn-sm" src="/svg/edit.svg" alt="">
+            </a>
+            <b-tooltip :target="'e' + item.id" trigger="hover">
+                Редактировать тарифный план
+            </b-tooltip>
         </template>
 
         <template #footer>
             <div class="card-footer">
-                <main-paginator :flowable="flowable" :onPageChange="getHistories"
+                <main-paginator :flowable="flowable"
+                                :onPageChange="getHistories"
                                 :pagination="pagination"></main-paginator>
             </div>
         </template>
@@ -105,15 +117,24 @@
                         label: 'Сумма',
                         sortable: true
                     },
-                    'edit':{
-                        label:''
+                    'edit': {
+                        label: ''
                     }
                 }
             }
         },
         methods: {
-            getEditUrl(item){
+            getEditUrl(item) {
                 return '/tariff-price-histories/' + item.id + '/edit';
+            },
+            async updateOrdersPrices(history) {
+                tShowSpinner();
+                try {
+                    const response = await axios.post(`/tariff-price-history/${history.id}/orders/update-price`);
+                } catch (e) {
+
+                }
+                tHideSpinner();
             },
             async getHistories(page = 1) {
                 this.isBusy = true;
