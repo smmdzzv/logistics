@@ -15,7 +15,7 @@ class CreateCustomsCodeItemTable extends Migration
     {
         Schema::create('customs_code_item', function (Blueprint $table) {
             $table->char('id', 26)->primary();
-            $table->char('customs_code_id', 26);
+            $table->char('customs_code_id', 26)->index();
             $table->char('item_id', 26);
 
             $table->timestamps();

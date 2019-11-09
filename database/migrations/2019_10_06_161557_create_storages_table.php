@@ -15,7 +15,7 @@ class CreateStoragesTable extends Migration
     {
         Schema::create('storages', function (Blueprint $table) {
             $table->char('id',26)->primary();
-            $table->char('branch_id',26);
+            $table->char('branch_id',26)->index();
             $table->string('name',255);
 
             $table->timestamps();

@@ -15,11 +15,11 @@ class CreateStoredItemInfosTable extends Migration
     {
         Schema::create('stored_item_infos', function (Blueprint $table) {
             $table->char('id',26)->primary();
-            $table->char('item_id',26);
-            $table->char('ownerId',26);
-            $table->char('branch_id',26);
-            $table->char('order_id',26);
-            $table->char('customs_code_id',26);
+            $table->char('item_id',26)->index();
+            $table->char('ownerId',26)->index();
+            $table->char('branch_id',26)->index();
+            $table->char('order_id',26)->index();
+            $table->char('customs_code_id',26)->index();
             $table->integer('count');
             $table->double('weight');
             $table->double('height');

@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->char('id', 26)->primary();;
-            $table->char('ownerId', 26);
+            $table->char('ownerId', 26)->index();
             $table->char('paymentId', 26)->nullable()->unique();
             $table->char('registeredById', 26);
             $table->char('branchId', 26);

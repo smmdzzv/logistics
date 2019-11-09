@@ -15,9 +15,9 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->char('id', 26)->primary();
-            $table->char('branchId', 26);
-            $table->char('cashierId', 26);
-            $table->char('currencyId', 26);
+            $table->char('branchId', 26)->index();
+            $table->char('cashierId', 26)->index();
+            $table->char('currencyId', 26)->index();
             $table->char('payerId', 26)->nullable();
             $table->char('paymentItemId', 26);
             $table->char('exchangeId', 26)->nullable();

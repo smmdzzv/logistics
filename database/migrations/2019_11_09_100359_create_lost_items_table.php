@@ -15,7 +15,7 @@ class CreateLostItemsTable extends Migration
     {
         Schema::create('lost_items', function (Blueprint $table) {
             $table->char('id',26)->primary();
-            $table->char('stored_item_id',26);
+            $table->char('stored_item_id',26)->index();
             $table->decimal('discount', 10,2);
             $table->integer('placeCount');
             $table->timestamps();
