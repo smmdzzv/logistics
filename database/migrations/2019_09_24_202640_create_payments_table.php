@@ -26,7 +26,7 @@ class CreatePaymentsTable extends Migration
             $table->decimal('amount', 10, 2);
             $table->string('comment')->nullable();
             $table->char('status', 15);
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

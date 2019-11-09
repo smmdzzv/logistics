@@ -10,6 +10,7 @@ use App\Models\Users\Cashier;
 use App\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string branchId
@@ -26,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  */
 class Payment extends BaseModel
 {
+    use SoftDeletes;
+
     protected $casts = [
         'amount' => 'double'
     ];
