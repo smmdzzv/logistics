@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\BaseModel;
 use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Till\Payment;
-use App\Models\Users\Client;
 use App\User;
-use Illuminate\Database\Eloquent\Model;
-use mysql_xdevapi\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @property double totalCubage
@@ -17,7 +14,8 @@ use mysql_xdevapi\Collection;
  * @property double totalPrice
  * @property double totalDiscount
  * @property double totalCount
- * @property Collection storedItems
+ * @property Collection<StoredItem> storedItems
+ * @property Collection<StoredItemInfo> storedItemInfos
  */
 class Order extends BaseModel
 {
@@ -78,6 +76,14 @@ class Order extends BaseModel
         }
 
         $this->roundStat();
+    }
+
+    public function resetStat(){
+        $this->totalCubage = 0;
+        $this->totalWeight = 0;
+        $this->totalPrice = 0;
+        $this->totalDiscount = 0;
+        $this->totalCount = 0;
     }
 
     public function roundStat()

@@ -21,6 +21,7 @@ use App\Models\Users\Client;
  * @property Item item
  * @property double count
  * @property double placeCount
+ * @property BillingInfo billingInfo
  */
 class StoredItemInfo extends BaseModel
 {
@@ -83,28 +84,35 @@ class StoredItemInfo extends BaseModel
      */
     public function getBillingInfo($customPrice = null)
     {
-        $tariffPricing = $this->item->tariff->lastPriceHistory;
+//        $tariffPricing = $this->item->tariff->lastPriceHistory;
 
-        $billingInfo = $this->billingInfo ?? new BillingInfo();
+//        $billingInfo = $this->billingInfo ?? new BillingInfo();
 
-        $billingInfo->tariffPricing()->associate($tariffPricing);
-        $billingInfo->storedItemInfo()->associate($this);
+        if(!$this->billingInfo){
+            $this->billingInfo = new BillingInfo();
+            $tariffPricing = $this->item->tariff->lastPriceHistory;
+            $this->billingInfo->tariffPricing()->associate($tariffPricing);
+            $this->billingInfo->storedItemInfo()->associate($this);
+        }
 
-        $billingInfo->totalWeight = $this->weight * $this->count;
-        $billingInfo->totalCubage = $this->width * $this->height * $this->length * $this->count;
-        $billingInfo->weightPerCube = $billingInfo->totalWeight / $billingInfo->totalCubage;
-        $billingInfo->discountPerCube = 0;
-        $billingInfo->count = $this->count;
+//        $billingInfo->tariffPricing()->associate($tariffPricing);
+//        $billingInfo->storedItemInfo()->associate($this);
+
+        $this->billingInfo->totalWeight = $this->weight * $this->count;
+        $this->billingInfo->totalCubage = $this->width * $this->height * $this->length * $this->count;
+        $this->billingInfo->weightPerCube = $this->billingInfo->totalWeight / $this->billingInfo->totalCubage;
+        $this->billingInfo->discountPerCube = 0;
+        $this->billingInfo->count = $this->count;
 
         if ($this->item->onlyCustomPrice) {
             if (!$customPrice)
                 self::throwBadMethodCallException('Custom Price is not provided');
-            $billingInfo->setCustomPrice($customPrice);
+            $this->billingInfo->setCustomPrice($customPrice);
 
         } else
-            $billingInfo->calculatePrice($this);
+            $this->billingInfo->calculatePrice($this);
 
-        return $billingInfo;
+        return $this->billingInfo;
     }
 
 

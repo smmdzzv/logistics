@@ -1,14 +1,18 @@
 <template>
     <div>
-        <div class="row">
-            <div class="col-12 col-sm-6">
+        <div class="row align-items-baseline">
+            <div class="col-md-6">
                 <p> Клиент: <span class="font-weight-bold">{{order.owner.name}}</span></p>
             </div>
-            <div class="col-12 col-sm-6 text-left text-sm-right">
-                <p class="badge badge-primary p-2" v-if="order.status !== 'completed'">
+            <div class="col-md-6 row text-right align-items-baseline">
+                <button class="ml-auto btn btn-link" @click="updateOrderPrice">
+                    Обновить стоимость
+                </button>
+
+                <p class="ml-3 badge badge-primary p-2" v-if="order.status !== 'completed'">
                     Статус: <span class="text">{{getStatus()}}</span>
                 </p>
-                <p class="badge badge-secondary p-2" v-else>
+                <p class="ml-3 badge badge-secondary p-2" v-else>
                     Статус: <span class="text">{{getStatus()}}</span>
                 </p>
             </div>
@@ -203,6 +207,15 @@
 
                     let price = data.item.billing_info.totalPrice / (data.item.count * data.item.placeCount);
                     return price.toFixed(2);
+                }
+            },
+            async updateOrderPrice() {
+                tShowSpinner();
+                try {
+                    const response = await axios.post(`/order/${this.order.id}/update-price`);
+                    window.location.reload();
+                } catch (e) {
+                    tHideSpinner();
                 }
             }
         },
