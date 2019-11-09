@@ -57,7 +57,7 @@
             <div v-else>
                 <ol>
                     <li  v-for="order in updatedOrders" :key="order.id">
-                        <a :href="'/orders/' + order.id">Заказ от {{order.created_at}} {{order.totalPrice}} USD</a>
+                        <a :href="'/orders/' + order.id">Заказ от {{order.created_at.split(' ')[0]}} | Цена: {{order.totalPrice}} $</a>
                     </li>
                 </ol>
 
