@@ -1,42 +1,71 @@
 <template>
-    <table-card
-        :fields="fields"
-        :isBusy="isBusy"
-        :items="items"
-        :striped="true"
-        :customCells="['edit']"
-        class="shadow"
-        excelFileName="История тарифных планов"
-        hover
-        primary-key="id"
-        responsive>
-        <template #header>
-            История тарифных планов
-        </template>
+    <div>
+        <table-card
+            :fields="fields"
+            :isBusy="isBusy"
+            :items="items"
+            :striped="true"
+            :customCells="['edit']"
+            class="shadow"
+            excelFileName="История тарифных планов"
+            hover
+            primary-key="id"
+            responsive>
+            <template #header>
+                История тарифных планов
+            </template>
 
-        <template slot="edit" slot-scope="{item}">
-            <a :id="'up' + item.id" href="#" @click.prevent="updateOrdersPrices(item)">
-                <img class="icon-btn-sm" src="/svg/refresh.svg" alt="">
-            </a>
-            <b-tooltip :target="'up' + item.id" trigger="hover">
-                Обновить стоимость заказов рассчитаных с данным тарифным планом
-            </b-tooltip>
-            <a :id="'e' + item.id" :href="getEditUrl(item)">
-                <img class="icon-btn-sm" src="/svg/edit.svg" alt="">
-            </a>
-            <b-tooltip :target="'e' + item.id" trigger="hover">
-                Редактировать тарифный план
-            </b-tooltip>
-        </template>
+            <template slot="edit" slot-scope="{item}">
+                <a :id="'up' + item.id" href="#" @click.prevent="updateOrdersPrices(item)">
+                    <img class="icon-btn-sm" src="/svg/refresh.svg" alt="">
+                </a>
+                <b-tooltip :target="'up' + item.id" triggers="hover">
+                    Обновить стоимость заказов рассчитаных с данным тарифным планом
+                </b-tooltip>
+                <a :id="'e' + item.id" :href="getEditUrl(item)">
+                    <img class="icon-btn-sm" src="/svg/edit.svg" alt="">
+                </a>
+                <b-tooltip :target="'e' + item.id" triggers="hover">
+                    Редактировать тарифный план
+                </b-tooltip>
+            </template>
 
-        <template #footer>
-            <div class="card-footer">
-                <main-paginator :flowable="flowable"
-                                :onPageChange="getHistories"
-                                :pagination="pagination"></main-paginator>
+            <template #footer>
+                <div class="card-footer">
+                    <main-paginator :flowable="flowable"
+                                    :onPageChange="getHistories"
+                                    :pagination="pagination"></main-paginator>
+                </div>
+            </template>
+        </table-card>
+
+        <b-toast id="my-toast" solid>
+            <template v-slot:toast-title>
+                <div class="d-flex flex-grow-1 align-items-baseline">
+
+                    <strong class="mr-auto" v-if="updatedOrders.length === 1">Обновлен 1 заказ</strong>
+                    <strong class="mr-auto" v-else-if="updatedOrders.length > 1 && updatedOrders.length < 5">
+                        Обновлено {{updatedOrders.length}} заказа
+                    </strong>
+                    <strong class="mr-auto" v-else>Обновлено {{updatedOrders.length}} заказов</strong>
+                </div>
+            </template>
+
+            <div v-if="updatedOrders.length === 0">
+                По данному тарифному плану нет расчитанных заказов
             </div>
-        </template>
-    </table-card>
+            <div v-else>
+                <ol>
+                    <li  v-for="order in updatedOrders" :key="order.id">
+                        <a :href="'/orders/' + order.id">Заказ от {{order.created_at}} {{order.totalPrice}} USD</a>
+                    </li>
+                </ol>
+
+
+            </div>
+
+        </b-toast>
+    </div>
 </template>
 
 <script>
@@ -60,6 +89,7 @@
                 },
                 items: [],
                 isBusy: false,
+                updatedOrders: [],
                 fields: {
                     created_at: {
                         label: 'Дата',
@@ -131,10 +161,15 @@
                 tShowSpinner();
                 try {
                     const response = await axios.post(`/tariff-price-history/${history.id}/orders/update-price`);
+                    this.updatedOrders = response.data;
                 } catch (e) {
 
                 }
                 tHideSpinner();
+                this.showNotification();
+            },
+            showNotification(orders) {
+                this.$bvToast.show('my-toast')
             },
             async getHistories(page = 1) {
                 this.isBusy = true;
