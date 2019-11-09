@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="row align-items-baseline">
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <p> Клиент: <span class="font-weight-bold">{{order.owner.name}}</span></p>
             </div>
-            <div class="col-md-6 row text-right align-items-baseline">
-                <button class="ml-auto btn btn-link" @click="updateOrderPrice">
+            <div class="col-md-7 row   align-items-baseline">
+                <button class="ml-md-auto btn btn-link" @click="updateOrderPrice">
                     Обновить стоимость
                 </button>
 
