@@ -72,7 +72,7 @@
                 }, this);
             },
             groupByTariffAndCode() {
-                let groupedByTariff = groupBy(this.storedItems, i => i.info.item.tariff.id);
+                let groupedByTariff = groupBy(this.items, i => i.info.item.tariff.id);
                 let groupedByCode = [];
 
                 groupedByTariff.forEach((arr) => {
