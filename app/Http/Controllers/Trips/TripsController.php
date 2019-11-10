@@ -25,7 +25,7 @@ class TripsController extends Controller
     public function all()
     {
         $paginate = request()->paginate ?? 10;
-        return Trip::with('car', 'driver')->paginate($paginate);
+        return Trip::with('car', 'driver')->latest()->paginate($paginate);
     }
 
     public function index()
