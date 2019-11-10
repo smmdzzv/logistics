@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container" xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-        <div class="row justify-content-center">
-            <div class="col-sm-10 col-md-8 col-lg-6 col-xl-4 mb-4">
+
+    <div class="row p-4 justify-content-center" xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+            <div class="col-sm-10 col-md-8 col-lg-4 mb-4">
                 <div class="card shadow">
                     <div class="card-header">
                         <div class="row">
@@ -96,5 +96,5 @@
                 </stored-table>
             </div>
         </div>
-    </div>
+
 @endsection

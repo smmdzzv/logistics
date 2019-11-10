@@ -240,7 +240,7 @@
                 isBusy: false,
                 fields: {
                     'info.item.name': {
-                        label: 'Имя',
+                        label: 'Наименование',
                         sortable: true
                     },
                     code: {
