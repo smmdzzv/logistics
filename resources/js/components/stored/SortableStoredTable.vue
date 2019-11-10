@@ -6,7 +6,7 @@
 
                 </slot>
                 <div class="ml-md-auto" v-if="clients">
-                    <button class="btn btn-link">Группировать по коду</button>
+                    <button class="btn btn-link" @click="groupByTariffAndCode">Группировать по коду</button>
                 </div>
                 <div class="ml-md-2">
                     <select class="form-control custom-select" id="branch" v-model="selectedClient">
@@ -66,21 +66,31 @@
         methods: {
             extractClients() {
                 this.storedItems.forEach((item) => {
-                    if(! this.clients.find(x => x.id === item.info.owner.id)){
+                    if (!this.clients.find(x => x.id === item.info.owner.id)) {
                         this.clients.push(item.info.owner);
                     }
-                },this);
+                }, this);
             },
-            sortByCode() {
+            groupByTariffAndCode() {
+                let groupedByTariff = groupBy(this.storedItems, i => i.info.item.tariff.id);
+                let groupedByCode = [];
 
+                groupedByTariff.forEach((arr) => {
+                    let grouped = groupBy(arr, i => i.info.customs_code.id);
+                    grouped.forEach((arr) => {
+                        groupedByCode.push(...arr);
+                    })
+                });
+
+                this.items = groupedByCode;
             }
         },
-        watch:{
-            selectedClient(){
-                if(this.selectedClient)
+        watch: {
+            selectedClient() {
+                if (this.selectedClient)
                     this.items = this.storedItems.filter((item) => {
                         return item.info.owner.id === this.selectedClient.id
-                    },this);
+                    }, this);
                 else
                     this.items = this.storedItems;
             }
@@ -91,8 +101,8 @@
                 excelColumns: [],
                 excelData: [],
                 isBusy: false,
-                selectedClient:null,
-                clients:[],
+                selectedClient: null,
+                clients: [],
                 fields: {
                     'info.item.name': {
                         label: 'Наименование',
@@ -102,7 +112,11 @@
                         label: 'Код',
                         sortable: true
                     },
-                    'info.customs_code.code':{
+                    'info.item.tariff.name': {
+                        label: 'Тариф',
+                        sortable: true
+                    },
+                    'info.customs_code.code': {
                         label: 'Там. код',
                         sortable: true
                     },

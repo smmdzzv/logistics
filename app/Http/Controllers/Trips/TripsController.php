@@ -40,6 +40,7 @@ class TripsController extends Controller
             'car',
             'storedItems.info.owner',
             'storedItems.info.item',
+            'storedItems.info.item.tariff',
             'storedItems.info.customsCode',
             'storedItems.storageHistory.storage');
         return view('trips.show', compact('trip'));
