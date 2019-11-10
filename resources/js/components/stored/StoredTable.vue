@@ -243,6 +243,10 @@
                         label: 'Имя',
                         sortable: true
                     },
+                    code: {
+                        label: 'Код',
+                        sortable: true
+                    },
                     'info.width': {
                         label: 'Ширина',
                         sortable: true
