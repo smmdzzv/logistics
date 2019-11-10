@@ -29,10 +29,9 @@
             </div>
         </div>
 
-
         <b-table :busy="isBusy"
                  :fields="fields"
-                 :items="sortedItems"
+                 :items="items"
                  :striped="true"
                  borderless
                  primary-key="id"
@@ -55,7 +54,7 @@
         name: "SortableStoredTable",
         mixins: [ExcelDataPreparatory],
         mounted() {
-            this.sortedItems = this.storedItems;
+            this.items = this.storedItems;
             this.extractClients();
         },
         props: {
@@ -79,16 +78,16 @@
         watch:{
             selectedClient(){
                 if(this.selectedClient)
-                    this.sortedItems = this.storedItems.filter((item) => {
+                    this.items = this.storedItems.filter((item) => {
                         return item.info.owner.id === this.selectedClient.id
                     },this);
                 else
-                    this.sortedItems = this.storedItems;
+                    this.items = this.storedItems;
             }
         },
         data() {
             return {
-                sortedItems: [],
+                items: [],
                 excelColumns: [],
                 excelData: [],
                 isBusy: false,
