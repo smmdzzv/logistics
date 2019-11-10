@@ -6,15 +6,15 @@
 
                 </slot>
                 <div class="ml-md-auto" v-if="clients">
+                    <button class="btn btn-link">Группировать по коду</button>
+                </div>
+                <div class="ml-md-2">
                     <select class="form-control custom-select" id="branch" v-model="selectedClient">
                         <option :value="null">--Все клиенты--</option>
                         <option :key="client.id" :value="client" v-for="client in clients">
                             {{client.name}}
                         </option>
                     </select>
-                </div>
-                <div class="ml-md-2">
-                    <button class="btn btn-link">Группировать по коду</button>
                 </div>
                 <div class="ml-md-3">
                     <vue-excel-xlsx
@@ -71,7 +71,7 @@
                     }
                 },this);
             },
-            sortByClient() {
+            sortByCode() {
 
             }
         },
@@ -100,6 +100,10 @@
                     },
                     code: {
                         label: 'Код',
+                        sortable: true
+                    },
+                    'info.customs_code.code':{
+                        label: 'Там. код',
                         sortable: true
                     },
                     'info.width': {
