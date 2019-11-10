@@ -32,6 +32,7 @@ Vue.component('UsersTable', require('./components/users/UsersTable.vue').default
 Vue.component('TrustedUserEditor', require('./components/users/trusted-users/TrustedUserEditor.vue').default);
 
 Vue.component('StoredTable', require('./components/stored/StoredTable.vue').default);
+Vue.component('SortableStoredTable', require('./components/stored/SortableStoredTable.vue').default);
 
 Vue.component('OrdersTable', require('./components/orders/OrdersTable.vue').default);
 Vue.component('OrderEditor', require('./components/orders/OrderEditor.vue').default);
