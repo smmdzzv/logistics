@@ -127,6 +127,10 @@ class TripStoredItemsController extends Controller
         return redirect(route('trips.show', $trip));
     }
 
+    public function generate(){
+        return [];
+    }
+
     public function availableItems()
     {
         $paginate = request()->input('paginate') ?? 10;

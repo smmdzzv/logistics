@@ -1,26 +1,31 @@
 <template>
     <div class="card">
         <div class="card-header">
-            <div :class="{'col-12' : !excelExport}" class="row align-items-baseline">
+            <div class="row px-3 align-items-baseline">
                 <slot name="header">
-                    <div class="row align-items-baseline col-12">
-                        <div>
-                            <span v-if="branches">Товары на складе</span>
-                            <span v-else>Товары на всех складах</span>
-                        </div>
-                        <template v-if="branches">
-                            <div class="ml-0 ml-sm-auto">
-                                <select class="form-control custom-select" id="branch" v-model="selectedBranch">
-                                    <option :value="null">--Все склады--</option>
-                                    <option :key="branch.id" :value="branch" v-for="branch in branches">
-                                        {{branch.name}}
-                                    </option>
-                                </select>
-                            </div>
-                        </template>
+                    <div>
+                        <span v-if="branches">Товары на складе</span>
+                        <span v-else>Товары на всех складах</span>
                     </div>
+                    <div class="ml-0 ml-sm-auto">
+                        <button id="generate-btn" class="btn btn-link" @click="generateList">Сгенерировать список</button>
+                        <b-tooltip target="generate-btn" triggers="hover">
+                            Генерация списка происходит с учетом выбранного фильтра и товаров,
+                            добавленных на рейс вручную. Для сброса сгенерированного списка, обновите страницу
+                        </b-tooltip>
+                    </div>
+                    <template v-if="branches">
+                        <div class="ml-3">
+                            <select class="form-control custom-select" id="branch" v-model="selectedBranch">
+                                <option :value="null">--Все склады--</option>
+                                <option :key="branch.id" :value="branch" v-for="branch in branches">
+                                    {{branch.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </template>
                 </slot>
-                <div class="ml-auto" v-if="excelExport">
+                <div class="ml-3" v-if="excelExport">
                     <vue-excel-xlsx
                         :columns="excelColumns"
                         :data="excelData"
@@ -130,6 +135,9 @@
                     return action += '?paginate=7&page=' + page;
                 }
             },
+            tripId:{
+                type:String
+            },
             highlightRows: {
                 type: Boolean,
                 default: false
@@ -212,6 +220,17 @@
                         if (!this.isInItems(item))
                             this.items.push(item);
                     }
+            },
+            async generateList(){
+                try{
+                    const response = await axios.get(`/trip/${this.tripId}/stored-items/generate`);
+                }
+                catch (e) {
+                    this.$root.showErrorMsg(
+                        "Ошибка генерации",
+                        'Не удалось сгенерировать список. Попробуйте сгенерировать список позднее'
+                    )
+                }
             }
         },
         computed: {
