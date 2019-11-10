@@ -135,7 +135,7 @@
                 let action = `/trip/stored-items/available`;
                 if (vm.selectedBranch)
                     action = `/trip/${vm.selectedBranch.id}/stored-items/available`;
-                return action += '?paginate=15&page=' + page;
+                return action += '?paginate=40&page=' + page;
             }
         }
     }
