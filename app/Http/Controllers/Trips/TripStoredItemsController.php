@@ -114,12 +114,13 @@ class TripStoredItemsController extends Controller
         return view('trips.change-items-trip', compact('trip', 'trips'));
     }
 
-    public function changeStatus(Trip $trip){
+    public function changeStatus(Trip $trip)
+    {
         $status = request()->input('status');
 
-        if($status === 'active')
+        if ($status === 'active')
             $trip->departureAt = Carbon::now();
-        if($status === 'finished')
+        if ($status === 'finished')
             $trip->returnedAt = Carbon::now();
         $trip->status = $status;
 
@@ -128,11 +129,18 @@ class TripStoredItemsController extends Controller
         return redirect(route('trips.show', $trip));
     }
 
-    public function generate(Trip $trip){
+    public function generate(Trip $trip)
+    {
+        $trip->load('storedItems');
         $availableItems = StoredItem::with('info')->available()->get();
         $generator = new GenerateTripStoredItemListHelper($trip, $availableItems);
-        $data =  $generator->generate();
-        return;
+
+        $itemsList = $generator->generate();
+        $tripItems = $trip->storedItems->map(function ($item) {
+            return $item->id;
+        });
+
+        return array_merge($itemsList, $tripItems->all());
     }
 
     public function availableItems()

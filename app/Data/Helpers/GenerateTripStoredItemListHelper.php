@@ -34,6 +34,8 @@ class GenerateTripStoredItemListHelper
         $this->prepareStoredItems();
 
         $this->setMaxValues();
+
+        $this->considerTripStoredItems();
     }
 
     /**
@@ -92,29 +94,55 @@ class GenerateTripStoredItemListHelper
     public function generate()
     {
 
-        $n = count($this->storedItems);
-        $W = $this->maxWeight;
-        $C = $this->maxCubage;
-//        $d = [0 => array_fill(0, $W + 1, 0)];
-        $d = [0 => array_fill(0, $C + 1, ['weight' => 0])];
+        $options = $this->calculatePossibleOptions();
 
-//        for ($i = 1; $i <= $n; $i++) {
+//        $maxWeights = $this->extractOptionsMaxWeights($options);
+
+        $index = count($options);
+
+        $optimalTripItemsArray = [];
+
+        while ($index) {
+
+            if (count($options[--$index]) > 1) {
+
+                $optimalTripItemsArray = array_map(function ($item) {
+
+                    return isset($item['id']) ? $item['id'] : null;
+
+                }, $options[--$index]);
+
+                break;
+            }
+
+        }
+
+        $optimalTripItemsArray = array_filter($optimalTripItemsArray, function ($item) {
+            return $item !== null;
+        });
+
+        return $optimalTripItemsArray;
+    }
+
+//    private function extractOptionsMaxWeights($options){
+//        $maxArr = [];
 //
-//            for ($j = 0; $j <= $W; $j++) {
-//                $d[$i][$j] = $d[$i - 1][$j];
-//
-//                $wi = $this->storedItems[$i - 1]->info->weight;
-//                $ci = $this->storedItems[$i - 1]->info->cubage;
-//
-//                if ($j - $wi >= 0) {
-//                    $d[$i][$j] = max([
-//                        $d[$i][$j],
-//                        $d[$i - 1][$j - $wi] + $ci
-//                    ]);
-//                }
-//            }
+//        foreach ($options as $item) {
+//            $maxArr[] = max($item);
 //        }
+//
+//        return $maxArr;
+//    }
 
+    /**
+     * @return array
+     */
+    private function calculatePossibleOptions()
+    {
+
+        $n = count($this->storedItems);
+        $C = $this->maxCubage;
+        $d = [0 => array_fill(0, $C + 1, ['weight' => 0])];
 
         for ($i = 1; $i <= $n; $i++) {
             $achieved = false;
@@ -144,15 +172,15 @@ class GenerateTripStoredItemListHelper
                 break;
         }
 
-
-        $max = [];
-
-        foreach ($d as $item) {
-            $max[] = max($item);
-        }
-
-
-        dd($max, $d[count($d) - 1], $n, $this->maxCubage);
+        return $d;
+//        $max = [];
+//
+//        foreach ($d as $item) {
+//            $max[] = max($item);
+//        }
+//
+//
+//        dd($max, $d[count($d) - 1], $n, $this->maxCubage);
     }
 
 //    public function generate()
