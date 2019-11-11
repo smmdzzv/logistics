@@ -8,7 +8,8 @@
                         <span v-else>Товары на всех складах</span>
                     </div>
                     <div class="ml-0 ml-sm-auto">
-                        <button id="generate-btn" class="btn btn-link" @click="generateList">Сгенерировать список</button>
+                        <button id="generate-btn" class="btn btn-link" @click="generateList">Сгенерировать список
+                        </button>
                         <b-tooltip target="generate-btn" triggers="hover">
                             Генерация списка происходит с учетом выбранного фильтра и товаров,
                             добавленных на рейс вручную. Для сброса сгенерированного списка, обновите страницу
@@ -135,8 +136,8 @@
                     return action += '?paginate=7&page=' + page;
                 }
             },
-            tripId:{
-                type:String
+            tripId: {
+                type: String
             },
             highlightRows: {
                 type: Boolean,
@@ -221,11 +222,19 @@
                             this.items.push(item);
                     }
             },
-            async generateList(){
-                try{
+            async generateList() {
+                try {
                     const response = await axios.get(`/trip/${this.tripId}/stored-items/generate`);
-                }
-                catch (e) {
+                    // this.items = response.data;
+                    for (let item of response.data) {
+                        if (!this.isInItems(item))
+                            this.items.push(item);
+
+                    }
+
+                    this.$emit('onItemsSelected', response.data);
+
+                } catch (e) {
                     this.$root.showErrorMsg(
                         "Ошибка генерации",
                         'Не удалось сгенерировать список. Попробуйте сгенерировать список позднее'

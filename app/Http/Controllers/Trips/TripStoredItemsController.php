@@ -144,7 +144,7 @@ class TripStoredItemsController extends Controller
         $itemsList = $itemsList->merge($trip->storedItems);
 
         $itemsList->loadMissing('info.owner', 'info.item', 'storageHistory.storage');
-       
+
         return $itemsList;
     }
 

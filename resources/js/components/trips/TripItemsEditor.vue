@@ -36,6 +36,7 @@
                               :tripId="trip.id"
                               @onItemSelected="onItemSelected"
                               @onItemUnselected="onItemUnselected"
+                              @onItemsSelected = "onItemsSelected"
                               class="shadow"
                               flowable
                               highlightRows
@@ -85,7 +86,7 @@
             totalCubage() {
                 let total = 0;
                 for (let stored of this.storedItems) {
-                    total += stored.info.weight * stored.info.height * stored.info.length;
+                    total += stored.info.width * stored.info.height * stored.info.length;
                 }
                 return Math.round(total * 100) / 100;
             },
@@ -108,6 +109,9 @@
         methods: {
             onItemSelected(item) {
                 this.storedItems.push(item)
+            },
+            onItemsSelected(items){
+                this.storedItems = items;
             },
             onItemUnselected(item) {
                 this.storedItems = this.storedItems.filter(function (stored) {
