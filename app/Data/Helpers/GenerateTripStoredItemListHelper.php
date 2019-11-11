@@ -17,10 +17,6 @@ class GenerateTripStoredItemListHelper
 
     private $storedItems;
 
-    private $cubage;
-
-    private $weight;
-
     private $maxCubage;
 
     private $maxWeight;
@@ -36,8 +32,6 @@ class GenerateTripStoredItemListHelper
         $this->storedItems = $storedItems;
 
         $this->prepareStoredItems();
-
-        $this->setInitialValues();
 
         $this->setMaxValues();
     }
@@ -63,18 +57,6 @@ class GenerateTripStoredItemListHelper
     }
 
     /**
-     *Sets initial values of $cubage and $weight if Trip already has stored items
-     */
-    private function setInitialValues()
-    {
-        $this->trip->storedItems->each(function ($item) {
-            $this->cubage += $item->info->length * $item->info->height * $item->info->width;
-
-            $this->weight += $item->info->weight;
-        });
-    }
-
-    /**
      *Sets maximum values for cubage and weight based on trip and car information
      */
     private function setMaxValues()
@@ -88,6 +70,25 @@ class GenerateTripStoredItemListHelper
         }
     }
 
+    /**
+     *Sets initial values of $cubage and $weight if Trip already has stored items
+     */
+    private function considerTripStoredItems()
+    {
+        $this->trip->storedItems->each(function ($item) {
+            $this->maxCubage -= $item->info->length * $item->info->height * $item->info->width;
+
+            $this->maxWeight -= $item->info->weight;
+        });
+
+        if ($this->maxWeight < 0)
+            abort(403, 'Общий вес товаров рейса превышает грузоподъемность машины');
+
+        if ($this->maxCubage < 0)
+            abort(403, 'Общий объем товаров рейса превышает вместимость машины');
+
+    }
+
     public function generate()
     {
 
@@ -95,7 +96,7 @@ class GenerateTripStoredItemListHelper
         $W = $this->maxWeight;
         $C = $this->maxCubage;
 //        $d = [0 => array_fill(0, $W + 1, 0)];
-        $d = [0 => array_fill(0, $C + 1, 0)];
+        $d = [0 => array_fill(0, $C + 1, ['weight' => 0])];
 
 //        for ($i = 1; $i <= $n; $i++) {
 //
@@ -124,24 +125,25 @@ class GenerateTripStoredItemListHelper
                 $wi = $this->storedItems[$i - 1]->info->weight;
                 $ci = $this->storedItems[$i - 1]->info->cubage;
 
-                if ($j - $ci >= 0) {
-                    $optWeight = max([
-                        $d[$i][$j],
-                        $d[$i - 1][$j - $ci] + $wi
-                    ]);
 
-                    if ($optWeight > $this->maxWeight){
+                if ($j - $ci >= 0 && $d[$i][$j]['weight'] < $d[$i - 1][$j - $ci]['weight'] + $wi) {
+
+                    $newWeight = $d[$i - 1][$j - $ci]['weight'] + $wi;
+
+                    if ($newWeight > $this->maxWeight) {
+                        array_splice($d[$i], $j, 1);
                         $achieved = true;
                         break;
                     }
 
-                    $d[$i][$j] = $optWeight;
+                    $d[$i][$j]['weight'] = $newWeight;
+                    $d[$i][$j]['id'] = $this->storedItems[$i - 1]->id;
                 }
             }
-
             if ($achieved)
                 break;
         }
+
 
         $max = [];
 
@@ -150,7 +152,7 @@ class GenerateTripStoredItemListHelper
         }
 
 
-        dd($max, $n, $this->maxCubage);
+        dd($max, $d[count($d) - 1], $n, $this->maxCubage);
     }
 
 //    public function generate()
