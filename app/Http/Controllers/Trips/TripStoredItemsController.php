@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Trips;
 
 
+use App\Data\Helpers\GenerateTripStoredItemListHelper;
 use App\Data\RequestWriters\Trips\AssociateToTripRequestWriter;
 use App\Data\RequestWriters\Trips\ChangeItemsTripRequest;
 use App\Data\RequestWriters\Trips\LoadItemsToCarRequestWriter;
@@ -127,19 +128,22 @@ class TripStoredItemsController extends Controller
         return redirect(route('trips.show', $trip));
     }
 
-    public function generate(){
-        return [];
+    public function generate(Trip $trip){
+        $availableItems = StoredItem::with('info')->available()->get();
+        $generator = new GenerateTripStoredItemListHelper($trip, $availableItems);
+        $data =  $generator->generate();
+        return;
     }
 
     public function availableItems()
     {
         $paginate = request()->input('paginate') ?? 10;
-        return StoredItem::whereDoesntHave('tripHistory')->with('info.owner', 'info.item', 'storageHistory.storage')->paginate($paginate);
+        return StoredItem::available()->with('info.owner', 'info.item', 'storageHistory.storage')->paginate($paginate);
     }
 
     public function availableItemsAtBranch(Branch $branch)
     {
         $paginate = request()->input('paginate') ?? 10;
-        return $branch->stores()->first()->storedItems()->whereDoesntHave('tripHistory')->with('info.owner', 'info.item', 'storageHistory.storage')->paginate($paginate);
+        return $branch->stores()->first()->storedItems()->available()->with('info.owner', 'info.item', 'storageHistory.storage')->paginate($paginate);
     }
 }

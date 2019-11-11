@@ -33,6 +33,7 @@
                               :prepareUrl="prepareUrl"
                               :providedItems="trip.stored_items"
                               :selectedItems="storedItems"
+                              :tripId="trip.id"
                               @onItemSelected="onItemSelected"
                               @onItemUnselected="onItemUnselected"
                               class="shadow"
@@ -91,13 +92,13 @@
             maxWeight() {
                 let weight = this.trip.car.maxWeight;
                 if (this.trip.hasTrailer)
-                    weight += this.trip.car.maxWeight + this.trip.car.trailerMaxWeight;
+                    weight += this.trip.car.trailerMaxWeight;
                 return weight
             },
             maxCubage() {
                 let cubage = this.trip.car.maxCubage;
                 if (this.trip.hasTrailer)
-                    cubage += this.trip.car.maxCubage + this.trip.car.trailerMaxCubage;
+                    cubage += this.trip.car.trailerMaxCubage;
                 return cubage;
             },
             action() {

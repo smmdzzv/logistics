@@ -6,12 +6,16 @@ use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemTripHistory;
 use App\Models\Users\Driver;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @property string departureDate
  * @property string departureAt
  * @property string returnedAt
  * @property string status
+ * @property bool hasTrailer
+ * @property Car car
+ * @property Collection<StoredItem> storedItems
  */
 class Trip extends BaseModel
 {

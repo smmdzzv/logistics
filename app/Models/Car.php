@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property double maxCubage
+ * @property double maxWeight
+ * @property double trailerMaxCubage
+ * @property double trailerMaxWeight
+ */
 class Car extends BaseModel
 {
     protected $guarded = [];
