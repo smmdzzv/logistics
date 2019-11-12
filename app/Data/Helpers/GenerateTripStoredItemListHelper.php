@@ -16,6 +16,10 @@ class GenerateTripStoredItemListHelper
      */
     private $trip;
 
+    /**
+     * Available stored items
+     * @var Collection<StoredItem> $storedItems
+     */
     private $storedItems;
 
     private $maxCubage;
@@ -160,7 +164,7 @@ class GenerateTripStoredItemListHelper
 
 
         if ($maxW > 50)
-            $this->normalizeWeight($result, $this->filterItems($result));
+            $this->normalizeWeight($result, $this->removeItems($result, $this->storedItems));
 
 
         $result = $result->map(function ($item) {
@@ -170,10 +174,15 @@ class GenerateTripStoredItemListHelper
         return $result->toArray();
     }
 
-    private function filterItems($results)
+    /**
+     * @param Collection $removeArr
+     * @param Collection $originArr
+     * @return Collection
+     */
+    private function removeItems($removeArr, $originArr)
     {
-        return $this->storedItems->filter(function ($item) use ($results) {
-            $found = $results->first(function ($result) use ($item) {
+        return $originArr->filter(function ($item) use ($removeArr) {
+            $found = $removeArr->first(function ($result) use ($item) {
                 return $result->id === $item->id;
             });
 
@@ -184,6 +193,7 @@ class GenerateTripStoredItemListHelper
     /**
      * @param Collection $origin
      * @param Collection $options
+     * @return Collection
      */
     private function normalizeWeight($origin, $options)
     {
@@ -225,7 +235,10 @@ class GenerateTripStoredItemListHelper
             }
         }
 
+        $normalizedResult = $this->removeItems($removeItems, $origin);
+        $normalizedResult->merge($addItems);
 
+        return $normalizedResult;
     }
 
 
