@@ -53,7 +53,6 @@ class GenerateTripStoredItemListHelper
         $this->storedItems = $this->storedItems
             ->groupBy(['info.ownerId', 'info.id'])
             ->flatten(2)
-            ->sortBy('info.weight')
             ->values();
 //        dd($this->storedItems->toArray());
     }
@@ -148,7 +147,16 @@ class GenerateTripStoredItemListHelper
             $achieved = false;
 
             for ($j = 0; $j <= $C; $j++) {
-                $d[$i][$j] = $d[$i - 1][$j];
+
+                if ($j > 0 && isset($d[$i - 1][$j]['id']) && isset($d[$i - 1][$j - 1]['id'])
+                    && $d[$i - 1][$j - 1]['id'] === $d[$i - 1][$j]['id']
+                    && $d[$i][$j - 1]['id'] === $this->storedItems[$i - 1]->id){
+                    $d[$i][$j] = $d[$i][$j - 1];
+                    continue;
+                }
+
+
+                    $d[$i][$j] = $d[$i - 1][$j];
 
                 $wi = $this->storedItems[$i - 1]->info->weight;
                 $ci = $this->storedItems[$i - 1]->info->cubage;
@@ -171,7 +179,7 @@ class GenerateTripStoredItemListHelper
             if ($achieved)
                 break;
         }
-
+//        dd($d[100]);
         return $d;
 //        $max = [];
 //
