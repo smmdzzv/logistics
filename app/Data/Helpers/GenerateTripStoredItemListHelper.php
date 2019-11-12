@@ -56,8 +56,8 @@ class GenerateTripStoredItemListHelper
         });
 
         $this->storedItems = $this->storedItems
-            ->groupBy(['info.ownerId', 'info.id'])
-            ->flatten(2)
+//            ->groupBy(['info.ownerId', 'info.id'])
+//            ->flatten(2)
             ->sortByDesc('info.weight')
             ->values();
 //        dd($this->storedItems->toArray());
@@ -96,11 +96,21 @@ class GenerateTripStoredItemListHelper
 
     }
 
+    /**
+     * @return Collection<StoredItem>
+     */
     public function generate()
     {
 //        dd($this->storedItems->toArray());
         $options = $this->calculatePossibleOptions();
-        return $options;
+
+        return $this->storedItems->filter(function ($item) use ($options) {
+            return $options->first(function ($id) use ($item) {
+                return $item->id === $id;
+            });
+        });
+
+
 //        $maxWeights = $this->extractOptionsMaxWeights($options);
 
 //        $index = count($options);
@@ -139,6 +149,9 @@ class GenerateTripStoredItemListHelper
 //        return $maxArr;
 //    }
 
+    /**
+     * @return Collection
+     */
     private function calculatePossibleOptions()
     {
 //        $n = count($this->storedItems);
@@ -171,7 +184,7 @@ class GenerateTripStoredItemListHelper
             return $item->id;
         });
 
-        return $result->toArray();
+        return $result;
     }
 
     /**

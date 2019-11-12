@@ -135,17 +135,13 @@ class TripStoredItemsController extends Controller
         $availableItems = StoredItem::with('info')->available()->get();
         $generator = new GenerateTripStoredItemListHelper($trip, $availableItems);
 
-        $generatedList = $generator->generate();
+        $generatedItemsList = $generator->generate();
 
-        $itemsList = $availableItems->filter(function ($item) use ($generatedList) {
-            return array_search($item->id, $generatedList);
-        });
+        $generatedItemsList = $generatedItemsList->merge($trip->storedItems);
 
-        $itemsList = $itemsList->merge($trip->storedItems);
+        $generatedItemsList->loadMissing('info.owner', 'info.item', 'storageHistory.storage');
 
-        $itemsList->loadMissing('info.owner', 'info.item', 'storageHistory.storage');
-
-        return $itemsList;
+        return $generatedItemsList;
     }
 
     public function availableItems()
