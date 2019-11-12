@@ -137,16 +137,15 @@ class GenerateTripStoredItemListHelper
 
     private function calculatePossibleOptions()
     {
-        $n = count($this->storedItems);
-        
+//        $n = count($this->storedItems);
+
         $result = new Collection();
 
         $maxC = $this->maxCubage;
         $maxW = $this->maxWeight;
 
-        for ($i = 0; $i < $n; $i++) {
-            $stored = $this->storedItems[$i];
 
+        foreach ($this->storedItems as $stored) {
             $cubage = $stored->info->cubage;
             $weight = $stored->info->weight;
 
@@ -160,13 +159,97 @@ class GenerateTripStoredItemListHelper
         }
 
 
-        $result = $result->map(function ($item){
+        if ($maxW > 50)
+            $this->normalizeWeight($result, $this->filterItems($result));
+
+
+        $result = $result->map(function ($item) {
             return $item->id;
         });
 
         return $result->toArray();
+    }
+
+    private function filterItems($results)
+    {
+        return $this->storedItems->filter(function ($item) use ($results) {
+            $found = $results->first(function ($result) use ($item) {
+                return $result->id === $item->id;
+            });
+
+            return $found === null;
+        });
+    }
+
+    /**
+     * @param Collection $origin
+     * @param Collection $options
+     */
+    private function normalizeWeight($origin, $options)
+    {
+        $origin = $origin->sortBy('info.cubage');
+        $options = $options->sortBy('info.cubage');
+
+        $originWeight = $origin->sum('info.weight');
+
+        $maxWeight = $this->maxWeight - $originWeight;
+
+        $removeItems = new Collection();
+        $addItems = new Collection();
+
+        foreach ($origin as $selected) {
+            $targetCubage = $selected->info->cubage;
+            $targetWeight = $maxWeight;
+
+            $filteredOptions = $options->filter(function ($option) use ($targetCubage) {
+                return $option->info->cubage <= $targetCubage;
+            })->sortByDesc('info.weight');
+
+            $substituteItems = new Collection();
+
+            foreach ($filteredOptions as $option) {
+                if ($targetCubage - $option->info->cubbage > 0
+                    && $targetWeight - $option->info->weight > 0) {
+                    $substituteItems->push($option);
+                    $targetCubage -= $option->info->cubage;
+                    $targetWeight -= $option->info->weight;
+                }
+            }
+
+            $substituteItemsWeight = $substituteItems->sum('info.weight');
+
+            if ($substituteItems->count() > 0 && $substituteItemsWeight > $selected->info->weight) {
+                $removeItems->push($selected);
+                $addItems->push($substituteItems);
+                $maxWeight -= $substituteItemsWeight;
+            }
+        }
+
 
     }
+
+
+//    private function normalizeCubage($origin, $options)
+//    {
+//        $options = $options->map(function ($item) {
+//            $item->specificVolume = $item->info->cubage / $item->info->weight;
+//        })->sortBy('specificVolume');
+//
+////        $currentCubage = $origin->count('info.cubage');
+//        $currentCubage = 0;
+////dd(count($origin));
+//        foreach ($origin as $item) {
+//            $currentCubage += $item->info->cubage;
+//        }
+//        dd($currentCubage);
+//
+////        while($this->maxCubage - )
+//
+////        for ($i = 0; $i < count($origin); $i++){
+////
+////            while($targetCubage - )
+////        }
+//    }
 
     /**
      * @return array

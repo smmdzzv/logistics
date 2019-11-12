@@ -79,7 +79,9 @@
                 let total = 0;
                 for (let stored of this.storedItems) {
                     total += stored.info.weight;
+                    console.log(stored.info.weight);
                 }
+
                 return Math.round(total * 100) / 100;
             },
 
