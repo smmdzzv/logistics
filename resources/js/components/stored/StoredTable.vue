@@ -223,6 +223,7 @@
                     }
             },
             async generateList() {
+                tShowSpinner();
                 try {
                     const response = await axios.get(`/trip/${this.tripId}/stored-items/generate`);
                     // this.items = response.data;
@@ -240,6 +241,8 @@
                         'Не удалось сгенерировать список. Попробуйте сгенерировать список позднее'
                     )
                 }
+
+                tHideSpinner();
             }
         },
         computed: {
