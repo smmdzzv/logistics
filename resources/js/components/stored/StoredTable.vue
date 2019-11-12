@@ -225,7 +225,10 @@
             async generateList() {
                 tShowSpinner();
                 try {
-                    const response = await axios.get(`/trip/${this.tripId}/stored-items/generate`);
+                    let action = `/trip/${this.tripId}/stored-items/generate`;
+                    if(this.selectedBranch)
+                        action += `?branch=${this.selectedBranch.id}`;
+                    const response = await axios.get(action);
                     // this.items = response.data;
                     for (let item of response.data) {
                         if (!this.isInItems(item))

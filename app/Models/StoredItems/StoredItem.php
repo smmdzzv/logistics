@@ -8,6 +8,7 @@ use App\Models\Branch;
 use App\Models\Branches\Storage;
 use App\Models\Trip;
 use App\StoredItems\StorageHistory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StoredItem extends BaseModel
@@ -18,6 +19,12 @@ class StoredItem extends BaseModel
 
     public function scopeAvailable($query){
         return $query->whereDoesntHave('tripHistory');
+    }
+
+    public function scopeStorage($query, $id){
+        return $query->whereHas('storageHistory', function (Builder $query) use ($id) {
+            $query->where('storage_id', $id);
+        });
     }
 
     public function info(){

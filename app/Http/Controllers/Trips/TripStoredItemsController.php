@@ -11,6 +11,7 @@ use App\Data\RequestWriters\Trips\LoadItemsToCarRequestWriter;
 use App\Data\RequestWriters\Trips\UnloadItemsFromCarRequestWriter;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
+use App\Models\Branches\Storage;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Trip;
 use Carbon\Carbon;
@@ -132,7 +133,18 @@ class TripStoredItemsController extends Controller
     public function generate(Trip $trip)
     {
         $trip->load('storedItems');
-        $availableItems = StoredItem::with('info')->available()->get();
+        $query = StoredItem::with('info')->available();
+        if (request('branch')) {
+            $branch = request('branch');
+            $storage = Storage::whereHas('branch', function (Builder $query) use ($branch) {
+                $query->where('id', $branch);
+            })->first();
+
+            $query->storage($storage->id);
+        }
+
+        $availableItems = $query->get();
+         
         $generator = new GenerateTripStoredItemListHelper($trip, $availableItems);
 
         $generatedItemsList = $generator->generate();
