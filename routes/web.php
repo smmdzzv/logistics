@@ -155,6 +155,9 @@ Route::resource('lost-items', 'LostAndFound\LostItemsController')->parameters(['
 
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo');
 
+//Legal Entities
+Route::get('legal-entity/accounts', 'Till\Accounts\LegalEntityAccounts@index')->name('legal-entity.accounts.index');
+
 //Countries
 Route::get('/countries', 'CountriesController@all');
 

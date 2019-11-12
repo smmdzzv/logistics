@@ -85,6 +85,8 @@
                                 <a class="dropdown-item" href="{{route('pending-payments.index')}}">Заявки</a>
                                 <a class="dropdown-item" href="{{route('payments.index')}}">История платежей</a>
                                 <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{route('legal-entity.accounts.index')}}">Счета Дуоб</a>
+                                <div class="dropdown-divider"></div>
                                 <h6 class="dropdown-header">Статьи прихода/расхода</h6>
                                 <a class="dropdown-item" href="{{route('payment-items.create')}}">Добавить статью</a>
                                 <a class="dropdown-item" href="{{route('payment-items.index')}}">Список статей</a>

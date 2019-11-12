@@ -144,7 +144,7 @@ class TripStoredItemsController extends Controller
         }
 
         $availableItems = $query->get();
-         
+
         $generator = new GenerateTripStoredItemListHelper($trip, $availableItems);
 
         $generatedItemsList = $generator->generate();
