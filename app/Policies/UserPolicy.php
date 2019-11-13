@@ -11,7 +11,9 @@ class UserPolicy
 
     public function before(User $user, $ability)
     {
-        return $user->hasRole('admin');
+        if($user->hasRole('admin')){
+            return true;
+        }
     }
 
     public function update(User $authorizedUser, User $user)

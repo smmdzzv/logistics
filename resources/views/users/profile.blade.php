@@ -3,7 +3,7 @@
 @section('content')
     {{--    <profile :user="{{$user}}"></profile>--}}
 
-    <div class="container">
+    <div class="p-3">
         <div class="card">
             <div class="card-header">
                 <h5 class="mb-0">Профиль пользователя</h5>
@@ -21,7 +21,7 @@
                 </div>
                 <div class="jumbotron">
                     <h4>Активные заказы</h4>
-                    <orders-table :action="action"></orders-table>
+                    <orders-table :provided-orders="{{$user->activeOrders}}" :action="action"></orders-table>
                 </div>
             </div>
         </div>

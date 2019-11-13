@@ -26,7 +26,7 @@ window.Vue.use(VueExcelXlsx);
 
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
-Vue.component('Profile', require('./components/users/Profile.vue').default);
+// Vue.component('Profile', require('./components/users/Profile.vue').default);
 
 Vue.component('UsersTable', require('./components/users/UsersTable.vue').default);
 Vue.component('TrustedUserEditor', require('./components/users/trusted-users/TrustedUserEditor.vue').default);

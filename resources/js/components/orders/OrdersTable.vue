@@ -42,7 +42,10 @@
     export default {
         name: "OrdersTable",
         mounted() {
-            this.getOrders();
+            if (this.providedOrders && this.providedOrders.length > 0)
+                this.orders = this.providedOrders;
+            else
+                this.getOrders();
         },
         props: {
             branches: {
@@ -56,6 +59,9 @@
             flowable: {
                 type: Boolean,
                 default: false
+            },
+            providedOrders: {
+                type: Array
             }
         },
         methods: {
