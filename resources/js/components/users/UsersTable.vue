@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="p3">
         <div class="card shadow">
             <div class="card-header">
                 <div class="row align-items-baseline">

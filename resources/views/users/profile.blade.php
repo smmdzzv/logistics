@@ -21,7 +21,7 @@
                 </div>
                 <div class="jumbotron">
                     <h4>Активные заказы</h4>
-                    <orders-table :provided-orders="{{$user->activeOrders}}" :action="action"></orders-table>
+                    <orders-table :load-items="false" :provided-orders="{{$user->activeOrders}}" :action="action"></orders-table>
                 </div>
             </div>
         </div>

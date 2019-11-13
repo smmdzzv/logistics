@@ -42,9 +42,9 @@
     export default {
         name: "OrdersTable",
         mounted() {
-            if (this.providedOrders && this.providedOrders.length > 0)
-                this.orders = this.providedOrders;
-            else
+            this.orders = this.providedOrders;
+
+            if (this.loadItems)
                 this.getOrders();
         },
         props: {
@@ -62,6 +62,10 @@
             },
             providedOrders: {
                 type: Array
+            },
+            loadItems: {
+                Type: Boolean,
+                default: true
             }
         },
         methods: {
