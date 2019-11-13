@@ -13,6 +13,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Rorecek\Ulid\HasUlid;
 
+/**
+ * @property String id
+ */
 class User extends Authenticatable
 {
     use HasUlid;
