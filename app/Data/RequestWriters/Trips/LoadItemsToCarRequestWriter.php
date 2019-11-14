@@ -19,7 +19,7 @@ class LoadItemsToCarRequestWriter extends RequestWriter
     function write()
     {
         $this->getHistoryRecords();
-        $this->deleteRecords();
+        $this->deleteStorageRecords();
         return $this->input->storedItems;
     }
 
@@ -32,7 +32,7 @@ class LoadItemsToCarRequestWriter extends RequestWriter
         }
     }
 
-    private function deleteRecords()
+    private function deleteStorageRecords()
     {
         $deleted = $this->data->storageHistories->map(function ($item, $key) {
             return $item->id;

@@ -24,7 +24,7 @@
                         <p>Принял: <b>{{$history->registeredBy->code}} {{$history->registeredBy->name}}</b></p>
                         @if($history->deleted_at)
                             <p>Дата выдачи: <b>{{$history->deleted_at}}</b></p>
-                            <p>Выдал: <b>{{$history->deletedBy->code}} {{$history->deletedBy->name}}</b></p> 
+                            <p>Выдал: <b>{{$history->deletedBy->code}} {{$history->deletedBy->name}}</b></p>
                         @endif
                         @if(!$loop->last)
                             <hr>
