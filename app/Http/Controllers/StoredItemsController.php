@@ -28,10 +28,22 @@ class StoredItemsController extends Controller
         return StoredItem::with('info.owner', 'info.item', 'storageHistory.storage')->latest()->paginate(10);
     }
 
+    public function show(StoredItem $storedItem){
+        $storedItem->load('info');
+        $storageHistories = $storedItem->storageHistories()->latest()->withTrashed()->with('storage', 'deletedBy', 'registeredBy')->get();
+        $tripHistories = $storedItem->tripHistory()->latest()->withTrashed()->with('trip', 'deletedBy', 'registeredBy')->get();
+        return view('stored.show', compact('storedItem', 'storageHistories', 'tripHistories'));
+    }
+
     public function filteredByBranch(Branch $branch)
     {
         if (isset($branch)) {
-            return $branch->storedItems()->with('info.owner', 'info.item', 'storageHistory.storage')->latest()->paginate(10);
+            return StoredItem::with('info.owner', 'info.item', 'storageHistory.storage')
+                ->whereHas('storage', function (Builder $query) use($branch) {
+                    $query->where('branch_id', $branch->id);
+                })
+                ->latest()
+                ->paginate(20);
         } else abort(404, 'Филиал не найден');
     }
 }

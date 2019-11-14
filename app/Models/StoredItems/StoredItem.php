@@ -4,10 +4,10 @@ namespace App\Models\StoredItems;
 
 
 use App\Models\BaseModel;
-use App\Models\Branch;
 use App\Models\Branches\Storage;
 use App\Models\Trip;
 use App\StoredItems\StorageHistory;
+use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -40,7 +40,7 @@ class StoredItem extends BaseModel
     }
 
     public function storage(){
-        return $this->stores()->latest()->first();
+        return $this->stores()->latest()->limit(1);
     }
 
     public function stores(){

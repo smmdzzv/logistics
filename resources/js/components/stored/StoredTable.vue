@@ -60,6 +60,10 @@
                 </div>
             </template>
 
+            <template slot="buttons" slot-scope="data">
+                <a :href="'/stored/' + data.item.id"><img class="icon-btn-sm" src="/svg/file.svg"></a>
+            </template>
+
             <template slot="selected" slot-scope="data">
                 <span class="text-success" v-if="isSelected(data.item)">&check;</span>
                 <span v-else></span>
@@ -303,6 +307,9 @@
                     },
                     'storage_history.storage.name': {
                         label: 'Склад'
+                    },
+                    'buttons':{
+                        label:''
                     },
                     'selected': {
                         label: ''

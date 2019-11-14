@@ -89,6 +89,7 @@ Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController')
 //StoredItems
 Route::get('/stored', 'StoredItemsController@index')->name('stored.index');
 Route::get('/stored/all', 'StoredItemsController@all')->name('stored.all');
+Route::get('/stored/{storedItem}', 'StoredItemsController@show')->name('stored.show');
 Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch');
 //Route::post('/stored/trip/{trip}', 'StoredItemsController@associateToTrip');
 

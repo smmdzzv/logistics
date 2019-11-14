@@ -34,9 +34,9 @@ class Branch extends BaseModel
     }
 
     //TODO check this
-    public function storedItems(){
-        return $this->hasManyThrough(StoredItem::class, StoredItemInfo::class);
-    }
+//    public function storedItems(){
+//        return $this->hasManyThrough(StoredItem::class, StoredItemInfo::class);
+//    }
 
     public function tariffPriceHistories(){
         return $this->hasMany(TariffPriceHistory::class);

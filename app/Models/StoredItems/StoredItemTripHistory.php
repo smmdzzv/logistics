@@ -4,6 +4,7 @@ namespace App\Models\StoredItems;
 
 use App\Models\BaseModel;
 use App\Models\Trip;
+use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StoredItemTripHistory extends BaseModel
@@ -18,5 +19,13 @@ class StoredItemTripHistory extends BaseModel
 
     public function trip(){
         return $this->belongsTo(Trip::class);
+    }
+
+    public function deletedBy(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function registeredBy(){
+        return $this->belongsTo(User::class);
     }
 }
