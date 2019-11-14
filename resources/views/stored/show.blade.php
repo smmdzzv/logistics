@@ -1,12 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container col-12">
+    <div class="container col-10">
         <div class="card">
             <div class="card-header">
-                Информация о товаре {{$storedItem->code}}
+                Информация о товаре <b>{{$storedItem->code}}</b>
             </div>
             <div class="card-body">
+                <h4>Общая информация</h4>
+                <div class="jumbotron">
+                    <p>Владелец: <b>{{$storedItem->info->owner->code}} {{$storedItem->info->owner->name}}</b></p>
+                    <p>Количество мест: <b>{{$storedItem->info->placeCount}}</b>
+                        | Стоимость: <b>{{$storedItem->info->billingInfo->pricePerItem}} USD</b></p>
+                </div>
                 <h4>Габариты</h4>
                 <div class="jumbotron">
                     <p>Вес: {{$storedItem->info->weight}} кг</p>
