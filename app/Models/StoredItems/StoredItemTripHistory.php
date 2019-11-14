@@ -21,11 +21,15 @@ class StoredItemTripHistory extends BaseModel
         return $this->belongsTo(Trip::class);
     }
 
-    public function deletedBy(){
+    public function loadedBy(){
         return $this->belongsTo(User::class);
     }
 
     public function registeredBy(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function deletedBy(){
         return $this->belongsTo(User::class);
     }
 }

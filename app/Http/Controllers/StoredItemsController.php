@@ -31,7 +31,7 @@ class StoredItemsController extends Controller
     public function show(StoredItem $storedItem){
         $storedItem->load('info');
         $storageHistories = $storedItem->storageHistories()->latest()->withTrashed()->with('storage', 'deletedBy', 'registeredBy')->get();
-        $tripHistories = $storedItem->tripHistory()->latest()->withTrashed()->with('trip', 'deletedBy', 'registeredBy')->get();
+        $tripHistories = $storedItem->tripHistory()->latest()->withTrashed()->with('trip', 'deletedBy', 'registeredBy', 'loadedBy')->get();
         return view('stored.show', compact('storedItem', 'storageHistories', 'tripHistories'));
     }
 

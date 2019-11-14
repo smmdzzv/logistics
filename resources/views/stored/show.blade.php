@@ -35,9 +35,13 @@
                 <div class="jumbotron">
                     @foreach($tripHistories as $history)
                         <p>Рейс: <b>{{$history->trip->code}}</b></p>
-                        <p>Дата регистрации: <b>{{$history->created_at}}</b></p>
-                        <p>Зарегистрировал: <b>{{$history->registeredBy->code}} {{$history->registeredBy->name}} </b>
+                        <p>Добавлен в предварительный список: <b>{{$history->created_at}}</b></p>
+                        <p>Добавил: <b>{{$history->registeredBy->code}} {{$history->registeredBy->name}} </b>
                         </p>
+                        @if($history->loaded_at)
+                            <p>Загружен на рейс: <b>{{$history->loaded_at}}</b></p>
+                            <p>Загрузил: <b>{{$history->loadedBy->code}} {{$history->loadedBy->name}}</b></p>
+                        @endif
                         @if($history->deleted_at)
                             <p>Дата снятия с рейса: <b>{{$history->deleted_at}}</b></p>
                             <p>Снял с рейса: <b>{{$history->deletedBy->code}} {{$history->deletedBy->name}}</b></p>
