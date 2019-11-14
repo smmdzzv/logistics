@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Builder;
  * @property double maxWeight
  * @property double trailerMaxCubage
  * @property double trailerMaxWeight
+ * @property string trailerNumber
+ * @property double width
+ * @property double height
+ * @property double length
+ * @property string number
  */
 class Car extends BaseModel
 {
