@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Trip;
 
+use App\Data\RequestWriters\Trips\LoadItemsToCarRequestWriter;
 use App\Data\RequestWriters\Trips\UnloadItemsFromCarRequestWriter;
 use App\Models\Branch;
 use App\Models\StoredItems\StoredItem;
@@ -32,6 +33,20 @@ class TripsController extends Controller
         $data->employee = auth()->user();
 
         $writer = new UnloadItemsFromCarRequestWriter($data);
+        $writer->write();
+
+        return;
+    }
+
+    public function loadItem(Trip $trip){
+        $data = new \stdClass();
+
+        $data->storedItems = new Collection();
+        $data->storedItems->push($this->getTripItemFromRequest($trip));
+
+        $data->employee = auth()->user();
+
+        $writer = new LoadItemsToCarRequestWriter($data);
         $writer->write();
 
         return;
