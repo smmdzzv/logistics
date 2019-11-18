@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Trip;
 
+use App\Data\RequestWriters\Trips\ChangeItemsTripRequest;
 use App\Data\RequestWriters\Trips\LoadItemsToCarRequestWriter;
 use App\Data\RequestWriters\Trips\UnloadItemsFromCarRequestWriter;
 use App\Models\Branch;
@@ -50,6 +51,19 @@ class TripsController extends Controller
         $writer->write();
 
         return;
+    }
+
+    public function transferItem(Trip $trip)
+    {
+        $data = new \stdClass();
+        $data->trip = $trip;
+        $data->targetTrip = Trip::findOrFail(request('targetTrip'));
+        $data->employee = auth()->user();
+        $data->storedItems = new Collection();
+        $data->storedItems->push($this->getTripItemFromRequest($trip));
+
+        $writer = new ChangeItemsTripRequest($data);
+        $writer->write();
     }
 
     private function getTripItemFromRequest(Trip $trip)
