@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container col-10">
+    <div class="container col-md-10">
         <div class="card">
             <div class="card-header">
                 Информация о товаре <b>{{$storedItem->code}}</b>
