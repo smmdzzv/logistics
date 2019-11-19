@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="card shadow">
                     <div class="card-header">Добавить тип товара</div>
                     <div class="card-body">
@@ -72,6 +72,7 @@
                                 <div class="col-md-6">
                                     <select id="customsCodes" name="customsCodes[]"
                                             multiple
+                                            required
                                             class="form-control @error('customsCodes') is-invalid @enderror">
                                         <option value="null" disabled>--Выберите коды--</option>
 
