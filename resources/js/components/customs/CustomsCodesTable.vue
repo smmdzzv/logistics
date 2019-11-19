@@ -21,6 +21,9 @@
             <span v-if="item.calculateByPiece">
                 ✓
             </span>
+            <span v-else>
+
+            </span>
         </template>
 
         <template #header>
