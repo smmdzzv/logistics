@@ -3,14 +3,14 @@
         <div class="container">
             <p>{{`Тип: ${storedItemInfo.item.name}`}}</p>
             <p>{{`Код: ${storedItem.code}`}}</p>
-            <p>{{`ШхВхД: ${storedItemInfo.width}x${storedItemInfo.height}x${storedItemInfo.length}`}}</p>
-            <p>{{`Вес: ${storedItemInfo.weight} кг`}} </p>
+            <p>{{`ШхВхД: ${storedItemInfo.width}x${storedItemInfo.height}x${storedItemInfo.length}`}}
+            | {{`Вес: ${storedItemInfo.weight} кг`}} </p>
             <p>{{`Принят: ${storedItem.created_at}`}} </p>
             <p>{{`Владелец: ${storedItemInfo.owner.code}`}} </p>
         </div>
 
         <div>
-            <barcode :options='{displayValue:false, height:50, width:1.6}' :value="storedItem.code" tag="svg"></barcode>
+            <barcode :options='{displayValue:false, height:50, width:2.1}' :value="storedItem.code" tag="svg"></barcode>
         </div>
     </div>
 </template>
