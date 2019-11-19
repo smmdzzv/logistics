@@ -96,19 +96,22 @@ class OrderRequestWriter extends RequestWriter
 
         $pattern = '!\d+!';
 
-        preg_match_all($pattern, $this->input->employee->id, $eMatches);
-        $employeeMark =  substr(implode("", $eMatches[0]), 0, 2);
+//        preg_match_all($pattern, $this->input->employee->id, $eMatches);
+//        $employeeMark =  substr(implode("", $eMatches[0]), 0, 2);
 
-        preg_match_all($pattern, $this->input->client->id, $oMatches);
-        $orderMark = substr(implode("", $oMatches[0]), 0, 2);
+        preg_match_all($pattern, $this->input->client->id, $cMatches);
+        $clientIntTrace = $cMatches[0][array_rand($cMatches[0])] . $cMatches[0][array_rand($cMatches[0])];
+        $clientMark = substr($clientIntTrace, 0, 2);
+//        $orderMark = substr(implode("", $cMatches[0]), 0, 2);
 
         while (!$isUnique) {
             $date = Carbon::now();
             preg_match_all($pattern, $date->isoFormat('x'), $dateMatches);
-            $dateMark = substr(implode("", $dateMatches[0]),8,6);
-            $code = $date->isoFormat('YY').$dateMark.$employeeMark.$orderMark. random_int(1000, 9999);
+            $dateMark = substr(implode("", $dateMatches[0]), 9, 5);
+            $code = $date->isoFormat('YY') . $dateMark . $clientMark . random_int(1000, 9999);
             $isUnique = !in_array($code, $this->data->codes);
         }
+
         $this->data->codes[] = $code;
         return $code;
     }
