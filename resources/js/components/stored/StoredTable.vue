@@ -8,12 +8,14 @@
                         <span v-else>Товары на всех складах</span>
                     </div>
                     <div class="ml-0 ml-sm-auto">
-                        <button id="generate-btn" class="btn btn-link" @click="generateList">Сгенерировать список
-                        </button>
-                        <b-tooltip target="generate-btn" triggers="hover">
-                            Генерация списка происходит с учетом выбранного фильтра и товаров,
-                            добавленных на рейс вручную. Для сброса сгенерированного списка, обновите страницу
-                        </b-tooltip>
+                        <template v-if="listGenerator">
+                            <button id="generate-btn" class="btn btn-link" @click="generateList">Сгенерировать список
+                            </button>
+                            <b-tooltip target="generate-btn" triggers="hover">
+                                Генерация списка происходит с учетом выбранного фильтра и товаров,
+                                добавленных на рейс вручную. Для сброса сгенерированного списка, обновите страницу
+                            </b-tooltip>
+                        </template>
                     </div>
                     <template v-if="branches">
                         <div class="ml-3">
@@ -92,6 +94,9 @@
                 type: Array,
                 required: false,
                 default: null
+            },
+            listGenerator:{
+                type:Boolean
             },
             selectable: {
                 type: Boolean,

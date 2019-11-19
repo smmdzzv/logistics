@@ -34,6 +34,7 @@
                               :providedItems="trip.stored_items"
                               :selectedItems="storedItems"
                               :tripId="trip.id"
+                              listGenerator
                               @onItemSelected="onItemSelected"
                               @onItemUnselected="onItemUnselected"
                               @onItemsSelected = "onItemsSelected"
