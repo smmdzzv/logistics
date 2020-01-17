@@ -8,5 +8,5 @@ class CustomsCode extends BaseModel
 {
     protected $guarded = [];
 
-    protected $casts = ['calculateByPiece' => 'boolean'];
+    protected $casts = ['isCalculatedByPiece' => 'boolean'];
 }

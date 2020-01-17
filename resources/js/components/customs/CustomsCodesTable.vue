@@ -17,12 +17,11 @@
         primaryKey="id"
         responsive>
 
-        <template slot="calculateByPiece" slot-scope="{item}">
-            <span v-if="item.calculateByPiece">
+        <template slot="isCalculatedByPiece" slot-scope="{item}">
+            <span v-if="item.isCalculatedByPiece">
                 ✓
             </span>
-            <span v-else>
-
+            <span v-else> 
             </span>
         </template>
 
@@ -54,11 +53,11 @@
         },
         data(){
             return{
-                cells:['calculateByPiece'],
+                cells:['isCalculatedByPiece'],
                 items: [],
                 fields:{
-                    shortName:{
-                        label:'Наз-ие',
+                    name:{
+                        label:'Наименование',
                         sortable:true
                     },
                     code:{
@@ -69,19 +68,19 @@
                         label:'Цена',
                         sortable:true
                     },
-                    rate:{
-                        label:'Ставка',
-                        sortable:true
-                    },
-                    percentage:{
-                        label:'%',
+                    interestRate:{
+                        label:'Базовая ставка, %',
                         sortable:true
                     },
                     vat:{
-                        label:'НДС',
+                        label:'НДС, %',
                         sortable:true
                     },
-                    calculateByPiece:{
+                    totalRate:{
+                        label:'Итогавая ставка, %',
+                        sortable:true
+                    },
+                    isCalculatedByPiece:{
                         label:'Расчет по шт.',
                         sortable:true
                     }
