@@ -25,7 +25,7 @@ class CreateStoredItemInfosTable extends Migration
             $table->double('height');
             $table->double('width');
             $table->double('length');
-            $table->double('placeCount');
+//            $table->double('placeCount');
             $table->timestamps();
         });
     }

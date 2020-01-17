@@ -33,7 +33,7 @@ class StoredItemInfo extends BaseModel
         'length' => 'double',
         'width' => 'double',
         'count' => 'double',
-        'placeCount' => 'double'
+//        'placeCount' => 'double'
     ];
 
     public function item()

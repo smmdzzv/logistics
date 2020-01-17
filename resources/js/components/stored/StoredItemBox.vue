@@ -145,25 +145,24 @@
                             variant="danger"/>
                     </div>
 
-                    <div class="form-group col-md-2">
-                        <label class="col-form-label text-md-right" for="placeCount">Кол-во мест</label>
-                        <input @blur="$v.storedItem.placeCount.$touch()"
-                               class="form-control"
-                               id="placeCount"
-                               maxlength="4"
-                               name="placeCount"
-                               placeholder=""
-                               required v-model.number="storedItem.placeCount">
-                        <b-popover
-                            :show.sync="$v.storedItem.placeCount.$error"
-                            content="Определите количество занимаемых мест единице товара"
-                            placement="bottom"
-                            target="placeCount"
-                            triggers="null"
-                            variant="danger"/>
-                    </div>
-                </div>
-                <div class="row">
+<!--                    <div class="form-group col-md-2">-->
+<!--                        <label class="col-form-label text-md-right" for="placeCount">Кол-во мест</label>-->
+<!--                        <input @blur="$v.storedItem.placeCount.$touch()"-->
+<!--                               class="form-control"-->
+<!--                               id="placeCount"-->
+<!--                               maxlength="4"-->
+<!--                               name="placeCount"-->
+<!--                               placeholder=""-->
+<!--                               required v-model.number="storedItem.placeCount">-->
+<!--                        <b-popover-->
+<!--                            :show.sync="$v.storedItem.placeCount.$error"-->
+<!--                            content="Определите количество занимаемых мест единице товара"-->
+<!--                            placement="bottom"-->
+<!--                            target="placeCount"-->
+<!--                            triggers="null"-->
+<!--                            variant="danger"/>-->
+<!--                    </div>-->
+
                     <div class="form-group col-md-2">
                         <label class="col-form-label text-md-right" for="count">Кол-во</label>
                         <input @blur="$v.storedItem.count.$touch()"
@@ -174,13 +173,16 @@
                                placeholder="в ед. товара"
                                required v-model.number="storedItem.count">
                         <b-popover
-                            :show.sync="$v.storedItem.count.$error"
-                            content="Определите количество товаров"
-                            placement="bottom"
-                            target="count"
-                            triggers="null"
-                            variant="danger"/>
+                                :show.sync="$v.storedItem.count.$error"
+                                content="Определите количество товаров"
+                                placement="bottom"
+                                target="count"
+                                triggers="null"
+                                variant="danger"/>
                     </div>
+                </div>
+                <div class="row">
+
 
                     <div class="form-group col-md-2">
                         <label class="col-form-label text-md-right" for="branch">Филиал</label>
@@ -260,7 +262,7 @@
                     count: null,
                     branch: this.branch,
                     item: null,
-                    placeCount: null,
+                    // placeCount: null,
                     customsCode: null,
                 },
                 tariff: {name: null},
@@ -313,7 +315,7 @@
                 this.storedItem.length = '';
                 this.storedItem.width = '';
                 this.storedItem.count = '';
-                this.storedItem.placeCount = '';
+                // this.storedItem.placeCount = '';
                 this.storedItem.item = null;
                 this.filteredItems = [];
                 this.storedItem.price = null;
@@ -419,10 +421,10 @@
                 item: {
                     required
                 },
-                placeCount: {
-                    required,
-                    integer
-                },
+                // placeCount: {
+                //     required,
+                //     integer
+                // },
                 customsCode: {
                     required
                 }

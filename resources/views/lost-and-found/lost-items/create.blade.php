@@ -54,7 +54,7 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="placeCount" class="col-md-4 col-form-label text-md-right">Кол-во мест</label>
+                                <label for="placeCount" class="col-md-4 col-form-label text-md-right">Кол-во товаров</label>
 
                                 <div class="col-md-6">
                                     <input id="placeCount"
