@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <div class="card">
         <div class="card-header">
             <div class="row align-items-baseline">
@@ -44,6 +44,14 @@
                 </div>
             </template>
         </b-table>
+        <vue-excel-xlsx
+                id="grouped-data"
+                :columns="groupedDataColumns"
+                :data="groupedData"
+                sheetname="Лист 1"
+                class="btn"
+                filename="Таможенные выплаты">
+        </vue-excel-xlsx>
     </div>
 </template>
 
@@ -56,6 +64,7 @@
         mounted() {
             this.items = this.storedItems;
             this.extractClients();
+            this.calculateDutyPrices();
         },
         props: {
             storedItems: {
@@ -83,6 +92,37 @@
                 });
 
                 this.items = groupedByCode;
+                this.fillGroupedData();
+                $('#grouped-data').click();
+            },
+            fillGroupedData(){
+                let groupedByCode = groupBy(this.items, i => i.info.customs_code.id);
+                groupedByCode.forEach((arr) => {
+                    let totalDutyPrice = 0;
+                    let totalWeight = 0;
+                    arr.forEach((item) => {
+                        totalDutyPrice += item.dutyPrice;
+                        totalWeight += item.info.weight;
+                    });
+
+                    let customsCode = arr[0].info.customs_code;
+
+                    this.groupedData.push({name: customsCode.name, code: customsCode.code, weight: totalWeight, dutyPrice: totalDutyPrice});
+                });
+            },
+            calculateDutyPrices(){
+                this.items.forEach((item)=> {
+                    let dutyPrice = 0;
+                    let customsTariff = item.info.customs_code;
+                    if(customsTariff.isCalculatedByPiece){
+                        dutyPrice = customsTariff.price * customsTariff.totalRate / 100
+                    }
+                    else{
+                        let tonnage = item.info.weight / 1000;
+                        dutyPrice = tonnage * customsTariff.price * customsTariff.totalRate / 100
+                    }
+                    item.dutyPrice = Math.round(dutyPrice * 100) / 100;
+                })
             }
         },
         watch: {
@@ -103,6 +143,7 @@
                 isBusy: false,
                 selectedClient: null,
                 clients: [],
+                groupedData:[],
                 fields: {
                     'info.item.name': {
                         label: 'Наименование',
@@ -142,8 +183,29 @@
                     },
                     'storage_history.storage.name': {
                         label: 'Склад'
+                    },
+                    'dutyPrice':{
+                        label: 'Таможенная пошлина'
                     }
-                }
+                },
+                groupedDataColumns:[
+                   {
+                        label: 'Наименование',
+                        field: 'name'
+                    },
+                    {
+                        label: 'Код',
+                        field: 'code'
+                    },
+                    {
+                        label: 'Вес',
+                        field: 'weight'
+                    },
+                    {
+                        label: 'Таможенная пошлина',
+                        field: 'dutyPrice'
+                    }
+                ]
             }
         },
         components: {
