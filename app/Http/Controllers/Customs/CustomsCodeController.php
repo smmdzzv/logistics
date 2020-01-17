@@ -17,14 +17,14 @@ class CustomsCodeController extends Controller
     private function rules(){
         return [
             'name' => 'required|string|max:255',
-            'shortName' => 'required|string|max:255',
+            'shortName' => 'nullable|string|max:255',
             'internationalName' => 'nullable|string|max:255',
             'code' => 'required|string|max:15',
             'price' => 'required|numeric',
-            'rate' => 'required|numeric',
-            'percentage' => 'required|numeric',
+            'interestRate' => 'required|numeric',
+            'totalRate' => 'required|numeric',
             'vat' => 'required|numeric',
-            'calculateByPiece' => 'required'
+            'isCalculatedByPiece' => 'required'
         ];
     }
 
