@@ -178,6 +178,48 @@
                             </div>
 
                             <div class="form-group row">
+                                <label class="col-md-4 col-form-label text-md-right" for="routeLengthToDestination">Длина маршрута до филиала назначения</label>
+                                <div class="col-md-6">
+                                    <input :class="{'is-invalid':$v.data.routeLengthToDestination.$error || errors.routeLengthToDestination}"
+                                           autocomplete="routeLengthToDestination"
+                                           autofocus
+                                           class="form-control"
+                                           id="routeLengthToDestination"
+                                           name="routeLengthToDestination"
+                                           type="number"
+                                           min="0"
+                                           v-model="data.routeLengthToDestination">
+
+                                    <span class="invalid-feedback" role="alert"
+                                          v-if="$v.data.routeLengthToDestination.$error || errors.routeLengthToDestination">
+                                        <strong>Необходимо ввести длину маршрута в км</strong>
+                                        <strong v-for="message in errors.routeLengthToDestination">{{message}}</strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label text-md-right" for="routeLengthFromDestination">Длина обратного пути</label>
+                                <div class="col-md-6">
+                                    <input :class="{'is-invalid':$v.data.routeLengthFromDestination.$error || errors.routeLengthFromDestination}"
+                                           autocomplete="routeLengthFromDestination"
+                                           autofocus
+                                           class="form-control"
+                                           id="routeLengthFromDestination"
+                                           name="routeLengthFromDestination"
+                                           type="number"
+                                           min="0"
+                                           v-model="data.routeLengthFromDestination">
+
+                                    <span class="invalid-feedback" role="alert"
+                                          v-if="$v.data.routeLengthFromDestination.$error || errors.routeLengthFromDestination">
+                                        <strong>Необходимо ввести длину маршрута в км</strong>
+                                        <strong v-for="message in errors.routeLengthFromDestination">{{message}}</strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 <label class="col-md-4 col-form-label text-md-right" for="departureDate">Дата
                                     отправления</label>
                                 <div class="col-md-6">
@@ -260,7 +302,9 @@
                     departureDate: null,
                     returnDate: null,
                     emptyToDestination: null,
-                    emptyFromDestination: null
+                    emptyFromDestination: null,
+                    routeLengthToDestination: 0,
+                    routeLengthFromDestination: 0
                 })
             },
             branches: {
@@ -287,7 +331,9 @@
                     departure_branch: null,
                     destination_branch: null,
                     emptyToDestination: null,
-                    emptyFromDestination: null
+                    emptyFromDestination: null,
+                    routeLengthToDestination: null,
+                    routeLengthFromDestination: null
                 }
             }
         },
@@ -323,7 +369,9 @@
                         emptyFromDestination: this.data.emptyFromDestination === true,
                         departure_branch_id: this.data.departure_branch.id,
                         destination_branch_id: this.data.destination_branch.id,
-                        id: this.data.id
+                        id: this.data.id,
+                        routeLengthToDestination: this.data.routeLengthToDestination,
+                        routeLengthFromDestination: this.data.routeLengthFromDestination
                     };
 
                     let response;
@@ -345,6 +393,8 @@
                         this.errors.destination_branch = e.response.data.errors.destination_branch_id;
                         this.errors.emptyToDestination = e.response.data.errors.emptyToDestination;
                         this.errors.emptyFromDestination = e.response.data.errors.emptyFromDestination;
+                        this.errors.routeLengthToDestination = e.response.data.errors.routeLengthToDestination;
+                        this.errors.routeLengthFromDestination = e.response.data.errors.routeLengthFromDestination;
                     } else {
                         this.$root.showErrorMsg(
                             "Ошибка сохранения",
@@ -393,7 +443,13 @@
                 },
                 destination_branch: {
                     required,
-                    isNotSameAsdeparture_branch: not(sameAs('departure_branch'))
+                    isNotSameAsDepartureBranch: not(sameAs('departure_branch'))
+                },
+                routeLengthToDestination:{
+                    required
+                },
+                routeLengthFromDestination:{
+                    required
                 }
             }
         }

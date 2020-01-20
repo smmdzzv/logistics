@@ -21,6 +21,8 @@ class CreateTripsTable extends Migration
             $table->char('destination_branch_id', 26);
             $table->boolean('emptyToDestination');
             $table->boolean('emptyFromDestination');
+            $table->integer('routeLengthToDestination');
+            $table->integer('routeLengthFromDestination');
             $table->char('to_consumption_id', 26);
             $table->char('from_consumption_id', 26);
             $table->string('code', 20)->unique();

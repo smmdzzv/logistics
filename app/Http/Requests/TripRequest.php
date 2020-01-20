@@ -37,6 +37,8 @@ class TripRequest extends FormRequest
             'hasTrailer' => 'required|boolean',
             'emptyToDestination' => 'required|boolean',
             'emptyFromDestination' => 'required|boolean',
+            'routeLengthToDestination' => 'required|integer|min:0',
+            'routeLengthFromDestination' => 'required|integer|min:0',
             'driverId' => 'required',
             'code' => [
                 'required',
