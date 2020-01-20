@@ -17,6 +17,10 @@ class CreateTripsTable extends Migration
             $table->char('id', 26)->primary();
             $table->char('carId', 26)->index();
             $table->char('driverId', 26)->index();
+            $table->char('branchFrom', 26);
+            $table->char('branchTo', 26);
+            $table->boolean('emptyToDestination');
+            $table->boolean('emptyFromDestination');
             $table->char('to_consumption_id', 26);
             $table->char('from_consumption_id', 26);
             $table->string('code', 20)->unique();

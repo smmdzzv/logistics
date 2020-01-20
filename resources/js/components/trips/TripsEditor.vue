@@ -74,21 +74,106 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row justify-content-center" v-if="data.car.trailerNumber">
-                                <div class="input-group offset-md-2 col-md-6">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">
-                                            <input type="checkbox" v-model="data.hasTrailer" name="hasTrailer">
-                                        </div>
-                                    </div>
-                                    <input type="text" class="form-control"
-                                           value="С прицепом" disabled>
+                            <div class="form-group row">
+                                <label for="departureBranch"
+                                       class="col-md-4 col-form-label text-md-right">
+                                    Филиал отправления</label>
 
+                                <div class="col-md-6">
+                                    <select id="departureBranch"
+                                            class="form-control custom-select"
+                                            :class="{'is-invalid':$v.data.departureBranch.$error || errors.departureBranch}"
+                                            name="departureBranch"
+                                            v-model="data.departureBranch"
+                                            required>
+                                        <option value="null" disabled>--Выберите филиал отправления</option>
+                                        <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
+                                    </select>
                                     <span class="invalid-feedback" role="alert"
-                                          v-if="errors.hasTrailer">
-                                        <strong>Необходимо выбрать водителя.</strong>
-                                        <strong v-for="message in errors.hasTrailer">{{message}}.</strong>
+                                          v-if="$v.data.departureBranch.$error || errors.departureBranch">
+                                        <strong>Необходимо выбрать филиал отправления.</strong>
+                                        <strong v-for="message in errors.departureBranch">{{message}}.</strong>
                                     </span>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label for="destinationBranch"
+                                       class="col-md-4 col-form-label text-md-right">
+                                    Филиал назначения</label>
+
+                                <div class="col-md-6">
+                                    <select id="destinationBranch"
+                                            class="form-control custom-select"
+                                            :class="{'is-invalid':$v.data.destinationBranch.$error || errors.destinationBranch}"
+                                            name="destinationBranch"
+                                            v-model="data.destinationBranch"
+                                            required>
+                                        <option value="null" disabled>--Выберите филиал назначения</option>
+                                        <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
+                                    </select>
+                                    <span class="invalid-feedback" role="alert"
+                                          v-if="$v.data.destinationBranch.$error || errors.destinationBranch">
+                                        <strong v-if="$v.data.destinationBranch.required">
+                                            Необходимо выбрать филиал назначения.
+                                            Пункт назначения не должен совпадать с пунктом отправления</strong>
+                                        <strong v-for="message in errors.destinationBranch">{{message}}.</strong>
+                                    </span>
+                                </div>
+                            </div>
+
+<!--                            <div class="form-group row justify-content-center" v-if="data.car.trailerNumber">-->
+<!--                                <div class="input-group offset-md-2 col-md-6">-->
+<!--                                    <div class="input-group-prepend">-->
+<!--                                        <div class="input-group-text">-->
+<!--                                            <input type="checkbox" v-model="data.hasTrailer" name="hasTrailer">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <input type="text" class="form-control"-->
+<!--                                           value="С прицепом" disabled>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+                            <div class="form-group row" v-if="data.car.trailerNumber">
+                                <label class="col-md-4 col-form-label text-md-right">Наличие прицепа</label>
+                                <div class="col-md-6">
+                                    <b-input-group  v-b-tooltip.hover title="Учитывается при расчете грузоподъемности и кубатуры машины">
+                                        <b-input-group-prepend is-text>
+                                            <b-form-checkbox switch class="mr-n2" v-model="data.hasTrailer" name="hasTrailer">
+                                                <span class="sr-only">Switch for following text input</span>
+                                            </b-form-checkbox>
+                                        </b-input-group-prepend>
+                                        <b-form-input disabled value="С прицепом"></b-form-input>
+                                    </b-input-group>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label text-md-right">Машина без груза</label>
+                                <div class="col-md-6">
+                                    <b-input-group  v-b-tooltip.hover title="Учитывается при расчете расхода топлива">
+                                        <b-input-group-prepend is-text>
+                                            <b-form-checkbox switch v-model="data.emptyToDestination" class="mr-n2">
+                                                <span class="sr-only">Switch for following text input</span>
+                                            </b-form-checkbox>
+                                        </b-input-group-prepend>
+                                        <b-form-input disabled value="До филиала назначения"></b-form-input>
+                                    </b-input-group>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label text-md-right">Машина без груза</label>
+                                <div class="col-md-6">
+                                    <b-input-group v-b-tooltip.hover title="Учитывается при расчете расхода топлива">
+                                        <b-input-group-prepend is-text>
+                                            <b-form-checkbox v-model="data.emptyFromDestination" switch class="mr-n2">
+                                                <span class="sr-only">Switch for following text input</span>
+                                            </b-form-checkbox>
+                                        </b-input-group-prepend>
+                                        <b-form-input disabled value="От филиала назначения"></b-form-input>
+                                    </b-input-group>
                                 </div>
                             </div>
 
@@ -97,10 +182,10 @@
                                     отправления</label>
                                 <div class="col-md-6">
                                     <b-form-input
-                                        :class="{'is-invalid': $v.data.departureDate.$error || errors.departureDate}"
-                                        id="departureDate"
-                                        type="date"
-                                        v-model="data.departureDate"/>
+                                            :class="{'is-invalid': $v.data.departureDate.$error || errors.departureDate}"
+                                            id="departureDate"
+                                            type="date"
+                                            v-model="data.departureDate"/>
 
                                     <span class="invalid-feedback"
                                           role="alert"
@@ -116,10 +201,10 @@
                                     возвращения</label>
                                 <div class="col-md-6">
                                     <b-form-input
-                                        :class="{'is-invalid': $v.data.returnDate.$error || errors.returnDate}"
-                                        id="returnDate"
-                                        type="date"
-                                        v-model="data.returnDate"></b-form-input>
+                                            :class="{'is-invalid': $v.data.returnDate.$error || errors.returnDate}"
+                                            id="returnDate"
+                                            type="date"
+                                            v-model="data.returnDate"></b-form-input>
 
                                     <span class="invalid-feedback" role="alert"
                                           v-if="$v.data.returnDate.$error || errors.returnDate">
@@ -149,7 +234,7 @@
 </template>
 
 <script>
-    import {required, maxLength} from 'vuelidate/lib/validators/';
+    import {required, maxLength, not, sameAs} from 'vuelidate/lib/validators/';
 
     export default {
         name: "TripsEditor",
@@ -167,11 +252,15 @@
                 default: () => ({
                     code: null,
                     car: {
-                        number:null
+                        number: null
                     },
                     driver: null,
+                    departureBranch: null,
+                    destinationBranch: null,
                     departureDate: null,
-                    returnDate: null
+                    returnDate: null,
+                    emptyToDestination: null,
+                    emptyFromDestination: null
                 })
             },
             branches: {
@@ -194,7 +283,11 @@
                     car: null,
                     departureDate: null,
                     returnDate: null,
-                    hasTrailer: null
+                    hasTrailer: null,
+                    departureBranch: null,
+                    destinationBranch: null,
+                    emptyToDestination: null,
+                    emptyFromDestination: null
                 }
             }
         },
@@ -219,7 +312,7 @@
             },
             async saveTrip() {
                 try {
-                    if(!this.data.hasTrailer)
+                    if (!this.data.hasTrailer)
                         this.data.hasTrailer = false;
 
                     let data = {
@@ -229,11 +322,15 @@
                         departureDate: this.data.departureDate,
                         returnDate: this.data.returnDate,
                         hasTrailer: this.data.hasTrailer,
+                        departureBranch: this.data.departureBranch.id,
+                        destinationBranch: this.data.destinationBranch.id,
+                        emptyToDestination: this.data.emptyToDestination,
+                        emptyFromDestination: this.data.emptyFromDestination,
                         id: this.data.id
                     };
 
                     let response;
-                    if(this.isEditMode)
+                    if (this.isEditMode)
                         response = await axios.patch('/trips/' + data.id, data);
                     else
                         response = await axios.post('/trips', data);
@@ -247,6 +344,10 @@
                         this.errors.departureDate = e.response.data.errors.departureDate;
                         this.errors.returnDate = e.response.data.errors.returnDate;
                         this.errors.hasTrailer = e.response.data.errors.hasTrailer;
+                        this.errors.departureBranch = e.response.data.errors.departureBranch;
+                        this.errors.destinationBranch = e.response.data.errors.destinationBranch;
+                        this.errors.emptyToDestination = e.response.data.errors.emptyToDestination;
+                        this.errors.emptyFromDestination = e.response.data.errors.emptyFromDestination;
                     } else {
                         this.$root.showErrorMsg(
                             "Ошибка сохранения",
@@ -289,6 +390,13 @@
                 },
                 returnDate: {
                     required
+                },
+                departureBranch: {
+                    required
+                },
+                destinationBranch: {
+                    required,
+                    isNotSameAsDepartureBranch: not(sameAs('departureBranch'))
                 }
             }
         }

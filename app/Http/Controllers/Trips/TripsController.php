@@ -19,7 +19,8 @@ class TripsController extends Controller
     public function create()
     {
         $cars = Car::all();
-        return view('trips.create', compact('cars'));
+        $branches = Branch::all();
+        return view('trips.create', compact('cars', 'branches'));
     }
 
     public function all()
