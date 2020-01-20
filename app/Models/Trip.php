@@ -16,6 +16,12 @@ use Illuminate\Database\Eloquent\Collection;
  * @property bool hasTrailer
  * @property Car car
  * @property Collection<StoredItem> storedItems
+ * @property FuelConsumption toConsumption
+ * @property FuelConsumption fromConsumption
+ * @property boolean emptyToDestination
+ * @property mixed emptyFromDestination
+ * @property int routeLengthToDestination
+ * @property int routeLengthFromDestination
  */
 class Trip extends BaseModel
 {
@@ -76,5 +82,28 @@ class Trip extends BaseModel
 
     public function fromConsumption(){
         return $this->belongsTo(FuelConsumption::class);
+    }
+
+    public function getCalculatedConsumptionTo(){
+        return $this->calculateConsumption($this->toConsumption, $this->emptyToDestination, $this->routeLengthToDestination);
+    }
+
+    public function getCalculatedConsumptionFrom(){
+        return $this->calculateConsumption($this->fromConsumption, $this->emptyFromDestination, $this->routeLengthFromDestination);
+    }
+
+    /**
+     * Return calculated fuel consumption
+     * @param FuelConsumption $fuelConsumption
+     * @param boolean $isEmpty
+     * @param $distance
+     * @return float
+     */
+    public function calculateConsumption(FuelConsumption $fuelConsumption, $isEmpty, $distance){
+        $consumption = $this->hasTrailer? $fuelConsumption->forLoadedTrailer : $fuelConsumption->forLoaded;
+        if($isEmpty)
+            $consumption = $this->hasTrailer? $fuelConsumption->forEmptyTrailer : $fuelConsumption->forEmpty;
+
+        return round($distance * $consumption, 2);
     }
 }

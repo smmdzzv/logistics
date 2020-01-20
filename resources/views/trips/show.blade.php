@@ -52,6 +52,9 @@
                         @endif
                     </p>
 
+                    <p>Длина маршрута до пункта назначения: <span class="font-weight-bold">{{$trip->routeLengthToDestination}} км</span></p>
+                    <p>Длина обратного пути: <span class="font-weight-bold">{{$trip->routeLengthFromDestination}} км</span></p>
+                    <p>Планируемый расход топлива: <span class="font-weight-bold">{{$calculatedConsumptionTo + $calculatedConsumptionFrom}} (до {{$calculatedConsumptionTo}}, от {{$calculatedConsumptionFrom}}) л</span></p>
                     <p>Дата отправления: <span class="font-weight-bold">{{$trip->departureDate}}</span></p>
                     <p>Дата возвращения: <span class="font-weight-bold">{{$trip->returnDate}}</span></p>
                     <p>Факт. дата отправления: <span class="font-weight-bold">{{$trip->departureAt}}</span></p>

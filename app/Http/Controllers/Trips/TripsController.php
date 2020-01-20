@@ -39,12 +39,18 @@ class TripsController extends Controller
         $trip->load(
             'driver',
             'car',
+            'toConsumption',
+            'fromConsumption',
             'storedItems.info.owner',
             'storedItems.info.item',
             'storedItems.info.item.tariff',
             'storedItems.info.customsCode',
             'storedItems.storageHistory.storage');
-        return view('trips.show', compact('trip'));
+
+        $calculatedConsumptionTo = $trip->getCalculatedConsumptionTo();
+        $calculatedConsumptionFrom = $trip->getCalculatedConsumptionFrom();
+
+        return view('trips.show', compact('trip', 'calculatedConsumptionTo', 'calculatedConsumptionFrom'));
     }
 
     public function store(TripRequest $request)
