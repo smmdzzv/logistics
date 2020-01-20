@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use Carbon\Carbon;
+use http\Client\Curl\User;
 use Illuminate\Validation\Rule;
 
 class BranchesController extends Controller
@@ -75,7 +77,9 @@ class BranchesController extends Controller
 
     public function destroy(Branch $branch)
     {
-        $branch->delete();
+        $branch->deleted_by_id = auth()->id();
+        $branch->deleted_at = Carbon::now();
+        $branch->save();
         return;
     }
 
