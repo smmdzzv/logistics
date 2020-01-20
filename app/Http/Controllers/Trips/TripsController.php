@@ -56,7 +56,7 @@ class TripsController extends Controller
     {
         $cars = Car::all();
         $branches = Branch::all();
-        $trip->load('driver', 'car');
+        $trip->load('driver', 'car', 'destinationBranch', 'departureBranch');
         return view('trips.edit', compact('cars', 'trip', 'branches'));
     }
 

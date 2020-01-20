@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use App\Models\Car;
 use App\Models\Trip;
 use App\Models\Users\Driver;
-use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Validation\Rule;
@@ -31,9 +30,13 @@ class TripRequest extends FormRequest
     {
         return [
             'returnDate' => 'required|date',
+            'destination_branch_id' => 'required|string',
+            'departure_branch_id' => 'required|string',
             'departureDate' => 'required|date',
             'carId' => 'required|exists:cars,id',
             'hasTrailer' => 'required|boolean',
+            'emptyToDestination' => 'required|boolean',
+            'emptyFromDestination' => 'required|boolean',
             'driverId' => 'required',
             'code' => [
                 'required',

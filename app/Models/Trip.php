@@ -22,7 +22,9 @@ class Trip extends BaseModel
     protected $guarded = [];
 
     protected $casts = [
-        'hasTrailer' => 'boolean'
+        'hasTrailer' => 'boolean',
+        'emptyToDestination' => 'boolean',
+        'emptyFromDestination' => 'boolean'
     ];
 
     public function driver()
@@ -56,5 +58,15 @@ class Trip extends BaseModel
     {
         $current = Carbon::now()->toDateString();
         return $this->departureDate >= $current && $this->status === 'created';
+    }
+
+    public function destinationBranch()
+    {
+        return $this->belongsTo(Branch::class, 'destination_branch_id');
+    }
+
+    public function departureBranch()
+    {
+        return $this->belongsTo(Branch::class, 'departure_branch_id');
     }
 }
