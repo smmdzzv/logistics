@@ -300,7 +300,7 @@
         },
         watch: {
             paymentType() {
-                if (this.disabled)
+                if (this.disable)
                     return;
 
                 this.$bvModal.show('busyModal');
