@@ -77,7 +77,7 @@
                         sortable:true
                     },
                     totalRate:{
-                        label:'Итогавая ставка, %',
+                        label:'Итоговая ставка, %',
                         sortable:true
                     },
                     isCalculatedByPiece:{
