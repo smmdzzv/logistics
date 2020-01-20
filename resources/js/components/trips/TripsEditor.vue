@@ -380,7 +380,6 @@
                     else
                         response = await axios.post('/trips', data);
                     window.location = getBaseUrl() + '/trips/' + response.data.id;
-
                 } catch (e) {
                     if (e.response.status === 422) {
                         this.errors.code = e.response.data.errors.code;

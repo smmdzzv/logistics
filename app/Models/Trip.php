@@ -69,4 +69,12 @@ class Trip extends BaseModel
     {
         return $this->belongsTo(Branch::class, 'departure_branch_id');
     }
+
+    public function toConsumption(){
+        return $this->belongsTo(FuelConsumption::class);
+    }
+
+    public function fromConsumption(){
+        return $this->belongsTo(FuelConsumption::class);
+    }
 }

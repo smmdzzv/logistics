@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Branch;
 use App\Models\Car;
 use App\Models\Trip;
 use App\Models\Users\Driver;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Validation\Rule;
@@ -49,37 +51,46 @@ class TripRequest extends FormRequest
         ];
     }
 
-    /**
-     * Configure the validator instance.
-     *
-     * @param \Illuminate\Validation\Validator $validator
-     * @return void
-     */
     public function withValidator($validator)
     {
-        $validator->after(function ($validator) {
-            $trip = Trip::find(request()->get('id'));
-            if($trip && !$trip->isEditable())
-                $validator->errors()->add('departureDate', 'Невозможно редактировать рейс. Дата редактирования должна быть меньше даты отправления');
+        $validator->after(
+            function ($validator) {
+                $trip = Trip::find(request()->get('id'));
+                if ($trip && !$trip->isEditable())
+                    $validator->errors()->add('departureDate', 'Невозможно редактировать рейс. Дата редактирования должна быть меньше даты отправления');
 
-            $driverId = request()->get('driverId');
-            $driver = Driver::find($driverId);
-            if ($driver === null)
-                $validator->errors()->add('driverId', 'Указанный пользователь не является водителем');
+                $driverId = request()->get('driverId');
+                $driver = Driver::find($driverId);
+                if ($driver === null)
+                    $validator->errors()->add('driverId', 'Указанный пользователь не является водителем');
 
-            $car = Car::with('fromChinaConsumption', 'toChinaConsumption')->find(request()->get('carId'));
+                $car = Car::find(request()->get('carId'));
 
-            if (!$car->toChinaConsumption)
-                return $validator->errors()->add('carId', 'Для указанной машины не утсановлен расход топлива в Китай');
+                $destinationCountryId = Branch::find(request()->get('destination_branch_id'))->country;
+                $departureCountryId = Branch::find(request()->get('departure_branch_id'))->country;
 
+                $destinationConsumption = $car->fuelConsumption()
+                    ->latest()
+                    ->whereHas('destination', function (Builder $query) use ($destinationCountryId) {
+                        $query->where('id', '=',$destinationCountryId);
+                    })->first();
 
-            if (!$car->fromChinaConsumption)
-                return $validator->errors()->add('carId', 'Для указанной машины не утсановлен расход топлива из Китая');
+                if (!$destinationConsumption)
+                    return $validator->errors()->add('carId', 'Для указанной машины не утсановлен расход топлива в страну назначения');
 
-            Input::merge([
-                'to_consumption_id' => $car->toChinaConsumption->id,
-                'from_consumption_id' => $car->fromChinaConsumption->id,
-            ]);
-        });
+                $departureConsumption = $car->fuelConsumption()
+                    ->latest()
+                    ->whereHas('destination', function (Builder $query) use ($departureCountryId) {
+                        $query->where('id', '=', $departureCountryId);
+                    })->first();
+
+                if (!$departureConsumption)
+                    return $validator->errors()->add('carId', 'Для указанной машины не утсановлен расход топлива из страны назначения');
+
+                Input::merge([
+                    'to_consumption_id' => $destinationConsumption->id,
+                    'from_consumption_id' => $departureConsumption->id,
+                ]);
+            });
     }
 }
