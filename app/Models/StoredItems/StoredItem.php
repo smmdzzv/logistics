@@ -17,6 +17,11 @@ class StoredItem extends BaseModel
 
     protected $guarded = [];
 
+    /**
+     * @param $query
+     * @return mixed
+     * TODO explanation
+     */
     public function scopeAvailable($query){
         return $query->whereDoesntHave('tripHistory');
     }
