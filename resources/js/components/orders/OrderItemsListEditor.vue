@@ -79,7 +79,8 @@
                 let action = `/order/${this.selectedOrder.id}/items`;
 
                 try {
-                    const response = await axios.post(action, data)
+                    const response = await axios.post(action, data);
+                    window.location.reload();
                 } catch (e) {
                     if (e.response.status === 400) {
                          this.$root.showErrorMsg(
