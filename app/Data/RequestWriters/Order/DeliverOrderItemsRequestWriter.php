@@ -10,7 +10,9 @@ use App\Models\StoredItems\StoredItem;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
 use App\Models\Users\TrustedUser;
+use App\StoredItems\StorageHistory;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
 class DeliverOrderItemsRequestWriter extends RequestWriter
 {
@@ -93,6 +95,13 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
         $ids = $this->input->storedItems->map(function ($item) {
             return $item->id;
         });
+
+        StorageHistory::whereHas('storedItem', function (Builder $query) use ($ids) {
+            $query->whereIn('id', $ids->all());
+        })->update([
+            'deleted_at' => Carbon::now(),
+            'deletedById' => $this->input->employee->id
+        ]);
 
         StoredItem::whereIn('id', $ids->all())->update([
             'deleted_at' => Carbon::now(),
