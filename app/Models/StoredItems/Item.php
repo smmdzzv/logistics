@@ -28,7 +28,7 @@ class Item extends BaseModel
 
     public function storedItems()
     {
-        return $this->$this->hasMany(StoredItem::class);
+        return $this->hasMany(StoredItem::class);
     }
 
     public function tariff()
