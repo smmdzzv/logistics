@@ -117,7 +117,7 @@
 
                 let weightPerCube = stored.totalWeight / stored.totalCubage;
 
-                if (stored.item.onlyAgreedPrice || weightPerCube >= tariff.maxWeightPerCube) {
+                if (stored.item.onlyAgreedPrice || weightPerCube >= tariff.maxWeightPerCube && !stored.item.calculateByNormAndWeight) {
                     stored.price = tariff.agreedPricePerKg * stored.totalWeight;
                     stored.price = Math.round(stored.price * 100) / 100;
                     return stored.price
@@ -129,7 +129,9 @@
                         price = price - tariff.discountForLowerLimit;
                     else if (tariff.mediumLimit > 0 && weightPerCube <= tariff.mediumLimit)
                         price = price - tariff.discountForMediumLimit;
-                } else if (weightPerCube > tariff.upperLimit)
+                }
+
+                if (weightPerCube > tariff.upperLimit)
                     price = price + (weightPerCube - tariff.upperLimit) * tariff.pricePerExtraKg;
 
                 stored.price = price * stored.totalCubage;

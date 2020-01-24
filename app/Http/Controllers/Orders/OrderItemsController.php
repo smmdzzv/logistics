@@ -3,9 +3,13 @@
 namespace App\Http\Controllers\Orders;
 
 use App\Data\RequestWriters\Order\DeliverOrderItemsRequestWriter;
+use App\Models\Currency;
+use App\Models\LegalEntities\LegalEntity;
 use App\Models\Order;
 use App\Models\StoredItems\StoredItem;
 use App\Http\Controllers\Controller;
+use App\Models\Till\Payment;
+use App\Models\Till\PaymentItem;
 
 class OrderItemsController extends Controller
 {
@@ -20,6 +24,7 @@ class OrderItemsController extends Controller
         return view('orders.edit-items-list');
     }
 
+    //TODO refactoring check items
     public function update(Order $order)
     {
         $data = new \stdClass();
@@ -32,6 +37,39 @@ class OrderItemsController extends Controller
         $writer->write();
 
         return;
+    }
+
+    //TODO refactor this and DeliverOrderItemsRequestWriter
+    public function storePaymentRequest(Order $order)
+    {
+        $items = $this->getStoredItems();
+
+        //Calculate bill
+        $unpaidStoredItemInfos = $items->load('info.billingInfo')
+            ->map(function ($item) {
+                return $item->info;
+            });
+
+        $paymentSum = $unpaidStoredItemInfos->sum(function ($info) {
+            return $info->billingInfo->pricePerItem;
+        });
+
+        $payment = Payment::create([
+            'branchId' => auth()->user()->branch->id,
+            'cashierId' => auth()->user()->id,
+            'currencyId' => Currency::where('isoName', 'USD')->first()->id,
+            'payerId' => $order->owner->id,
+            'paymentItemId' => PaymentItem::firstOrCreate([
+                'title' => 'Пополнение баланса',
+                'type' => 'in',
+                'description' => 'Пополнение долларового счета пользователя'
+            ])->id,
+            'accountToId' => LegalEntity::first()->accounts()->where('isoName', 'USD')->first()->id,
+            'amount' => $paymentSum,
+            'status' => 'completed',
+            'comment' => 'Пополнение баланса для оплаты заказа'
+        ]);
+
     }
 
     private function getStoredItems()
