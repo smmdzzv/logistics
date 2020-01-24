@@ -52,35 +52,42 @@ class BillingInfo extends BaseModel
     public function calculatePrice(StoredItemInfo $storedItemInfo)
     {
 
-        if ($storedItemInfo->item->onlyAgreedPrice || $this->weightPerCube >= $this->tariffPricing->maxWeightPerCube) {
+        if ($storedItemInfo->item->onlyAgreedPrice
+            || $this->weightPerCube >= $this->tariffPricing->maxWeightPerCube
+            && !$storedItemInfo->item->calculateByNormAndWeight) {
 
             $this->pricePerItem = $this->tariffPricing->agreedPricePerKg * $this->totalWeight;
 
-        } elseif ($storedItemInfo->item->applyDiscount) {
+            return  $this->roundData();
+
+        }
+
+        $this->pricePerItem = $this->tariffPricing->pricePerCube;
+
+        if ($storedItemInfo->item->applyDiscount) {
 
             if ($this->tariffPricing->lowerLimit > 0 && $this->weightPerCube <= $this->tariffPricing->lowerLimit) {
 
-                $this->pricePerItem = $this->tariffPricing->pricePerCube - $this->tariffPricing->discountForLowerLimit;
+                $this->pricePerItem -= $this->tariffPricing->discountForLowerLimit;
                 $this->discountPerCube = $this->tariffPricing->discountForLowerLimit;
 
             } elseif ($this->tariffPricing->mediumLimit > 0 && $this->weightPerCube <= $this->tariffPricing->mediumLimit) {
 
-                $this->pricePerItem = $this->tariffPricing->pricePerCube - $this->tariffPricing->discountForMediumLimit;
+                $this->pricePerItem -= $this->tariffPricing->discountForMediumLimit;
                 $this->discountPerCube = $this->tariffPricing->discountForMediumLimit;
-
             }
 
-        } elseif ($this->weightPerCube > $this->tariffPricing->upperLimit)
-            $this->pricePerItem = $this->tariffPricing->pricePerCube
+        }
+
+        if ($this->weightPerCube > $this->tariffPricing->upperLimit)
+            $this->pricePerItem = $this->pricePerItem
                 + ($this->weightPerCube - $this->tariffPricing->upperLimit)
                 * $this->tariffPricing->pricePerExtraKg;
-        else
-            $this->pricePerItem = $this->tariffPricing->pricePerCube;
 
         $this->totalDiscount = $this->discountPerCube * $storedItemInfo->count;
         $this->totalPrice = $this->pricePerItem * $this->totalCubage;
 
-        $this->roundData();
+        return $this->roundData();
     }
 
     public function roundData()

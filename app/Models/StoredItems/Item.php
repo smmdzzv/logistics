@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool applyDiscount
  * @property string tariffId
  * @property Tariff tariff
+ * @property bool calculateByNormAndWeight
  */
 class Item extends BaseModel
 {
