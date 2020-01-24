@@ -147,6 +147,29 @@
                                 <div class="input-group offset-md-2 col-md-6">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
+                                            <input type="hidden" name="calculateByNormAndWeight" value="0">
+                                            <input type="checkbox" name="calculateByNormAndWeight"
+                                                   @if(old('calculateByNormAndWeight'))checked @endif
+                                                   value="1"
+                                                   aria-label="Radio button for following text input">
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control @error('calculateByNormAndWeight') is-invalid @enderror"
+                                           aria-label="Text input with radio button"
+                                           value="Расчет по весу и норме" disabled>
+
+                                    @error('calculateByNormAndWeight')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row justify-content-center">
+                                <div class="input-group offset-md-2 col-md-6">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
                                             <input type="hidden" name="applyDiscount" value="0">
                                             <input type="checkbox" name="applyDiscount"
                                                    @if(old('applyDiscount'))checked @endif

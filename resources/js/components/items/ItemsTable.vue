@@ -25,6 +25,10 @@
                 <b-check :checked="item.onlyAgreedPrice" disabled></b-check>
             </template>
 
+            <template slot="calculateByNormAndWeight" slot-scope="{item}">
+                <b-check :checked="item.calculateByNormAndWeight" disabled></b-check>
+            </template>
+
             <template slot="applyDiscount" slot-scope="{item}">
                 <b-check :checked="item.applyDiscount" disabled></b-check>
             </template>
@@ -59,7 +63,7 @@
                 },
                 items: [],
                 isBusy: false,
-                customCells: ['applyDiscount', 'onlyCustomPrice', 'onlyAgreedPrice'],
+                customCells: ['applyDiscount', 'onlyCustomPrice', 'onlyAgreedPrice', 'calculateByNormAndWeight'],
                 fields: {
                     name: {
                         label: 'Наименование',
@@ -79,6 +83,10 @@
                     },
                     onlyAgreedPrice:{
                         label: 'Дог-ная цена',
+                        sortable: true
+                    },
+                    calculateByNormAndWeight:{
+                        label: 'Расчет по норме и весу',
                         sortable: true
                     },
                     applyDiscount: {

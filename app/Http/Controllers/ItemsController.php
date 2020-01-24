@@ -58,6 +58,7 @@ class ItemsController extends Controller
             'onlyCustomPrice' => "required|in:0,1",
             'applyDiscount' => "required|in:0,1",
             'onlyAgreedPrice' => "required|in:0,1",
+            'calculateByNormAndWeight' => "required|in:0,1",
             'tariffId' => 'required|exists:tariffs,id',
             'name' => [
                 'required',
