@@ -55,7 +55,7 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
                 return $item->info;
             });
 
-        $paymentSum = $unpaidStoredItemInfos->sum(function ($info){
+        $paymentSum = $unpaidStoredItemInfos->sum(function ($info) {
             return $info->billingInfo->pricePerItem;
         });
 
@@ -67,11 +67,14 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
         if ($paymentSum > 0) {
             $this->data->account = $this->input->order->owner->accounts()->first();
 
-            if ($this->data->account->balance < $paymentSum
-                && !$this->checkForDebtPossibility($paymentSum))
-                abort(400, "Недостаточно средств на балансе");
-            else
-                $this->createPayment($paymentSum, $unpaidItems);
+            if ($this->data->account->balance < $paymentSum) {
+                if (!$this->input->isDebtRequested)
+                    abort(400, "Недостаточно средств на балансе");
+                else if (!$this->checkForDebtPossibility($paymentSum))
+                    abort(400, "Доверительный платеж не возможен");
+            }
+
+            $this->createPayment($paymentSum, $unpaidItems);
         }
 
 
@@ -140,10 +143,10 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
         ]);
 
         $unpaidStoredItems->each(function ($item, $key) use ($orderPayment) {
-           OrderPaymentItem::create([
-               'stored_item_id' => $item->id,
-               'order_payment_id' => $orderPayment->id
-           ]);
+            OrderPaymentItem::create([
+                'stored_item_id' => $item->id,
+                'order_payment_id' => $orderPayment->id
+            ]);
         });
 
 //        $this->input->order->paymentId = $this->saved->payment->id;

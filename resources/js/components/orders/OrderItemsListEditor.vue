@@ -3,10 +3,10 @@
         <div class="col-12 mb-3">
             <label class="col-12">Клиент</label>
             <search-user-dropdown
-                :selected="clientSelected"
-                autofocus
-                placeholder="Введите ФИО или код клиента"
-                url="/concrete/client/filter?userInfo=">
+                    :selected="clientSelected"
+                    autofocus
+                    placeholder="Введите ФИО или код клиента"
+                    url="/concrete/client/filter?userInfo=">
             </search-user-dropdown>
         </div>
 
@@ -22,23 +22,30 @@
 
         <div class="col-12 pb-4">
             <stored-items-table-card
-                :borderless="borderless"
-                :fixed="fixed"
-                :hover="hover"
-                :responsive="responsive"
-                :select-mode="selectMode"
-                :selectable="selectable"
-                :sticky-header="tableHeight"
-                :storedItems="items"
-                :striped="striped"
-                @itemsSelected="onItemsSelected"
-                title="Список товаров">
+                    :borderless="borderless"
+                    :fixed="fixed"
+                    :hover="hover"
+                    :responsive="responsive"
+                    :select-mode="selectMode"
+                    :selectable="selectable"
+                    :sticky-header="tableHeight"
+                    :storedItems="items"
+                    :striped="striped"
+                    @itemsSelected="onItemsSelected"
+                    title="Список товаров">
             </stored-items-table-card>
         </div>
 
         <div class="col-12 text-center">
             <button @click="submit" class="btn btn-primary">Выдать</button>
         </div>
+
+
+        <b-modal id="payment-error" title="Ошибка оплаты" ok-only centered ok-title="Закрыть">
+            <p class="my-4">Недостаточно средств на балансе. </p>
+            <a href="#" @click.prevent="submit(true)">Доверительный платеж</a><br>
+            <a href="#">Оформить платежную заявку на пополнение баланса</a>
+        </b-modal>
     </div>
 
 </template>
@@ -69,11 +76,12 @@
             onItemsSelected(items) {
                 this.selectedItems = items
             },
-            async submit() {
+            async submit(isDebtRequested = false) {
                 let data = {
                     items: this.selectedItems.map((item) => {
                         return item.id
-                    })
+                    }),
+                    isDebtRequested: isDebtRequested
                 };
 
                 let action = `/order/${this.selectedOrder.id}/items`;
@@ -83,10 +91,11 @@
                     window.location.reload();
                 } catch (e) {
                     if (e.response.status === 400) {
-                         this.$root.showErrorMsg(
-                             "Ошибка оплаты",
-                             e.response.data.message
-                         );
+                        this.$bvModal.show('payment-error');
+                        // this.$root.showErrorMsg(
+                        //     "Ошибка оплаты",
+                        //     e.response.data.message
+                        // );
                     }
                 }
             }

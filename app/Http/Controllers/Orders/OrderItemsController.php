@@ -26,6 +26,7 @@ class OrderItemsController extends Controller
         $data->order = $order;
         $data->employee = auth()->user();
         $data->storedItems = $this->getStoredItems();
+        $data->isDebtRequested = request()->get('isDebtRequested');
 
         $writer = new DeliverOrderItemsRequestWriter($data);
         $writer->write();
