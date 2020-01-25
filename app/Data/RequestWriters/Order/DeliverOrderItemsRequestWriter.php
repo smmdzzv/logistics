@@ -122,7 +122,7 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
             'currencyId' => Currency::where('isoName', 'USD')->first()->id,
             'payerId' => $this->input->order->owner->id,
             'paymentItemId' => PaymentItem::firstOrCreate([
-                'title' => 'Оплата заказа',
+                'title' => 'Списание с баланса',
                 'type' => 'internal',
                 'description' => 'Списание денег с баланса клиента в счет оплаты заказы'
             ])->id,

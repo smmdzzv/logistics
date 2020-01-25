@@ -37,9 +37,9 @@ class OrderItemsController extends Controller
         $data->isDebtRequested = request()->get('isDebtRequested');
 
         $writer = new DeliverOrderItemsRequestWriter($data);
-        $writer->write();
+        $result = $writer->write();
 
-        return;
+        return $result->payment->id;
     }
 
     //TODO refactor this and DeliverOrderItemsRequestWriter
