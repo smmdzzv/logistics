@@ -6,6 +6,8 @@ use App\Models\BaseModel;
 use App\Models\Branch;
 use App\Models\Currency;
 use App\Models\Order;
+use App\Models\Order\OrderPayment;
+use App\Models\StoredItems\StoredItem;
 use App\Models\Users\Cashier;
 use App\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -54,9 +56,9 @@ class Payment extends BaseModel
         return $this->belongsTo(Currency::class, 'currencyId');
     }
 
-    public function order(){
-        return $this->hasOne(Order::class,'paymentId');
-    }
+//    public function order(){
+//        return $this->hasOne(Order::class,'paymentId');
+//    }
 
     public function paymentItem(){
         return $this->belongsTo(PaymentItem::class, 'paymentItemId');
@@ -82,5 +84,17 @@ class Payment extends BaseModel
 
     public function exchange(){
         return $this->belongsTo(MoneyExchange::class, 'exchangeId');
+    }
+
+    public function orderPayments(){
+        return $this->hasMany(Order\OrderPayment::class);
+    }
+
+    public function orderPayment(){
+        return  $this->hasOne(Order\OrderPayment::class);
+    }
+
+    public function orderPaymentItems(){
+        return $this->hasManyThrough(Order\OrderPaymentItem::class, OrderPayment::class);
     }
 }

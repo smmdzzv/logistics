@@ -11,6 +11,7 @@
         :sticky-header="tableHeight"
         :striped="striped"
         :tableBusy="isBusy"
+        :customCells="customCells"
         class="shadow"
         excelFileName="История платежей"
         excelSheetName="Все платежи"
@@ -105,6 +106,12 @@
             </div>
         </template>
 
+        <template slot="show" slot-scope="{item}">
+            <a class="btn" :href="getDetailsUrl(item)">
+                <img class="icon-btn-sm" src="/svg/file.svg">
+            </a>
+        </template>
+
         <template #footer>
             <div class="card-footer">
                 <main-paginator :flowable="flowable" :onPageChange="getItems"
@@ -161,7 +168,7 @@
                 },
                 items: [],
                 isBusy: false,
-                customCells: [],
+                customCells: ['show'],
                 selectedBranch: null,
                 selectedType: null,
                 selectedPaymentItem: null,
@@ -204,6 +211,9 @@
                         label: 'Кассир',
                         sortable: true
                     },
+                    'show':{
+                        label:''
+                    }
                 },
             }
         },
@@ -240,6 +250,9 @@
             cashierSelected(cashier) {
                 this.selectedCashier = cashier;
                 this.getItems();
+            },
+            getDetailsUrl(item){
+                return '/payments/' + item.id;
             },
             getItems(page = 1) {
                 if (this.trips)

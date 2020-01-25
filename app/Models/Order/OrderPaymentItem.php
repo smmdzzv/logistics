@@ -13,7 +13,7 @@ class OrderPaymentItem extends BaseModel
     protected $guarded = [];
 
     public function storedItem(){
-        return $this->belongsTo(StoredItem::class);
+        return $this->belongsTo(StoredItem::class)->withTrashed();
     }
 
     public function orderPayment(){

@@ -75,8 +75,6 @@ Route::resource('customs-code', 'Customs\CustomsCodeController')->parameters(['c
 
 //Till
 
-Route::resource('payments', 'Till\Payments\PaymentsController', ['only' => 'index']);
-
 Route::get('/pending-payments', 'Till\Payments\PendingPaymentsController@index')->name('pending-payments.index');
 Route::get('/pending-payments/filtered', 'Till\Payments\PendingPaymentsController@filtered');
 
@@ -88,6 +86,7 @@ Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
 
 Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController')->parameters(['outgoing-payments' => 'payment']);
 
+Route::resource('payments', 'Till\Payments\PaymentsController', ['only' => ['index', 'show']])->parameters(['payments' => 'payment']);
 //StoredItems
 Route::get('/stored', 'StoredItemsController@index')->name('stored.index');
 Route::get('/stored/all', 'StoredItemsController@all')->name('stored.all');

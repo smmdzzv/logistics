@@ -28,7 +28,8 @@ class StoredItemsController extends Controller
         return StoredItem::with('info.owner', 'info.item', 'storageHistory.storage')->latest()->paginate(10);
     }
 
-    public function show(StoredItem $storedItem){
+    public function show($storedItem){
+        $storedItem = StoredItem::withTrashed()->find($storedItem);
         $storedItem->load('info', 'info.owner', 'info.billingInfo');
         $storageHistories = $storedItem->storageHistories()->latest()
             ->withTrashed()->with('storage', 'deletedBy', 'registeredBy')->get();

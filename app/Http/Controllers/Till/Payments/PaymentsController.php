@@ -33,6 +33,20 @@ class PaymentsController extends BaseController
             ->paginate($this->pagination());
     }
 
+    public function show(Payment $payment){
+        $payment->load('cashier',
+            'payer',
+            'currency',
+            'paymentItem',
+            'branch',
+            'accountFrom',
+            'accountTo',
+            'exchange',
+            'orderPaymentItems.storedItem.info.billingInfo',
+            'orderPaymentItems.storedItem.info.item');
+        return view('till.payments.show', compact('payment'));
+    }
+
     public function filtered()
     {
         $query = Payment::with('accountTo', 'cashier', 'payer', 'currency', 'paymentItem')
