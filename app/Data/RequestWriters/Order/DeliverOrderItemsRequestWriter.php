@@ -95,8 +95,7 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
 
     private function checkForDebtPossibility($paymentSum): bool
     {
-        $trusted = TrustedUser::where('user_id', $this->input->order->owner->id)
-            ->where('to', '>=', Carbon::now()->toDateString())
+        $trusted = TrustedUser::where('user_id', $this->input->order->owner->id)            ->where('to', '>=', Carbon::now()->toDateString())
             ->first();
 
         if (!$trusted)

@@ -42,8 +42,8 @@
 
 
         <b-modal id="payment-error" title="Ошибка оплаты" ok-only centered ok-title="Закрыть">
-            <p class="my-4">Недостаточно средств на балансе. </p>
-            <a href="#" @click.prevent="submit(true)">Доверительный платеж</a><br>
+            <p class="my-4">{{errorMessage}}</p>
+            <a href="#" @click.prevent="submit(e, true)">Доверительный платеж</a><br>
             <a href="#">Оформить платежную заявку на пополнение баланса</a>
         </b-modal>
     </div>
@@ -66,7 +66,8 @@
                 orders: [],
                 selectedOrder: null,
                 items: [],
-                selectedItems: []
+                selectedItems: [],
+                errorMessage: null
             }
         },
         methods: {
@@ -76,7 +77,9 @@
             onItemsSelected(items) {
                 this.selectedItems = items
             },
-            async submit(isDebtRequested = false) {
+            async submit(e, isDebtRequested = false) {
+                this.$bvModal.hide('payment-error');
+
                 let data = {
                     items: this.selectedItems.map((item) => {
                         return item.id
@@ -88,15 +91,19 @@
 
                 try {
                     const response = await axios.post(action, data);
-                    window.location.reload();
+                    // window.location.reload();
                 } catch (e) {
                     if (e.response.status === 400) {
-                        this.$bvModal.show('payment-error');
+                        this.errorMessage =  e.response.data.message;
                         // this.$root.showErrorMsg(
                         //     "Ошибка оплаты",
                         //     e.response.data.message
                         // );
                     }
+                    else{
+                        this.errorMessage = "Не удалось оформить выдачу товаров. Повтороите попытку после перезагрузки страницы"
+                    }
+                    this.$bvModal.show('payment-error');
                 }
             }
         },
