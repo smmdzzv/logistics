@@ -6,10 +6,13 @@ use App\Data\RequestWriters\Order\DeliverOrderItemsRequestWriter;
 use App\Models\Currency;
 use App\Models\LegalEntities\LegalEntity;
 use App\Models\Order;
+use App\Models\Order\OrderPayment;
+use App\Models\Order\OrderPaymentItem;
 use App\Models\StoredItems\StoredItem;
 use App\Http\Controllers\Controller;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
+use Illuminate\Database\Eloquent\Builder;
 
 class OrderItemsController extends Controller
 {
@@ -25,7 +28,7 @@ class OrderItemsController extends Controller
     }
 
     //TODO refactoring check items
-    public function update(Order $order)
+    public function deliver(Order $order)
     {
         $data = new \stdClass();
         $data->order = $order;
@@ -64,12 +67,27 @@ class OrderItemsController extends Controller
                 'type' => 'in',
                 'description' => 'Пополнение долларового счета пользователя'
             ])->id,
-            'accountToId' => LegalEntity::first()->accounts()->where('isoName', 'USD')->first()->id,
+            'accountToId' => LegalEntity::first()->accounts()->whereHas('currency', function (Builder $query) {
+                $query->where('isoName', 'USD');
+            })->first()->id,
             'amount' => $paymentSum,
-            'status' => 'completed',
+            'status' => 'pending',
             'comment' => 'Пополнение баланса для оплаты заказа'
         ]);
 
+        $orderPayment = OrderPayment::create([
+            'order_id' => $order->id,
+            'payment_id' => $payment->id
+        ]);
+
+        $items->each(function ($item, $key) use ($orderPayment) {
+            OrderPaymentItem::create([
+                'stored_item_id' => $item->id,
+                'order_payment_id' => $orderPayment->id
+            ]);
+        });
+
+        return;
     }
 
     private function getStoredItems()
