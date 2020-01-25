@@ -56,36 +56,38 @@ class BillingInfo extends BaseModel
             || $this->weightPerCube >= $this->tariffPricing->maxWeightPerCube
             && !$storedItemInfo->item->calculateByNormAndWeight) {
 
-            $this->pricePerItem = $this->tariffPricing->agreedPricePerKg * $this->totalWeight;
+            $this->totalPrice = $this->tariffPricing->agreedPricePerKg * $this->totalWeight;
+            $this->pricePerItem = $this->totalPrice / $this->count;
 
             return  $this->roundData();
 
         }
 
-        $this->pricePerItem = $this->tariffPricing->pricePerCube;
+        $pricePerCube = $this->tariffPricing->pricePerCube;
 
         if ($storedItemInfo->item->applyDiscount) {
 
             if ($this->tariffPricing->lowerLimit > 0 && $this->weightPerCube <= $this->tariffPricing->lowerLimit) {
 
-                $this->pricePerItem -= $this->tariffPricing->discountForLowerLimit;
+                $pricePerCube -= $this->tariffPricing->discountForLowerLimit;
                 $this->discountPerCube = $this->tariffPricing->discountForLowerLimit;
 
             } elseif ($this->tariffPricing->mediumLimit > 0 && $this->weightPerCube <= $this->tariffPricing->mediumLimit) {
 
-                $this->pricePerItem -= $this->tariffPricing->discountForMediumLimit;
+                $pricePerCube -= $this->tariffPricing->discountForMediumLimit;
                 $this->discountPerCube = $this->tariffPricing->discountForMediumLimit;
             }
 
         }
 
         if ($this->weightPerCube > $this->tariffPricing->upperLimit)
-            $this->pricePerItem = $this->pricePerItem
+            $pricePerCube = $pricePerCube
                 + ($this->weightPerCube - $this->tariffPricing->upperLimit)
                 * $this->tariffPricing->pricePerExtraKg;
 
         $this->totalDiscount = $this->discountPerCube * $storedItemInfo->count;
-        $this->totalPrice = $this->pricePerItem * $this->totalCubage;
+        $this->totalPrice = $pricePerCube * $this->totalCubage;
+        $this->pricePerItem  = $this->totalPrice / $this->count;
 
         return $this->roundData();
     }

@@ -20,7 +20,6 @@ use App\Models\Users\Client;
  * @property string ownerId
  * @property Item item
  * @property double count
- * @property double placeCount
  * @property BillingInfo billingInfo
  */
 class StoredItemInfo extends BaseModel
