@@ -12,13 +12,21 @@ class PaymentItemsTableSeeder extends Seeder
      */
     public function run()
     {
-//        PaymentItem::create(
-//            [
-//                'title' => 'Оплата заказа',
-//                'description' => 'Плата за принятый заказ',
-//                'type' => 'in'
-//            ]
-//        );
+        PaymentItem::create(
+            [
+                'title' => 'Списание с баланса',
+                'description' => 'Списание денег с баланса клиента в счет оплаты заказы',
+                'type' => 'internal'
+            ]
+        );
+
+        PaymentItem::create(
+            [
+                'title' => 'Оплата заказа',
+                'description' => 'Оплата заказа наличными без пополнения баланса пользователя',
+                'type' => 'in'
+            ]
+        );
 
         PaymentItem::create(
             [

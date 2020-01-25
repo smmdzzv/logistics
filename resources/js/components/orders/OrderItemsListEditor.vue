@@ -90,6 +90,7 @@
 
                 try{
                     const response = await axios.post(action, data);
+                    window.location = `/incoming-payments/${response.data}/edit`;
                 }
                 catch (e) {
                     if (e.response.status === 400) {
@@ -111,7 +112,7 @@
 
                 try {
                     const response = await axios.post(action, data);
-                    // window.location.reload();
+                    window.location = `/incoming-payments/${response.data}/edit`;
                 } catch (e) {
                     if (e.response.status === 400) {
                         this.errorMessage =  e.response.data.message;

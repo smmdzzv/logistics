@@ -62,11 +62,7 @@ class OrderItemsController extends Controller
             'cashierId' => auth()->user()->id,
             'currencyId' => Currency::where('isoName', 'USD')->first()->id,
             'payerId' => $order->owner->id,
-            'paymentItemId' => PaymentItem::firstOrCreate([
-                'title' => 'Пополнение баланса',
-                'type' => 'in',
-                'description' => 'Пополнение долларового счета пользователя'
-            ])->id,
+            'paymentItemId' => PaymentItem::where('title', 'Оплата заказа')->first()->id,
             'accountToId' => LegalEntity::first()->accounts()->whereHas('currency', function (Builder $query) {
                 $query->where('isoName', 'USD');
             })->first()->id,
@@ -87,7 +83,7 @@ class OrderItemsController extends Controller
             ]);
         });
 
-        return;
+        return $payment->id;
     }
 
     private function getStoredItems()
