@@ -45,7 +45,7 @@ class OrderItemsController extends Controller
     //TODO refactor this and DeliverOrderItemsRequestWriter
     public function storePaymentRequest(Order $order)
     {
-        $items = $this->getStoredItems();
+        $items = StoredItem::whereIn('id', \request()->input('items'))->unpaid()->get();
 
         //Calculate bill
         $unpaidStoredItemInfos = $items->load('info.billingInfo')
