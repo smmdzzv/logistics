@@ -38,7 +38,8 @@ Route::get('/orders/{client}/active', 'OrdersController@activeOrders')->name('cl
 Route::post('/order/{order}/update-price', 'Orders\OrderPriceController@update')->name('order-price.update');
 
 Route::get('/orders/items/edit', 'Orders\OrderItemsController@edit')->name('order-items.edit');
-Route::get('/order/{order}/items', 'Orders\OrderItemsController@storedItems'); //TODO rename order to deliver
+Route::get('/order/{order}/items', 'Orders\OrderItemsController@storedItems');
+Route::get('/order/{order}/unpaid-items', 'Orders\OrderItemsController@unpaidStoredItems');
 Route::post('/deliver/{order}/items', 'Orders\OrderItemsController@deliver');
 Route::post('/deliver/{order}/items/pending-payment', 'Orders\OrderItemsController@storePaymentRequest');
 

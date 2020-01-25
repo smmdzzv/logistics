@@ -36,6 +36,11 @@ async function getOrderItems(orderId) {
     return axios.get(action);
 }
 
+async function getUnpaidOrderItems(orderId) {
+    let action = `/order/${orderId}/unpaid-items`;
+    return axios.get(action);
+}
+
 function disableForm(){
     $( "input" ).prop( "disabled", true );
 }

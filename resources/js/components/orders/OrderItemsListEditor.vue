@@ -44,7 +44,7 @@
         <b-modal id="payment-error" title="Ошибка оплаты" ok-only centered ok-title="Закрыть">
             <p class="my-4">{{errorMessage}}</p>
             <a href="#" @click.prevent="submit(e, true)">Доверительный платеж</a><br>
-            <a href="#">Оформить платежную заявку на пополнение баланса</a>
+            <a href="#" @click.prevent="createPendingPayment">Оформить платежную заявку на пополнение баланса</a>
         </b-modal>
     </div>
 
@@ -77,6 +77,26 @@
             onItemsSelected(items) {
                 this.selectedItems = items
             },
+            async createPendingPayment(){
+                this.$bvModal.hide('payment-error');
+
+                let data = {
+                    items: this.selectedItems.map((item) => {
+                        return item.id
+                    }),
+                };
+
+                let action = `/deliver/${this.selectedOrder.id}/items/pending-payment`;
+
+                try{
+                    const response = await axios.post(action, data);
+                }
+                catch (e) {
+                    if (e.response.status === 400) {
+
+                    }
+                }
+            },
             async submit(e, isDebtRequested = false) {
                 this.$bvModal.hide('payment-error');
 
@@ -87,7 +107,7 @@
                     isDebtRequested: isDebtRequested
                 };
 
-                let action = `/order/${this.selectedOrder.id}/items`;
+                let action = `/deliver/${this.selectedOrder.id}/items`;
 
                 try {
                     const response = await axios.post(action, data);
@@ -95,10 +115,6 @@
                 } catch (e) {
                     if (e.response.status === 400) {
                         this.errorMessage =  e.response.data.message;
-                        // this.$root.showErrorMsg(
-                        //     "Ошибка оплаты",
-                        //     e.response.data.message
-                        // );
                     }
                     else{
                         this.errorMessage = "Не удалось оформить выдачу товаров. Повтороите попытку после перезагрузки страницы"
@@ -128,7 +144,7 @@
                     return;
                 tShowSpinner();
                 try {
-                    const response = await getOrderItems(this.selectedOrder.id);
+                    const response = await getUnpaidOrderItems(this.selectedOrder.id);
                     this.items = response.data;
                 } catch (e) {
                     this.$root.showErrorMsg(

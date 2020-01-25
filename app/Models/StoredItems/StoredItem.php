@@ -5,9 +5,9 @@ namespace App\Models\StoredItems;
 
 use App\Models\BaseModel;
 use App\Models\Branches\Storage;
+use App\Models\Order\OrderPaymentItem;
 use App\Models\Trip;
 use App\StoredItems\StorageHistory;
-use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -30,6 +30,14 @@ class StoredItem extends BaseModel
         return $query->whereHas('storageHistory', function (Builder $query) use ($id) {
             $query->where('storage_id', $id);
         });
+    }
+
+    public function scopeUnpaid($query){
+        return $query->whereDoesntHave('orderPaymentItems');
+    }
+
+    public function orderPaymentItems(){
+        return $this->hasMany(OrderPaymentItem::class);
     }
 
     public function info(){

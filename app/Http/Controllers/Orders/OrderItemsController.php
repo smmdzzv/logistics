@@ -99,4 +99,10 @@ class OrderItemsController extends Controller
     {
         return $order->storedItems()->with('info', 'info.item', 'info.owner', 'storageHistory.storage')->get();
     }
+
+    public function unpaidStoredItems(Order $order){
+        return $order->storedItems()
+            ->with('info', 'info.item', 'info.owner', 'storageHistory.storage')
+            ->unpaid()->get();
+    }
 }
