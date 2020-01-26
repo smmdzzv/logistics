@@ -94,6 +94,9 @@ Route::get('/stored/{storedItem}', 'StoredItemsController@show')->name('stored.s
 Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch');
 //Route::post('/stored/trip/{trip}', 'StoredItemsController@associateToTrip');
 
+//Shops
+Route::resource('shop', 'Shops\ShopsController', ['only' => ['create', 'store']]);
+
 //Settings
 Route::get('/settings', 'AppSettingsController@show');
 Route::post('/settings/branch', 'AppSettingsController@storeBranch');

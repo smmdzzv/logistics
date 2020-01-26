@@ -9,6 +9,7 @@ use App\Models\Customs\CustomsCode;
 use App\Models\Order;
 use App\Models\Trip;
 use App\Models\Users\Client;
+use App\Shops\Shop;
 
 /**
  * @property double weight
@@ -72,6 +73,10 @@ class StoredItemInfo extends BaseModel
 
     public function customsCode(){
         return $this->belongsTo(CustomsCode::class);
+    }
+
+    public function shop(){
+        return $this->belongsTo(Shop::class);
     }
 
     //TODO count prop

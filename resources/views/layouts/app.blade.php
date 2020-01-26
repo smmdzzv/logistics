@@ -67,6 +67,7 @@
                                 <a class="dropdown-item" href="{{route('items.index')}}">Список наименований</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{route('customs-code.index')}}">Таможенные коды</a>
+                                <a class="dropdown-item" href="{{route('shop.create')}}">Добавить магазин</a>
                             </div>
                         </li>
                         <!--Till-->
