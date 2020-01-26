@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Tariff;
 use App\Models\Users\Client;
+use App\Shops\Shop;
 use App\User;
 use stdClass;
 
@@ -50,7 +51,8 @@ class OrdersController extends Controller
     {
         $user = auth()->user();
         $tariffs = Tariff::all();
-        return view('orders.create', compact('user', 'tariffs'));
+        $shops = Shop::all();
+        return view('orders.create', compact('user', 'tariffs', 'shops'));
     }
 
     public function store(StoreOrderRequest $request)

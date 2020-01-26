@@ -1,6 +1,9 @@
 <template>
     <div>
-        <stored-item-box :branch="user.branch" :onStoredItemAdded="onStoredItemAdded" :tariffs="tariffs"
+        <stored-item-box :branch="user.branch"
+                         :onStoredItemAdded="onStoredItemAdded"
+                         :tariffs="tariffs"
+                         :shops="shops"
                          class="pb-4"></stored-item-box>
         <div class="card">
             <div class="card-header bg-info">
@@ -70,7 +73,8 @@
         name: "OrderItemsBox",
         props: {
             user: null,
-            tariffs: Array
+            tariffs: Array,
+            shops: Array
         },
         data() {
             return {

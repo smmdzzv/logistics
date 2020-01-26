@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <order-items-box :tariffs="tariffs" :user="user"
+        <order-items-box :tariffs="tariffs" :user="user" :shops="shops"
                          v-on:onStoredItemsChange="onStoredItemsChange"/>
 
 
@@ -37,7 +37,8 @@
         name: "OrderEditor",
         props: {
             user: null,
-            tariffs: Array
+            tariffs: Array,
+            shops: Array
         },
         data() {
             return {
