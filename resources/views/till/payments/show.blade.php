@@ -29,22 +29,23 @@
                     <div class=" ">
                         <div class="card">
                             <div class="card-header text-center">
-                                <div class="form-row">
-                                    <div class="col text-md-left">
-                                    <span>
-                                       Наименование
-                                    </span>
+                                <div class="form-row text-center">
+                                    <div class="col-md-2 text-md-left">
+                                        <span>Наименование</span>
+                                    </div>
+                                    <div class="col-md-3 text-md-left">
+                                        <span>Код</span>
                                     </div>
                                     <div class="col-md-3 text-md-left">
                                         <span>Ш &times; В &times; Д</span>
                                     </div>
-                                    <div class="col-md-2 text-md-left">
+                                    <div class="col-md-1 text-md-left">
                                         <span>Вес</span>
                                     </div>
-                                    <div class="col-md-2 text-md-left">
+                                    <div class="col-md-1 text-md-left">
                                         <span>Цена за кг</span>
                                     </div>
-                                    <div class="col-md-2 text-md-left">
+                                    <div class="col-md-1 text-md-left">
                                         <span>Цена</span>
                                     </div>
                                     <div class="col-md-1">
@@ -54,23 +55,25 @@
                             @foreach($payment->orderPaymentItems as $orderPaymentItem)
                                 <li class="list-group-item">
                                     <div class="form-row text-center">
-                                        <div class="col text-md-left">
-                                    <span>
-                                        {{$orderPaymentItem->storedItem->info->item->name}}
-                                    </span>
+                                        <div class="col-md-2 text-md-left">
+                                            <span>{{$orderPaymentItem->storedItem->info->item->name}}</span>
                                         </div>
                                         <div class="col-md-3 text-md-left">
-                                    <span>{{$orderPaymentItem->storedItem->info->width}}
-                                        &times; {{$orderPaymentItem->storedItem->info->height}}
-                                        &times; {{$orderPaymentItem->storedItem->info->length}}</span>
+                                            <span>{{$orderPaymentItem->storedItem->code}}</span>
                                         </div>
-                                        <div class="col-md-2 text-md-left">
+                                        <div class="col-md-3 text-md-left">
+                                            <span>{{$orderPaymentItem->storedItem->info->width}}
+                                                &times; {{$orderPaymentItem->storedItem->info->height}}
+                                                &times; {{$orderPaymentItem->storedItem->info->length}}
+                                            </span>
+                                        </div>
+                                        <div class="col-md-1 text-md-left">
                                             <span>{{$orderPaymentItem->storedItem->info->weight}} кг</span>
                                         </div>
-                                        <div class="col-md-2 text-md-left">
+                                        <div class="col-md-1 text-md-left">
                                             <span>{{round($orderPaymentItem->storedItem->info->billingInfo->pricePerItem / $orderPaymentItem->storedItem->info->weight, 2)}} $</span>
                                         </div>
-                                        <div class="col-md-2 text-md-left">
+                                        <div class="col-md-1 text-md-left">
                                             <span>{{$orderPaymentItem->storedItem->info->billingInfo->pricePerItem}} $</span>
                                         </div>
                                         <div class="col-md-1">
