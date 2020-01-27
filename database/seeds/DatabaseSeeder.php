@@ -31,5 +31,7 @@ class DatabaseSeeder extends Seeder
 
          $this->call(PaymentItemsTableSeeder::class);
          $this->call(MoneyExchangesTableSeeder::class);
+
+         $this->call(CustomsCodesTableSeeder::class);
     }
 }

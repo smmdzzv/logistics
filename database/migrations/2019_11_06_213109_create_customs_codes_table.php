@@ -16,7 +16,7 @@ class CreateCustomsCodesTable extends Migration
         Schema::create('customs_codes', function (Blueprint $table) {
             $table->char('id', 26)->primary();
             $table->char('name', 255);
-            $table->char('shortName', 255)->nullable();;
+            $table->char('description', 255)->nullable();
             $table->char('internationalName', 255)->nullable();
             $table->char('code', 20)->unique();
             $table->double('price');
