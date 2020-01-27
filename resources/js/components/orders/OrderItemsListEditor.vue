@@ -37,7 +37,8 @@
         </div>
 
         <div class="col-12 text-center">
-            <button @click="submit" class="btn btn-primary">Выдать</button>
+            <button @click="submit(e, false)" class="btn btn-primary  m-2">Подготовить к выдаче</button>
+            <button @click="submit(e, false, true)" class="btn btn-secondary m-2">Выдать сразу</button>
         </div>
 
 
@@ -98,14 +99,15 @@
                     }
                 }
             },
-            async submit(e, isDebtRequested = false) {
+            async submit(e, isDebtRequested = false, deliverImmediately = false) {
                 this.$bvModal.hide('payment-error');
 
                 let data = {
                     items: this.selectedItems.map((item) => {
                         return item.id
                     }),
-                    isDebtRequested: isDebtRequested
+                    isDebtRequested: isDebtRequested,
+                    deliverImmediately: deliverImmediately
                 };
 
                 let action = `/deliver/${this.selectedOrder.id}/items`;

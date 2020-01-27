@@ -12,6 +12,7 @@ use App\Models\StoredItems\StoredItem;
 use App\Http\Controllers\Controller;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 class OrderItemsController extends Controller
@@ -35,6 +36,7 @@ class OrderItemsController extends Controller
         $data->employee = auth()->user();
         $data->storedItems = $this->getStoredItems();
         $data->isDebtRequested = request()->get('isDebtRequested');
+        $data->deliverImmediately = request()->get('deliverImmediately');
 
         $writer = new DeliverOrderItemsRequestWriter($data);
         $result = $writer->write();
@@ -82,6 +84,11 @@ class OrderItemsController extends Controller
                 'order_payment_id' => $orderPayment->id
             ]);
         });
+
+        StoredItem::whereIn('id', request()->input('items'))->update([
+            'deleted_at' => Carbon::now(),
+            'deleted_by_id' => auth()->user()->id
+        ]);
 
         return $payment->id;
     }
