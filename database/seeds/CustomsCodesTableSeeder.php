@@ -16,7 +16,6 @@ class CustomsCodesTableSeeder extends Seeder
             [
                 "Автозапчасти",
                 "Автомобилные аксессуары,запчасти для трактора",
-                "",
                 "8708999909",
                 "2100",
                 "0",
@@ -316,7 +315,6 @@ class CustomsCodesTableSeeder extends Seeder
             ],
             [
                 "Канцтовары",
-                "",
                 "Обложка для тетради",
                 "4820900000",
                 "1500",
@@ -693,7 +691,7 @@ class CustomsCodesTableSeeder extends Seeder
                 "",
                 "4202290000",
                 "4000",
-                "30",
+                "0",
                 "18",
                 "30",
 
