@@ -17,6 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->char('id', 26)->primary();
             $table->char('branchId', 26)->index();
             $table->char('cashierId', 26)->index();
+            $table->char('preparedById', 26)->index()->nullable();
             $table->char('currencyId', 26)->index();
             $table->char('payerId', 26)->nullable();
             $table->char('paymentItemId', 26);

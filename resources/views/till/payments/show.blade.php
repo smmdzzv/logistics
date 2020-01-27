@@ -21,6 +21,10 @@
                     @endif
                     <p>Статья: <b>{{$payment->paymentItem->title}}</b></p>
                     <p>Пояснение: <b>{{$payment->comment}}</b></p>
+                    @if($payment->preparedBy)
+                        <p>Заявку подготовил: <b>{{$payment->preparedBy->name}}</b></p>
+                        <p>Дата создания заявки:  <b>{{$payment->created_at}}</b></p>
+                    @endif
                     <p>Операцию провел: <b>{{$payment->cashier->name}}</b></p>
                     <p>Операция проведена в <b>{{$payment->branch->name}}</b></p>
                 </div>

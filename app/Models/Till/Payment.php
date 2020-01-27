@@ -42,6 +42,11 @@ class Payment extends BaseModel
         return $this->belongsTo(User::class, 'cashierId');
     }
 
+    public function preparedBy()
+    {
+        return $this->belongsTo(User::class, 'preparedById');
+    }
+
     /**
      * Used for balance replenishment only, when accountFrom is null
      * @return BelongsTo

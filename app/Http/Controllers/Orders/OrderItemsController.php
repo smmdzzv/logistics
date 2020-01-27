@@ -65,6 +65,7 @@ class OrderItemsController extends Controller
             'currencyId' => Currency::where('isoName', 'USD')->first()->id,
             'payerId' => $order->owner->id,
             'paymentItemId' => PaymentItem::where('title', 'Оплата заказа')->first()->id,
+            'preparedById' => auth()->user()->id,
             'accountToId' => LegalEntity::first()->accounts()->whereHas('currency', function (Builder $query) {
                 $query->where('isoName', 'USD');
             })->first()->id,

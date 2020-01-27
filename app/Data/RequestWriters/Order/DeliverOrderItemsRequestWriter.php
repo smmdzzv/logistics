@@ -121,6 +121,7 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
             'cashierId' => $this->input->employee->id,
             'currencyId' => Currency::where('isoName', 'USD')->first()->id,
             'payerId' => $this->input->order->owner->id,
+            'preparedById' => auth()->user()->id,
             'paymentItemId' => PaymentItem::firstOrCreate([
                 'title' => 'Списание с баланса',
                 'type' => 'internal',

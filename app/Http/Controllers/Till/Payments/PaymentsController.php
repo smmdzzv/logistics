@@ -34,7 +34,9 @@ class PaymentsController extends BaseController
     }
 
     public function show(Payment $payment){
-        $payment->load('cashier',
+        $payment->load(
+            'cashier',
+            'preparedBy',
             'payer',
             'currency',
             'paymentItem',
