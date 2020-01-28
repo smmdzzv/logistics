@@ -26,7 +26,11 @@
         </template>
 
         <template slot="details" slot-scope="{item}">
-            <a :href="getDetailsUrl(item)" class="btn btn-outline-primary">Детали</a>
+            <a :href="getDetailsUrl(item)"><img class="icon-btn-sm" src="/svg/file.svg"></a>
+        </template>
+
+        <template slot="edit" slot-scope="{item}">
+            <a :href="getEditUrl(item)"><img class="icon-btn-sm" src="/svg/edit.svg"></a>
         </template>
 
         <template #footer>
@@ -91,6 +95,9 @@
             },
             getDetailsUrl(order) {
                 return '/orders/' + order.id;
+            },
+            getEditUrl(order) {
+                return '/orders/' + order.id + '/edit';
             }
         },
         computed: {
@@ -110,7 +117,7 @@
                 orders: [],
                 action: this.url,
                 isBusy: false,
-                customCells: ['details'],
+                customCells: ['details', 'edit'],
                 fields: {
                     totalWeight: {
                         label: 'Вес',
@@ -141,6 +148,9 @@
                         sortable: true
                     },
                     'details': {
+                        label: '',
+                    },
+                    'edit': {
                         label: '',
                     }
                 }

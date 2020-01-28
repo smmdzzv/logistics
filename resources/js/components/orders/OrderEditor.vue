@@ -4,6 +4,7 @@
             <div class="col-12">
                 <label class="col-12" for="user">Клиент</label>
                 <search-user-dropdown :selected="onUserSelected"
+                                      :preselectedUser="client"
                                       class="col-12"
                                       id="user"
                                       placeholder="Введите ФИО или код клиента"
@@ -19,7 +20,10 @@
             </div>
         </div>
 
-        <order-items-box :tariffs="tariffs" :user="user" :shops="shops"
+        <order-items-box :tariffs="tariffs"
+                         :order="order"
+                         :user="user"
+                         :shops="shops"
                          v-on:onStoredItemsChange="onStoredItemsChange"/>
 
 
@@ -35,10 +39,16 @@
 <script>
     export default {
         name: "OrderEditor",
+        mounted(){
+            if(this.order){
+                this.onUserSelected(this.order.owner);
+            }
+        },
         props: {
             user: null,
             tariffs: Array,
-            shops: Array
+            shops: Array,
+            order: Object
         },
         data() {
             return {

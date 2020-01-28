@@ -273,6 +273,9 @@
                     item: null,
                     // placeCount: null,
                     customsCode: null,
+                    billingInfo: {
+                        tariffPricing: null
+                    },
                     shop:null
                 },
                 tariff: {name: null},
@@ -297,7 +300,7 @@
                 try {
                     let action = `tariff/${this.tariff.id}/pricing`;
                     const response = await axios.get(action);
-                    this.storedItem.tariffPricing = response.data;
+                    this.storedItem.billingInfo.tariffPricing = response.data;
                 } catch (e) {
                     this.$root.showErrorMsg(
                         'Ошибка загрузки',

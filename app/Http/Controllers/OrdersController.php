@@ -88,6 +88,24 @@ class OrdersController extends Controller
         return $result->order;
     }
 
+    public function edit(Order $order){
+        $order->load([
+            'storedItemInfos',
+            'storedItemInfos.customsCode',
+            'storedItemInfos.owner',
+            'storedItemInfos.billingInfo.tariffPricing',
+            'storedItemInfos.item',
+            'storedItemInfos.storedItems',
+            'owner'
+        ]);
+
+        $user = auth()->user();
+        $tariffs = Tariff::all();
+        $shops = Shop::all();
+
+        return view('orders.edit', compact('order', 'user', 'tariffs', 'shops'));
+    }
+
     public function update(StoreOrderRequest $request)
     {
 

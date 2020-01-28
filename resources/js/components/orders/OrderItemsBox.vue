@@ -18,10 +18,10 @@
                             <div class="col-md-2 cell"> Тип товара</div>
                             <div class="col-md-2 cell"> Объем</div>
                             <div class="col-md-2 cell"> Вес</div>
-<!--                            <div id="titlePricePerPlaceCount" class="col-md-1 cell"> Цена</div>-->
-<!--                            <b-tooltip target="titlePricePerPlaceCount" triggers="hover">-->
-<!--                                Цена в расчете на единицу места-->
-<!--                            </b-tooltip>-->
+                            <!--                            <div id="titlePricePerPlaceCount" class="col-md-1 cell"> Цена</div>-->
+                            <!--                            <b-tooltip target="titlePricePerPlaceCount" triggers="hover">-->
+                            <!--                                Цена в расчете на единицу места-->
+                            <!--                            </b-tooltip>-->
                             <div id="pricePerSingleItem" class="col-md-3 cell"> Цена за товар</div>
                             <b-tooltip target="pricePerSingleItem" triggers="hover">
                                 Цена за единицу товара
@@ -71,10 +71,18 @@
 <script>
     export default {
         name: "OrderItemsBox",
+        mounted() {
+            if (this.order)
+                for (var i = 0; i < this.order.storedItemInfos.length; i++) {
+                    this.onStoredItemAdded(this.order.storedItemInfos[i]);
+                }
+
+        },
         props: {
             user: null,
             tariffs: Array,
-            shops: Array
+            shops: Array,
+            order: Object
         },
         data() {
             return {
@@ -114,10 +122,10 @@
                 if (!stored)
                     return null;
 
-                if(stored.price)
+                if (stored.price)
                     return stored.price.toFixed(2);
 
-                let tariff = stored.tariffPricing;
+                let tariff = stored.billingInfo.tariffPricing;
 
                 let weightPerCube = stored.totalWeight / stored.totalCubage;
 

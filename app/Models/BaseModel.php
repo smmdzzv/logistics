@@ -18,5 +18,7 @@ class BaseModel extends Model
      */
     public $incrementing = false;
 
+    public static $snakeAttributes = false;
+
     protected $casts = ['id' => 'string'];
 }
