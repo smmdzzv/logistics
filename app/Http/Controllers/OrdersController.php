@@ -93,8 +93,10 @@ class OrdersController extends Controller
             'storedItemInfos',
             'storedItemInfos.customsCode',
             'storedItemInfos.owner',
+            'storedItemInfos.shop',
             'storedItemInfos.billingInfo.tariffPricing',
-            'storedItemInfos.item',
+            'storedItemInfos.item.tariff',
+            'storedItemInfos.item.codes',
             'storedItemInfos.storedItems',
             'owner'
         ]);

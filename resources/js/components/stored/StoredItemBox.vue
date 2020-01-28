@@ -83,6 +83,7 @@
                         <label class="col-form-label text-md-right" for="item">Наименование товара</label>
                         <suggestions-input :onItemSearchInputChange="onItemSearchInputChange"
                                            :onSelected="onItemSelected"
+                                           :initQuery="itemInitQuery"
                                            displayPropertyName="name"
                                            id="item"
                                            keyPropertyName="id"
@@ -130,7 +131,8 @@
                         <label class="col-form-label text-md-right" for="customs-code">Таможенный код</label>
                         <select class="form-control custom-select"
                                 id="customs-code"
-                                required v-model="storedItem.customsCode">
+                                v-model="storedItem.customsCode"
+                                required>
                             <option :value="customsCode"
                                     v-for="customsCode in customsCodes"
                             >{{customsCode.name}}
@@ -250,6 +252,7 @@
             },
             tariffs: Array,
             shops: Array,
+            providedStoredItemInfo: Object,
             onStoredItemAdded: {
                 type: Function,
                 required: true
@@ -263,6 +266,7 @@
                 items: [],
                 filteredItems: [],
                 customsCodes: [],
+                itemInitQuery: '',
                 storedItem: {
                     width: null,
                     height: null,
@@ -276,7 +280,7 @@
                     billingInfo: {
                         tariffPricing: null
                     },
-                    shop:null
+                    shop: null
                 },
                 tariff: {name: null},
                 customPrice: 0,
@@ -296,6 +300,9 @@
                 }
             },
             async getPricing() {
+                //if stored item is being edited pricing should be the same
+                if(this.storedItem.billingInfo.tariffPricing)
+                   return;
                 tShowSpinner();
                 try {
                     let action = `tariff/${this.tariff.id}/pricing`;
@@ -329,7 +336,7 @@
                 this.storedItem.width = '';
                 this.storedItem.count = '';
                 // this.storedItem.placeCount = '';
-                this.storedItem.item = null;
+                this.storedItem.item = {name: null};
                 this.filteredItems = [];
                 this.storedItem.price = null;
                 this.storedItem.customsCode = null;
@@ -401,6 +408,27 @@
                 })
             }
 
+        },
+        watch: {
+            providedStoredItemInfo() {
+                this.onItemSelected(this.providedStoredItemInfo.item);
+                //this is needed, because attached customsCode could differ as an object from options (customsCodes)
+                // this.storedItem.customsCode = this.customsCodes.find(function (el) {
+                //     if (el.id === this.providedStoredItemInfo.customsCode.id)
+                //         return el;
+                // }, this);
+
+                // this.providedStoredItemInfo.shop = this.shops.find(function (el) {
+                //     if(el.id === this.providedStoredItemInfo.shop.id)
+                //         return el;
+                // }, this);
+                this.storedItem = $.extend(true, {}, this.providedStoredItemInfo);
+                this.storedItem.customsCode = this.customsCodes.find(function (el) {
+                    if (el.id === this.providedStoredItemInfo.customsCode.id)
+                        return el;
+                }, this);
+                this.itemInitQuery = this.providedStoredItemInfo.item.name;
+            }
         },
         components: {
             SuggestionsInput: require('../common/SuggestionInput').default

@@ -56,10 +56,10 @@ class StoredItemInfo extends BaseModel
         return $this->belongsTo(Order::class);
     }
 
-    public function trip()
-    {
-        return $this->belongsTo(Trip::class, 'tripId');
-    }
+//    public function trip()
+//    {
+//        return $this->belongsTo(Trip::class, 'tripId');
+//    }
 
     public function billingInfo()
     {
@@ -72,7 +72,7 @@ class StoredItemInfo extends BaseModel
     }
 
     public function customsCode(){
-        return $this->belongsTo(CustomsCode::class);
+        return $this->belongsTo(CustomsCode::class, 'customs_code_id');
     }
 
     public function shop(){

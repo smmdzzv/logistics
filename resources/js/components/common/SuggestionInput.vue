@@ -41,9 +41,9 @@
                 type: String,
                 default: 'id'
             },
-            isInvalid:{
+            isInvalid: {
                 required: false,
-                default:false
+                default: false
             },
             onItemSearchInputChange: {
                 type: Function,
@@ -53,22 +53,27 @@
                 type: Function,
                 required: true
             },
-            initQuery:{
+            initQuery: {
                 type: String,
-                required:false
+                required: false
             }
         },
         //TODO v-model binding
-        created(){
-            if(this.initQuery){
-                this.query = this.initQuery;
-            }
-        },
+        // created(){
+        //     if(this.initQuery){
+        //         this.query = this.initQuery;
+        //     }
+        // },
         data() {
             return {
                 query: '',
                 activeOptionIndex: 0,
                 showOptions: false
+            }
+        },
+        watch: {
+            initQuery() {
+                this.query = this.initQuery;
             }
         },
         methods: {

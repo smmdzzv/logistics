@@ -1,6 +1,7 @@
 <template>
     <div>
         <stored-item-box :branch="user.branch"
+                         :providedStoredItemInfo="storedItemInfoToEdit"
                          :onStoredItemAdded="onStoredItemAdded"
                          :tariffs="tariffs"
                          :shops="shops"
@@ -22,7 +23,7 @@
                             <!--                            <b-tooltip target="titlePricePerPlaceCount" triggers="hover">-->
                             <!--                                Цена в расчете на единицу места-->
                             <!--                            </b-tooltip>-->
-                            <div id="pricePerSingleItem" class="col-md-3 cell"> Цена за товар</div>
+                            <div id="pricePerSingleItem" class="col-md-3 cell">Цена</div>
                             <b-tooltip target="pricePerSingleItem" triggers="hover">
                                 Цена за единицу товара
                             </b-tooltip>
@@ -41,6 +42,8 @@
                             <div class="col-md-3 cell"> {{getPriceForOne(stored)}} $</div>
                             <div class="col-md-2 cell"> {{getPrice(stored)}} $</div>
                             <div class="col-md-1">
+                                <img @click="editItem(stored)" alt="delete-item" class="icon-btn-sm"
+                                     src="/svg/edit.svg">
                                 <img @click="removeFromList(stored)" alt="delete-item" class="icon-btn-sm"
                                      src="/svg/delete.svg">
                             </div>
@@ -55,11 +58,11 @@
             <div class="card-footer" v-if="storedItems.length > 0">
                 <div class="form-row">
                     <div class="col-md-2 cell"> Итого</div>
-                    <div :property="storedItems" class="col-md-2 cell">{{getTotalCubage()}} м<sup>3</sup></div>
-                    <div :property="storedItems" class="col-md-2 cell"> {{getTotalWeight()}} кг</div>
+                    <div class="col-md-2 cell">{{getTotalCubage()}} м<sup>3</sup></div>
+                    <div class="col-md-2 cell"> {{getTotalWeight()}} кг</div>
                     <div class="col-md-1 cell"></div>
                     <div class="col-md-2 cell"></div>
-                    <div :property="storedItems" class="col-md-2 cell">{{getTotalPrice()}} $</div>
+                    <div class="col-md-2 cell">{{getTotalPrice()}} $</div>
                     <div class="col-md-1 cell"></div>
                 </div>
             </div>
@@ -86,7 +89,8 @@
         },
         data() {
             return {
-                storedItems: []
+                storedItems: [],
+                storedItemInfoToEdit: null
             }
         },
         methods: {
@@ -94,6 +98,10 @@
                 this.$bvModal.show('addItemModal');
             },
             onStoredItemAdded(storedItem) {
+                if(storedItem.id)
+                    this.storedItems = this.storedItems.filter(function (el) {
+                        return el.id !== storedItem.id
+                    });
                 this.storedItems.push(storedItem);
                 this.$emit('onStoredItemsChange', this.storedItems)
             },
@@ -115,15 +123,19 @@
                 });
                 this.$emit('onStoredItemsChange', this.storedItems);
             },
-
+            editItem(stored) {
+                this.storedItemInfoToEdit = $.extend(true, {}, stored);
+                if(!stored.id)
+                    this.removeFromList(stored);
+            },
             //tariffPricing is attached to storedItem in @StoredItemBox.vue onAdded
             //tariffPricing properties are same as server version
             getPrice(stored) {
                 if (!stored)
                     return null;
 
-                if (stored.price)
-                    return stored.price.toFixed(2);
+                // if (stored.price)
+                //     return stored.price.toFixed(2);
 
                 let tariff = stored.billingInfo.tariffPricing;
 
