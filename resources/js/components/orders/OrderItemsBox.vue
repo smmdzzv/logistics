@@ -180,8 +180,7 @@
                     //     sum += price;
                     // else
                     let price = this.getPrice(stored);
-                    sum += Number(price);
-                    console.log(sum)
+                    sum += Number(price); 
                 }
                 return sum.toFixed(2);
             },

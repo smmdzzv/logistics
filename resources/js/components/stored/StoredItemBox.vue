@@ -331,6 +331,7 @@
             },
             clearForm(e) {
                 if (e) e.preventDefault();
+                this.itemInitQuery = '';
                 this.storedItem.weight = '';
                 this.storedItem.id = null;
                 this.storedItem.height = '';
@@ -338,7 +339,7 @@
                 this.storedItem.width = '';
                 this.storedItem.count = '';
                 // this.storedItem.placeCount = '';
-                this.storedItem.item = {name: ''};
+                this.storedItem.item = null;
                 this.filteredItems = [];
                 this.storedItem.price = null;
                 this.storedItem.customsCode = null;
