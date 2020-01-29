@@ -302,7 +302,7 @@
             },
             async getPricing() {
                 //if stored item is being edited pricing should be the same
-                if (this.storedItem.billingInfo.tariffPricing)
+                if (this.storedItem.billingInfo.tariffPricing && this.storedItem.item.id === this.providedStoredItemInfo.item.id)
                     return;
                 tShowSpinner();
                 try {
