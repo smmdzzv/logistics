@@ -98,7 +98,7 @@
                 this.$bvModal.show('addItemModal');
             },
             onStoredItemAdded(storedItem) {
-                if(storedItem.id)
+                if (storedItem.id)
                     this.storedItems = this.storedItems.filter(function (el) {
                         return el.id !== storedItem.id
                     });
@@ -125,7 +125,7 @@
             },
             editItem(stored) {
                 this.storedItemInfoToEdit = $.extend(true, {}, stored);
-                if(!stored.id)
+                if (!stored.id)
                     this.removeFromList(stored);
             },
             //tariffPricing is attached to storedItem in @StoredItemBox.vue onAdded
@@ -134,8 +134,10 @@
                 if (!stored)
                     return null;
 
-                // if (stored.price)
-                //     return stored.price.toFixed(2);
+                if (stored.customPrice) {
+                    return stored.customPrice.toFixed(2);
+                }
+
 
                 let tariff = stored.billingInfo.tariffPricing;
 
@@ -177,7 +179,9 @@
                     // if (price)
                     //     sum += price;
                     // else
-                        sum += this.getPrice(stored);
+                    let price = this.getPrice(stored);
+                    sum += Number(price);
+                    console.log(sum)
                 }
                 return sum.toFixed(2);
             },

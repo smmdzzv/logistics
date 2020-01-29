@@ -268,7 +268,7 @@
                 customsCodes: [],
                 itemInitQuery: '',
                 storedItem: {
-                    id:null,
+                    id: null,
                     width: null,
                     height: null,
                     length: null,
@@ -302,8 +302,8 @@
             },
             async getPricing() {
                 //if stored item is being edited pricing should be the same
-                if(this.storedItem.billingInfo.tariffPricing)
-                   return;
+                if (this.storedItem.billingInfo.tariffPricing)
+                    return;
                 tShowSpinner();
                 try {
                     let action = `tariff/${this.tariff.id}/pricing`;
@@ -338,7 +338,7 @@
                 this.storedItem.width = '';
                 this.storedItem.count = '';
                 // this.storedItem.placeCount = '';
-                this.storedItem.item = {name: null};
+                this.storedItem.item = {name: ''};
                 this.filteredItems = [];
                 this.storedItem.price = null;
                 this.storedItem.customsCode = null;
@@ -402,7 +402,7 @@
                     return
                 }
 
-                this.storedItem.price = parseFloat(this.customPrice) * parseFloat(this.storedItem.count);
+                this.storedItem.customPrice = parseFloat(this.customPrice) * parseFloat(this.storedItem.count);
 
                 // Hide the modal manually
                 this.$nextTick(() => {
