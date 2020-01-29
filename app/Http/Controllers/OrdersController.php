@@ -77,7 +77,7 @@ class OrdersController extends Controller
                 'customs_code_id' => $itemData['customsCode']['id']
             ]);
 
-            $data->customPrices[$itemIndex] = $itemData['price'];
+            $data->customPrices[$itemIndex] = isset($itemData['customPrice']) ? $itemData['customPrice'] : null;
 
             $itemIndex++;
         }
