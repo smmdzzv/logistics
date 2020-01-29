@@ -365,9 +365,10 @@
             },
             submit() {
                 //Copy data to new variable
-                let stored = $.extend(true, {}, this.storedItem);
-                this.onStoredItemAdded(stored);
+                // let stored = $.extend(true, {}, this.storedItem);
+                let stored = JSON.parse(JSON.stringify(this.storedItem));
                 this.clearForm(null);
+                this.onStoredItemAdded(stored);
             },
 
             //Custom Price

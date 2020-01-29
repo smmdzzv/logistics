@@ -74,7 +74,7 @@
 
                         window.location.href = '/orders/' + response.data.id;
                     } catch (e) {
-                        tHideSpinner()
+                        tHideSpinner();
                         this.$root.showErrorMsg(
                             'Ошибка сохранения',
                             'Не удалось сохранить заказ. Попробуйте принять заказ позже'

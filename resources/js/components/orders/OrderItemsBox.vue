@@ -142,9 +142,9 @@
                 let weightPerCube = stored.totalWeight / stored.totalCubage;
 
                 if (stored.item.onlyAgreedPrice || weightPerCube >= tariff.maxWeightPerCube && !stored.item.calculateByNormAndWeight) {
-                    stored.price = tariff.agreedPricePerKg * stored.totalWeight;
-                    stored.price = Math.round(stored.price * 100) / 100;
-                    return stored.price
+                    let price = tariff.agreedPricePerKg * stored.totalWeight;
+                    price = Math.round(price * 100) / 100;
+                    return price
                 }
 
                 let price = tariff.pricePerCube;
@@ -158,9 +158,9 @@
                 if (weightPerCube > tariff.upperLimit)
                     price = price + (weightPerCube - tariff.upperLimit) * tariff.pricePerExtraKg;
 
-                stored.price = price * stored.totalCubage;
-                stored.price = Math.round(stored.price * 100) / 100;
-                return stored.price;
+                price = price * stored.totalCubage;
+                price = Math.round(price * 100) / 100;
+                return price;
             },
             // getPricePerPlaceCount(stored) {
             //     let price = this.getPriceForOne(stored) / stored.placeCount;
@@ -173,10 +173,10 @@
             getTotalPrice() {
                 let sum = 0;
                 for (let stored of this.storedItems) {
-                    let price = stored.price;
-                    if (price)
-                        sum += price;
-                    else
+                    // let price = stored.price;
+                    // if (price)
+                    //     sum += price;
+                    // else
                         sum += this.getPrice(stored);
                 }
                 return sum.toFixed(2);
