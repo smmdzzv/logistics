@@ -19,7 +19,7 @@
         </div>
 
         <b-table :fields="fields"
-                 :items="order.stored_item_infos"
+                 :items="order.storedItemInfos"
                  foot-clone
                  hover
                  no-footer-sorting
@@ -34,7 +34,7 @@
             <template slot="FOOT[item.name]">
                 <span>Итого</span>
             </template>
-            <template slot="FOOT[customs_code.code]">
+            <template slot="FOOT[customsCodes.code]">
                 <span></span>
             </template>
             <template slot="FOOT[count]">
@@ -46,23 +46,23 @@
 <!--            <template slot="FOOT[pricePerPlaceCount]">-->
 <!--                <span> </span>-->
 <!--            </template>-->
-            <template slot="FOOT[billing_info.totalWeight]">
+            <template slot="FOOT[billingInfo.totalWeight]">
                 <span>{{order.totalWeight}}</span>
             </template>
-            <template slot="HEAD[billing_info.totalCubage]">
+            <template slot="HEAD[billingInfo.totalCubage]">
                 <span>Объем, м<sup>3</sup></span>
             </template>
-            <template slot="FOOT[billing_info.totalCubage]">
+            <template slot="FOOT[billingInfo.totalCubage]">
                 <span>{{order.totalCubage}}</span>
             </template>
-            <template slot="FOOT[billing_info.totalDiscount]">
+            <template slot="FOOT[billingInfo.totalDiscount]">
                 <span>{{order.totalDiscount}}</span>
             </template>
-            <template slot="FOOT[billing_info.totalPrice]">
+            <template slot="FOOT[billingInfo.totalPrice]">
                 <span>{{order.totalPrice}}</span>
             </template>
 
-            <template slot="HEAD[customs_code.code]">
+            <template slot="HEAD[customsCodes.code]">
                 <span id="code">Код</span>
                 <b-tooltip target="code" trigger="hover">
                     Таможенный код
@@ -103,7 +103,7 @@
                     <stored-item-short-info :key="stored.id"
                                             :storedItem="stored"
                                             :storedItemInfo="item"
-                                            v-for="stored in item.stored_items"/>
+                                            v-for="stored in item.storedItems"/>
                 </template>
             </vue-easy-print>
         </b-modal>
@@ -128,7 +128,7 @@
                         label: 'Тип',
                         sortable: true
                     },
-                    'customs_code.code': {
+                    'customsCodes.code': {
                         label: 'Код',
                         sortable: true
                     },
@@ -143,19 +143,19 @@
                     // 'pricePerPlaceCount': {
                     //     label: 'Цена'
                     // },
-                    'billing_info.totalWeight': {
+                    'billingInfo.totalWeight': {
                         label: 'Вес, кг',
                         sortable: true
                     },
-                    'billing_info.totalCubage': {
+                    'billingInfo.totalCubage': {
                         label: 'Объем, м3',
                         sortable: true
                     },
-                    'billing_info.totalDiscount': {
+                    'billingInfo.totalDiscount': {
                         label: 'Скидка',
                         sortable: true
                     },
-                    'billing_info.totalPrice': {
+                    'billingInfo.totalPrice': {
                         label: 'Сумма, $',
                         sortable: true
                     },
@@ -187,10 +187,10 @@
                 if (data)
                     this.itemsToShow.push(data.item);
                 else
-                    this.itemsToShow = this.order.stored_item_infos;
+                    this.itemsToShow = this.order.storedItemInfos;
 
                 this.itemsToShow = this.itemsToShow.filter(function (item) {
-                    return item.stored_items.length > 0;
+                    return item.storedItems.length > 0;
                 });
 
                 if (this.itemsToShow.length > 0)
@@ -205,7 +205,7 @@
             // pricePerCountPlace(data) {
             //     if (data && data.item.placeCount) {
             //
-            //         let price = data.item.billing_info.totalPrice / (data.item.count * data.item.placeCount);
+            //         let price = data.item.billingInfo.totalPrice / (data.item.count * data.item.placeCount);
             //         return price.toFixed(2);
             //     }
             // },
