@@ -268,6 +268,7 @@
                 customsCodes: [],
                 itemInitQuery: '',
                 storedItem: {
+                    id:null,
                     width: null,
                     height: null,
                     length: null,
@@ -331,6 +332,7 @@
             clearForm(e) {
                 if (e) e.preventDefault();
                 this.storedItem.weight = '';
+                this.storedItem.id = null;
                 this.storedItem.height = '';
                 this.storedItem.length = '';
                 this.storedItem.width = '';
