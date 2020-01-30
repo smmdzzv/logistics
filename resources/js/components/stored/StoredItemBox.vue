@@ -191,12 +191,12 @@
                                name="shop"
                                placeholder="в ед. товара"
                                required v-model.number="storedItem.shop">
-<!--                        <select class="form-control custom-select"-->
-<!--                                id="shop"-->
-<!--                                required v-model="storedItem.shop">-->
-<!--                            <option :value="null" disabled>&#45;&#45; Выберите магазин &#45;&#45;</option>-->
-<!--                            <option :value="shop" v-for="shop in shops">{{shop.code}} {{shop.name}}</option>-->
-<!--                        </select>-->
+                        <!--                        <select class="form-control custom-select"-->
+                        <!--                                id="shop"-->
+                        <!--                                required v-model="storedItem.shop">-->
+                        <!--                            <option :value="null" disabled>&#45;&#45; Выберите магазин &#45;&#45;</option>-->
+                        <!--                            <option :value="shop" v-for="shop in shops">{{shop.code}} {{shop.name}}</option>-->
+                        <!--                        </select>-->
                     </div>
 
                     <div class="form-group col-md-3">
@@ -306,7 +306,9 @@
             },
             async getPricing() {
                 //if stored item is being edited pricing should be the same
-                if (this.storedItem.billingInfo.tariffPricing && this.storedItem.item.id === this.providedStoredItemInfo.item.id)
+                if (this.storedItem.billingInfo.tariffPricing
+                    && this.providedStoredItemInfo
+                    && this.storedItem.item.id === this.providedStoredItemInfo.item.id)
                     return;
                 tShowSpinner();
                 try {

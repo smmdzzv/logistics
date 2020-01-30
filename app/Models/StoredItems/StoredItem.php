@@ -8,6 +8,7 @@ use App\Models\Branches\Storage;
 use App\Models\Order\OrderPaymentItem;
 use App\Models\Trip;
 use App\StoredItems\StorageHistory;
+use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -84,5 +85,9 @@ class StoredItem extends BaseModel
 
     public function tripHistory(){
         return $this->hasOne(StoredItemTripHistory::class)->latest();
+    }
+
+    public function deletedBy(){
+        return $this->belongsTo(User::class);
     }
 }

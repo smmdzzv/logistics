@@ -10,6 +10,8 @@ use App\Models\Order;
 use App\Models\Trip;
 use App\Models\Users\Client;
 use App\Shops\Shop;
+use App\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property double weight
@@ -25,6 +27,8 @@ use App\Shops\Shop;
  */
 class StoredItemInfo extends BaseModel
 {
+    use SoftDeletes;
+
     protected $guarded = [];
 
     protected $casts = [
@@ -54,6 +58,10 @@ class StoredItemInfo extends BaseModel
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function deletedBy(){
+        return $this->belongsTo(User::class);
     }
 
 //    public function trip()

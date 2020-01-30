@@ -63,7 +63,7 @@
             async submitData() {
                 if (this.client && this.storedItems.length > 0) {
                     // this.$bvModal.show('busyModal');
-                    tShowSpinner();
+                    // tShowSpinner();
                     try {
                         let response  = null;
                         if(this.order){
@@ -79,7 +79,7 @@
                             });
                         }
 
-                        window.location.href = '/orders/' + response.data.id;
+                        // window.location.href = '/orders/' + response.data.id;
                     } catch (e) {
                         tHideSpinner();
                         this.$root.showErrorMsg(

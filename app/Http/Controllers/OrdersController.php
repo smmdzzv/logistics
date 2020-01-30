@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Data\RequestWriters\Order\OrderRequestWriter;
+use App\Data\RequestWriters\Order\UpdateOrderRequestWriter;
 use App\Models\Branch;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
@@ -10,7 +11,6 @@ use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Tariff;
 use App\Models\Users\Client;
 use App\User;
-use stdClass;
 
 class OrdersController extends Controller
 {
@@ -89,17 +89,18 @@ class OrdersController extends Controller
         return view('orders.edit', compact('order', 'user', 'tariffs'));
     }
 
-    public function update(StoreOrderRequest $request)
+    public function update(Order $order, StoreOrderRequest $request)
     {
         $storedItemInfos = $this->getStoredItemInfos();
         $customPrices = $this->getCustomPricesArray();
 
-        $orderWriter = new OrderRequestWriter(
+        $orderWriter = new UpdateOrderRequestWriter(
             Client::findOrFail($request->input('clientId')),
             Branch::findOrFail(auth()->user()->branch->id),
             auth()->user(),
             $storedItemInfos,
-            $customPrices
+            $customPrices,
+            $order
         );
 
         return $orderWriter->write();
@@ -109,6 +110,7 @@ class OrdersController extends Controller
         $storedItemInfos = array();
         foreach (request()->input('storedItemInfos') as $itemData) {
             $storedItemInfos[] = new StoredItemInfo([
+                'id' => $itemData['id'],
                 'width' => $itemData['width'],
                 'height' => $itemData['height'],
                 'length' => $itemData['length'],
