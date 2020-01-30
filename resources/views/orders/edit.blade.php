@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">Оформить заказ</div>
                 <div class="card-body">
-                    <order-editor :user="{{$user}}" :tariffs="{{$tariffs}}" :shops="{{$shops}}" :order="{{$order}}"></order-editor>
+                    <order-editor :user="{{$user}}" :tariffs="{{$tariffs}}" :order="{{$order}}"></order-editor>
                 </div>
             </div>
         </div>

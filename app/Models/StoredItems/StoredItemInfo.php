@@ -75,9 +75,9 @@ class StoredItemInfo extends BaseModel
         return $this->belongsTo(CustomsCode::class, 'customs_code_id');
     }
 
-    public function shop(){
-        return $this->belongsTo(Shop::class);
-    }
+//    public function shop(){
+//        return $this->belongsTo(Shop::class);
+//    }
 
     //TODO count prop
 

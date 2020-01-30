@@ -4,7 +4,6 @@
                          :providedStoredItemInfo="storedItemInfoToEdit"
                          :onStoredItemAdded="onStoredItemAdded"
                          :tariffs="tariffs"
-                         :shops="shops"
                          class="pb-4"></stored-item-box>
         <div class="card">
             <div class="card-header bg-info">
@@ -84,7 +83,6 @@
         props: {
             user: null,
             tariffs: Array,
-            shops: Array,
             order: Object
         },
         data() {

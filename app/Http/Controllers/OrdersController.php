@@ -9,7 +9,6 @@ use App\Models\Order;
 use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Tariff;
 use App\Models\Users\Client;
-use App\Shops\Shop;
 use App\User;
 use stdClass;
 
@@ -51,8 +50,7 @@ class OrdersController extends Controller
     {
         $user = auth()->user();
         $tariffs = Tariff::all();
-        $shops = Shop::all();
-        return view('orders.create', compact('user', 'tariffs', 'shops'));
+        return view('orders.create', compact('user', 'tariffs'));
     }
 
     public function store(StoreOrderRequest $request)
@@ -70,6 +68,7 @@ class OrdersController extends Controller
                 'length' => $itemData['length'],
                 'weight' => $itemData['weight'],
                 'count' => $itemData['count'],
+                'shop' => $itemData['shop'],
                 'item_id' => $itemData['item']['id'],
 //                'placeCount' => $itemData['placeCount'],
                 'ownerId' => $data->client->id,
@@ -93,7 +92,7 @@ class OrdersController extends Controller
             'storedItemInfos',
             'storedItemInfos.customsCode',
             'storedItemInfos.owner',
-            'storedItemInfos.shop',
+//            'storedItemInfos.shop',
             'storedItemInfos.billingInfo.tariffPricing',
             'storedItemInfos.item.tariff',
             'storedItemInfos.item.codes',
@@ -103,9 +102,9 @@ class OrdersController extends Controller
 
         $user = auth()->user();
         $tariffs = Tariff::all();
-        $shops = Shop::all();
+//        $shops = Shop::all();
 
-        return view('orders.edit', compact('order', 'user', 'tariffs', 'shops'));
+        return view('orders.edit', compact('order', 'user', 'tariffs'));
     }
 
     public function update(StoreOrderRequest $request)

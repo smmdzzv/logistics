@@ -186,12 +186,17 @@
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label class="col-form-label text-md-right" for="shop">Магазин</label>
-                        <select class="form-control custom-select"
-                                id="shop"
-                                required v-model="storedItem.shop">
-                            <option :value="null" disabled>-- Выберите магазин --</option>
-                            <option :value="shop" v-for="shop in shops">{{shop.code}} {{shop.name}}</option>
-                        </select>
+                        <input class="form-control"
+                               id="shop"
+                               name="shop"
+                               placeholder="в ед. товара"
+                               required v-model.number="storedItem.shop">
+<!--                        <select class="form-control custom-select"-->
+<!--                                id="shop"-->
+<!--                                required v-model="storedItem.shop">-->
+<!--                            <option :value="null" disabled>&#45;&#45; Выберите магазин &#45;&#45;</option>-->
+<!--                            <option :value="shop" v-for="shop in shops">{{shop.code}} {{shop.name}}</option>-->
+<!--                        </select>-->
                     </div>
 
                     <div class="form-group col-md-3">
@@ -251,7 +256,6 @@
                 }
             },
             tariffs: Array,
-            shops: Array,
             providedStoredItemInfo: Object,
             onStoredItemAdded: {
                 type: Function,
