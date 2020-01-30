@@ -9,42 +9,67 @@ use App\Data\MassWriters\Order\StorageHistoriesWriter;
 use App\Data\MassWriters\Order\StoredItemInfosWriter;
 use App\Data\MassWriters\Order\StoredItemsWriter;
 use App\Data\RequestWriters\RequestWriter;
+use App\Models\Branch;
 use App\Models\Order;
+use App\Models\StoredItems\StoredItemInfo;
 use App\StoredItems\StorageHistory;
+use App\User;
 use Carbon\Carbon;
 use stdClass;
 
 class OrderRequestWriter extends RequestWriter
 {
 
+    private $client;
+    private $branch;
+    private $employee;
+    private $storedItemInfos;
+    private $customPrices;
+    public $order;
+
     /**
-     * @return stdClass, which contains saved models
-     * @throws \Exception
+     * OrderRequestWriter constructor.
+     * @param User $client
+     * @param Branch $branch
+     * @param User $employee
+     * @param array<StoredItemInfo> $storedItemInfos
+     * @param array<double> $customPrices
+     * @param Order $order
      */
+    public function __construct($client, $branch, $employee, $storedItemInfos, $customPrices, $order = null)
+    {
+        $this->client = $client;
+        $this->branch = $branch;
+        $this->employee = $employee;
+        $this->storedItemInfos = $storedItemInfos;
+        $this->customPrices = $customPrices;
+        $this->order = $order == null ? new Order() : $order;
+
+        parent::__construct(null);
+    }
+
+
     function write()
     {
-        $this->createOrder();
+        $this->updateOrderRelations();
         $this->createStoredInfos();
         $this->createStoredItems();
         $this->createStorageHistories();
         $this->createBillingInfos();
         $this->updateOrderStatistics();
 
-        return $this->saved;
+        return $this->order;
     }
 
     /**
      * Creates and saves new Order
      */
-    private function createOrder()
+    private function updateOrderRelations()
     {
-        $order = new Order();
-        $order->owner()->associate($this->input->client);
-        $order->branch()->associate($this->input->branch);
-        $order->registeredBy()->associate(auth()->user());
-        $order->push();
-
-        $this->saved->order = $order;
+        $this->order->owner()->associate($this->client);
+        $this->order->branch()->associate($this->branch);
+        $this->order->registeredBy()->associate(auth()->user());
+        $this->order->push();
     }
 
     /**
@@ -52,13 +77,13 @@ class OrderRequestWriter extends RequestWriter
      */
     private function createStoredInfos()
     {
-        foreach ($this->input->storedItemInfos as $stored) {
-            $stored->order_id = $this->saved->order->id;
+        foreach ($this->storedItemInfos as $stored) {
+            $stored->order_id = $this->order->id;
         }
 
-        $infosWriter = new StoredItemInfosWriter($this->input->storedItemInfos);
+        $infosWriter = new StoredItemInfosWriter($this->storedItemInfos);
         $this->saved->storedItemInfos = $infosWriter->write();
-        $this->input->storedItemInfos = [];
+        $this->storedItemInfos = [];
 
     }
 
@@ -96,10 +121,10 @@ class OrderRequestWriter extends RequestWriter
 
         $pattern = '!\d+!';
 
-//        preg_match_all($pattern, $this->input->employee->id, $eMatches);
+//        preg_match_all($pattern, $this->employee->id, $eMatches);
 //        $employeeMark =  substr(implode("", $eMatches[0]), 0, 2);
 
-        preg_match_all($pattern, $this->input->client->id, $cMatches);
+        preg_match_all($pattern, $this->client->id, $cMatches);
         $clientIntTrace = $cMatches[0][array_rand($cMatches[0])] . $cMatches[0][array_rand($cMatches[0])];
         $clientMark = substr($clientIntTrace, 0, 2);
 //        $orderMark = substr(implode("", $cMatches[0]), 0, 2);
@@ -121,13 +146,13 @@ class OrderRequestWriter extends RequestWriter
      */
     private function createStorageHistories()
     {
-        $storageId = $this->input->branch->mainStorage->id;
+        $storageId = $this->branch->mainStorage->id;
 
         foreach ($this->saved->storedItems as $item) {
             $this->data->storageHistories[] = new StorageHistory([
                 'stored_item_id' => $item->id,
                 'storage_id' => $storageId,
-                'registeredById' => $this->input->employee->id
+                'registeredById' => $this->employee->id
             ]);
         }
 
@@ -145,7 +170,7 @@ class OrderRequestWriter extends RequestWriter
         $priceIndex = 0;
 
         foreach ($this->saved->storedItemInfos as $info) {
-            $price = $this->input->customPrices[$priceIndex];
+            $price = $this->customPrices[$priceIndex];
 
             $this->data->billingInfos[] = $info->getBillingInfo($price);
 
@@ -162,7 +187,7 @@ class OrderRequestWriter extends RequestWriter
      */
     private function updateOrderStatistics()
     {
-        $this->saved->order->updateStat($this->saved->billingInfos);
-        $this->saved->order->save();
+        $this->order->updateStat($this->saved->billingInfos);
+        $this->order->save();
     }
 }
