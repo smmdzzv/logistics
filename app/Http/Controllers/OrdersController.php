@@ -91,17 +91,18 @@ class OrdersController extends Controller
 
     public function update(StoreOrderRequest $request)
     {
-        $data = new stdClass();
-        $data->client = Client::findOrFail($request->input('clientId'));
-        $data->branch = Branch::findOrFail(auth()->user()->branch->id);
-        $data->employee = auth()->user();
-        $data->storedItemInfos = $this->getStoredItemInfos();
-        $data->customPrices = $this->getCustomPricesArray();
+        $storedItemInfos = $this->getStoredItemInfos();
+        $customPrices = $this->getCustomPricesArray();
 
-        $orderWriter = new OrderRequestWriter($data);
-        $result = $orderWriter->write();
+        $orderWriter = new OrderRequestWriter(
+            Client::findOrFail($request->input('clientId')),
+            Branch::findOrFail(auth()->user()->branch->id),
+            auth()->user(),
+            $storedItemInfos,
+            $customPrices
+        );
 
-        return $result->order;
+        return $orderWriter->write();
     }
 
     private function getStoredItemInfos(){

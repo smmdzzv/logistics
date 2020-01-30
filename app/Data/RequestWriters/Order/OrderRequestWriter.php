@@ -17,14 +17,19 @@ use App\User;
 use Carbon\Carbon;
 use stdClass;
 
+
 class OrderRequestWriter extends RequestWriter
 {
 
-    private $client;
-    private $branch;
-    private $employee;
-    private $storedItemInfos;
-    private $customPrices;
+    protected $client;
+    protected $branch;
+    protected $employee;
+    protected $storedItemInfos;
+    protected $storedItems;
+    protected $customPrices;
+    protected $billingInfos = array();
+    protected $storageHistories = array();
+    protected $codes = array();
     public $order;
 
     /**
@@ -64,7 +69,7 @@ class OrderRequestWriter extends RequestWriter
     /**
      * Creates and saves new Order
      */
-    private function updateOrderRelations()
+    protected function updateOrderRelations()
     {
         $this->order->owner()->associate($this->client);
         $this->order->branch()->associate($this->branch);
@@ -75,15 +80,14 @@ class OrderRequestWriter extends RequestWriter
     /**
      *Creates and saves orders related array of StoredItemInfo
      */
-    private function createStoredInfos()
+    protected function createStoredInfos()
     {
         foreach ($this->storedItemInfos as $stored) {
             $stored->order_id = $this->order->id;
         }
 
         $infosWriter = new StoredItemInfosWriter($this->storedItemInfos);
-        $this->saved->storedItemInfos = $infosWriter->write();
-        $this->storedItemInfos = [];
+        $this->storedItemInfos = $infosWriter->write();
 
     }
 
@@ -91,19 +95,18 @@ class OrderRequestWriter extends RequestWriter
      *Creates and saves for each StoredItemInfo related array of StoredItems
      * @throws \Exception
      */
-    private function createStoredItems()
+    protected function createStoredItems()
     {
-        foreach ($this->saved->storedItemInfos as $info) {
+        foreach ($this->storedItemInfos as $info) {
             $items = $info->getStoredItems();
             foreach ($items as $item) {
                 $item->code = $this->generateCode();
-                $this->data->storedItems[] = $item;
+                $this->storedItems[] = $item;
             }
         }
 
-        $storedWriter = new StoredItemsWriter($this->data->storedItems);
-        $this->saved->storedItems = $storedWriter->write();
-        $this->data->storedItems = [];
+        $storedWriter = new StoredItemsWriter($this->storedItems);
+        $this->storedItems = $storedWriter->write();
     }
 
     /**
@@ -111,10 +114,10 @@ class OrderRequestWriter extends RequestWriter
      * to distinguish same items visually
      * @throws \Exception
      */
-    private function generateCode()
+    protected function generateCode()
     {
-        if (!isset($this->data->codes))
-            $this->data->codes = [];
+        if (!isset($this->codes))
+            $this->codes = [];
 
         $isUnique = false;
         $code = "";
@@ -134,60 +137,58 @@ class OrderRequestWriter extends RequestWriter
             preg_match_all($pattern, $date->isoFormat('x'), $dateMatches);
             $dateMark = substr(implode("", $dateMatches[0]), 9, 5);
             $code = $date->isoFormat('YY') . $dateMark . $clientMark . random_int(1000, 9999);
-            $isUnique = !in_array($code, $this->data->codes);
+            $isUnique = !in_array($code, $this->codes);
         }
 
-        $this->data->codes[] = $code;
+        $this->codes[] = $code;
         return $code;
     }
 
     /**
      *Creates and saves for each StoredItem StorageHistory
      */
-    private function createStorageHistories()
+    protected function createStorageHistories()
     {
         $storageId = $this->branch->mainStorage->id;
 
-        foreach ($this->saved->storedItems as $item) {
-            $this->data->storageHistories[] = new StorageHistory([
+        foreach ($this->storedItems as $item) {
+            $this->storageHistories[] = new StorageHistory([
                 'stored_item_id' => $item->id,
                 'storage_id' => $storageId,
                 'registeredById' => $this->employee->id
             ]);
         }
 
-        $historyWriters = new StorageHistoriesWriter($this->data->storageHistories);
-        $this->saved->storageHistories = $historyWriters->write();
-        $this->data->storageHistories = [];
+        $historyWriters = new StorageHistoriesWriter($this->storageHistories);
+        $this->storageHistories = $historyWriters->write();
     }
 
 
     /**
      *Creates and saves for each StoredItemInfo BillingInfo
      */
-    private function createBillingInfos()
+    protected function createBillingInfos()
     {
         $priceIndex = 0;
 
-        foreach ($this->saved->storedItemInfos as $info) {
+        foreach ($this->storedItemInfos as $info) {
             $price = $this->customPrices[$priceIndex];
 
-            $this->data->billingInfos[] = $info->getBillingInfo($price);
+            $this->billingInfos[] = $info->getBillingInfo($price);
 
             $priceIndex++;
         }
 
-        $billingsWriter = new BillingInfosWriter($this->data->billingInfos);
-        $this->saved->billingInfos = $billingsWriter->write();
-        $this->data->billingInfos = [];
+        $billingsWriter = new BillingInfosWriter($this->billingInfos);
+        $this->billingInfos = $billingsWriter->write();
     }
 
     /**
      *Updates Order stat on total params based on saved BillingInfo array
      */
-    private function updateOrderStatistics()
+    protected function updateOrderStatistics()
     {
-        $this->order->updateStat($this->saved->billingInfos);
+        $this->order->updateStat($this->billingInfos);
         $this->order->save();
     }
 }
