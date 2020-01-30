@@ -60,26 +60,29 @@ class OrdersController extends Controller
         $data->client = Client::findOrFail($request->input('clientId'));
         $data->branch = Branch::findOrFail(auth()->user()->branch->id);
         $data->employee = auth()->user();
-        $itemIndex = 0;
-        foreach ($request->input('storedItemInfos') as $itemData) {
-            $data->storedItemInfos[] = new StoredItemInfo([
-                'width' => $itemData['width'],
-                'height' => $itemData['height'],
-                'length' => $itemData['length'],
-                'weight' => $itemData['weight'],
-                'count' => $itemData['count'],
-                'shop' => $itemData['shop'],
-                'item_id' => $itemData['item']['id'],
-//                'placeCount' => $itemData['placeCount'],
-                'ownerId' => $data->client->id,
-                'branch_id' => $data->branch->id,
-                'customs_code_id' => $itemData['customsCode']['id']
-            ]);
 
-            $data->customPrices[$itemIndex] = isset($itemData['customPrice']) ? $itemData['customPrice'] : null;
+        $data->storedItemInfos = $this->getStoredItemInfos();
+//        foreach ($request->input('storedItemInfos') as $itemData) {
+//            $data->storedItemInfos[] = new StoredItemInfo([
+//                'width' => $itemData['width'],
+//                'height' => $itemData['height'],
+//                'length' => $itemData['length'],
+//                'weight' => $itemData['weight'],
+//                'count' => $itemData['count'],
+//                'shop' => $itemData['shop'],
+//                'item_id' => $itemData['item']['id'],
+////                'placeCount' => $itemData['placeCount'],
+//                'ownerId' => $data->client->id,
+//                'branch_id' => $data->branch->id,
+//                'customs_code_id' => $itemData['customsCode']['id']
+//            ]);
+//
+//            $data->customPrices[$itemIndex] = isset($itemData['customPrice']) ? $itemData['customPrice'] : null;
+//
+//            $itemIndex++;
+//        }
 
-            $itemIndex++;
-        }
+        $data->customPrices = $this->getCustomPricesArray();
 
         $orderWriter = new OrderRequestWriter($data);
         $result = $orderWriter->write();
@@ -110,6 +113,41 @@ class OrdersController extends Controller
     public function update(StoreOrderRequest $request)
     {
 
+    }
+
+    private function getStoredItemInfos(){
+        $storedItemInfos = array();
+        foreach (request()->input('storedItemInfos') as $itemData) {
+            $storedItemInfos[] = new StoredItemInfo([
+                'width' => $itemData['width'],
+                'height' => $itemData['height'],
+                'length' => $itemData['length'],
+                'weight' => $itemData['weight'],
+                'count' => $itemData['count'],
+                'shop' => $itemData['shop'],
+                'item_id' => $itemData['item']['id'],
+//                'placeCount' => $itemData['placeCount'],
+                'ownerId' => request()->input('clientId'),
+                'branch_id' => auth()->user()->branch->id,
+                'customs_code_id' => $itemData['customsCode']['id']
+            ]);
+
+//            $data->customPrices[$itemIndex] = isset($itemData['customPrice']) ? $itemData['customPrice'] : null;
+        }
+
+        return $storedItemInfos;
+    }
+
+    private function getCustomPricesArray(){
+        $customPrices = array();
+        $index = 0;
+
+        foreach (request()->input('storedItemInfos') as $itemData) {
+            $customPrices[$index] = isset($itemData['customPrice']) ? $itemData['customPrice'] : null;
+            $index++;
+        }
+
+        return $customPrices;
     }
 
     public function all()

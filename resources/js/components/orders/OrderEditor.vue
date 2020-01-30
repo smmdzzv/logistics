@@ -65,10 +65,19 @@
                     // this.$bvModal.show('busyModal');
                     tShowSpinner();
                     try {
-                        const response = await axios.post('/orders', {
-                            storedItemInfos: this.storedItems,
-                            clientId: this.client.id
-                        });
+                        let response  = null;
+                        if(this.order){
+                            response = await axios.patch('/orders/' + this.order.id, {
+                                storedItemInfos: this.storedItems,
+                                clientId: this.client.id
+                            });
+                        }
+                        else{
+                            response = await axios.post('/orders', {
+                                storedItemInfos: this.storedItems,
+                                clientId: this.client.id
+                            });
+                        }
 
                         window.location.href = '/orders/' + response.data.id;
                     } catch (e) {
