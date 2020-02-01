@@ -23,7 +23,7 @@ class OrdersController extends Controller
         $adminOnly = ['edit', 'update', 'destroy'];
 
         $this->middleware('roles.allow:admin')->only($adminOnly);
-        $this->middleware('roles.deny:client,worker')->except($adminOnly);
+        $this->middleware('roles.deny:client,worker, driver, cashier')->except($adminOnly);
     }
 
     public function index()
@@ -41,6 +41,8 @@ class OrdersController extends Controller
             'storedItemInfos.billingInfo',
             'storedItemInfos.item',
             'storedItemInfos.storedItems',
+            'orderRemovedItems.storedItemInfo.item',
+            'orderRemovedItems.storedItemInfo.deletedBy',
             'owner'
         ]);
         return view('orders.show', compact('order'));

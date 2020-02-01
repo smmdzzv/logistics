@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Order\OrderRemovedItem;
 use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Till\Payment;
@@ -63,6 +64,10 @@ class Order extends BaseModel
     public function payment()
     {
         return $this->belongsTo(Payment::class, 'paymentId');
+    }
+
+    public function orderRemovedItems(){
+        return $this->hasMany(OrderRemovedItem::class);
     }
 
     public function updateStat(Array $billings)
