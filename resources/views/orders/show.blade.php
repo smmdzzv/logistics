@@ -25,6 +25,7 @@
                             <th scope="col">Кол-во</th>
                             <th scope="col">Вес</th>
                             <th scope="col">Объем, м <sup>3</sup></th>
+                            <th scope="col">Удалено</th>
                             <th scope="col">Удалил</th>
                         </tr>
                         </thead>
@@ -35,6 +36,7 @@
                                 <td>{{$removed->storedItemInfo->count}}</td>
                                 <td>{{$removed->storedItemInfo->weight}}</td>
                                 <td>{{round($removed->storedItemInfo->length * $removed->storedItemInfo->height * $removed->storedItemInfo->width,2)}}</td>
+                                <td>{{$removed->storedItemInfo->deleted_at}}</td>
                                 <td>{{$removed->storedItemInfo->deletedBy->name}}</td>
                             </tr>
                         @endforeach
