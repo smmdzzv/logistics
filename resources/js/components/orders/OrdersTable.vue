@@ -135,7 +135,7 @@
                         label: 'Цена',
                         sortable: true
                     },
-                    'registered_by.name': {
+                    'registeredBy.name': {
                         label: 'Принял',
                         sortable: true
                     },
