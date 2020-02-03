@@ -135,7 +135,7 @@
                                 required>
                             <option :value="customsCode"
                                     v-for="customsCode in customsCodes"
-                            >{{customsCode.name}}
+                            >{{customsCode.code}} - {{customsCode.name}}
                             </option>
                         </select>
                         <b-popover
@@ -190,7 +190,7 @@
                         <input class="form-control"
                                id="shop"
                                name="shop"
-                               placeholder="в ед. товара"
+                               placeholder="код или название магазина"
                                required v-model.number="storedItem.shop">
                         <!--                        <select class="form-control custom-select"-->
                         <!--                                id="shop"-->
