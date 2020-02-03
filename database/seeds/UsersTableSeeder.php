@@ -51,7 +51,7 @@ class UsersTableSeeder extends Seeder
             'branch_id' => $branchId,
             'phone' => '',
             'password' => Hash::make('15sdTit'),
-            'email' => 'duob@test.com',
+            'email' => 'info@duob.tj',
             'code'=>'111111'
         ]);
 
