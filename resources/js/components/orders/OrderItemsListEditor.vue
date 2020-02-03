@@ -36,16 +36,28 @@
             </stored-items-table-card>
         </div>
 
+        <div class="col-12 form-group">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input type="checkbox" v-model="isDebtRequested" name="isDebtRequested">
+                    </div>
+                </div>
+                <input type="text" class="form-control"
+                       value="Учитывать возможность предоставления долга" disabled>
+            </div>
+        </div>
+
         <div class="col-12 text-center">
-            <button @click="submit(e, false)" class="btn btn-primary  m-2">Подготовить к выдаче</button>
-            <button @click="submit(e, false, true)" class="btn btn-secondary m-2">Выдать сразу</button>
+            <button @click="createPendingPayment" class="btn btn-primary  m-2">Оформить заявку</button>
+            <button @click="submit(e, true)" class="btn btn-secondary m-2">Выдать сразу</button>
         </div>
 
 
         <b-modal id="payment-error" title="Ошибка оплаты" ok-only centered ok-title="Закрыть">
             <p class="my-4">{{errorMessage}}</p>
-            <a href="#" @click.prevent="submit(e, true)">Доверительный платеж</a><br>
-            <a href="#" @click.prevent="createPendingPayment">Оформить платежную заявку на пополнение баланса</a>
+<!--            <a href="#" @click.prevent="submit(e, true)">Доверительный платеж</a><br>-->
+            <!--            <a href="#" @click.prevent="createPendingPayment">Оформить платежную заявку на пополнение баланса</a>-->
         </b-modal>
     </div>
 
@@ -68,7 +80,8 @@
                 selectedOrder: null,
                 items: [],
                 selectedItems: [],
-                errorMessage: null
+                errorMessage: null,
+                isDebtRequested:false
             }
         },
         methods: {
@@ -78,7 +91,7 @@
             onItemsSelected(items) {
                 this.selectedItems = items
             },
-            async createPendingPayment(){
+            async createPendingPayment() {
                 this.$bvModal.hide('payment-error');
 
                 let data = {
@@ -89,24 +102,23 @@
 
                 let action = `/deliver/${this.selectedOrder.id}/items/pending-payment`;
 
-                try{
+                try {
                     const response = await axios.post(action, data);
                     window.location = `/incoming-payments/${response.data}/edit`;
-                }
-                catch (e) {
+                } catch (e) {
                     if (e.response.status === 400) {
 
                     }
                 }
             },
-            async submit(e, isDebtRequested = false, deliverImmediately = false) {
+            async submit(e, deliverImmediately = false) {
                 this.$bvModal.hide('payment-error');
 
                 let data = {
                     items: this.selectedItems.map((item) => {
                         return item.id
                     }),
-                    isDebtRequested: isDebtRequested,
+                    isDebtRequested: this.isDebtRequested,
                     deliverImmediately: deliverImmediately
                 };
 
@@ -117,9 +129,8 @@
                     window.location = `/payments/${response.data}`;
                 } catch (e) {
                     if (e.response.status === 400) {
-                        this.errorMessage =  e.response.data.message;
-                    }
-                    else{
+                        this.errorMessage = e.response.data.message;
+                    } else {
                         this.errorMessage = "Не удалось оформить выдачу товаров. Повтороите попытку после перезагрузки страницы"
                     }
                     this.$bvModal.show('payment-error');
