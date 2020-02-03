@@ -310,7 +310,7 @@
                         label: 'Владелец',
                         sortable: true
                     },
-                    'storage_history.storage.name': {
+                    'storageHistory.storage.name': {
                         label: 'Склад'
                     },
                     'buttons':{
