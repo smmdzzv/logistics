@@ -85,7 +85,7 @@
                 let groupedByCode = [];
 
                 groupedByTariff.forEach((arr) => {
-                    let grouped = groupBy(arr, i => i.info.customs_code.id);
+                    let grouped = groupBy(arr, i => i.info.customsCode.id);
                     grouped.forEach((arr) => {
                         groupedByCode.push(...arr);
                     })
@@ -96,7 +96,7 @@
                 $('#grouped-data').click();
             },
             fillGroupedData(){
-                let groupedByCode = groupBy(this.items, i => i.info.customs_code.id);
+                let groupedByCode = groupBy(this.items, i => i.info.customsCode.id);
                 groupedByCode.forEach((arr) => {
                     let totalDutyPrice = 0;
                     let totalWeight = 0;
@@ -105,7 +105,7 @@
                         totalWeight += item.info.weight;
                     });
 
-                    let customsCode = arr[0].info.customs_code;
+                    let customsCode = arr[0].info.customsCode;
 
                     this.groupedData.push({name: customsCode.name, code: customsCode.code, weight: totalWeight, dutyPrice: totalDutyPrice});
                 });
@@ -113,7 +113,7 @@
             calculateDutyPrices(){
                 this.items.forEach((item)=> {
                     let dutyPrice = 0;
-                    let customsTariff = item.info.customs_code;
+                    let customsTariff = item.info.customsCode;
                     if(customsTariff.isCalculatedByPiece){
                         dutyPrice = customsTariff.price * customsTariff.totalRate / 100
                     }
@@ -157,7 +157,7 @@
                         label: 'Тариф',
                         sortable: true
                     },
-                    'info.customs_code.code': {
+                    'info.customsCode.code': {
                         label: 'Там. код',
                         sortable: true
                     },
@@ -181,7 +181,7 @@
                         label: 'Владелец',
                         sortable: true
                     },
-                    'storage_history.storage.name': {
+                    'storageHistory.storage.name': {
                         label: 'Склад'
                     },
                     'dutyPrice':{

@@ -31,7 +31,7 @@
             <div class="col-lg-8">
                 <stored-table :branches="branches"
                               :prepareUrl="prepareUrl"
-                              :providedItems="trip.stored_items"
+                              :providedItems="trip.storedItems"
                               :selectedItems="storedItems"
                               :tripId="trip.id"
                               listGenerator
@@ -66,7 +66,7 @@
         },
         data() {
             return {
-                storedItems: this.trip.stored_items.filter(function () {
+                storedItems: this.trip.storedItems.filter(function () {
                     return true;
                 }),
                 isSubmitting: false

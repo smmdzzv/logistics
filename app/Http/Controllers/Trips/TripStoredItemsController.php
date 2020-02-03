@@ -67,7 +67,7 @@ class TripStoredItemsController extends Controller
 
     public function editUnloaded(Trip $trip)
     {
-        $trip->load('storedItems.info.item', 'storedItems.info.owner', 'storedItems.storageHistory.storage', 'car');
+        $trip->load('loadedItems.info.item', 'loadedItems.info.owner', 'loadedItems.storageHistory.storage', 'car');
         $branches = Branch::all();
         return view('trips.unload-items', compact('trip', 'branches'));
     }

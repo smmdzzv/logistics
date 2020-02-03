@@ -133,6 +133,8 @@
                     this.selected = this.items;
                 }
                 else this.selected = [];
+
+                return this.$emit('itemsSelected', this.selected);
             }
         },
         data() {
