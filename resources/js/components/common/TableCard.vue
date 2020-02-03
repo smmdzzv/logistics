@@ -2,22 +2,33 @@
     <div class="card">
         <div class="card-header">
             <div class="row align-items-baseline">
-                <div class="col-10 col-md-11">
+                <div class="col-10 col-md-10">
                     <slot name="header">
 
                     </slot>
                 </div>
-
-                <div class="ml-auto" v-if="excelColumns">
-                    <vue-excel-xlsx
-                        :columns="excelColumns"
-                        :data="excelData"
-                        :filename="excelFileName"
-                        :sheetname="excelSheetName"
-                        class="btn">
-                        <img class="icon-btn-md" src="/svg/excel.svg">
-                    </vue-excel-xlsx>
+                <div class="col-2 col-md-2">
+                    <div class="form-row align-items-center">
+                        <div class="col-12 col-md-6" v-if="excelColumns">
+                            <vue-excel-xlsx
+                                    :columns="excelColumns"
+                                    :data="excelData"
+                                    :filename="excelFileName"
+                                    :sheetname="excelSheetName"
+                                    class="btn p-0 p-md-1">
+                                <img class="icon-btn-md" src="/svg/excel.svg">
+                            </vue-excel-xlsx>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <input type="checkbox"
+                                   class="form-control"
+                                   style="width:24px"
+                                   v-b-tooltip.hover title="Выбрать все"
+                                   v-model="selectAll">
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
 
@@ -70,7 +81,7 @@
     export default {
         name: "TableCard",
         mixins: [ExcelDataPreparatory, TableCardProps],
-        props:{
+        props: {
             items: {
                 type: Array,
                 required: true
@@ -81,7 +92,7 @@
             },
             primaryKey: {
                 type: String,
-                required:true
+                required: true
             },
             isBusy: {
                 type: Boolean,
@@ -116,9 +127,18 @@
                 if (this.isSelected(item)) return this.selectedRowClass
             }
         },
+        watch:{
+            selectAll(){
+                if(this.selectAll){
+                    this.selected = this.items;
+                }
+                else this.selected = [];
+            }
+        },
         data() {
             return {
-                selected: []
+                selected: [],
+                selectAll: false
             }
         },
     }
