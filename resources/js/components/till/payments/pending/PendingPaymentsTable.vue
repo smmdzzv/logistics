@@ -115,7 +115,7 @@
                         label: 'Дата',
                         sortable: true
                     },
-                    'account_to.description': {
+                    'accountTo.description': {
                         label: 'Cчет зачисления',
                         sortable: true
                     },
@@ -131,7 +131,7 @@
                         label: 'Валюта',
                         sortable: true
                     },
-                    'payment_item.title': {
+                    'paymentItem.title': {
                         label: 'Статья',
                         sortable: true
                     },
@@ -186,9 +186,9 @@
                 console.log(item)
             },
             getEditUrl(item){
-                if(item.payment_item.type === 'in')
+                if(item.paymentItem.type === 'in')
                     return '/incoming-payments/' + item.id + '/edit';
-                if(item.payment_item.type === 'out')
+                if(item.paymentItem.type === 'out')
                     return '/outgoing-payments/' + item.id + '/edit';
             }
         },

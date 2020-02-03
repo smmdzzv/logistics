@@ -188,7 +188,7 @@
                                         id="convertedAmount"
                                         label="Сумма зачисления"
                                         label-for="convertedAmount">
-                                        <b-input-group :append="exchange.to_currency.isoName">
+                                        <b-input-group :append="exchange.toCurrency.isoName">
                                             <b-form-input disabled id="convertedAmount"
                                                           v-model="convertedAmount"></b-form-input>
 
@@ -281,7 +281,7 @@
                 accountTo: null,
                 exchange: {
                     coefficient: null,
-                    to_currency: {
+                    toCurrency: {
                         isoName: null
                     }
                 },
@@ -392,15 +392,15 @@
             },
             setInitialData() {
                 this.currencies = [this.payment.currency];
-                this.paymentItems = [this.payment.payment_item];
-                this.accountsTo = [this.payment.account_to];
-                this.paymentType = this.payment.payment_item.type;
+                this.paymentItems = [this.payment.paymentItem];
+                this.accountsTo = [this.payment.accountTo];
+                this.paymentType = this.payment.paymentItem.type;
 
                 this.client = this.payment.payer;
-                this.paymentItem = this.payment.payment_item;
+                this.paymentItem = this.payment.paymentItem;
                 this.status = this.payment.status;
                 this.currency = this.payment.currency;
-                this.accountTo = this.payment.account_to;
+                this.accountTo = this.payment.accountTo;
                 this.amount = this.payment.amount;
                 if (this.payment.exchange)
                     this.exchange = this.payment.exchange;
