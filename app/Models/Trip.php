@@ -60,6 +60,11 @@ class Trip extends BaseModel
         return $this->storedItems()->doesntHave('storageHistory');
     }
 
+    public function unloadedItems()
+    {
+        return $this->storedItems()->has('storageHistory');
+    }
+
     public function isEditable()
     {
         $current = Carbon::now()->toDateString();

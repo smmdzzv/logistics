@@ -41,7 +41,7 @@ class TripStoredItemsController extends Controller
 
     public function editLoaded(Trip $trip)
     {
-        $trip->load('storedItems.info.item', 'storedItems.info.owner', 'storedItems.storageHistory.storage', 'car');
+        $trip->load('unloadedItems.info.item', 'unloadedItems.info.owner', 'unloadedItems.storageHistory.storage', 'car');
         return view('trips.load-items', compact('trip'));
     }
 

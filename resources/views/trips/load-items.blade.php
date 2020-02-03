@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <loaded-items-editor :trip="{{$trip}}"
-                             :stored-items="{{$trip->storedItems}}"
+                             :stored-items="{{$trip->unloadedItems}}"
                              selectable
                              title="Загрузить товары"
                              hover/>
