@@ -184,7 +184,7 @@
                         label: 'Дата',
                         sortable: true
                     },
-                    'account_to.description': {
+                    'accountTo.description': {
                         label: 'Cчет зачисления',
                         sortable: true
                     },
@@ -200,7 +200,7 @@
                         label: 'Валюта',
                         sortable: true
                     },
-                    'payment_item.title': {
+                    'paymentItem.title': {
                         label: 'Статья',
                         sortable: true
                     },
