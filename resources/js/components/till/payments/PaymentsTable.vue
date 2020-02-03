@@ -106,6 +106,12 @@
             </div>
         </template>
 
+        <template slot="payer.name" slot-scope="{item}">
+            <a :href="'http://127.0.0.1:8000/profile/' + item.payer.id">
+                {{item.payer.name}}
+            </a>
+        </template>
+
         <template slot="show" slot-scope="{item}">
             <a class="btn" :href="getDetailsUrl(item)">
                 <img class="icon-btn-sm" src="/svg/file.svg">
@@ -168,7 +174,7 @@
                 },
                 items: [],
                 isBusy: false,
-                customCells: ['show'],
+                customCells: ['show', 'payer.name'],
                 selectedBranch: null,
                 selectedType: null,
                 selectedPaymentItem: null,

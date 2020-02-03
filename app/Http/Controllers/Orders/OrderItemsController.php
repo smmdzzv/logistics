@@ -59,37 +59,40 @@ class OrderItemsController extends Controller
             return $info->billingInfo->pricePerItem;
         });
 
+        $paymentSum -= $order->owner->accounts()->dollarAccount()->balance;
+
         $payment = Payment::create([
             'branchId' => auth()->user()->branch->id,
             'cashierId' => auth()->user()->id,
             'currencyId' => Currency::where('isoName', 'USD')->first()->id,
             'payerId' => $order->owner->id,
-            'paymentItemId' => PaymentItem::where('title', 'Оплата заказа')->first()->id,
+            'paymentItemId' => PaymentItem::where('title', 'Пополнение баланса')->first()->id,
             'preparedById' => auth()->user()->id,
-            'accountToId' => LegalEntity::first()->accounts()->whereHas('currency', function (Builder $query) {
-                $query->where('isoName', 'USD');
-            })->first()->id,
+//            'accountToId' => LegalEntity::first()->accounts()->whereHas('currency', function (Builder $query) {
+//                $query->where('isoName', 'USD');
+//            })->first()->id,
+            'accountToId' => LegalEntity::first()->accounts()->dollarAccount()->id,
             'amount' => $paymentSum,
             'status' => 'pending',
             'comment' => 'Пополнение баланса для оплаты заказа'
         ]);
 
-        $orderPayment = OrderPayment::create([
-            'order_id' => $order->id,
-            'payment_id' => $payment->id
-        ]);
+//        $orderPayment = OrderPayment::create([
+//            'order_id' => $order->id,
+//            'payment_id' => $payment->id
+//        ]);
 
-        $items->each(function ($item, $key) use ($orderPayment) {
-            OrderPaymentItem::create([
-                'stored_item_id' => $item->id,
-                'order_payment_id' => $orderPayment->id
-            ]);
-        });
+//        $items->each(function ($item, $key) use ($orderPayment) {
+//            OrderPaymentItem::create([
+//                'stored_item_id' => $item->id,
+//                'order_payment_id' => $orderPayment->id
+//            ]);
+//        });
 
-        StoredItem::whereIn('id', request()->input('items'))->update([
-            'deleted_at' => Carbon::now(),
-            'deleted_by_id' => auth()->user()->id
-        ]);
+//        StoredItem::whereIn('id', request()->input('items'))->update([
+//            'deleted_at' => Carbon::now(),
+//            'deleted_by_id' => auth()->user()->id
+//        ]);
 
         return $payment->id;
     }

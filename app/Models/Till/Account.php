@@ -43,4 +43,10 @@ class Account extends BaseModel
     public function paymentsOut(){
         return $this->hasMany(Payment::class, 'accountFromId');
     }
+
+    public function scopeDollarAccount($query){
+        return $query->whereHas('currency', function (Builder $query) {
+            $query->where('isoName', 'USD');
+        })->first();
+    }
 }
