@@ -99,7 +99,7 @@ class StoredItemInfo extends BaseModel
 //        $tariffPricing = $this->item->tariff->lastPriceHistory;
 
 //        $billingInfo = $this->billingInfo ?? new BillingInfo();
-
+//dd($this->billingInfo);
         if(!$this->billingInfo){
             $this->billingInfo = new BillingInfo();
             $tariffPricing = $this->item->tariff->lastPriceHistory;

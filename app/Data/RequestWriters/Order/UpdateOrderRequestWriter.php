@@ -9,42 +9,95 @@ use Carbon\Carbon;
 
 class UpdateOrderRequestWriter extends OrderRequestWriter
 {
+    private $existingStoredItemInfos = array();
+
     function write()
     {
         $this->handleDeletedStoredItemInfos();
 
-        parent::updateOrderRelations();
+        $this->updateOrderRelations();
+
+        $this->filterExistingStoredItemInfos();
+
+        $this->updateExistingStoredItemInfos();
+
         $this->createStoredInfos();
+
         $this->createStoredItems();
+
         $this->createStorageHistories();
-        parent::createBillingInfos();
-        parent::updateOrderStatistics();
+
+        $this->storedItemInfos = array_merge($this->storedItemInfos, $this->existingStoredItemInfos);
+
+        $this->createBillingInfos();
+
+        $this->updateOrderStatistics();
 
         return $this->order;
     }
 
     private function handleDeletedStoredItemInfos()
     {
-        $storeItemInfosToDelete = $this->order->storedItemInfos
-            ->filter(function ($value) {
-                return !collect($this->storedItemInfos)->contains('id', $value);
+        $ids = collect($this->storedItemInfos)
+            ->map(function ($item) {
+                return $item->id;
+            })
+            ->reject(function ($id) {
+                return empty($id);
             });
 
-        $storeItemInfosToDelete->each(function($info){
-           $info->storedItems()->update([
-               'deleted_at' => Carbon::now(),
-               'deleted_by_id' => $this->employee->id
-           ]);
+        $storeItemInfosToDelete = $this->order->storedItemInfos
+            ->filter(function ($info) use ($ids) {
+                return !$ids->contains($info->id);
+            });
 
-           OrderRemovedItem::create([
-               'stored_item_info_id' => $info->id,
-               'order_id' => $this->order->id
-           ]);
+        $storeItemInfosToDelete->each(function ($info) {
+            $info->storedItems()->update([
+                'deleted_at' => Carbon::now(),
+                'deleted_by_id' => $this->employee->id
+            ]);
 
-           $info->update([
-               'deleted_at' => Carbon::now(),
-               'deleted_by_id' => $this->employee->id
-           ]);
+            OrderRemovedItem::create([
+                'stored_item_info_id' => $info->id,
+                'order_id' => $this->order->id
+            ]);
+
+            $info->update([
+                'deleted_at' => Carbon::now(),
+                'deleted_by_id' => $this->employee->id
+            ]);
         });
+    }
+
+    private function filterExistingStoredItemInfos()
+    {
+        $this->storedItemInfos = array_filter($this->storedItemInfos, function ($info) {
+            if ($info->id)
+                $this->existingStoredItemInfos[] = $info;
+            return $info->id == null;
+        });
+    }
+
+    private function updateExistingStoredItemInfos(){
+        $updatedStoredItemInfos = array();
+        foreach ($this->existingStoredItemInfos as $info){
+            $storedItemInfo = $this->order->storedItemInfos->firstWhere('id', $info->id);
+//                            $attr =$info->attributesToArray();
+            $storedItemInfo->fill($info->attributesToArray())->save();
+
+            $storedItemInfo->billingInfo()->update([
+                'deleted_by_id' => $this->employee->id,
+                'deleted_at' => Carbon::now()
+            ]);
+
+            $updatedStoredItemInfos[] = $storedItemInfo;
+//                $info->order_id = $this->order->id;
+//                $attr =$info->attributesToArray();
+//                unset($attr['id']);
+//                $res = StoredItemInfo::create($attr);
+//            dd($res);
+        }
+
+        $this->existingStoredItemInfos = $updatedStoredItemInfos;
     }
 }

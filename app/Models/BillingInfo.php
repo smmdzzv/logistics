@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\StoredItems\StoredItemInfo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property double totalWeight
@@ -18,6 +19,8 @@ use App\Models\StoredItems\StoredItemInfo;
  */
 class BillingInfo extends BaseModel
 {
+    use SoftDeletes;
+
     protected $casts = [
         'totalWeight' => 'double',
         'totalCubage' => 'double',

@@ -38,11 +38,13 @@ class Order extends BaseModel
         $this->totalCount = 0;
     }
 
-    public function storedItemInfos(){
+    public function storedItemInfos()
+    {
         return $this->hasMany(StoredItemInfo::class);
     }
 
-    public function storedItems(){
+    public function storedItems()
+    {
         return $this->hasManyThrough(StoredItem::class, StoredItemInfo::class);
     }
 
@@ -66,12 +68,15 @@ class Order extends BaseModel
         return $this->belongsTo(Payment::class, 'paymentId');
     }
 
-    public function orderRemovedItems(){
+    public function orderRemovedItems()
+    {
         return $this->hasMany(OrderRemovedItem::class);
     }
 
     public function updateStat(Array $billings)
     {
+        $this->resetStat();
+
         foreach ($billings as $billing) {
             $this->totalCubage += $billing['totalCubage'];
             $this->totalWeight += $billing['totalWeight'];
@@ -83,7 +88,8 @@ class Order extends BaseModel
         $this->roundStat();
     }
 
-    public function resetStat(){
+    public function resetStat()
+    {
         $this->totalCubage = 0;
         $this->totalWeight = 0;
         $this->totalPrice = 0;
@@ -100,7 +106,8 @@ class Order extends BaseModel
         $this->totalCount = round($this->totalCount, 2);
     }
 
-    public function complete(){
+    public function complete()
+    {
         $this->status = "completed";
         $this->save();
     }

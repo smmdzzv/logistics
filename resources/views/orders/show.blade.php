@@ -34,8 +34,8 @@
                             <tr>
                                 <td>{{$removed->storedItemInfo->item->name}}</td>
                                 <td>{{$removed->storedItemInfo->count}}</td>
-                                <td>{{$removed->storedItemInfo->weight}}</td>
-                                <td>{{round($removed->storedItemInfo->length * $removed->storedItemInfo->height * $removed->storedItemInfo->width,2)}}</td>
+                                <td>{{$removed->storedItemInfo->weight * $removed->storedItemInfo->count}}</td>
+                                <td>{{round($removed->storedItemInfo->length * $removed->storedItemInfo->height * $removed->storedItemInfo->width * $removed->storedItemInfo->count,2)}}</td>
                                 <td>{{$removed->storedItemInfo->deleted_at}}</td>
                                 <td>{{$removed->storedItemInfo->deletedBy->name}}</td>
                             </tr>

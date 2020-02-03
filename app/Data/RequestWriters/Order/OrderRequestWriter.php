@@ -24,8 +24,8 @@ class OrderRequestWriter extends RequestWriter
     protected $client;
     protected $branch;
     protected $employee;
-    protected $storedItemInfos;
-    protected $storedItems;
+    protected $storedItemInfos = array();
+    protected $storedItems = array();
     protected $customPrices;
     protected $billingInfos = array();
     protected $storageHistories = array();
@@ -86,9 +86,10 @@ class OrderRequestWriter extends RequestWriter
             $stored->order_id = $this->order->id;
         }
 
-        $infosWriter = new StoredItemInfosWriter($this->storedItemInfos);
-        $this->storedItemInfos = $infosWriter->write();
-
+        if (count($this->storedItemInfos) > 0) {
+            $infosWriter = new StoredItemInfosWriter($this->storedItemInfos);
+            $this->storedItemInfos = $infosWriter->write();
+        }
     }
 
     /**
@@ -105,8 +106,10 @@ class OrderRequestWriter extends RequestWriter
             }
         }
 
-        $storedWriter = new StoredItemsWriter($this->storedItems);
-        $this->storedItems = $storedWriter->write();
+        if (count($this->storedItems) > 0) {
+            $storedWriter = new StoredItemsWriter($this->storedItems);
+            $this->storedItems = $storedWriter->write();
+        }
     }
 
     /**
@@ -159,8 +162,10 @@ class OrderRequestWriter extends RequestWriter
             ]);
         }
 
-        $historyWriters = new StorageHistoriesWriter($this->storageHistories);
-        $this->storageHistories = $historyWriters->write();
+        if (count($this->storageHistories) > 0) {
+            $historyWriters = new StorageHistoriesWriter($this->storageHistories);
+            $this->storageHistories = $historyWriters->write();
+        }
     }
 
 
@@ -179,8 +184,10 @@ class OrderRequestWriter extends RequestWriter
             $priceIndex++;
         }
 
-        $billingsWriter = new BillingInfosWriter($this->billingInfos);
-        $this->billingInfos = $billingsWriter->write();
+        if (count($this->billingInfos) > 0) {
+            $billingsWriter = new BillingInfosWriter($this->billingInfos);
+            $this->billingInfos = $billingsWriter->write();
+        }
     }
 
     /**
