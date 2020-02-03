@@ -8,8 +8,9 @@
                     </slot>
                 </div>
                 <div class="col-2 col-md-2">
-                    <div class="form-row align-items-center">
-                        <div class="col-12 col-md-6" v-if="excelColumns">
+                    <div class="form-row align-items-center" :class="{'text-right': !selectable}">
+                        <div class="col-12" v-if="excelColumns"
+                        :class="{'col-md-6':selectable}">
                             <vue-excel-xlsx
                                     :columns="excelColumns"
                                     :data="excelData"
@@ -19,7 +20,7 @@
                                 <img class="icon-btn-md" src="/svg/excel.svg">
                             </vue-excel-xlsx>
                         </div>
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-6" v-if="selectable">
                             <input type="checkbox"
                                    class="form-control"
                                    style="width:24px"
