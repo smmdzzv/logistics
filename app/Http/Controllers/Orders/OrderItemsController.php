@@ -36,7 +36,6 @@ class OrderItemsController extends Controller
         $data->employee = auth()->user();
         $data->storedItems = $this->getStoredItems();
         $data->isDebtRequested = request()->get('isDebtRequested');
-        $data->deliverImmediately = request()->get('deliverImmediately');
 
         $writer = new DeliverOrderItemsRequestWriter($data);
         $result = $writer->write();
@@ -109,7 +108,7 @@ class OrderItemsController extends Controller
 
     public function unpaidStoredItems(Order $order){
         return $order->storedItems()
-            ->with('info', 'info.item', 'info.owner', 'storageHistory.storage')
+            ->with('info', 'info.item','info.billingInfo', 'info.owner', 'storageHistory.storage')
             ->unpaid()->get();
     }
 }

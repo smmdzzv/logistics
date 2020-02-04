@@ -19,7 +19,10 @@
                 </option>
             </b-form-select>
         </div>
-
+        <div class="col-12 form-group">
+            <label class="col-12">Товаров выбрано на сумму (в долларах)</label>
+            <input class="form-control" v-model="paymentSum" disabled>
+        </div>
         <div class="col-12 pb-4">
             <stored-items-table-card
                     :borderless="borderless"
@@ -50,13 +53,13 @@
 
         <div class="col-12 text-center">
             <button @click="createPendingPayment" class="btn btn-primary  m-2">Оформить заявку</button>
-            <button @click="submit(e, true)" class="btn btn-secondary m-2">Выдать сразу</button>
+            <button @click="submit" class="btn btn-secondary m-2">Выдать сразу</button>
         </div>
 
 
         <b-modal id="payment-error" title="Ошибка оплаты" ok-only centered ok-title="Закрыть">
             <p class="my-4">{{errorMessage}}</p>
-<!--            <a href="#" @click.prevent="submit(e, true)">Доверительный платеж</a><br>-->
+            <!--            <a href="#" @click.prevent="submit(e, true)">Доверительный платеж</a><br>-->
             <!--            <a href="#" @click.prevent="createPendingPayment">Оформить платежную заявку на пополнение баланса</a>-->
         </b-modal>
     </div>
@@ -81,7 +84,8 @@
                 items: [],
                 selectedItems: [],
                 errorMessage: null,
-                isDebtRequested:false
+                isDebtRequested: false,
+                paymentSum: 0
             }
         },
         methods: {
@@ -89,7 +93,11 @@
                 this.client = client
             },
             onItemsSelected(items) {
-                this.selectedItems = items
+                this.selectedItems = items;
+                this.calculateTotalPayment();
+            },
+            calculateTotalPayment() {
+                this.paymentSum = this.selectedItems.reduce((sum, nextItem) => sum + nextItem.info.billingInfo.pricePerItem, 0);
             },
             async createPendingPayment() {
                 this.$bvModal.hide('payment-error');
@@ -111,15 +119,14 @@
                     }
                 }
             },
-            async submit(e, deliverImmediately = false) {
+            async submit() {
                 this.$bvModal.hide('payment-error');
 
                 let data = {
                     items: this.selectedItems.map((item) => {
                         return item.id
                     }),
-                    isDebtRequested: this.isDebtRequested,
-                    deliverImmediately: deliverImmediately
+                    isDebtRequested: this.isDebtRequested
                 };
 
                 let action = `/deliver/${this.selectedOrder.id}/items`;

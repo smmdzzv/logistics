@@ -159,14 +159,13 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
             return $item->id;
         });
 
-        if ($this->input->deliverImmediately) {
-            StorageHistory::whereHas('storedItem', function (Builder $query) use ($ids) {
-                $query->whereIn('id', $ids->all());
-            })->update([
-                'deleted_at' => Carbon::now(),
-                'deletedById' => $this->input->employee->id
-            ]);
-        }
+
+        StorageHistory::whereHas('storedItem', function (Builder $query) use ($ids) {
+            $query->whereIn('id', $ids->all());
+        })->update([
+            'deleted_at' => Carbon::now(),
+            'deletedById' => $this->input->employee->id
+        ]);
 
         StoredItem::whereIn('id', $ids->all())->update([
             'deleted_at' => Carbon::now(),
