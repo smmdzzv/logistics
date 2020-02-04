@@ -6,14 +6,12 @@ use App\Data\RequestWriters\Order\DeliverOrderItemsRequestWriter;
 use App\Models\Currency;
 use App\Models\LegalEntities\LegalEntity;
 use App\Models\Order;
-use App\Models\Order\OrderPayment;
-use App\Models\Order\OrderPaymentItem;
 use App\Models\StoredItems\StoredItem;
 use App\Http\Controllers\Controller;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\Users\TrustedUser;
+use Carbon\Carbon; 
 
 class OrderItemsController extends Controller
 {
@@ -59,6 +57,15 @@ class OrderItemsController extends Controller
         });
 
         $paymentSum -= $order->owner->accounts()->dollarAccount()->balance;
+
+        if (request('isDebtRequested')) {
+            $trusted = TrustedUser::where('user_id', $order->owner->id)->where('to', '>=', Carbon::now()->toDateString())
+                ->first();
+
+            if ($trusted) {
+                $paymentSum -= $trusted->maxDebt;
+            }
+        }
 
         $payment = Payment::create([
             'branchId' => auth()->user()->branch->id,
@@ -106,9 +113,10 @@ class OrderItemsController extends Controller
         return $order->storedItems()->with('info', 'info.item', 'info.owner', 'storageHistory.storage')->get();
     }
 
-    public function unpaidStoredItems(Order $order){
+    public function unpaidStoredItems(Order $order)
+    {
         return $order->storedItems()
-            ->with('info', 'info.item','info.billingInfo', 'info.owner', 'storageHistory.storage')
+            ->with('info', 'info.item', 'info.billingInfo', 'info.owner', 'storageHistory.storage')
             ->unpaid()->get();
     }
 }

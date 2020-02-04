@@ -106,6 +106,7 @@
                     items: this.selectedItems.map((item) => {
                         return item.id
                     }),
+                    isDebtRequested: this.isDebtRequested
                 };
 
                 let action = `/deliver/${this.selectedOrder.id}/items/pending-payment`;
@@ -133,7 +134,7 @@
 
                 try {
                     const response = await axios.post(action, data);
-                    window.location = `/payments/${response.data}`;
+                    // window.location = `/payments/${response.data}`;
                 } catch (e) {
                     if (e.response.status === 400) {
                         this.errorMessage = e.response.data.message;
