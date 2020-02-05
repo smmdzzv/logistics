@@ -34,7 +34,15 @@ class StoredItem extends BaseModel
     }
 
     public function scopeUnpaid($query){
-        return $query->whereDoesntHave('orderPaymentItems');
+        return $query->whereDoesntHave('orderPaymentItems', function (Builder $query) {
+            $query->whereHas('orderPayment', function (Builder $query){
+                $query->whereHas('payment', function (Builder $query){
+                    $query->whereHas('paymentItem', function (Builder $query){
+                        $query->where('title', '=','Списание с баланса');
+                    });
+                });
+            });
+        });
     }
 
     public function orderPaymentItems(){

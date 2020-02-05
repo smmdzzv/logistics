@@ -40,6 +40,7 @@ Route::post('/order/{order}/update-price', 'Orders\OrderPriceController@update')
 Route::get('/orders/items/edit', 'Orders\OrderItemsController@edit')->name('order-items.edit');
 Route::get('/order/{order}/items', 'Orders\OrderItemsController@storedItems');
 Route::get('/order/{order}/unpaid-items', 'Orders\OrderItemsController@unpaidStoredItems');
+Route::get('/order/{order}/payments', 'Orders\OrderItemsController@orderPayments');
 Route::post('/deliver/{order}/items', 'Orders\OrderItemsController@deliver');
 Route::post('/deliver/{order}/items/pending-payment', 'Orders\OrderItemsController@storePaymentRequest');
 

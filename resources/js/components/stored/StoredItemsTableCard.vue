@@ -1,5 +1,6 @@
 <template>
     <table-card
+
         :borderless="borderless"
         :fields="fields"
         :fixed="fixed"
@@ -11,6 +12,7 @@
         :sticky-header="tableHeight"
         :striped="striped"
         :tableBusy="isBusy"
+        ref="tableCard"
         @itemsSelected="onItemsSelected"
         excelFileName="Список товаров рейса"
         primaryKey="id"
@@ -94,7 +96,7 @@
         },
         watch: {
             storedItems() {
-                this.items = this.storedItems
+                this.items = this.storedItems;
             }
         },
         components: {

@@ -9,7 +9,6 @@ use App\Models\Currency;
 use App\Models\Order\OrderPayment;
 use App\Models\Order\OrderPaymentItem;
 use App\Models\StoredItems\StoredItem;
-use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
 use App\Models\Users\TrustedUser;
@@ -38,16 +37,18 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
             return $item->id;
         });
 
-        $paidItemsIds = OrderPaymentItem::whereIn('stored_item_id', $ids)
-            ->get()
-            ->map(function ($item) {
-                return $item->stored_item_id;
-            });
+//        $paidItemsIds = OrderPaymentItem::whereIn('stored_item_id', $ids)
+//            ->get()
+//            ->map(function ($item) {
+//                return $item->stored_item_id;
+//            });
 
-        $unpaidItems = $this->input->storedItems
-            ->filter(function ($storedItemId, $key) use ($paidItemsIds) {
-                return !$paidItemsIds->contains($storedItemId);
-            });
+//        $unpaidItems = $this->input->storedItems
+//            ->filter(function ($storedItemId, $key) use ($paidItemsIds) {
+//                return !$paidItemsIds->contains($storedItemId);
+//            });
+
+        $unpaidItems = StoredItem::whereIn('id', $ids)->get();
 
         //Calculate bill
         $unpaidStoredItemInfos = $unpaidItems->load('info.billingInfo')

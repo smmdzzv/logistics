@@ -19,6 +19,17 @@
                 </option>
             </b-form-select>
         </div>
+        <div class="col-12 form-group" v-if="orderPayments && orderPayments.length > 0">
+            <label class="col-12">Выборки</label>
+            <b-form-select v-model="selectedOrderPayment">
+                <option disabled value="null">-- Выбранные товары --</option>
+                <option :key="orderPayments.id"
+                        :value="orderPayment"
+                        v-for="orderPayment in orderPayments">
+                    {{orderPayment.created_at}}
+                </option>
+            </b-form-select>
+        </div>
         <div class="col-12 form-group">
             <label class="col-12">Товаров выбрано на сумму (в долларах)</label>
             <input class="form-control" v-model="paymentSum" disabled>
@@ -35,6 +46,7 @@
                     :storedItems="items"
                     :striped="striped"
                     @itemsSelected="onItemsSelected"
+                    ref="storedItemsTable"
                     title="Список товаров">
             </stored-items-table-card>
         </div>
@@ -81,7 +93,9 @@
                 client: null,
                 orders: [],
                 selectedOrder: null,
+                selectedOrderPayment: null,
                 items: [],
+                orderPayments: [],
                 selectedItems: [],
                 errorMessage: null,
                 isDebtRequested: false,
@@ -97,7 +111,7 @@
                 this.calculateTotalPayment();
             },
             calculateTotalPayment() {
-                this.paymentSum = this.selectedItems.reduce((sum, nextItem) => sum + nextItem.info.billingInfo.pricePerItem, 0);
+                this.paymentSum = Math.round(this.selectedItems.reduce((sum, nextItem) => sum + nextItem.info.billingInfo.pricePerItem, 0) * 100) / 100;
             },
             async createPendingPayment() {
                 this.$bvModal.hide('payment-error');
@@ -166,8 +180,10 @@
                     return;
                 tShowSpinner();
                 try {
-                    const response = await getUnpaidOrderItems(this.selectedOrder.id);
-                    this.items = response.data;
+                    const itemsResponse = await getUnpaidOrderItems(this.selectedOrder.id);
+                    this.items = itemsResponse.data;
+                    const paymentsResponse = await getOrderPayments(this.selectedOrder.id);
+                    this.orderPayments = paymentsResponse.data;
                 } catch (e) {
                     this.$root.showErrorMsg(
                         "Ошибка загрузки",
@@ -175,6 +191,21 @@
                     )
                 }
                 tHideSpinner();
+            },
+            selectedOrderPayment() {
+                // TODO refactor
+                // this.$refs.storedItemsTable.$refs.tableCard.selected
+                let ids = this.selectedOrderPayment.paidItems.map(function (paidItem) {
+                        return paidItem.storedItem.id;
+                    });
+
+                this.$refs.storedItemsTable.$refs.tableCard.selected = this.items.filter(function (item) {
+                    return ids.includes(item.id);
+                });
+
+                this.$refs.storedItemsTable.$refs.tableCard.$emit(
+                    'itemsSelected',
+                    this.$refs.storedItemsTable.$refs.tableCard.selected);
             }
         }
     }

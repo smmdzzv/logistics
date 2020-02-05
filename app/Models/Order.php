@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Order\OrderPayment;
 use App\Models\Order\OrderRemovedItem;
 use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemInfo;
-use App\Models\Till\Payment;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -63,9 +63,13 @@ class Order extends BaseModel
         return $this->belongsTo(Branch::class, 'branchId');
     }
 
-    public function payment()
+//    public function payment()
+//    {
+//        return $this->belongsTo(Payment::class, 'paymentId');
+//    }
+    public function orderPayments()
     {
-        return $this->belongsTo(Payment::class, 'paymentId');
+        return $this->hasMany(OrderPayment::class);
     }
 
     public function orderRemovedItems()
