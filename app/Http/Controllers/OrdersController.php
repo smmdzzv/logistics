@@ -72,6 +72,8 @@ class OrdersController extends Controller
     }
 
     public function edit(Order $order){
+        if($order->status == 'completed')
+            return abort(403, 'Доступ запрещен');
         $order->load([
             'storedItemInfos',
             'storedItemInfos.customsCode',

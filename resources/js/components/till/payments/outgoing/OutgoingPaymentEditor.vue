@@ -189,14 +189,14 @@
             },
             setInitialData() {
                 this.currencies = [this.payment.currency];
-                this.paymentItems = [this.payment.payment_item];
-                this.accountsFrom = [this.payment.account_from];
-                this.paymentType = this.payment.payment_item.type;
+                this.paymentItems = [this.payment.paymentItem];
+                this.accountsFrom = [this.payment.accountFrom];
+                this.paymentType = this.payment.paymentItem.type;
 
-                this.paymentItem = this.payment.payment_item;
+                this.paymentItem = this.payment.paymentItem;
                 this.status = this.payment.status;
                 this.currency = this.payment.currency;
-                this.accountFrom = this.payment.account_from;
+                this.accountFrom = this.payment.accountFrom;
                 this.amount = this.payment.amount;
                 this.comment = this.payment.comment;
             },

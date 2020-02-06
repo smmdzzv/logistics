@@ -30,7 +30,7 @@
         </template>
 
         <template slot="edit" slot-scope="{item}">
-            <a :href="getEditUrl(item)"><img class="icon-btn-sm" src="/svg/edit.svg"></a>
+            <a v-if="item.status !== 'completed'" :href="getEditUrl(item)"><img class="icon-btn-sm" src="/svg/edit.svg"></a>
         </template>
 
         <template #footer>

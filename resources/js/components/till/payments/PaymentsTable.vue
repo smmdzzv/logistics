@@ -107,7 +107,7 @@
         </template>
 
         <template slot="payer.name" slot-scope="{item}">
-            <a :href="'http://127.0.0.1:8000/profile/' + item.payer.id">
+            <a :href="'/profile/' + item.payer.id" v-if="item.payer">
                 {{item.payer.name}}
             </a>
         </template>
