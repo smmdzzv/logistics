@@ -31,8 +31,8 @@ abstract class AbstractRoleUsersController extends Controller
     {
         $info = request()->userInfo;
 
-        return $this->entityClass::whereRaw("code LIKE '%$info%'")->roleConstraint()
-            ->orWhereRaw("name LIKE '%$info%'")->get();
+        return $this->entityClass::whereRaw("code LIKE '%$info%'")
+            ->orWhereRaw("name LIKE '%$info%'")->roleConstraint()->get();
     }
 
     abstract protected function index();

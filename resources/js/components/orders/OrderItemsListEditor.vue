@@ -114,6 +114,9 @@
                 this.paymentSum = Math.round(this.selectedItems.reduce((sum, nextItem) => sum + nextItem.info.billingInfo.pricePerItem, 0) * 100) / 100;
             },
             async createPendingPayment() {
+                if(this.selectedItems.length === 0)
+                    return;
+
                 tShowSpinner();
                 this.$bvModal.hide('payment-error');
 
@@ -138,6 +141,9 @@
                 tHideSpinner();
             },
             async submit() {
+                if(this.selectedItems.length === 0)
+                    return;
+
                 tShowSpinner();
                 this.$bvModal.hide('payment-error');
 
