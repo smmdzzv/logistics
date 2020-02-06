@@ -9,6 +9,7 @@ use App\Models\Currency;
 use App\Models\LegalEntities\LegalEntity;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
+use App\User;
 use stdClass;
 
 class OutgoingPaymentsController extends Controller
@@ -34,7 +35,8 @@ class OutgoingPaymentsController extends Controller
         $data->branchId = auth()->user()->branch->id;
         $data->cashierId = auth()->id();
 
-        $paymentWriter = new OutgoingPaymentRequestWriter($data);
+        $recipient = User::findOrFail($request->get('recipient'));
+        $paymentWriter = new OutgoingPaymentRequestWriter($recipient ,$data);
         $paymentWriter->write();
 
         return redirect()->route('payments.index');
@@ -44,7 +46,7 @@ class OutgoingPaymentsController extends Controller
     {
         if ($payment->paymentItem->type !== 'out')
             abort(403, 'Указанный платеж не является исходящим');
-        $payment->load( 'accountFrom.currency', 'currency');
+        $payment->load( 'accountFrom.currency', 'currency', 'recipient');
 
         return view('till.payments.outgoing.edit', compact('payment'));
     }
@@ -58,7 +60,8 @@ class OutgoingPaymentsController extends Controller
         $data->branchId = auth()->user()->branch->id;
         $data->cashierId = auth()->id();
 
-        $paymentWriter = new OutgoingPaymentRequestWriter($data);
+        $recipient = User::findOrFail($request->get('recipient'));
+        $paymentWriter = new OutgoingPaymentRequestWriter($recipient, $data);
         $paymentWriter->write();
 
         return;

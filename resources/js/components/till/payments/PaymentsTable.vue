@@ -106,9 +106,12 @@
             </div>
         </template>
 
-        <template slot="payer.name" slot-scope="{item}">
+        <template slot="client.name" slot-scope="{item}">
             <a :href="'/profile/' + item.payer.id" v-if="item.payer">
                 {{item.payer.name}}
+            </a>
+            <a :href="'/profile/' + item.recipient.id" v-if="item.recipient">
+                {{item.recipient.name}}
             </a>
         </template>
 
@@ -174,7 +177,7 @@
                 },
                 items: [],
                 isBusy: false,
-                customCells: ['show', 'payer.name'],
+                customCells: ['show', 'client.name'],
                 selectedBranch: null,
                 selectedType: null,
                 selectedPaymentItem: null,
@@ -194,8 +197,8 @@
                         label: 'Cчет зачисления',
                         sortable: true
                     },
-                    'payer.name': {
-                        label: 'Плательщик',
+                    'client.name': {
+                        label: 'Плательщик/Получатель',
                         sortable: true
                     },
                     amount: {

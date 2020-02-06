@@ -28,7 +28,7 @@ class PaymentsController extends BaseController
 
     public function all()
     {
-        return Payment::with('accountTo', 'cashier', 'payer', 'currency', 'paymentItem')
+        return Payment::with('accountTo', 'cashier', 'payer', 'currency', 'paymentItem', 'recipient')
             ->latest()
             ->paginate($this->pagination());
     }
@@ -51,7 +51,7 @@ class PaymentsController extends BaseController
 
     public function filtered()
     {
-        $query = Payment::with('accountTo', 'cashier', 'payer', 'currency', 'paymentItem')
+        $query = Payment::with('accountTo', 'cashier', 'payer', 'currency', 'paymentItem', 'recipient')
             ->where('status', 'completed')
             ->latest();
 

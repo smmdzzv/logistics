@@ -8,7 +8,6 @@ use App\Models\Till\Payment;
 
 class PaymentRequestWriter extends RequestWriter
 {
-
     function write()
     {
         return $this->writePayment();
@@ -24,7 +23,7 @@ class PaymentRequestWriter extends RequestWriter
             $this->input->payment['currencyId'] = $this->data->duobAccount->currency->id;
         }
 
-        $filter = ['orderId', 'accountTo', 'accountFrom'];
+        $filter = ['orderId', 'accountTo', 'accountFrom', 'recipient'];
         $data = array_filter($this->input->payment, function ($key) use ($filter) {
             return !in_array($key, $filter);
         }, ARRAY_FILTER_USE_KEY);

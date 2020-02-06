@@ -3,11 +3,8 @@
 namespace App\Http\Requests\Till;
 
 use App\Models\Currency;
-use App\Models\Order;
 use App\Models\Till\Account;
 use App\Models\Till\MoneyExchange;
-use App\Models\Users\Driver;
-use App\Models\Users\Client;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -49,7 +46,7 @@ class PaymentRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            $amount = $this->request->get('amount');
+//            $amount = $this->request->get('amount');
 //            $convertedPrice = null;
             $currency = Currency::find($this->request->get('currencyId'));
 

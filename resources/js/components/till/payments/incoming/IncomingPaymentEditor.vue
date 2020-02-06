@@ -350,7 +350,7 @@
                     return;
 
                 this.client = client;
-                this.getClientTotalDebt();
+                // this.getClientTotalDebt();
             },
             async getClientTotalDebt() {
                 if (!this.client)

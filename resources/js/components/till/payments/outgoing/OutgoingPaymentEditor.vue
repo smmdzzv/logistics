@@ -25,7 +25,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-6">
                                     <label>Счет списания</label>
                                     <!--                                    <input class="form-control" disabled id="accountFrom" type="text"-->
                                     <!--                                           v-model="accountFrom.description">-->
@@ -34,6 +34,23 @@
                                             {{account.description}}
                                         </option>
                                     </b-select>
+                                </div>
+
+                                <div class="form-row col-md-6">
+                                    <div class="form-group col-12">
+                                        <label for="client">Получатель</label>
+                                        <search-user-dropdown :isInvalid="$v.client.$error || errors.client"
+                                                              :preselectedUser="client"
+                                                              :selected="clientSelected"
+                                                              placeholder="Введите ФИО или код клиента"
+                                                              url="/search/user/"></search-user-dropdown>
+                                        <input class="is-invalid form-control" id="client" type="hidden">
+                                        <span class="invalid-feedback" role="alert"
+                                              v-if="$v.client.$error || errors.client">
+                                                <strong>Необходимо выбрать клиента.</strong>
+                                                <strong v-for="message in errors.client">{{message}}.</strong>
+                                            </span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -179,6 +196,7 @@
                     amount: null,
                     paymentItem: null,
                 },
+                client: null
             }
         },
         methods: {
@@ -186,6 +204,12 @@
                 $("input").prop("disabled", true);
                 $("select").prop("disabled", true);
                 $("#status").prop("disabled", false);
+            },
+            clientSelected(client) {
+                if (this.client && client && this.client.id === client.id)
+                    return;
+
+                this.client = client;
             },
             setInitialData() {
                 this.currencies = [this.payment.currency];
@@ -199,6 +223,7 @@
                 this.accountFrom = this.payment.accountFrom;
                 this.amount = this.payment.amount;
                 this.comment = this.payment.comment;
+                this.client = this.payment.recipient;
             },
             async submitForm() {
                 this.$bvModal.show('busyModal');
@@ -208,6 +233,7 @@
                     let data = {
                         currencyId: this.currency.id,
                         paymentItemId: this.paymentItem.id,
+                        recipient: this.client.id,
                         amount: this.amount,
                         comment: this.comment,
                         status: this.status,
@@ -226,6 +252,7 @@
                         if (e.response.status === 422) {
                             this.errors.amount = e.response.data.errors.amount;
                             this.errors.paymentItem = e.response.data.errors.paymentItemId;
+                            this.errors.client = e.response.data.errors.recipient;
                         } else {
                             this.$root.showErrorMsg('Ошибка сохранения',
                                 'Не удалось провести платеж. Обновите странице и повторите попытку.' + e.response.data.message)
@@ -259,6 +286,9 @@
                 decimal,
                 validateAmount
             },
+            client: {
+                required
+            }
         }
     }
 </script>

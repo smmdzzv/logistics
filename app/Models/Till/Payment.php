@@ -56,6 +56,15 @@ class Payment extends BaseModel
         return $this->belongsTo(User::class, 'payerId');
     }
 
+    /**
+     * Used for outgoing payments
+     * @return BelongsTo
+     */
+    public function recipient()
+    {
+        return $this->belongsTo(User::class, 'recipient_id');
+    }
+
     public function currency()
     {
         return $this->belongsTo(Currency::class, 'currencyId');

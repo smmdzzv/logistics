@@ -6,12 +6,19 @@ use App\Models\Till\Account;
 
 class OutgoingPaymentRequestWriter extends PaymentRequestWriter
 {
+    private $recipient;
+
+    public function __construct($recipient, $input)
+    {
+        $this->recipient = $recipient;
+        parent::__construct($input);
+    }
 
     function write()
     {
         parent::write();
 
-        $this->updateAccountFrom();
+        $this->updateAccountFromAndTo();
 
         if ($this->saved->payment->status === 'completed')
             $this->updateAccountsBalance();
@@ -22,12 +29,12 @@ class OutgoingPaymentRequestWriter extends PaymentRequestWriter
     /**
      *Sets payment account.
      */
-    private function updateAccountFrom()
+    private function updateAccountFromAndTo()
     {
 //        if(!isset($this->data->duobAccount))
 //            $this->data->duobAccount = LegalEntity::first()->accounts()->with('currency')->first();
         $this->data->accountFrom = Account::with('currency')->findOrFail($this->input->payment['accountFrom']);
-
+        $this->saved->payment->recipient_id = $this->recipient->id;
         $this->saved->payment->accountFromId = $this->data->accountFrom->id;
         $this->saved->payment->save();
     }
