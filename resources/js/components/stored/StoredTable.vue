@@ -62,6 +62,10 @@
                 </div>
             </template>
 
+            <template slot="owner" slot-scope="{item}">
+                <span>{{item.info.owner.code}} {{item.info.owner.name}}</span>
+            </template>
+
             <template slot="buttons" slot-scope="data">
                 <a :href="'/stored/' + data.item.id"><img class="icon-btn-sm" src="/svg/file.svg"></a>
             </template>
@@ -282,6 +286,10 @@
                 items: [],
                 isBusy: false,
                 fields: {
+                    'owner': {
+                        label: 'Владелец',
+                        sortable: true
+                    },
                     'info.item.name': {
                         label: 'Наименование',
                         sortable: true
@@ -304,10 +312,6 @@
                     },
                     'info.weight': {
                         label: 'Вес',
-                        sortable: true
-                    },
-                    'info.owner.name': {
-                        label: 'Владелец',
                         sortable: true
                     },
                     'storageHistory.storage.name': {
