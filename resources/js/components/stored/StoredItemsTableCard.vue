@@ -12,6 +12,7 @@
         :sticky-header="tableHeight"
         :striped="striped"
         :tableBusy="isBusy"
+        :customCells="customCells"
         ref="tableCard"
         @itemsSelected="onItemsSelected"
         excelFileName="Список товаров рейса"
@@ -22,6 +23,10 @@
             <slot name="header">
                 {{title}}
             </slot>
+
+            <template slot="owner" slot-scope="{item}">
+                <span>{{item.info.owner.code}} {{item.info.owner.name}}</span>
+            </template>
         </template>
     </table-card>
 </template>
@@ -50,7 +55,12 @@
                 isSubmitting: false,
                 isBusy: this.tableBusy,
                 selectedItems: [],
+                customCells:['owner'],
                 fields: {
+                    'owner': {
+                        label: 'Владелец',
+                        sortable: true
+                    },
                     'info.item.name': {
                         label: 'Имя',
                         sortable: true
@@ -69,10 +79,6 @@
                     },
                     'info.weight': {
                         label: 'Вес',
-                        sortable: true
-                    },
-                    'info.owner.name': {
-                        label: 'Владелец',
                         sortable: true
                     },
                     'storageHistory.storage.name': {
