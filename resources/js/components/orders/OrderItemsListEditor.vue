@@ -19,7 +19,7 @@
                 </option>
             </b-form-select>
         </div>
-        <div class="col-12 form-group" v-if="orderPayments && orderPayments.length > 0">
+        <div class="col-12 form-group">
             <label class="col-12">Выборки</label>
             <b-form-select v-model="selectedOrderPayment">
                 <option disabled value="null">-- Выбранные товары --</option>
@@ -114,6 +114,7 @@
                 this.paymentSum = Math.round(this.selectedItems.reduce((sum, nextItem) => sum + nextItem.info.billingInfo.pricePerItem, 0) * 100) / 100;
             },
             async createPendingPayment() {
+                tShowSpinner();
                 this.$bvModal.hide('payment-error');
 
                 let data = {
@@ -130,11 +131,14 @@
                     window.location = `/incoming-payments/${response.data}/edit`;
                 } catch (e) {
                     if (e.response.status === 400) {
-
+                        this.errorMessage = e.response.data.message;
+                        this.$bvModal.show('payment-error');
                     }
                 }
+                tHideSpinner();
             },
             async submit() {
+                tShowSpinner();
                 this.$bvModal.hide('payment-error');
 
                 let data = {
@@ -148,7 +152,7 @@
 
                 try {
                     const response = await axios.post(action, data);
-                    // window.location = `/payments/${response.data}`;
+                    window.location = `/payments/${response.data}`;
                 } catch (e) {
                     if (e.response.status === 400) {
                         this.errorMessage = e.response.data.message;
@@ -157,6 +161,7 @@
                     }
                     this.$bvModal.show('payment-error');
                 }
+                tHideSpinner();
             }
         },
         watch: {

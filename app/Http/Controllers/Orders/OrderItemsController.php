@@ -69,6 +69,10 @@ class OrderItemsController extends Controller
             }
         }
 
+        if($paymentSum <= 0){
+            return abort(400, 'На балансе клиента достаточно денег для оплаты выбранных товаров');
+        }
+
         $payment = Payment::create([
             'branchId' => auth()->user()->branch->id,
             'cashierId' => auth()->user()->id,
