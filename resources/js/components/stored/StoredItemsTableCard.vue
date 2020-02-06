@@ -23,10 +23,10 @@
             <slot name="header">
                 {{title}}
             </slot>
+        </template>
 
-            <template slot="owner" slot-scope="{item}">
-                <span>{{item.info.owner.code}} {{item.info.owner.name}}</span>
-            </template>
+        <template slot="owner" slot-scope="data">
+            <span>{{data.item.info.owner.code}} {{data.item.info.owner.name}}</span>
         </template>
     </table-card>
 </template>

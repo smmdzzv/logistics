@@ -192,7 +192,10 @@
                 tShowSpinner();
                 try {
                     const itemsResponse = await getUnpaidOrderItems(this.selectedOrder.id);
-                    this.items = itemsResponse.data;
+                    this.items = itemsResponse.data.map(function (item) {
+                        item.info.owner = this.client;
+                        return item;
+                    }, this);
                     const paymentsResponse = await getOrderPayments(this.selectedOrder.id);
                     this.orderPayments = paymentsResponse.data;
                 } catch (e) {
