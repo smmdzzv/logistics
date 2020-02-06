@@ -43,6 +43,10 @@
                     <b-spinner class="align-middle"></b-spinner>
                 </div>
             </template>
+
+            <template slot="owner" slot-scope="{item}">
+                <span>{{item.info.owner.code}} {{item.info.owner.name}}</span>
+            </template>
         </b-table>
         <vue-excel-xlsx
                 id="grouped-data"
@@ -145,6 +149,10 @@
                 clients: [],
                 groupedData:[],
                 fields: {
+                    'owner': {
+                        label: 'Владелец',
+                        sortable: true
+                    },
                     'info.item.name': {
                         label: 'Наименование',
                         sortable: true
@@ -175,10 +183,6 @@
                     },
                     'info.weight': {
                         label: 'Вес',
-                        sortable: true
-                    },
-                    'info.owner.name': {
-                        label: 'Владелец',
                         sortable: true
                     },
                     'storageHistory.storage.name': {
