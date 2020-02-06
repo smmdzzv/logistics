@@ -42,6 +42,12 @@ class RolesTableSeeder extends Seeder
         $roleEmployee->description = 'Системная роль - кассир';
         $roleEmployee->save();
 
+        $roleEmployee = new Role();
+        $roleEmployee->name = 'storekeeper';
+        $roleEmployee->title = 'Кладовщик';
+        $roleEmployee->description = 'Системная роль - кассир';
+        $roleEmployee->save();
+
         $roleAdmin = new Role();
         $roleAdmin->name = 'admin';
         $roleAdmin->title = 'Администратор';
