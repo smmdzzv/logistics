@@ -28,7 +28,7 @@
                  responsive
                  striped>
             <template slot="count" slot-scope="{item}">
-                <span>{{item.count}} ({{item.item.unit}})</span>
+                <span>{{item.count}}/{{item.storedItems.length}} ({{item.item.unit}})</span>
             </template>
 
             <template slot="FOOT[item.name]">
@@ -66,6 +66,13 @@
                 <span id="code">Код</span>
                 <b-tooltip target="code" trigger="hover">
                     Таможенный код
+                </b-tooltip>
+            </template>
+
+            <template slot="HEAD[count]">
+                <span id="count-header">Кол-во мест</span>
+                <b-tooltip target="count-header" trigger="hover">
+                    Количество мест товара. Общее кол-во/Остаток
                 </b-tooltip>
             </template>
 
@@ -133,7 +140,7 @@
                         sortable: true
                     },
                     count: {
-                        label: 'Кол-во',
+                        label: 'Кол-во мест',
                         sortable: true
                     },
                     // placeCount: {
