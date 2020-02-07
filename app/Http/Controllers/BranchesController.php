@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
-use Carbon\Carbon;
-use http\Client\Curl\User;
+use App\Models\Currency;
+use App\Models\Till\Account;
+use Carbon\Carbon; 
 use Illuminate\Validation\Rule;
 
 class BranchesController extends Controller
@@ -51,6 +52,18 @@ class BranchesController extends Controller
         if (!isset($data['director']))
             $branch->director = null;
         $branch->load('director', 'country');
+
+        $accounts = [];
+        $currencies = Currency::all();
+        foreach ($currencies as $currency){
+            $accounts[] = new Account([
+                'balance' => 0,
+                'description' => "Cчет {$branch->name} {$currency->isoName} ({$currency->name})",
+                'currencyId' => $currency->id
+            ]);
+        }
+
+        $branch->accounts()->saveMany($accounts);
 
         return $branch;
     }

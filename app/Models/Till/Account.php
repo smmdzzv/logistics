@@ -13,6 +13,8 @@ class Account extends BaseModel
         'balance' => 'double'
     ];
 
+    protected $guarded = [];
+
     /**
      * The "booting" method of the model.
      *

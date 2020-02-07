@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Branches\Storage; 
+use App\Models\Branches\Storage;
 use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Till\Account;
 use App\Models\Till\Payment;
