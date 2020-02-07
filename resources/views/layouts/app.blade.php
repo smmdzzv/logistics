@@ -96,7 +96,7 @@
                                     <a class="dropdown-item" href="{{route('pending-payments.index')}}">Заявки</a>
                                     <a class="dropdown-item" href="{{route('payments.index')}}">История платежей</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{route('legal-entity.accounts.index')}}">Счета
+                                    <a class="dropdown-item" href="{{route('branches.accounts.index')}}">Счета
                                         Дуоб</a>
                                     @if(Auth::user()->hasRole('admin'))
                                         <div class="dropdown-divider"></div>

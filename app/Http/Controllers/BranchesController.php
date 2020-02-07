@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use App\Models\Currency;
 use App\Models\Till\Account;
-use Carbon\Carbon; 
+use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 
 class BranchesController extends Controller

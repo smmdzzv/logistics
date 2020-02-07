@@ -57,7 +57,7 @@ class BillingInfo extends BaseModel
 
         if ($storedItemInfo->item->onlyAgreedPrice
             || $this->weightPerCube >= $this->tariffPricing->maxWeightPerCube
-            && !$storedItemInfo->item->calculateByNormAndWeight) {
+            && $storedItemInfo->item->calculateByNormAndWeight) {
 
             $this->totalPrice = $this->tariffPricing->agreedPricePerKg * $this->totalWeight;
             $this->pricePerItem = $this->totalPrice / $this->count;

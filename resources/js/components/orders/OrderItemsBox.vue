@@ -128,7 +128,7 @@
             },
             //tariffPricing is attached to storedItem in @StoredItemBox.vue onAdded
             //tariffPricing properties are same as server version
-            getPrice(stored) {
+            getPrice(stored) {debugger;
                 if (!stored)
                     return null;
 
@@ -141,7 +141,7 @@
 
                 let weightPerCube = stored.totalWeight / stored.totalCubage;
 
-                if (stored.item.onlyAgreedPrice || weightPerCube >= tariff.maxWeightPerCube && !stored.item.calculateByNormAndWeight) {
+                if (stored.item.onlyAgreedPrice || weightPerCube >= tariff.maxWeightPerCube && stored.item.calculateByNormAndWeight) {
                     let price = tariff.agreedPricePerKg * stored.totalWeight;
                     price = Math.round(price * 100) / 100;
                     return price
