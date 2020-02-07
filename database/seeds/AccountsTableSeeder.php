@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Branch;
 use App\Models\LegalEntities\LegalEntity;
 use App\Models\Till\Account;
 use App\Models\Currency;
@@ -29,6 +30,21 @@ class AccountsTableSeeder extends Seeder
         });
 
         $owner->accounts()->saveMany($accounts);
+
+        $branches = Branch::all();
+
+        foreach ($branches as $branch){
+            $accounts = [];
+            foreach ($currencies as $currency){
+                $accounts[] = new Account([
+                    'balance' => 0,
+                    'description' => "Cчет {$branch->name} {$currency->isoName} ({$currency->name})",
+                    'currencyId' => $currency->id
+                ]);
+            }
+
+            $branch->accounts()->saveMany($accounts);
+        }
 
 
         $users = User::all();

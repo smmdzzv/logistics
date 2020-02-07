@@ -24,7 +24,8 @@ class Account extends BaseModel
 
         Relation::morphMap([
             'users' => 'App\User',
-            'legalEntities' => 'App\Models\LegalEntities\LegalEntity'
+            'legalEntities' => 'App\Models\LegalEntities\LegalEntity',
+            'branch' => 'App\Models\Branch'
         ]);
     }
 

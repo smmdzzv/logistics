@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Branches\Storage;
-use App\Models\StoredItems\StoredItem;
+use App\Models\Branches\Storage; 
 use App\Models\StoredItems\StoredItemInfo;
+use App\Models\Till\Account;
 use App\Models\Till\Payment;
 use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -70,5 +70,9 @@ class Branch extends BaseModel
     public function payments()
     {
         return $this->hasMany(Payment::class, 'branchId');
+    }
+
+    public function accounts(){
+        return $this->morphMany(Account::class, 'owner');
     }
 }
