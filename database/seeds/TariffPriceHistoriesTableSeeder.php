@@ -20,20 +20,20 @@ class TariffPriceHistoriesTableSeeder extends Seeder
         $this->tariffs = Tariff::all();
 
         $newPrice = new TariffPriceHistory();
-        $newPrice->lowerLimit = 110;
-        $newPrice->mediumLimit = 170;
+        $newPrice->lowerLimit = 90;
+        $newPrice->mediumLimit = 120;
         $newPrice->upperLimit = 200;
-        $newPrice->discountForLowerLimit = 10;
-        $newPrice->discountForMediumLimit = 5;
-        $newPrice->pricePerCube = 175;
-        $newPrice->agreedPricePerKg = 0.77;
-        $newPrice->pricePerExtraKg = 0.35;
+        $newPrice->discountForLowerLimit = 5;
+        $newPrice->discountForMediumLimit = 0;
+        $newPrice->pricePerCube = 165;
+        $newPrice->agreedPricePerKg = 0.73;
+        $newPrice->pricePerExtraKg = 0.33;
         $newPrice->maxWeightPerCube = 250;
         $newPrice->maxCubage = 108;
         $newPrice->maxWeight = 27000;
         $newPrice->branch_id = $branchId;
         $newPrice->tariff_id = $this->getId('Обувь-У');
-        $newPrice->totalMoney = 21306.96;
+        $newPrice->totalMoney = 19602;
         $newPrice->save();
 
         $tariff=$this->getId('Пресс-У');
@@ -56,20 +56,20 @@ class TariffPriceHistoriesTableSeeder extends Seeder
 
         $tariff=$this->getId('Запчасти-У');
         TariffPriceHistory::create([
-            'lowerLimit'=>110,
-            'mediumLimit'=>170,
-            'upperLimit'=>200,
+            'lowerLimit'=>90,
+            'mediumLimit'=>120,
+            'upperLimit'=>170,
             'discountForLowerLimit'=>10,
             'discountForMediumLimit'=>5,
-            'pricePerCube'=>175,
-            'agreedPricePerKg'=>0.77,
-            'pricePerExtraKg'=>0.35,
+            'pricePerCube'=>170,
+            'agreedPricePerKg'=>0.79,
+            'pricePerExtraKg'=>0.33,
             'maxWeightPerCube'=>250,
             'maxCubage'=>108,
             'maxWeight'=>27000,
             'branch_id'=>$branchId,
             'tariff_id'=>$tariff,
-            'totalMoney' => 21306.96
+            'totalMoney' => 21211
         ]);
 
         $tariff=$this->getId('Договорной-У');
