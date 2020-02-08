@@ -36,7 +36,7 @@ class UserRequest extends FormRequest
                 })
             ],
             'email' => [
-                'required',
+                'nullable',
                 'string',
                 'email',
                 'max:255',
@@ -45,7 +45,7 @@ class UserRequest extends FormRequest
                 )
             ],
             'code' => [
-                'nullable',
+                'required',
                 'string',
                 Rule::unique('users')->ignore(
                     request()->user ? request()->user->id : '-1'

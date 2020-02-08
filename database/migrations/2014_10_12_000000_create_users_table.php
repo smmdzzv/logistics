@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->char('branch_id', 26)->nullable();
             $table->string('name')->nullable();
             $table->string('code')->unique()->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('api_token', 80)

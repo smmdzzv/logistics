@@ -96,7 +96,7 @@ class UsersController extends Controller
         $account = new Account();
         $account->currencyId = Currency::where('isoName', 'USD')->first()->id;
         $account->balance = 0;
-        $account->description = 'Долларовый счет пользователя '.$user->name;
+        $account->description = 'Долларовый счет пользователя ' . $user->name;
 
         $user->accounts()->save($account);
 
@@ -114,13 +114,15 @@ class UsersController extends Controller
 
         $user->position_id = $request['position'] ? Position::firstOrCreate(['name' => $request['position']])->id : null;
 
-        $user->roles()->detach();
+        $user->roles()->detach(
+            $user->roles()->where('name', '!=', 'admin')->get()
+        );
 
         foreach ($request['roles'] as $id) {
             $role = Role::findOrFail($id);
             if ($role->name !== 'admin')
                 $user->roles()->attach($role);
-            elseif (auth()->user()->hasRole('admin'))
+            elseif (auth()->user()->hasRole('admin') && !$user->hasRole('admin'))
                 $user->roles()->attach($role);
         }
 
@@ -133,11 +135,12 @@ class UsersController extends Controller
         return redirect(route('users.index'));
     }
 
-    public function find(){
+    public function find()
+    {
         $userInfo = request('userInfo');
         $users = User::whereRaw("name LIKE '%$userInfo%' OR code LIKE '%$userInfo%'")->get();
 
-        $users = $users->filter(function ($user){
+        $users = $users->filter(function ($user) {
             return count($user->roles) !== 0;
         });
 
