@@ -128,7 +128,7 @@
             },
             //tariffPricing is attached to storedItem in @StoredItemBox.vue onAdded
             //tariffPricing properties are same as server version
-            getPrice(stored) {debugger;
+            getPrice(stored) {
                 if (!stored)
                     return null;
 

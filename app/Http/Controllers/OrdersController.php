@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Common\PasswordGenerator;
 use App\Data\RequestWriters\Order\OrderRequestWriter;
 use App\Data\RequestWriters\Order\UpdateOrderRequestWriter;
 use App\Models\Branch;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
+use App\Models\Role;
 use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Tariff;
 use App\Models\Users\Client;
 use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class OrdersController extends Controller
 {
@@ -61,7 +64,7 @@ class OrdersController extends Controller
         $customPrices = $this->getCustomPricesArray();
 
         $orderWriter = new OrderRequestWriter(
-            Client::findOrFail($request->input('clientId')),
+            $this->findOrCreateClient($request->input('clientCode')),
             Branch::findOrFail(auth()->user()->branch->id),
             auth()->user(),
             $storedItemInfos,
@@ -99,7 +102,7 @@ class OrdersController extends Controller
         $customPrices = $this->getCustomPricesArray();
 
         $orderWriter = new UpdateOrderRequestWriter(
-            Client::findOrFail($request->input('clientId')),
+            $this->findOrCreateClient($request->input('clientCode')),
             Branch::findOrFail(auth()->user()->branch->id),
             auth()->user(),
             $storedItemInfos,
@@ -108,6 +111,25 @@ class OrdersController extends Controller
         );
 
         return $orderWriter->write();
+    }
+
+    /**
+     * @param String $code
+     * @return User
+     */
+    private function findOrCreateClient(String $code){
+        $client = Client::roleConstraint()->where('code',$code)->first();
+        if(!$client){
+            $client = User::create([
+                'code' => $code,
+                'password' =>  Hash::make(PasswordGenerator::generate()),
+                'branch_id' => auth()->user()->branch->id
+            ]);
+
+            $client->roles()->attach(Role::where('name', 'client')->first());
+        }
+
+        return $client;
     }
 
     private function getStoredItemInfos(){

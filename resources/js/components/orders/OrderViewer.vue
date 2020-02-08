@@ -2,7 +2,7 @@
     <div>
         <div class="row align-items-baseline">
             <div class="col-md-5">
-                <p> Клиент: <span class="font-weight-bold">{{order.owner.name}}</span></p>
+                <p> Клиент: <span class="font-weight-bold">{{order.owner.code}}</span></p>
             </div>
             <div class="col-md-7 row   align-items-baseline">
                 <button class="ml-md-auto btn btn-link" @click="updateOrderPrice">

@@ -84,6 +84,7 @@ class OrderRequestWriter extends RequestWriter
     {
         foreach ($this->storedItemInfos as $stored) {
             $stored->order_id = $this->order->id;
+            $stored->ownerId = $this->client->id;
         }
 
         if (count($this->storedItemInfos) > 0) {

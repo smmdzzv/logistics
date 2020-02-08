@@ -83,7 +83,9 @@ class UpdateOrderRequestWriter extends OrderRequestWriter
         foreach ($this->existingStoredItemInfos as $info){
             $storedItemInfo = $this->order->storedItemInfos->firstWhere('id', $info->id);
 //                            $attr =$info->attributesToArray();
-            $storedItemInfo->fill($info->attributesToArray())->save();
+            $storedItemInfo->fill($info->attributesToArray());
+            $storedItemInfo->ownerId = $this->client->id;
+            $storedItemInfo->save();
 
             $storedItemInfo->billingInfo()->update([
                 'deleted_by_id' => $this->employee->id,
