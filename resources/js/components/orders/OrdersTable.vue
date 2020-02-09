@@ -139,7 +139,7 @@
                         label: 'Принял',
                         sortable: true
                     },
-                    'owner.name': {
+                    'owner.code': {
                         label: 'Владелец',
                         sortable: true
                     },
