@@ -4,6 +4,7 @@
 namespace App\Data\Filters;
 
 
+
 use Illuminate\Database\Eloquent\Builder;
 
 abstract class Filter
@@ -18,5 +19,8 @@ abstract class Filter
         $this->query = $query;
     }
 
+    /**
+     * @return Builder $query
+     */
     abstract function filter();
 }

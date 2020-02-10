@@ -88,12 +88,16 @@ Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
 Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController')->parameters(['outgoing-payments' => 'payment']);
 
 Route::resource('payments', 'Till\Payments\PaymentsController', ['only' => ['index', 'show']])->parameters(['payments' => 'payment']);
+
 //StoredItems
 Route::get('/stored', 'StoredItemsController@index')->name('stored.index');
 Route::get('/stored/all', 'StoredItemsController@all')->name('stored.all');
 Route::get('/stored/{storedItem}', 'StoredItemsController@show')->name('stored.show');
 Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch');
 //Route::post('/stored/trip/{trip}', 'StoredItemsController@associateToTrip');
+
+//StoredItemInfo
+Route::get('/stored-item-info/filtered', 'StoredItemInfo\StoredItemInfoController@storedItemInfos');
 
 //Shops
 Route::resource('shop', 'Shops\ShopsController', ['only' => ['create', 'store']]);

@@ -93,7 +93,8 @@
             },
             primaryKey: {
                 type: String,
-                required: true
+                required: true,
+                default:'id'
             },
             isBusy: {
                 type: Boolean,
@@ -110,7 +111,7 @@
                     return;
                 if (this.isSelected(item)) {
                     this.selected = this.selected.filter(function (stored) {
-                        return stored.id !== item.id
+                        return stored.primaryKey !== item.primaryKey
                     })
                 } else {
                     this.selected.push(item)
@@ -120,7 +121,7 @@
             },
             isSelected(item) {
                 return this.selected.find(function (selected) {
-                    return selected.id === item.id;
+                    return selected.primaryKey === item.primaryKey;
                 });
             },
             rowClass(item, type) {

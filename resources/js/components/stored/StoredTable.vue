@@ -325,9 +325,6 @@
                     }
                 }
             }
-        },
-        components: {
-            'MainPaginator': require('../common/MainPaginator.vue').default
         }
     }
 </script>

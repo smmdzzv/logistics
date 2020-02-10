@@ -23,10 +23,10 @@ class StorageHistory extends BaseModel
         return $this->belongsTo(Storage::class);
     }
 
-    public function branch()
-    {
-        return $this->hasOneThrough(Branch::class, Storage::class);
-    }
+//    public function branch()
+//    {
+//        return $this->hasOneThrough(Branch::class, Storage::class);
+//    }
 
     public function storedItem()
     {

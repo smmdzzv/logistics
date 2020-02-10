@@ -33,6 +33,7 @@ Vue.component('TrustedUserEditor', require('./components/users/trusted-users/Tru
 
 Vue.component('StoredTable', require('./components/stored/StoredTable.vue').default);
 Vue.component('SortableStoredTable', require('./components/stored/SortableStoredTable.vue').default);
+Vue.component('StoredItemInfoTable', require('./components/stored-item-info/StoredItemInfoTable.vue').default);
 
 Vue.component('OrdersTable', require('./components/orders/OrdersTable.vue').default);
 Vue.component('OrderEditor', require('./components/orders/OrderEditor.vue').default);
@@ -69,6 +70,8 @@ Vue.component('CustomsCodesTable', require('./components/customs/CustomsCodesTab
 Vue.component('CreateLostItem', require('./components/lost-and-found/CreateLostItem.vue').default);
 
 Vue.component('DuobAccountsViewer', require('./components/accounts/branches/DuobAccountsViewer.vue').default);
+
+Vue.component('MainPaginator', require('./components/common/MainPaginator.vue').default);
 
 Vue.component('BranchViewer', require('./components/branches/BranchViewer.vue').default);
 Vue.component('Barcode', require('@xkeshi/vue-barcode').default);

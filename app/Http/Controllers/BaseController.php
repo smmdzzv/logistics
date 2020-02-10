@@ -8,6 +8,6 @@ class BaseController extends Controller
      * @return int pagination limit
      */
     protected function pagination(){
-        return request()->input('paginate') ?? 10;
+        return request()->input('paginate') ?? 40;
     }
 }

@@ -29,7 +29,8 @@
             </div>
 
             <div class="col-lg-8">
-                <stored-table :branches="branches"
+                <stored-table v-show="!detailedMode"
+                              :branches="branches"
                               :prepareUrl="prepareUrl"
                               :providedItems="trip.storedItems"
                               :selectedItems="storedItems"
@@ -44,8 +45,14 @@
                               hover
                               selectable/>
             </div>
+            <div class="col-lg-8">
+                <stored-item-info-table v-show="!detailedMode"
+                                        :branches="branches"
+                                        @onItemsSelected = "onItemsSelected"
+                                        flowable>
 
-
+                </stored-item-info-table>
+            </div>
         </div>
 </template>
 
@@ -69,6 +76,7 @@
                 storedItems: this.trip.storedItems.filter(function () {
                     return true;
                 }),
+                detailedMode:false,
                 isSubmitting: false
             }
         },
@@ -80,7 +88,6 @@
                 let total = 0;
                 for (let stored of this.storedItems) {
                     total += stored.info.weight;
-                    console.log(stored.info.weight);
                 }
 
                 return Math.round(total * 100) / 100;
