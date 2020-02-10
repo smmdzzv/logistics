@@ -45,9 +45,10 @@
                               hover
                               selectable/>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <stored-item-info-table v-show="!detailedMode"
                                         :branches="branches"
+                                        :providedItems="trip.storedItems"
                                         @onItemsSelected = "onItemsSelected"
                                         flowable>
 

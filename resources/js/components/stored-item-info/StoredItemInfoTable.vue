@@ -21,6 +21,10 @@
                 <input class="form-control" type="text" maxlength="3" v-model="item.selectedCount"
                        @change="updateSelectedStoredItems">
             </template>
+
+            <template slot="groupedStoredItemsCount" slot-scope="{item}">
+                <span>{{item.storedItems.length}}</span>
+            </template>
         </table-card>
 
         <div class="card-footer">
@@ -39,6 +43,7 @@
         name: "StoredItemInfoTable",
         mixins: [ExcelDataPreparatory, TableCardProps],
         mounted() {
+            this.setItems();
             this.getItems();
         },
         props: {
@@ -48,6 +53,9 @@
             url: {
                 type: String,
                 default: 'stored-item-info/filtered'
+            },
+            providedItems: {
+                type: Array
             },
             prepareUrl: {
                 type: Function,
@@ -69,7 +77,7 @@
                 },
                 isBusy: false,
                 items: [],
-                customCells: ['selectedCount'],
+                customCells: ['selectedCount', 'groupedStoredItemsCount'],
                 fields: {
                     'owner.code': {
                         label: 'Владелец',
@@ -102,7 +110,7 @@
                     'selectedCount': {
                         label: 'Кол-во мест'
                     },
-                    'groupedStoredItemsBranch.name': {
+                    'groupedStoredItemsStorage.name': {
                         label: 'Склад',
                         sortable: true
                     }
@@ -110,6 +118,67 @@
             }
         },
         methods: {
+            //Converts provided storedItem to StoredItemInfos
+            convertStoredItemsToInfos(storedItems) {
+                let groupedStoredItemsByInfo = storedItems.reduce((r, stored) => {
+                    r[stored.info.id] = [...r[stored.info.id] || [], stored];
+                    return r;
+                }, {});
+
+                let infos = Object.keys(groupedStoredItemsByInfo).map((key) => {
+                    let storedItemInfo = Object.assign({}, groupedStoredItemsByInfo[key][0].info);
+                    storedItemInfo.storedItems = groupedStoredItemsByInfo[key].map((stored) => {
+                        let storedCopy = Object.assign({}, stored);
+                        delete storedCopy.info;
+                        return storedCopy;
+                    });
+
+                    if (storedItemInfo.storedItems)
+                        storedItemInfo.selectedCount = storedItemInfo.storedItems.length;
+
+                    return storedItemInfo;
+                });
+
+                return infos;
+            },
+            prepareStoredItemInfos(infos) {
+                let storedItemInfos = [];
+                let index = 0;
+
+                infos.forEach(info => {
+                    let groupedStoredItems = info.storedItems.reduce((r, stored) => {
+                        r[stored.storageHistory.storage.id] = [...r[stored.storageHistory.storage.id] || [], stored];
+                        return r;
+                    }, {});
+
+                    let infos = Object.keys(groupedStoredItems).map((key) => {
+                        index++;
+
+                        let storedItemInfo = Object.assign({}, info);
+                        storedItemInfo.storedItems = groupedStoredItems[key];
+                        storedItemInfo.primaryKey = storedItemInfo.id + storedItemInfo.storedItems[0].storageHistory.storage.id;
+                        // storedItemInfo.groupedStoredItemsCount = storedItemInfo.storedItems.length;
+                        storedItemInfo.groupedStoredItemsStorage = storedItemInfo.storedItems[0].storageHistory.storage;
+                        storedItemInfo.selectedCount = !storedItemInfo.selectedCount ? 0 : storedItemInfo.selectedCount;
+                        return storedItemInfo;
+                    });
+
+                    storedItemInfos = [...storedItemInfos, ...infos]
+                });
+
+                return storedItemInfos;
+            },
+            setItems() {
+                if (this.providedItems) {
+                    let storedItemInfos = this.convertStoredItemsToInfos(this.providedItems);
+                    let storedItems = this.prepareStoredItemInfos(storedItemInfos);
+                    for (let item of storedItems) {
+                        this.items.push(item);
+                    }
+                }
+
+                this.updateSelectedStoredItems();
+            },
             getItems(page = 1) {
                 this.isBusy = true;
 
@@ -118,43 +187,44 @@
                 axios.get(action)
                     .then(response => {
                         this.pagination = response.data;
-                        let storedItemInfos = [];
-                        let index = 0;
-                        response.data.data.forEach(info => {
-                            let groupedStoredItems = info.storedItems.reduce((r, stored) => {
-                                r[stored.storageHistory.storage.branch.id] = [...r[stored.storageHistory.storage.branch.id] || [], stored];
-                                return r;
-                            }, {});
-
-                            let infos = Object.keys(groupedStoredItems).map((key) => {
-                                index++;
-
-                                let storedItemInfo = Object.assign({}, info);
-                                storedItemInfo.storedItems = groupedStoredItems[key];
-                                storedItemInfo.primaryKey = storedItemInfo.id + storedItemInfo.storedItems[0].storageHistory.storage.branch.id;
-                                storedItemInfo.groupedStoredItemsCount = storedItemInfo.storedItems.length;
-                                storedItemInfo.groupedStoredItemsBranch = storedItemInfo.storedItems[0].storageHistory.storage.branch;
-                                storedItemInfo.selectedCount = 0;
-                                return storedItemInfo;
-                            });
-
-                            storedItemInfos = [...storedItemInfos, ...infos]
-                            // groupedStoredItems.forEach(grouped => {
-                            //     storedItemInfo = Object.assign({}, info);
-                            //     storedItemInfo.storedItems = grouped;
-                            //     storedItemInfos.push(storedItemInfo);
-                            // });
-                        });
-
-
+                        // let storedItemInfos = [];
+                        // let index = 0;
                         // response.data.data.forEach(info => {
-                        //     info.storedItems.forEach(stored => {
-                        //         console.log(stored.storageHistory.storage.branch.id)
-                        //     })
+                        //     let groupedStoredItems = info.storedItems.reduce((r, stored) => {
+                        //         r[stored.storageHistory.storage.branch.id] = [...r[stored.storageHistory.storage.branch.id] || [], stored];
+                        //         return r;
+                        //     }, {});
+                        //
+                        //     let infos = Object.keys(groupedStoredItems).map((key) => {
+                        //         index++;
+                        //
+                        //         let storedItemInfo = Object.assign({}, info);
+                        //         storedItemInfo.storedItems = groupedStoredItems[key];
+                        //         storedItemInfo.primaryKey = storedItemInfo.id + storedItemInfo.storedItems[0].storageHistory.storage.branch.id;
+                        //         storedItemInfo.groupedStoredItemsCount = storedItemInfo.storedItems.length;
+                        //         storedItemInfo.groupedStoredItemsStorage = storedItemInfo.storedItems[0].storageHistory.storage.branch;
+                        //         storedItemInfo.selectedCount = 0;
+                        //         return storedItemInfo;
+                        //     });
+                        //
+                        //     storedItemInfos = [...storedItemInfos, ...infos]
                         // });
 
+                        let storedItemInfos = this.prepareStoredItemInfos(response.data.data);
                         let items = storedItemInfos.filter(item => {
-                            return !this.isInItems(item)
+                            let existingInfo = this.findInItems(item);
+                            if (existingInfo) {
+                                let newStoredItems = item.storedItems.filter((stored) => {
+                                    return !existingInfo.storedItems.find((item) => {
+                                        return item.id === stored.id;
+                                    });
+                                });
+
+                                existingInfo.storedItems = [...existingInfo.storedItems, ...newStoredItems];
+                                console.log(existingInfo.storedItems.length, item.storedItems.length, newStoredItems.length)
+                            }
+
+                            return !existingInfo;
                         });
 
                         if (this.flowable)
@@ -177,7 +247,7 @@
             //         return 'table-danger';
             // },
             // Checks if item in all items array
-            isInItems(item) {
+            findInItems(item) {
                 return this.items.find(function (stored) {
                     return stored.primaryKey === item.primaryKey;
                 });
@@ -197,11 +267,10 @@
                             storedItem.info = storedItemInfoCopy;
                             selectedItems.push(storedItem);
                             count++;
-                        }
-                        else break;
+                        } else break;
                     }
                 });
-                console.log(selectedItems);
+
                 this.$emit('onItemsSelected', selectedItems);
             }
         },
