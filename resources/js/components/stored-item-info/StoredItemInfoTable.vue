@@ -221,7 +221,6 @@
                                 });
 
                                 existingInfo.storedItems = [...existingInfo.storedItems, ...newStoredItems];
-                                console.log(existingInfo.storedItems.length, item.storedItems.length, newStoredItems.length)
                             }
 
                             return !existingInfo;

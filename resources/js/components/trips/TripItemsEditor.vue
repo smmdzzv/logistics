@@ -1,4 +1,8 @@
 <template>
+    <div>
+        <div class="row">
+            <button class="ml-auto mr-5 btn btn-sm btn-primary" @click="toggleTable">Переключить вид</button>
+        </div>
         <div class="row p-3">
             <div class="col-lg-4 mb-4">
                 <div class="card shadow">
@@ -10,10 +14,12 @@
                         <p>Суммарный вес: <span :class="{'text-danger': totalWeight > maxWeight}">{{totalWeight}}</span>
                             из {{maxWeight}} кг</p>
                         <p>Суммарная кубатура: <span
-                            :class="{'text-danger': totalCubage > maxCubage}">{{totalCubage}}</span> из {{maxCubage}}
+                                :class="{'text-danger': totalCubage > maxCubage}">{{totalCubage}}</span> из
+                            {{maxCubage}}
                             м<sup>3</sup>
                         </p>
-                        <small v-if="trip.hasTrailer" class="text-muted">С учетом кубатуры и грузоподъемности прицепа</small>
+                        <small v-if="trip.hasTrailer" class="text-muted">С учетом кубатуры и грузоподъемности прицепа
+                        </small>
                     </div>
                     <div class="card-footer">
                         <div class="form-group row mb-0">
@@ -28,33 +34,34 @@
 
             </div>
 
-            <div class="col-lg-8">
-                <stored-table v-show="!detailedMode"
-                              :branches="branches"
-                              :prepareUrl="prepareUrl"
-                              :providedItems="trip.storedItems"
-                              :selectedItems="storedItems"
-                              :tripId="trip.id"
-                              listGenerator
-                              @onItemSelected="onItemSelected"
-                              @onItemUnselected="onItemUnselected"
-                              @onItemsSelected = "onItemsSelected"
-                              class="shadow"
-                              flowable
-                              highlightRows
-                              hover
-                              selectable/>
+            <div class="col-lg-8" v-show="!detailedMode">
+                <stored-table
+                        :branches="branches"
+                        :prepareUrl="prepareUrl"
+                        :providedItems="trip.storedItems"
+                        :selectedItems="storedItems"
+                        :tripId="trip.id"
+                        listGenerator
+                        @onItemSelected="onItemSelected"
+                        @onItemUnselected="onItemUnselected"
+                        @onItemsSelected="onItemsSelected"
+                        class="shadow"
+                        flowable
+                        highlightRows
+                        hover
+                        selectable/>
             </div>
-            <div class="col-lg-12">
-                <stored-item-info-table v-show="!detailedMode"
-                                        :branches="branches"
+            <div class="col-lg-8" v-show="!detailedMode">
+                <stored-item-info-table :branches="branches"
                                         :providedItems="trip.storedItems"
-                                        @onItemsSelected = "onItemsSelected"
+                                        :selectedItems="storedItems"
+                                        @onItemsSelected="onItemsSelected"
                                         flowable>
 
                 </stored-item-info-table>
             </div>
         </div>
+    </div>
 </template>
 
 <script>
@@ -77,7 +84,7 @@
                 storedItems: this.trip.storedItems.filter(function () {
                     return true;
                 }),
-                detailedMode:false,
+                detailedMode: false,
                 isSubmitting: false
             }
         },
@@ -118,10 +125,13 @@
             }
         },
         methods: {
+            toggleTable(){
+                this.detailedMode = !this.detailedMode;
+            },
             onItemSelected(item) {
                 this.storedItems.push(item)
             },
-            onItemsSelected(items){
+            onItemsSelected(items) {
                 this.storedItems = items;
             },
             onItemUnselected(item) {
