@@ -133,15 +133,15 @@
                         return storedCopy;
                     });
 
-                    if (storedItemInfo.storedItems)
-                        storedItemInfo.selectedCount = storedItemInfo.storedItems.length;
-
+                    // if (storedItemInfo.storedItems)
+                    //     storedItemInfo.selectedCount = storedItemInfo.storedItems.length;
+                    // console.log(storedItemInfo.selectedCount, storedItemInfo.storedItems);
                     return storedItemInfo;
                 });
 
                 return infos;
             },
-            prepareStoredItemInfos(infos) {
+            prepareStoredItemInfos(infos, countStoredItems = false) {
                 let storedItemInfos = [];
                 let index = 0;
 
@@ -159,7 +159,7 @@
                         storedItemInfo.primaryKey = storedItemInfo.id + storedItemInfo.storedItems[0].storageHistory.storage.id;
                         // storedItemInfo.groupedStoredItemsCount = storedItemInfo.storedItems.length;
                         storedItemInfo.groupedStoredItemsStorage = storedItemInfo.storedItems[0].storageHistory.storage;
-                        storedItemInfo.selectedCount = !storedItemInfo.selectedCount ? 0 : storedItemInfo.selectedCount;
+                        storedItemInfo.selectedCount = countStoredItems ? storedItemInfo.storedItems.length : 0;
                         return storedItemInfo;
                     });
 
@@ -171,7 +171,7 @@
             setItems() {
                 if (this.providedItems) {
                     let storedItemInfos = this.convertStoredItemsToInfos(this.providedItems);
-                    let storedItems = this.prepareStoredItemInfos(storedItemInfos);
+                    let storedItems = this.prepareStoredItemInfos(storedItemInfos, true);
                     for (let item of storedItems) {
                         this.items.push(item);
                     }
