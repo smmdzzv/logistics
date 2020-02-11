@@ -130,7 +130,7 @@
                             </li>
                         @endif
                     <!--Trips-->
-                        @if(Auth::user()->hasRole('admin'))
+                        @if(Auth::user()->hasAnyRole(['admin', 'manager']))
                             <li class="nav-item dropdown">
                                 <a id="tripsMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
