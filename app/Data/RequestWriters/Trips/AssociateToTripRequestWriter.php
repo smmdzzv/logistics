@@ -57,7 +57,10 @@ class AssociateToTripRequestWriter extends RequestWriter
             ->whereHas('storedItem', function (Builder $query) {
                 $query->whereHas('storageHistory');
             })
-            ->forceDelete();
+            ->update([
+                'deleted_at' => Carbon::now(),
+                'deleted_by_id' => $this->input->employee->id
+            ]);
     }
 
     /**
