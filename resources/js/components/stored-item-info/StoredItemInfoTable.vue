@@ -45,7 +45,7 @@
             </template>
         </table-card>
 
-        <div class="card-footer">
+        <div class="card-footer" v-if="pagination.last_page">
             <main-paginator :flowable="flowable"
                             :onPageChange="getItems"
                             :pagination="pagination"/>
