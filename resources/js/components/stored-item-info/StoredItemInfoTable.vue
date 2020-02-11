@@ -23,7 +23,7 @@
                         Список товаров
                     </span>
 
-                    <template v-if="branches && branches.length > 1">
+                    <template v-if="branches">
                         <div class="ml-auto">
                             <select class="form-control custom-select" id="branch" v-model="selectedBranch">
                                 <option :value="null">--Все склады--</option>

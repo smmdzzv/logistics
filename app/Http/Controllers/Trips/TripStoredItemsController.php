@@ -25,7 +25,7 @@ class TripStoredItemsController extends Controller
         $this->middleware('auth');
         $adminOnly = ['editLoaded', 'updateLoaded', 'editUnloaded', 'updateUnloaded', 'exchangeItems', 'changeItemsTrip'];
         $this->middleware('roles.deny:client,cashier,driver')->except($adminOnly);
-        $this->middleware('roles.allow:admin')->only($adminOnly);
+        $this->middleware('roles.allow:manager,admin')->only($adminOnly);
     }
 
     public function associateToTrip(Trip $trip)
@@ -70,6 +70,11 @@ class TripStoredItemsController extends Controller
     {
         $trip->load('loadedItems.info.item', 'loadedItems.info.owner', 'loadedItems.storageHistory.storage', 'car');
         $branches = new Collection([$trip->departureBranch, $trip->destinationBranch]);
+        if (!auth()->user()->hasRole('admin'))
+            $branches = new Collection([$branches->first(function ($branch) {
+                return $branch->id === auth()->user()->branch->id;
+            })]);
+
         return view('trips.unload-items', compact('trip', 'branches'));
     }
 
@@ -90,7 +95,7 @@ class TripStoredItemsController extends Controller
     {
         $trip->load('storedItems.info.item', 'storedItems.info.owner', 'storedItems.storageHistory.storage', 'car');
         $branches = new Collection();
-        if(auth()->user()->hasRole('admin'))
+        if (auth()->user()->hasRole('admin'))
             $branches = Branch::all();
         else
             $branches->push(auth()->user()->branch);
