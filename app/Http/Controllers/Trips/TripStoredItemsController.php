@@ -16,6 +16,7 @@ use App\Models\StoredItems\StoredItem;
 use App\Models\Trip;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class TripStoredItemsController extends Controller
 {
@@ -88,7 +89,12 @@ class TripStoredItemsController extends Controller
     public function edit(Trip $trip)
     {
         $trip->load('storedItems.info.item', 'storedItems.info.owner', 'storedItems.storageHistory.storage', 'car');
-        $branches = Branch::all();
+        $branches = new Collection();
+        if(auth()->user()->hasRole('admin'))
+            $branches = Branch::all();
+        else
+            $branches->push(auth()->user()->branch);
+
         return view('trips.edit-items-list', compact('trip', 'branches'));
     }
 
@@ -165,6 +171,9 @@ class TripStoredItemsController extends Controller
     public function availableItemsAtBranch(Branch $branch)
     {
         $paginate = request()->input('paginate') ?? 10;
-        return $branch->stores()->first()->storedItems()->available()->with('info.owner', 'info.item', 'storageHistory.storage')->paginate($paginate);
+        return StoredItem::with('info.owner', 'info.item', 'storageHistory.storage')->available()->whereHas('storage', function (Builder $query) use ($branch) {
+            $query->where('branch_id', $branch->id)->where('deleted_at', null);
+        })->paginate($paginate);
+//        return $branch->stores()->first()->storedItems()->available()->with('info.owner', 'info.item', 'storageHistory.storage')->paginate($paginate);
     }
 }

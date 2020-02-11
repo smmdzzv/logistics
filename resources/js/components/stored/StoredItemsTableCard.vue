@@ -16,7 +16,7 @@
         ref="tableCard"
         @itemsSelected="onItemsSelected"
         excelFileName="Список товаров рейса"
-        primaryKey="id"
+        :primaryKey="'id'"
         responsive>
 
         <template #header>

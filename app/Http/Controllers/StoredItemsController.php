@@ -43,7 +43,7 @@ class StoredItemsController extends Controller
         if (isset($branch)) {
             return StoredItem::with('info.owner', 'info.item', 'storageHistory.storage')
                 ->whereHas('storage', function (Builder $query) use($branch) {
-                    $query->where('branch_id', $branch->id);
+                    $query->where('branch_id', $branch->id)->where('deleted_at', null);
                 })
                 ->latest()
                 ->paginate(20);

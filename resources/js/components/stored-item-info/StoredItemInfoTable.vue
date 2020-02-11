@@ -17,6 +17,24 @@
                 excelSheetName="Лист 1"
                 :primaryKey="'primaryKey'"
                 responsive>
+            <template slot="header">
+                <div class="row">
+                    <span class="ml-2">
+                        Список товаров
+                    </span>
+
+                    <template v-if="branches && branches.length > 1">
+                        <div class="ml-auto">
+                            <select class="form-control custom-select" id="branch" v-model="selectedBranch">
+                                <option :value="null">--Все склады--</option>
+                                <option :key="branch.id" :value="branch" v-for="branch in branches">
+                                    {{branch.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </template>
+                </div>
+            </template>
             <template slot="selectedCount" slot-scope="{item}">
                 <input class="form-control" type="text" maxlength="3" v-model="item.selectedCount"
                        @change="updateSelectedStoredItems">
@@ -52,7 +70,7 @@
             },
             url: {
                 type: String,
-                default: 'stored-item-info/filtered'
+                default: 'stored-item-info/filtered?'
             },
             providedItems: {
                 type: Array
@@ -62,8 +80,8 @@
                 default: (page, vm) => {
                     let action = vm.url;
                     if (vm.selectedBranch)
-                        action = `/${vm.selectedBranch.id}/stored`;
-                    return action += '?paginate=40&page=' + page;
+                        action = `${vm.url}branch=${vm.selectedBranch.id}&`;
+                    return action += 'paginate=40&page=' + page;
                 }
             },
             flowable: false
@@ -147,6 +165,8 @@
 
                 infos.forEach(info => {
                     let groupedStoredItems = info.storedItems.reduce((r, stored) => {
+                        if(!stored.storageHistory)
+                            stored.storageHistory = {storage: {id: null}}
                         r[stored.storageHistory.storage.id] = [...r[stored.storageHistory.storage.id] || [], stored];
                         return r;
                     }, {});
@@ -271,6 +291,14 @@
                 });
 
                 this.$emit('onItemsSelected', selectedItems);
+            }
+        },
+
+        watch:{
+            selectedBranch(){
+                this.items.splice(0, this.items.length);
+                this.setItems();
+                this.getItems();
             }
         },
         components: {

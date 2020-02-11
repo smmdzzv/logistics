@@ -126,6 +126,11 @@ class UsersController extends Controller
                 $user->roles()->attach($role);
         }
 
+        if($user->hasRole('admin') && !Role::whereIn('id', $request['roles'])->where('name', 'admin')->first())
+            $user->roles()->detach(
+                $user->roles()->where('name', '=', 'admin')->get()
+            );
+
         if (!isset($user->branch->id) || $user->branch->id !== $request['branch']) {
             $branch = Branch::findOrFail($request['branch']);
             $user->branch()->associate($branch);

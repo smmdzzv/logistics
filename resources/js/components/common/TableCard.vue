@@ -111,7 +111,7 @@
                     return;
                 if (this.isSelected(item)) {
                     this.selected = this.selected.filter(function (stored) {
-                        return stored.primaryKey !== item.primaryKey
+                        return stored.id !== item.id
                     })
                 } else {
                     this.selected.push(item)
@@ -121,7 +121,7 @@
             },
             isSelected(item) {
                 return this.selected.find(function (selected) {
-                    return selected.primaryKey === item.primaryKey;
+                    return selected.id === item.id;
                 });
             },
             rowClass(item, type) {

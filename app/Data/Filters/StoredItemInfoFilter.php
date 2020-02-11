@@ -16,5 +16,7 @@ class StoredItemInfoFilter extends Filter
             $this->query->whereHas('paymentItem', function (Builder $query) use ($filters) {
                 $query->where('id', $filters['item']);
             });
+
+        return $this->query;
     }
 }
