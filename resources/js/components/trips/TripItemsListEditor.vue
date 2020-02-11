@@ -66,7 +66,7 @@
 
 <script>
     export default {
-        name: "TripItemsEditor",
+        name: "TripItemsListEditor",
         props: {
             trip: {
                 type: Object,

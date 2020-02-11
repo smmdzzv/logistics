@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    <trip-items-editor :trip="{{$trip}}":branches="{{$branches}}"></trip-items-editor>
+    <trip-items-list-editor :trip="{{$trip}}":branches="{{$branches}}"></trip-items-list-editor>
 @endsection
