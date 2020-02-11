@@ -45,7 +45,7 @@
             </template>
         </table-card>
 
-        <div class="card-footer" v-if="pagination.last_page">
+        <div class="card-footer" v-if="pagination && pagination.last_page > 1">
             <main-paginator :flowable="flowable"
                             :onPageChange="getItems"
                             :pagination="pagination"/>
@@ -99,10 +99,7 @@
         data() {
             return {
                 selectedBranch: null,
-                pagination: {
-                    last_page: null,
-                    current_page: null
-                },
+                pagination: null,
                 isBusy: false,
                 items: [],
                 customCells: ['selectedCount', 'groupedStoredItemsCount'],
@@ -187,7 +184,7 @@
                 infos.forEach(info => {
                     let groupedStoredItems = info.storedItems.reduce((r, stored) => {
                         if(!stored.storageHistory)
-                            stored.storageHistory = {storage: {id: null}}
+                            stored.storageHistory = {storage: {id: null}};
                         r[stored.storageHistory.storage.id] = [...r[stored.storageHistory.storage.id] || [], stored];
                         return r;
                     }, {});
@@ -209,7 +206,7 @@
 
                 return storedItemInfos;
             },
-            setItems() { console.log(this.providedStoredItems)
+            setItems() {
                 if (this.providedStoredItems) {
                     let storedItemInfos = this.convertStoredItemsToInfos(this.providedStoredItems);
                     let storedItems = this.prepareStoredItemInfos(storedItemInfos, true);
@@ -228,28 +225,6 @@
                 axios.get(action)
                     .then(response => {
                         this.pagination = response.data;
-                        // let storedItemInfos = [];
-                        // let index = 0;
-                        // response.data.data.forEach(info => {
-                        //     let groupedStoredItems = info.storedItems.reduce((r, stored) => {
-                        //         r[stored.storageHistory.storage.branch.id] = [...r[stored.storageHistory.storage.branch.id] || [], stored];
-                        //         return r;
-                        //     }, {});
-                        //
-                        //     let infos = Object.keys(groupedStoredItems).map((key) => {
-                        //         index++;
-                        //
-                        //         let storedItemInfo = Object.assign({}, info);
-                        //         storedItemInfo.storedItems = groupedStoredItems[key];
-                        //         storedItemInfo.primaryKey = storedItemInfo.id + storedItemInfo.storedItems[0].storageHistory.storage.branch.id;
-                        //         storedItemInfo.groupedStoredItemsCount = storedItemInfo.storedItems.length;
-                        //         storedItemInfo.groupedStoredItemsStorage = storedItemInfo.storedItems[0].storageHistory.storage.branch;
-                        //         storedItemInfo.selectedCount = 0;
-                        //         return storedItemInfo;
-                        //     });
-                        //
-                        //     storedItemInfos = [...storedItemInfos, ...infos]
-                        // });
 
                         let storedItemInfos = this.prepareStoredItemInfos(response.data.data);
                         let items = storedItemInfos.filter(item => {
@@ -279,13 +254,6 @@
                         })
                     });
             },
-            // rowClass(item, type) {
-            //     if (!this.highlightRows || !item) return;
-            //     if (this.isSelected(item))
-            //         return 'table-success';
-            //     else if (this.isInProvidedItems(item))
-            //         return 'table-danger';
-            // },
             // Checks if item in all items array
             findInItems(item) {
                 return this.items.find(function (stored) {
@@ -317,9 +285,13 @@
 
         watch:{
             selectedBranch(){
-                this.items.splice(0, this.items.length);
-                this.setItems();
-                this.getItems();
+                if(!this.preventItemLoading){
+                    this.items.splice(0, this.items.length);
+                    this.setItems();
+                    this.getItems();
+                }
+
+                this.$emit('branchSelected', this.selectedBranch);
             }
         },
         components: {

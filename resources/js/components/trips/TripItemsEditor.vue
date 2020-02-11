@@ -2,7 +2,9 @@
     <div>
         <stored-item-info-table v-if="storedItems"
                                 @onItemsSelected="onItemsSelected"
+                                @branchSelected="onBranchSelected"
                                 :providedStoredItems="storedItems"
+                                :branches="branches"
                                 prevent-item-loading
                                 flowable>
         </stored-item-info-table>
@@ -28,13 +30,17 @@
             action: {
                 type: String,
                 required: true
+            },
+            branches:{
+                type: Array
             }
         },
         data() {
             return {
                 storedItems: null,
                 selectedItems: [],
-                actionUrl: null
+                actionUrl: null,
+                selectedBranch:null
             }
         },
         methods: {
@@ -44,17 +50,47 @@
                         this.storedItems = this.trip.unloadedItems;
                         this.actionUrl = `/trip/${this.trip.id}/stored-items/load`;
                         break;
+                    case 'unload':
+                        this.storedItems = this.trip.loadedItems;
+                        this.actionUrl = `/trip/${this.trip.id}/stored-items/unload`;
+                        break;
                 }
             },
             onItemsSelected(items) {
                 this.selectedItems = items;
             },
+            onBranchSelected(branch){
+                this.selectedBranch = branch;
+            },
+            validate(){
+                let result = true;
+                switch(this.action){
+                    case 'unload':
+                        result = this.validateBranch();
+                        break;
+                }
+                return result;
+            },
+            validateBranch(){
+                if(this.selectedBranch)
+                    return true;
+                else{
+                    this.$root.showErrorMsg(
+                        'Выберите филиал',
+                        'Для приема товаров необходимо выбрать филиал'
+                    );
+                    return false;
+                }
+            },
             async submit() {
+                if(!this.validate())
+                    return;
                 try {
                     let data = {
                         storedItems: this.selectedItems.map((selected) => {
                             return selected.id;
-                        })
+                        }),
+                        branch: this.selectedBranch ? this.selectedBranch.id : null
                     };
 
                     const response = await axios.post(this.actionUrl, data);
