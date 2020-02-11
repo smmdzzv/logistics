@@ -53,7 +53,7 @@
             </div>
             <div class="col-lg-8" v-else>
                 <stored-item-info-table :branches="branches"
-                                        :providedItems="trip.storedItems"
+                                        :providedStoredItems="trip.storedItems"
                                         :selectedItems="storedItems"
                                         @onItemsSelected="onItemsSelected"
                                         flowable>

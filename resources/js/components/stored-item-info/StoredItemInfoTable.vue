@@ -36,7 +36,7 @@
                 </div>
             </template>
             <template slot="selectedCount" slot-scope="{item}">
-                <input class="form-control" type="text" maxlength="3" v-model="item.selectedCount"
+                <input class="form-control" type="text" maxlength="3" style="width:6em" v-model="item.selectedCount"
                        @change="updateSelectedStoredItems">
             </template>
 
@@ -61,8 +61,11 @@
         name: "StoredItemInfoTable",
         mixins: [ExcelDataPreparatory, TableCardProps],
         mounted() {
+            if(this.columnsToHide)
+                this.hideColumns();
             this.setItems();
-            this.getItems();
+            if(!this.preventItemLoading)
+                this.getItems();
         },
         props: {
             branches: {
@@ -72,8 +75,15 @@
                 type: String,
                 default: 'stored-item-info/filtered?'
             },
-            providedItems: {
+            providedStoredItems: {
                 type: Array
+            },
+            preventItemLoading: {
+                type:Boolean,
+                default:false
+            },
+            columnsToHide:{
+                type:Array
             },
             prepareUrl: {
                 type: Function,
@@ -136,6 +146,17 @@
             }
         },
         methods: {
+            hideColumns(){
+                let newFields = {};
+
+                Object.keys(this.fields).map((key) => {
+                    if(!this.columnsToHide.includes(key)){
+                        newFields[key] = this.fields[key];
+                    }
+                });
+
+                this.fields = newFields;
+            },
             //Converts provided storedItem to StoredItemInfos
             convertStoredItemsToInfos(storedItems) {
                 let groupedStoredItemsByInfo = storedItems.reduce((r, stored) => {
@@ -188,9 +209,9 @@
 
                 return storedItemInfos;
             },
-            setItems() {
-                if (this.providedItems) {
-                    let storedItemInfos = this.convertStoredItemsToInfos(this.providedItems);
+            setItems() { console.log(this.providedStoredItems)
+                if (this.providedStoredItems) {
+                    let storedItemInfos = this.convertStoredItemsToInfos(this.providedStoredItems);
                     let storedItems = this.prepareStoredItemInfos(storedItemInfos, true);
                     for (let item of storedItems) {
                         this.items.push(item);
