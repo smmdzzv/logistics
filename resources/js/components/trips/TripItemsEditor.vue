@@ -1,5 +1,13 @@
 <template>
     <div>
+        <div class="mb-3" v-if="trips">
+            <b-select class="col-md-3 ml-auto" :class="{'is-invalid': selectedTrip === null}" v-model="selectedTrip">
+                <option :value="null" disabled>-- Выберите рейс --</option>
+                <option :key="trip.id" :value="trip" v-for="trip in trips">
+                    {{trip.code}}
+                </option>
+            </b-select>
+        </div>
         <stored-item-info-table v-if="storedItems"
                                 @onItemsSelected="onItemsSelected"
                                 @branchSelected="onBranchSelected"
@@ -33,6 +41,9 @@
             },
             branches:{
                 type: Array
+            },
+            trips:{
+                type: Array
             }
         },
         data() {
@@ -40,7 +51,8 @@
                 storedItems: null,
                 selectedItems: [],
                 actionUrl: null,
-                selectedBranch:null
+                selectedBranch:null,
+                selectedTrip:null
             }
         },
         methods: {
@@ -53,6 +65,10 @@
                     case 'unload':
                         this.storedItems = this.trip.loadedItems;
                         this.actionUrl = `/trip/${this.trip.id}/stored-items/unload`;
+                        break;
+                    case 'transfer':
+                        this.storedItems = this.trip.loadedItems;
+                        this.actionUrl = `/trip/${this.trip.id}/exchange/stored-items`;
                         break;
                 }
             },
@@ -90,7 +106,8 @@
                         storedItems: this.selectedItems.map((selected) => {
                             return selected.id;
                         }),
-                        branch: this.selectedBranch ? this.selectedBranch.id : null
+                        branch: this.selectedBranch ? this.selectedBranch.id : null,
+                        targetTrip: this.selectedTrip ? this.selectedTrip.id : null
                     };
 
                     const response = await axios.post(this.actionUrl, data);
