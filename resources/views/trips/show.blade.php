@@ -8,7 +8,7 @@
                     <div class="row">
                         <div class="col-6">Детали рейса</div>
                         <div class="col-6 text-right">
-                            @if(auth()->user()->hasRole('admin'))
+                            @if(auth()->user()->hasAnyRole(['admin', 'manager']))
                                 <a href="{{route('trip.edit-loaded', $trip)}}">
                                     <img class="icon-btn-sm" src="/svg/car-loading.svg">
                                 </a>
