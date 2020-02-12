@@ -34,7 +34,20 @@
             <label class="col-12">Товаров выбрано на сумму (в долларах)</label>
             <input class="form-control" v-model="paymentSum" disabled>
         </div>
-        <div class="col-12 pb-4">
+        <div class="col-12 pb-4" v-if="items && items.length > 0">
+            <stored-item-info-table
+                    :borderless="borderless"
+                    :responsive="responsive"
+                    :providedStoredItems="items"
+                    :striped="striped"
+                    prevent-item-loading
+                    @onItemsSelected="onItemsSelected"
+                    ref="storedItemsTable"
+                    title="Список товаров">
+            </stored-item-info-table>
+        </div>
+
+        <div class="col-12 pb-4" v-if="detailedView">
             <stored-items-table-card
                     :borderless="borderless"
                     :fixed="fixed"
@@ -99,7 +112,8 @@
                 selectedItems: [],
                 errorMessage: null,
                 isDebtRequested: false,
-                paymentSum: 0
+                paymentSum: 0,
+                detailedView:false
             }
         },
         methods: {

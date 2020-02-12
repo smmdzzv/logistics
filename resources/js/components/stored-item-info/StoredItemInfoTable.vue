@@ -296,6 +296,12 @@
                 }
 
                 this.$emit('branchSelected', this.selectedBranch);
+            },
+            providedStoredItems(){
+                this.items.splice(0, this.items.length);
+                this.setItems();
+                if(!this.preventItemLoading)
+                    this.getItems();
             }
         },
         components: {
