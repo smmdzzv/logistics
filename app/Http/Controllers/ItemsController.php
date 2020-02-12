@@ -23,7 +23,7 @@ class ItemsController extends Controller
     public function all()
     {
         $paginate = request()->paginate ?? 20;
-        return Item::with('branch')->paginate($paginate);
+        return Item::paginate($paginate);
     }
 
     public function allEager()
@@ -38,9 +38,9 @@ class ItemsController extends Controller
 
     public function create()
     {
-        $branches = Branch::all();
+//        $branches = Branch::all();
         $customsCodes = CustomsCode::all();
-        return view('items.create', compact('branches', 'customsCodes'));
+        return view('items.create', compact( 'customsCodes'));
     }
 
     public function store(Request $request)
@@ -59,7 +59,7 @@ class ItemsController extends Controller
             'applyDiscount' => "required|in:0,1",
             'onlyAgreedPrice' => "required|in:0,1",
             'calculateByNormAndWeight' => "required|in:0,1",
-            'branch_id' => 'required|exists:branches,id',
+//            'branch_id' => 'required|exists:branches,id',
             'name' => [
                 'required',
                 'string',

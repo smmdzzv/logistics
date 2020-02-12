@@ -43,28 +43,28 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <label for="branch_id" class="col-md-4 col-form-label text-md-right">Филиал</label>
-                                <div class="col-md-6">
-                                    <select id="branch_id" name="branch_id"
-                                            class="form-control @error('branch_id') is-invalid @enderror">
-                                        <option value="null" disabled>--Выберите филиал--</option>
+{{--                            <div class="form-group row">--}}
+{{--                                <label for="branch_id" class="col-md-4 col-form-label text-md-right">Филиал</label>--}}
+{{--                                <div class="col-md-6">--}}
+{{--                                    <select id="branch_id" name="branch_id"--}}
+{{--                                            class="form-control @error('branch_id') is-invalid @enderror">--}}
+{{--                                        <option value="null" disabled>--Выберите филиал--</option>--}}
 
-                                        @foreach($branches as $branch)
-                                            <option value="{{$branch->id}}"
-                                                    @if($branch->id === old('branch_id')) selected @endif>
-                                                {{$branch->name}}
-                                            </option>
-                                        @endforeach
-                                    </select>
+{{--                                        @foreach($branches as $branch)--}}
+{{--                                            <option value="{{$branch->id}}"--}}
+{{--                                                    @if($branch->id === old('branch_id')) selected @endif>--}}
+{{--                                                {{$branch->name}}--}}
+{{--                                            </option>--}}
+{{--                                        @endforeach--}}
+{{--                                    </select>--}}
 
-                                    @error('branch_id')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
+{{--                                    @error('branch_id')--}}
+{{--                                    <span class="invalid-feedback" role="alert">--}}
+{{--                                        <strong>{{ $message }}</strong>--}}
+{{--                                    </span>--}}
+{{--                                    @enderror--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
                             <div class="form-group row">
                                 <label for="customsCodes" class="col-md-4 col-form-label text-md-right">Таможенные коды</label>

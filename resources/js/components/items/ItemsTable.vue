@@ -73,10 +73,10 @@
                         label: 'Единица',
                         sortable: false
                     },
-                    'branch.name': {
-                        label: 'Филиал',
-                        sortable: true
-                    },
+                    // 'branch.name': {
+                    //     label: 'Филиал',
+                    //     sortable: true
+                    // },
                     onlyCustomPrice: {
                         label: 'Ручная цена',
                         sortable: true

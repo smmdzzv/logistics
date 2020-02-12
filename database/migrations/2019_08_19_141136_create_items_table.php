@@ -16,7 +16,7 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->char('id', 26)->primary();
 //            $table->char('tariffId', 26);
-            $table->char('branch_id', 26)->index();
+//            $table->char('branch_id', 26)->index();
             $table->string('name', 255)->unique();
             $table->char('unit', 10);
             $table->boolean('onlyCustomPrice')->default(false);

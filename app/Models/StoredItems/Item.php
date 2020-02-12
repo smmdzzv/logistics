@@ -38,10 +38,10 @@ class Item extends BaseModel
 //        return $this->belongsTo(Tariff::class, 'tariffId');
 //    }
 
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class);
-    }
+//    public function branch()
+//    {
+//        return $this->belongsTo(Branch::class);
+//    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany to CustomsCodes
