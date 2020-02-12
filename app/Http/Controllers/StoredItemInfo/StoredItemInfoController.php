@@ -31,7 +31,7 @@ class StoredItemInfoController extends BaseController
                 $query->whereHas('storage', function (Builder $query) use ($branch) {
                     $query->where('branch_id', $branch->id)->where('deleted_at', null);
                 });
-            }, 'storedItems.storageHistory.storage.branch', 'owner'])->latest();
+            }, 'storedItems.storageHistory.storage.branch', 'owner', 'item'])->latest();
         else
             $query = StoredItemInfo::with('owner', 'item','storedItems.storageHistory.storage.branch')->latest();
 
