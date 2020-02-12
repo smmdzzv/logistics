@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use App\Models\StoredItems\StoredItem;
-use App\Models\Trip;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 
 class StoredItemsController extends Controller
 {
@@ -14,12 +13,15 @@ class StoredItemsController extends Controller
     {
         $this->middleware('auth');
 
-        $this->middleware("roles.deny:client");
+        $this->middleware("roles.allow:cashier,storekeeper,manager,admin");
     }
 
     public function index()
     {
-        $branches = Branch::all();
+        if (auth()->user()->hasRole('admin'))
+            $branches = Branch::all();
+        else
+            $branches = new Collection([auth()->user()->branch]);
         return view('stored.index', compact('branches'));
     }
 
@@ -28,7 +30,8 @@ class StoredItemsController extends Controller
         return StoredItem::with('info.owner', 'info.item', 'storageHistory.storage')->latest()->paginate(10);
     }
 
-    public function show($storedItem){
+    public function show($storedItem)
+    {
         $storedItem = StoredItem::withTrashed()->find($storedItem);
         $storedItem->load('info', 'info.owner', 'info.billingInfo');
         $storageHistories = $storedItem->storageHistories()->latest()
@@ -42,7 +45,7 @@ class StoredItemsController extends Controller
     {
         if (isset($branch)) {
             return StoredItem::with('info.owner', 'info.item', 'storageHistory.storage')
-                ->whereHas('storage', function (Builder $query) use($branch) {
+                ->whereHas('storage', function (Builder $query) use ($branch) {
                     $query->where('branch_id', $branch->id)->where('deleted_at', null);
                 })
                 ->latest()
