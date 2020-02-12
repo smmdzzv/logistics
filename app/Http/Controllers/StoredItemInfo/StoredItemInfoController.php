@@ -18,7 +18,7 @@ class StoredItemInfoController extends BaseController
         $this->middleware('roles.allow:client,manager,storekeeper');
     }
 
-    public function storedItemInfos()
+    public function availableStoredItemInfos()
     {
         if (!auth()->user()->hasRole('admin'))
             $branch = auth()->user()->branch;

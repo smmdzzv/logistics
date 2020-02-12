@@ -73,7 +73,7 @@
             },
             url: {
                 type: String,
-                default: 'stored-item-info/filtered?'
+                default: 'stored-item-info/available/filtered?'
             },
             providedStoredItems: {
                 type: Array
