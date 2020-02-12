@@ -3,6 +3,63 @@
         <form @submit.prevent id="addItemForm">
             <div class="container">
                 <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="col-form-label text-md-right" for="shop">Магазин</label>
+                        <input class="form-control"
+                               id="shop"
+                               name="shop"
+                               placeholder="код или название магазина"
+                               required v-model.number="storedItem.shop">
+                        <!--                        <select class="form-control custom-select"-->
+                        <!--                                id="shop"-->
+                        <!--                                required v-model="storedItem.shop">-->
+                        <!--                            <option :value="null" disabled>&#45;&#45; Выберите магазин &#45;&#45;</option>-->
+                        <!--                            <option :value="shop" v-for="shop in shops">{{shop.code}} {{shop.name}}</option>-->
+                        <!--                        </select>-->
+                    </div>
+
+                    <div class="form-group col-md-5">
+                        <label class="col-form-label text-md-right" for="item">Наименование товара</label>
+                        <suggestions-input :onItemSearchInputChange="onItemSearchInputChange"
+                                           :onSelected="onItemSelected"
+                                           :initQuery="itemInitQuery"
+                                           displayPropertyName="name"
+                                           id="item"
+                                           keyPropertyName="id"
+                                           placeholder="Введите название товара"
+                                           ref="suggestionInput"
+                                           required
+                                           v-bind:options="filteredItems"/>
+                        <b-popover
+                                :show.sync="$v.storedItem.item.$error"
+                                content="Найдите товар по имени"
+                                placement="bottom"
+                                target="item"
+                                triggers="null"
+                                variant="danger"/>
+                    </div>
+
+
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label text-md-right" for="weight">Вес</label>
+                        <input @blur="$v.storedItem.weight.$touch()"
+                               class="form-control"
+                               id="weight"
+                               maxlength="6"
+                               name="weight"
+                               placeholder="в кг"
+                               required
+                               v-model.number="storedItem.weight">
+                        <b-popover
+                                :show.sync="$v.storedItem.weight.$error"
+                                content="Введите вес в килограммах"
+                                placement="bottom"
+                                target="weight"
+                                triggers="null"
+                                variant="danger"/>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="form-group col-md-3">
                         <label class="col-form-label text-md-right" for="width">Ширина</label>
                         <input @blur="$v.storedItem.width.$touch()"
@@ -59,48 +116,29 @@
                     </div>
 
                     <div class="form-group col-md-3">
-                        <label class="col-form-label text-md-right" for="weight">Вес</label>
-                        <input @blur="$v.storedItem.weight.$touch()"
+                        <label class="col-form-label text-md-right" for="count">Кол-во мест</label>
+                        <input @blur="$v.storedItem.count.$touch()"
+                               :disabled="storedItem.id"
                                class="form-control"
-                               id="weight"
-                               maxlength="6"
-                               name="weight"
-                               placeholder="в кг"
-                               required
-                               v-model.number="storedItem.weight">
+                               id="count"
+                               maxlength="4"
+                               name="count"
+                               placeholder="в ед. товара"
+                               required v-model.number="storedItem.count">
                         <b-popover
-                                :show.sync="$v.storedItem.weight.$error"
-                                content="Введите вес в килограммах"
+                                :show.sync="$v.storedItem.count.$error"
+                                content="Определите количество товаров"
                                 placement="bottom"
-                                target="weight"
+                                target="count"
                                 triggers="null"
                                 variant="danger"/>
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group col-md-5">
-                        <label class="col-form-label text-md-right" for="item">Наименование товара</label>
-                        <suggestions-input :onItemSearchInputChange="onItemSearchInputChange"
-                                           :onSelected="onItemSelected"
-                                           :initQuery="itemInitQuery"
-                                           displayPropertyName="name"
-                                           id="item"
-                                           keyPropertyName="id"
-                                           placeholder="Введите название товара"
-                                           ref="suggestionInput"
-                                           required
-                                           v-bind:options="filteredItems"/>
-                        <b-popover
-                                :show.sync="$v.storedItem.item.$error"
-                                content="Найдите товар по имени"
-                                placement="bottom"
-                                target="item"
-                                triggers="null"
-                                variant="danger"/>
-                    </div>
+                <div class="row">
 
-                    <div class="form-group col-md-2" id="tariff-wrapper">
+
+                    <div class="form-group col-md-4" id="tariff-wrapper">
                         <label class="col-form-label text-md-right" for="tariff">Тариф</label>
                         <input class="form-control" type="text" id="tariff" :value="tariff.name" disabled>
                         <b-tooltip target="tariff-wrapper" triggers="hover">
@@ -127,7 +165,7 @@
                     <!--                            variant="danger"/>-->
                     <!--                    </div>-->
 
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                         <label class="col-form-label text-md-right" for="customs-code">Таможенный код</label>
                         <select class="form-control custom-select"
                                 id="customs-code"
@@ -147,60 +185,7 @@
                                 variant="danger"/>
                     </div>
 
-                    <!--                    <div class="form-group col-md-2">-->
-                    <!--                        <label class="col-form-label text-md-right" for="placeCount">Кол-во мест</label>-->
-                    <!--                        <input @blur="$v.storedItem.placeCount.$touch()"-->
-                    <!--                               class="form-control"-->
-                    <!--                               id="placeCount"-->
-                    <!--                               maxlength="4"-->
-                    <!--                               name="placeCount"-->
-                    <!--                               placeholder=""-->
-                    <!--                               required v-model.number="storedItem.placeCount">-->
-                    <!--                        <b-popover-->
-                    <!--                            :show.sync="$v.storedItem.placeCount.$error"-->
-                    <!--                            content="Определите количество занимаемых мест единице товара"-->
-                    <!--                            placement="bottom"-->
-                    <!--                            target="placeCount"-->
-                    <!--                            triggers="null"-->
-                    <!--                            variant="danger"/>-->
-                    <!--                    </div>-->
-
-                    <div class="form-group col-md-2">
-                        <label class="col-form-label text-md-right" for="count">Кол-во</label>
-                        <input @blur="$v.storedItem.count.$touch()"
-                               :disabled="storedItem.id"
-                               class="form-control"
-                               id="count"
-                               maxlength="4"
-                               name="count"
-                               placeholder="в ед. товара"
-                               required v-model.number="storedItem.count">
-                        <b-popover
-                                :show.sync="$v.storedItem.count.$error"
-                                content="Определите количество товаров"
-                                placement="bottom"
-                                target="count"
-                                triggers="null"
-                                variant="danger"/>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="form-group col-md-4">
-                        <label class="col-form-label text-md-right" for="shop">Магазин</label>
-                        <input class="form-control"
-                               id="shop"
-                               name="shop"
-                               placeholder="код или название магазина"
-                               required v-model.number="storedItem.shop">
-                        <!--                        <select class="form-control custom-select"-->
-                        <!--                                id="shop"-->
-                        <!--                                required v-model="storedItem.shop">-->
-                        <!--                            <option :value="null" disabled>&#45;&#45; Выберите магазин &#45;&#45;</option>-->
-                        <!--                            <option :value="shop" v-for="shop in shops">{{shop.code}} {{shop.name}}</option>-->
-                        <!--                        </select>-->
-                    </div>
-
-                    <div class="form-group col-md-3">
                         <label class="col-form-label text-md-right" for="branch">Филиал</label>
                         <input class="form-control" disabled id="branch" name="branch" v-model="branch.name">
                     </div>
