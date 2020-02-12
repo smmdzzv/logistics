@@ -29,7 +29,7 @@
                  v-bind:property="users"
                  v-for="user in users"
                  v-on:click.stop.prevent>
-                {{user.code}} {{user.name}}
+                {{user.code}}
             </div>
         </div>
     </div>
@@ -86,7 +86,7 @@
             },
             userInfo() {
                 if(this.selectedUser
-                    && this.userInfo !== this.selectedUser.name)
+                    && this.userInfo !== this.selectedUser.code)
                 {
                     this.selectedUser = null;
                     this.selectedUserDisplayInfo = '';
@@ -122,8 +122,10 @@
             },
             setSelectedUser(user) {
                 this.selectedUser = user;
-                this.selectedUserDisplayInfo = user.code + ' ' + user.name;
-                this.userInfo = user.name;
+                // this.selectedUserDisplayInfo = user.code + ' ' + user.name;
+                this.selectedUserDisplayInfo = user.code;
+                this.selectedUserDisplayInfo = user.code;
+                this.userInfo = user.code;
                 this.isEditMode = false;
                 this.selected(this.selectedUser);
             },
