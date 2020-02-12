@@ -52,11 +52,13 @@
                                     <a class="dropdown-item" href="{{route('orders.index')}}">Список заказов</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{route('stored.index')}}">Принятые товары</a>
-                                    <a class="dropdown-item" href="{{route('order-items.edit')}}">Выдать товары</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{route('lost-items.index')}}">Потерянные товары</a>
-
                                     @if(Auth::user()->hasRole('admin'))
+                                        <a class="dropdown-item" href="{{route('order-items.edit')}}">Выдать товары</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{{route('lost-items.index')}}">Потерянные
+                                            товары</a>
+
+
                                         <div class="dropdown-divider"></div>
                                         <h6 class="dropdown-header">Тарифы и расценки</h6>
                                         <a class="dropdown-item" href="{{route('tariffs.index')}}">Управление
