@@ -11,7 +11,10 @@ class TariffsController extends Controller
     public function __construct(){
         $this->middleware('auth');
 
-        $this->middleware('roles.allow:admin');
+        $exceptions = ['pricing'];
+
+        $this->middleware('roles.allow:admin')->except($exceptions);
+        $this->middleware('roles.allow:manager')->only($exceptions);
     }
 
     public function index(){
