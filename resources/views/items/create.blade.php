@@ -44,22 +44,21 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="tariffId" class="col-md-4 col-form-label text-md-right">Тариф</label>
+                                <label for="branch_id" class="col-md-4 col-form-label text-md-right">Филиал</label>
                                 <div class="col-md-6">
-                                    <select id="tariffId" name="tariffId"
-                                            class="form-control @error('tariffId') is-invalid @enderror">
-                                        <option value="null" disabled>--Выберите тариф--</option>
+                                    <select id="branch_id" name="branch_id"
+                                            class="form-control @error('branch_id') is-invalid @enderror">
+                                        <option value="null" disabled>--Выберите филиал--</option>
 
-                                        @foreach($tariffs as $tariff)
-                                            <option value="{{$tariff->id}}"
-                                                    @if($tariff->id === old('tariffId')) selected @endif>
-                                                {{$tariff->name}}
+                                        @foreach($branches as $branch)
+                                            <option value="{{$branch->id}}"
+                                                    @if($branch->id === old('branch_id')) selected @endif>
+                                                {{$branch->name}}
                                             </option>
                                         @endforeach
-
                                     </select>
 
-                                    @error('tariffId')
+                                    @error('branch_id')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

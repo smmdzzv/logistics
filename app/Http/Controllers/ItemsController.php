@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\Customs\CustomsCode;
 use App\Models\StoredItems\Item;
-use App\Models\Tariff;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -38,9 +38,9 @@ class ItemsController extends Controller
 
     public function create()
     {
-        $tariffs = Tariff::all();
+        $branches = Branch::all();
         $customsCodes = CustomsCode::all();
-        return view('items.create', compact('tariffs', 'customsCodes'));
+        return view('items.create', compact('branches', 'customsCodes'));
     }
 
     public function store(Request $request)
@@ -59,7 +59,7 @@ class ItemsController extends Controller
             'applyDiscount' => "required|in:0,1",
             'onlyAgreedPrice' => "required|in:0,1",
             'calculateByNormAndWeight' => "required|in:0,1",
-            'tariffId' => 'required|exists:tariffs,id',
+            'branch_id' => 'required|exists:branches,id',
             'name' => [
                 'required',
                 'string',
