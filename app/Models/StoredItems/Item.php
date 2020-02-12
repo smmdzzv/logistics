@@ -3,9 +3,9 @@
 namespace App\Models\StoredItems;
 
 use App\Models\BaseModel;
+use App\Models\Branch;
 use App\Models\Customs\CustomsCode;
-use App\Models\Tariff;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Tariff; 
 
 /**
  * @property string name
@@ -33,9 +33,14 @@ class Item extends BaseModel
         return $this->hasMany(StoredItem::class);
     }
 
-    public function tariff()
+//    public function tariff()
+//    {
+//        return $this->belongsTo(Tariff::class, 'tariffId');
+//    }
+
+    public function branch()
     {
-        return $this->belongsTo(Tariff::class, 'tariffId');
+        return $this->belongsTo(Branch::class);
     }
 
     /**
