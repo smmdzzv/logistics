@@ -41,7 +41,7 @@
             </template>
 
             <template slot="groupedStoredItemsCount" slot-scope="{item}">
-                <span>{{item.storedItems.length}}</span>
+                <span>{{getItemsLength(item)}}</span>
             </template>
         </table-card>
 
@@ -153,6 +153,10 @@
                 });
 
                 this.fields = newFields;
+            },
+            getItemsLength(item){
+                this.$set(item, 'groupedStoredItemsCount', item.storedItems.length);
+                return item.groupedStoredItemsCount;
             },
             //Converts provided storedItem to StoredItemInfos
             convertStoredItemsToInfos(storedItems) {
