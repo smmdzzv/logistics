@@ -14,7 +14,7 @@ class ItemsController extends Controller
     {
         $this->middleware('auth');
 
-        $except = ['all', 'eager'];
+        $except = ['all', 'allEager'];
 
         $this->middleware('roles.allow:admin')->except($except);
         $this->middleware('roles.deny:client')->only($except);
