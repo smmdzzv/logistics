@@ -84,6 +84,9 @@
                     case 'unload':
                         result = this.validateBranch();
                         break;
+                    case 'transfer':
+                        result = this.validateTrip();
+                        break;
                 }
                 return result;
             },
@@ -98,9 +101,23 @@
                     return false;
                 }
             },
+            validateTrip(){
+                if(this.selectedTrip)
+                    return true;
+                else{
+                    this.$root.showErrorMsg(
+                        'Выберите рейс',
+                        'Для трансфера товаров необходимо выбрать рейс'
+                    );
+                    return false;
+                }
+            },
             async submit() {
                 if(!this.validate())
                     return;
+                if(this.selectedItems.length === 0)
+                    return;
+
                 try {
                     let data = {
                         storedItems: this.selectedItems.map((selected) => {
