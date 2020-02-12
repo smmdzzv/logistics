@@ -34,7 +34,7 @@
 
             </div>
 
-            <div class="col-lg-8" v-if="detailedMode">
+            <div class="col-lg-8" v-show="detailedMode">
                 <stored-table
                         :branches="branches"
                         :prepareUrl="prepareUrl"
@@ -51,9 +51,10 @@
                         hover
                         selectable/>
             </div>
-            <div class="col-lg-8" v-else>
+            <div class="col-lg-8" v-show="!detailedMode">
                 <stored-item-info-table :branches="branches"
                                         :providedStoredItems="trip.storedItems"
+                                        :providedSelectedStoredItems="storedItems"
                                         :selectedItems="storedItems"
                                         @onItemsSelected="onItemsSelected"
                                         flowable>

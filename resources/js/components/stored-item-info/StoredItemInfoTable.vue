@@ -78,6 +78,9 @@
             providedStoredItems: {
                 type: Array
             },
+            providedSelectedStoredItems:{
+                type: Array
+            },
             preventItemLoading: {
                 type:Boolean,
                 default:false
@@ -264,7 +267,7 @@
                     return stored.primaryKey === item.primaryKey;
                 });
             },
-            updateSelectedStoredItems() {
+            updateSelectedStoredItems(fireEvent = true) {
                 let selectedItems = [];
                 this.items.forEach((storedItemInfo) => {
                     let count = 0;
@@ -282,8 +285,8 @@
                         } else break;
                     }
                 });
-
-                this.$emit('onItemsSelected', selectedItems);
+                if(fireEvent)
+                    this.$emit('onItemsSelected', selectedItems);
             }
         },
 
@@ -302,6 +305,18 @@
                 this.setItems();
                 if(!this.preventItemLoading)
                     this.getItems();
+            },
+            providedSelectedStoredItems(){
+                this.items.forEach(function (storedItemInfo) {
+                    storedItemInfo.selectedCount = 0;
+
+                    storedItemInfo.storedItems.forEach(function (storedItem) {
+                        let exists = this.providedSelectedStoredItems.find(provided => provided.id === storedItem.id);
+                        if(exists) storedItemInfo.selectedCount++;
+                    }, this);
+                }, this);
+
+                this.updateSelectedStoredItems(false);
             }
         },
         components: {
