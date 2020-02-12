@@ -22,7 +22,7 @@
         <div class="col-12 form-group">
             <label class="col-12">Выборки</label>
             <b-form-select v-model="selectedOrderPayment">
-                <option disabled value="null">-- Выбранные товары --</option>
+                <option value="null">-- Выбранные товары --</option>
                 <option :key="orderPayments.id"
                         :value="orderPayment"
                         v-for="orderPayment in orderPayments">
@@ -34,14 +34,17 @@
             <label class="col-12">Товаров выбрано на сумму (в долларах)</label>
             <input class="form-control" v-model="paymentSum" disabled>
         </div>
+
 <!--        <div class="col-12 mb-3">-->
 <!--            <button class="btn btn-primary" @click="detailedView = !detailedView">Переключить вид</button>-->
 <!--        </div>-->
+
         <div class="col-12 pb-4" v-show="!detailedView">
             <stored-item-info-table
                     :borderless="borderless"
                     :responsive="responsive"
                     :providedStoredItems="items"
+                    :providedSelectedStoredItems="selectedItems"
                     :striped="striped"
                     prevent-item-loading
                     @onItemsSelected="onItemsSelected"
@@ -50,7 +53,7 @@
             </stored-item-info-table>
         </div>
 
-        <div class="col-12 pb-4" v-show="detailedView">
+        <div class="col-12 pb-4" v-if="detailedView">
             <stored-items-table-card
                     :borderless="borderless"
                     :fixed="fixed"
@@ -224,19 +227,25 @@
                 tHideSpinner();
             },
             selectedOrderPayment() {
+
                 // TODO refactor
                 // this.$refs.storedItemsTable.$refs.tableCard.selected
                 let ids = this.selectedOrderPayment.paidItems.map(function (paidItem) {
                         return paidItem.storedItem.id;
                     });
 
-                this.$refs.storedItemsTable.$refs.tableCard.selected = this.items.filter(function (item) {
-                    return ids.includes(item.id);
-                });
+                this.selectedItems = this.items.filter(function (item) {
+                        return ids.includes(item.id);
+                    });
 
-                this.$refs.storedItemsTable.$refs.tableCard.$emit(
-                    'itemsSelected',
-                    this.$refs.storedItemsTable.$refs.tableCard.selected);
+                //
+                // this.$refs.storedItemsTable.$refs.tableCard.selected = this.items.filter(function (item) {
+                //     return ids.includes(item.id);
+                // });
+                //
+                // this.$refs.storedItemsTable.$refs.tableCard.$emit(
+                //     'itemsSelected',
+                //     this.$refs.storedItemsTable.$refs.tableCard.selected);
             }
         }
     }
