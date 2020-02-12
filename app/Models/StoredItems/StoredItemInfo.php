@@ -7,7 +7,7 @@ use App\Models\BillingInfo;
 use App\Models\Branch;
 use App\Models\Customs\CustomsCode;
 use App\Models\Order;
-use App\Models\Tariff; 
+use App\Models\Tariff;
 use App\Models\Users\Client;
 use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Item item
  * @property double count
  * @property BillingInfo billingInfo
+ * @property Tariff tariff
  */
 class StoredItemInfo extends BaseModel
 {
@@ -105,7 +106,7 @@ class StoredItemInfo extends BaseModel
 //dd($this->billingInfo);
         if(!$this->billingInfo){
             $this->billingInfo = new BillingInfo();
-            $tariffPricing = $this->item->tariff->lastPriceHistory;
+            $tariffPricing = $this->tariff->lastPriceHistory;
             $this->billingInfo->tariffPricing()->associate($tariffPricing);
             $this->billingInfo->storedItemInfo()->associate($this);
         }
