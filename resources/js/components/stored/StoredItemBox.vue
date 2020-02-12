@@ -152,6 +152,7 @@
                                 name="tariff"
                                 id="tariff"
                                 required v-model="storedItem.tariff">
+                            <option value="null" disabled>-- Выберите тариф --</option>
                             <option :value="tariff"
                                     v-for="tariff in tariffs"
                             >{{tariff.name}}
@@ -172,6 +173,7 @@
                                 id="customs-code"
                                 v-model="storedItem.customsCode"
                                 required>
+                            <option value="null" disabled>-- Выберите таможенный код --</option>
                             <option :value="customsCode"
                                     v-for="customsCode in customsCodes"
                             >{{customsCode.code}} - {{customsCode.name}}
