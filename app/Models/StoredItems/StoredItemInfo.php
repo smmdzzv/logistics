@@ -7,9 +7,8 @@ use App\Models\BillingInfo;
 use App\Models\Branch;
 use App\Models\Customs\CustomsCode;
 use App\Models\Order;
-use App\Models\Trip;
+use App\Models\Tariff; 
 use App\Models\Users\Client;
-use App\Shops\Shop;
 use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -72,6 +71,10 @@ class StoredItemInfo extends BaseModel
     public function billingInfo()
     {
         return $this->hasOne(BillingInfo::class);
+    }
+
+    public function tariff(){
+        return $this->belongsTo(Tariff::class);
     }
 
     public function storedItems()

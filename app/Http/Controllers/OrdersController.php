@@ -83,7 +83,7 @@ class OrdersController extends Controller
             'storedItemInfos',
             'storedItemInfos.customsCode',
             'storedItemInfos.owner',
-//            'storedItemInfos.shop',
+            'storedItemInfos.tariff',
             'storedItemInfos.billingInfo.tariffPricing',
             'storedItemInfos.item.tariff',
             'storedItemInfos.item.codes',
@@ -120,7 +120,7 @@ class OrdersController extends Controller
      * @return User
      */
     private function findOrCreateClient(String $code){
-        $client = Client::roleConstraint()->where('code',$code)->first();
+        $client = User::where('code',$code)->first();
         if(!$client){
             $client = User::create([
                 'code' => $code,
@@ -158,6 +158,7 @@ class OrdersController extends Controller
 //                'placeCount' => $itemData['placeCount'],
                 'ownerId' => request()->input('clientId'),
                 'branch_id' => auth()->user()->branch->id,
+                'tariff_id' => $itemData['tariff']['id'],
                 'customs_code_id' => $itemData['customsCode']['id']
             ]);
 

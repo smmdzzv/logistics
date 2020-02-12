@@ -9,7 +9,7 @@
                                id="shop"
                                name="shop"
                                placeholder="код или название магазина"
-                               required v-model.number="storedItem.shop">
+                               required v-model="storedItem.shop">
                         <!--                        <select class="form-control custom-select"-->
                         <!--                                id="shop"-->
                         <!--                                required v-model="storedItem.shop">-->
