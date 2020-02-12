@@ -138,32 +138,33 @@
                 <div class="row">
 
 
-                    <div class="form-group col-md-4" id="tariff-wrapper">
-                        <label class="col-form-label text-md-right" for="tariff">Тариф</label>
-                        <input class="form-control" type="text" id="tariff" :value="tariff.name" disabled>
-                        <b-tooltip target="tariff-wrapper" triggers="hover">
-                            Определенно в свойствах наименования
-                        </b-tooltip>
-                    </div>
-
-                    <!--                    <div class="form-group col-md-2">-->
+                    <!--                    <div class="form-group col-md-4" id="tariff-wrapper">-->
                     <!--                        <label class="col-form-label text-md-right" for="tariff">Тариф</label>-->
-                    <!--                        <select class="form-control custom-select"-->
-                    <!--                                id="tariff"-->
-                    <!--                                required v-model="tariff">-->
-                    <!--                            <option :value="tariff"-->
-                    <!--                                    v-for="tariff in tariffs"-->
-                    <!--                            >{{tariff.name}}-->
-                    <!--                            </option>-->
-                    <!--                        </select>-->
-                    <!--                        <b-popover-->
-                    <!--                            :show.sync="$v.tariff.$error"-->
-                    <!--                            content="Выберите тариф из списка"-->
-                    <!--                            placement="bottom"-->
-                    <!--                            target="tariff"-->
-                    <!--                            triggers="null"-->
-                    <!--                            variant="danger"/>-->
+                    <!--                        <input class="form-control" type="text" id="tariff" :value="tariff.name" disabled>-->
+                    <!--                        <b-tooltip target="tariff-wrapper" triggers="hover">-->
+                    <!--                            Определенно в свойствах наименования-->
+                    <!--                        </b-tooltip>-->
                     <!--                    </div>-->
+
+                    <div class="form-group col-md-4">
+                        <label class="col-form-label text-md-right" for="tariff">Тариф</label>
+                        <select class="form-control custom-select"
+                                name="tariff"
+                                id="tariff"
+                                required v-model="storedItem.tariff">
+                            <option :value="tariff"
+                                    v-for="tariff in tariffs"
+                            >{{tariff.name}}
+                            </option>
+                        </select>
+                        <b-popover
+                                :show.sync="$v.storedItem.tariff.$error"
+                                content="Выберите тариф из списка"
+                                placement="bottom"
+                                target="tariff"
+                                triggers="null"
+                                variant="danger"/>
+                    </div>
 
                     <div class="form-group col-md-4">
                         <label class="col-form-label text-md-right" for="customs-code">Таможенный код</label>
@@ -266,6 +267,7 @@
                     count: null,
                     branch: this.branch,
                     item: null,
+                    tariff: null,
                     // placeCount: null,
                     customsCode: null,
                     billingInfo: {
@@ -273,7 +275,7 @@
                     },
                     shop: null
                 },
-                tariff: {name: null},
+                // tariff: {name: null},
                 customPrice: 0,
                 customPriceState: null
             }
@@ -294,11 +296,12 @@
                 //if stored item is being edited pricing should be the same
                 if (this.storedItem.billingInfo.tariffPricing
                     && this.providedStoredItemInfo
-                    && this.storedItem.item.id === this.providedStoredItemInfo.item.id)
+                    && this.storedItem.item.id === this.providedStoredItemInfo.item.id
+                    && this.storedItem.tariff.id === this.providedStoredItemInfo.tariff.id)
                     return;
                 tShowSpinner();
                 try {
-                    let action = `tariff/${this.tariff.id}/pricing`;
+                    let action = `tariff/${this.storedItem.tariff.id}/pricing`;
                     const response = await axios.get(action);
                     this.storedItem.billingInfo.tariffPricing = response.data;
                 } catch (e) {
@@ -318,7 +321,7 @@
             },
             onItemSelected(item) {
                 this.storedItem.item = item;
-                this.tariff = this.tariffs.find(x => x.id === item.tariffId);
+                // this.tariff = this.tariffs.find(x => x.id === item.tariffId);
                 this.customsCodes = item.codes;
             },
             clearForm(e) {
@@ -336,7 +339,7 @@
                 this.storedItem.price = null;
                 this.storedItem.customsCode = null;
                 this.storedItem.shop = null;
-                this.tariff = {name: null};
+                this.storedItem.tariff = null;
                 this.customsCodes = [];
                 this.$refs.suggestionInput.query = '';
                 this.$nextTick(() => {
@@ -465,11 +468,11 @@
                 // },
                 customsCode: {
                     required
+                },
+                tariff: {
+                    required
                 }
-            },
-            // tariff: {
-            //     required
-            // }
+            }
         }
     }
 </script>
