@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\Tariff;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class TariffsController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth');
 
         $exceptions = ['pricing'];
@@ -17,9 +17,11 @@ class TariffsController extends Controller
         $this->middleware('roles.allow:manager')->only($exceptions);
     }
 
-    public function index(){
-        $tariffs = Tariff::all();
-        return view('tariffs.create', compact('tariffs'));
+    public function index()
+    {
+        $tariffs = Tariff::with('branch')->get();
+        $branches = Branch::all();
+        return view('tariffs.create', compact('tariffs', 'branches'));
     }
 
 //    public function create(){
@@ -27,16 +29,19 @@ class TariffsController extends Controller
 //        return view('tariffs.create', compact('tariffs'));
 //    }
 
-    public function store(){
+    public function store()
+    {
         $data = request()->validate([
             'name' => 'required|string|max:255',
-            'description' => 'string|max:255|nullable'
+            'description' => 'string|max:255|nullable',
+            'branch_id' => 'required|exists:branches,id'
         ]);
 
-        return Tariff::create($data);
+        return Tariff::create($data)->load('branch');
     }
 
-    public function destroy(Tariff $tariff){
+    public function destroy(Tariff $tariff)
+    {
         $tariff->delete();
     }
 

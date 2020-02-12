@@ -15,6 +15,7 @@ use App\Models\Tariff;
 use App\Models\Till\Account;
 use App\Models\Users\Client;
 use App\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
 
 class OrdersController extends Controller
@@ -56,7 +57,8 @@ class OrdersController extends Controller
     public function create()
     {
         $user = auth()->user();
-        $tariffs = Tariff::all();
+//        $tariffs = Tariff::all();
+        $tariffs = $this->getTariffs();
         return view('orders.create', compact('user', 'tariffs'));
     }
 
@@ -76,8 +78,9 @@ class OrdersController extends Controller
         return $orderWriter->write();
     }
 
-    public function edit(Order $order){
-        if($order->status == 'completed')
+    public function edit(Order $order)
+    {
+        if ($order->status == 'completed')
             return abort(403, 'Доступ запрещен');
         $order->load([
             'storedItemInfos',
@@ -92,7 +95,8 @@ class OrdersController extends Controller
         ]);
 
         $user = auth()->user();
-        $tariffs = Tariff::all();
+//        $tariffs = Tariff::all();
+        $tariffs = $this->getTariffs();
 //        $shops = Shop::all();
 
         return view('orders.edit', compact('order', 'user', 'tariffs'));
@@ -115,60 +119,8 @@ class OrdersController extends Controller
         return $orderWriter->write();
     }
 
-    /**
-     * @param String $code
-     * @return User
-     */
-    private function findOrCreateClient(String $code){
-        $client = User::where('code',$code)->first();
-        if(!$client){
-            $client = User::create([
-                'code' => $code,
-                'password' =>  Hash::make(PasswordGenerator::generate()),
-                'branch_id' => auth()->user()->branch->id
-            ]);
-
-            $client->roles()->attach(Role::where('name', 'client')->first());
-
-            $account = new Account();
-            $account->currencyId = Currency::where('isoName', 'USD')->first()->id;
-            $account->balance = 0;
-            $account->description = 'Долларовый счет пользователя ' . $client->name;
-
-            $client->accounts()->save($account);
-        }
-
-
-
-        return $client;
-    }
-
-    private function getStoredItemInfos(){
-        $storedItemInfos = array();
-        foreach (request()->input('storedItemInfos') as $itemData) {
-            $storedItemInfos[] = new StoredItemInfo([
-                'id' => $itemData['id'],
-                'width' => $itemData['width'],
-                'height' => $itemData['height'],
-                'length' => $itemData['length'],
-                'weight' => $itemData['weight'],
-                'count' => $itemData['count'],
-                'shop' => $itemData['shop'],
-                'item_id' => $itemData['item']['id'],
-//                'placeCount' => $itemData['placeCount'],
-                'ownerId' => request()->input('clientId'),
-                'branch_id' => auth()->user()->branch->id,
-                'tariff_id' => $itemData['tariff']['id'],
-                'customs_code_id' => $itemData['customsCode']['id']
-            ]);
-
-//            $data->customPrices[$itemIndex] = isset($itemData['customPrice']) ? $itemData['customPrice'] : null;
-        }
-
-        return $storedItemInfos;
-    }
-
-    private function getCustomPricesArray(){
+    private function getCustomPricesArray()
+    {
         $customPrices = array();
         $index = 0;
 
@@ -205,5 +157,65 @@ class OrdersController extends Controller
         if (isset($user)) {
             return $user->orders()->with(['owner', 'registeredBy'])->paginate($paginate);
         } else abort(404, 'Пользователь не найден');
+    }
+
+    private function getTariffs()
+    {
+        return auth()->user()->hasRole('admin') ? Tariff::all() : Tariff::where('branch_id', auth()->user()->branch->id)->get();
+
+    }
+
+    /**
+     * @param String $code
+     * @return User
+     */
+    private function findOrCreateClient(String $code)
+    {
+        $client = User::where('code', $code)->first();
+        if (!$client) {
+            $client = User::create([
+                'code' => $code,
+                'password' => Hash::make(PasswordGenerator::generate()),
+                'branch_id' => auth()->user()->branch->id
+            ]);
+
+            $client->roles()->attach(Role::where('name', 'client')->first());
+
+            $account = new Account();
+            $account->currencyId = Currency::where('isoName', 'USD')->first()->id;
+            $account->balance = 0;
+            $account->description = 'Долларовый счет пользователя ' . $client->name;
+
+            $client->accounts()->save($account);
+        }
+
+
+        return $client;
+    }
+
+    private function getStoredItemInfos()
+    {
+        $storedItemInfos = array();
+        foreach (request()->input('storedItemInfos') as $itemData) {
+            $storedItemInfos[] = new StoredItemInfo([
+                'id' => $itemData['id'],
+                'width' => $itemData['width'],
+                'height' => $itemData['height'],
+                'length' => $itemData['length'],
+                'weight' => $itemData['weight'],
+                'count' => $itemData['count'],
+                'shop' => $itemData['shop'],
+                'item_id' => $itemData['item']['id'],
+//                'placeCount' => $itemData['placeCount'],
+                'ownerId' => request()->input('clientId'),
+                'branch_id' => auth()->user()->branch->id,
+                'tariff_id' => $itemData['tariff']['id'],
+                'customs_code_id' => $itemData['customsCode']['id']
+            ]);
+
+//            $data->customPrices[$itemIndex] = isset($itemData['customPrice']) ? $itemData['customPrice'] : null;
+        }
+
+        return $storedItemInfos;
     }
 }

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property string id
  * @property TariffPriceHistory lastPriceHistory
+ * @property string description
+ * @property string branch_id
  */
 class Tariff extends BaseModel
 {
@@ -16,9 +18,14 @@ class Tariff extends BaseModel
 
     protected $guarded = [];
 
-    public function items()
+//    public function items()
+//    {
+//        return $this->hasMany(Item::class, 'tariffId');
+//    }
+
+    public function branch()
     {
-        return $this->hasMany(Item::class, 'tariffId');
+        return $this->belongsTo(Branch::class);
     }
 
     public function priceHistories()

@@ -17,6 +17,7 @@ class CreateTariffsTable extends Migration
             $table->char('id', 26)->primary();
             $table->string('name');
             $table->string('description')->nullable()->default('');
+            $table->char('branch_id', 26)->index();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-12">
                 <div class="card shadow">
                     <div class="card-header">Тарифы</div>
                     <div class="card-body">
@@ -26,12 +26,12 @@
                                                type="text"
                                                v-model="tariff.name">
                                         <b-popover
-                                            :show.sync="$v.tariff.name.$error"
-                                            content="Введите название тарифа"
-                                            placement="bottom"
-                                            target="name"
-                                            triggers="null"
-                                            variant="danger"/>
+                                                :show.sync="$v.tariff.name.$error"
+                                                content="Введите название тарифа"
+                                                placement="bottom"
+                                                target="name"
+                                                triggers="null"
+                                                variant="danger"/>
                                     </div>
                                 </div>
 
@@ -48,12 +48,33 @@
                                                type="text"
                                                v-model="tariff.description">
                                         <b-popover
-                                            :show.sync="$v.tariff.description.$error"
-                                            content="Максимально допустимая длина описания 255 символов"
-                                            placement="bottom"
-                                            target="description"
-                                            triggers="null"
-                                            variant="danger"/>
+                                                :show.sync="$v.tariff.description.$error"
+                                                content="Максимально допустимая длина описания 255 символов"
+                                                placement="bottom"
+                                                target="description"
+                                                triggers="null"
+                                                variant="danger"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="branch_id" class="col-md-4 col-form-label text-md-right">Филиал</label>
+                                    <div class="col-md-6">
+                                        <select id="branch_id" name="branch_id"
+                                                class="form-control"
+                                                v-model="tariff.branch"
+                                                :class="{'is-invalid': !tariff.branch}">
+                                            <option value="null" disabled>--Выберите филиал--</option>
+                                            <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
+                                        </select>
+
+                                        <b-popover
+                                                :show.sync="$v.tariff.branch.$error"
+                                                content="Выберите филиал"
+                                                placement="bottom"
+                                                target="branch_id"
+                                                triggers="null"
+                                                variant="danger"/>
                                     </div>
                                 </div>
 
@@ -84,10 +105,12 @@
                                             v-for="tariff in tariffs">
                                             <div :key="tariff.id" class="row">
                                                 <div class="col-md-3"> {{tariff.name}}</div>
-                                                <div class="col-md-7"> {{tariff.description}}</div>
+                                                <div class="col-md-3"> {{tariff.branch.name}}</div>
+                                                <div class="col-md-4"> {{tariff.description}}</div>
                                                 <div class="col-md-2">
                                                     <div class="row mt-2 mt-md-0">
-                                                        <img :id="tariff.id" @click="editTariffPricing(tariff)" alt="delete-item"
+                                                        <img :id="tariff.id" @click="editTariffPricing(tariff)"
+                                                             alt="delete-item"
                                                              class="icon-btn-sm ml-auto"
                                                              src="/svg/edit.svg">
                                                         <b-tooltip :target="tariff.id" triggers="hover">
@@ -120,17 +143,23 @@
             data: {
                 type: Array,
                 required: true
+            },
+            branches: {
+                type: Array,
+                required: true
             }
         },
         data() {
             return {
                 tariff: {
                     name: '',
-                    description: ''
+                    description: '',
+                    branch: null
                 },
-                tariffs:this.data,
+                tariffs: this.data,
                 showAddTariffErrorModal: false,
-                isSubmitting:false
+                isSubmitting: false
+
             }
         },
         methods: {
@@ -142,14 +171,14 @@
                     try {
                         const response = await axios.post('/tariffs', {
                             name: this.tariff.name,
-                            description: this.tariff.description
+                            description: this.tariff.description,
+                            branch_id: this.tariff.branch.id
                         });
 
-                        if (response.data){
+                        if (response.data) {
                             this.tariffs.push(response.data);
                             this.resetForm();
-                        }
-                        else
+                        } else
                             this.showAddTariffErrorModal = true;
                     } catch (e) {
                         this.showAddTariffErrorModal = true;
@@ -159,48 +188,48 @@
                     this.hideBusy();
                 })
             },
-            setBusy(){
+            setBusy() {
                 this.isSubmitting = true;
                 this.$bvModal.show('busyModal');
             },
-            hideBusy(){
+            hideBusy() {
                 this.isSubmitting = false;
                 this.$bvModal.hide('busyModal');
             },
-            resetForm(){
+            resetForm() {
                 this.showAddTariffErrorModal = false;
                 this.tariff.name = '';
                 this.tariff.description = '';
+                this.tariff.branch = null;
                 this.$nextTick(() => {
                     this.$v.$reset();
                 })
             },
             async removeFromList(tariff) {
-                let confirmed = await this.$bvModal.msgBoxConfirm(`Вы уверены что хотите удалить тариф ${tariff.name}?`,{
-                    centered:true,
-                    okTitle:'Да',
-                    cancelTitle:'Отменить',
-                    footerClass:'border-0',
-                    title:'Подтверждение удаления'
+                let confirmed = await this.$bvModal.msgBoxConfirm(`Вы уверены что хотите удалить тариф ${tariff.name}?`, {
+                    centered: true,
+                    okTitle: 'Да',
+                    cancelTitle: 'Отменить',
+                    footerClass: 'border-0',
+                    title: 'Подтверждение удаления'
                 });
 
-                if(!confirmed)
+                if (!confirmed)
                     return;
 
                 this.setBusy();
-                try{
+                try {
                     await axios.delete('/tariffs/' + tariff.id);
 
                     this.tariffs = jQuery.grep(this.tariffs, function (value) {
                         return value !== tariff;
                     });
-                }
-                catch(e){
+                } catch (e) {
                     //TODO
                 }
                 this.hideBusy();
             },
-            editTariffPricing(tariff){
+            editTariffPricing(tariff) {
                 window.location = `tariff-price-histories/create?tariff=${tariff.id}`;
             }
         },
@@ -212,6 +241,9 @@
                 },
                 description: {
                     maxLength: maxLength(255)
+                },
+                branch:{
+                    required
                 }
             }
         }

@@ -90,23 +90,23 @@ class TariffPriceHistoriesTableSeeder extends Seeder
             'totalMoney' => 21306.96
         ]);
 
-        $tariff=$this->getId('Кашкар');
-        TariffPriceHistory::create([
-            'lowerLimit'=>110,
-            'mediumLimit'=>170,
-            'upperLimit'=>200,
-            'discountForLowerLimit'=>10,
-            'discountForMediumLimit'=>5,
-            'pricePerCube'=>155,
-            'agreedPricePerKg'=>0.6,
-            'pricePerExtraKg'=>0.33,
-            'maxWeightPerCube'=>250,
-            'maxCubage'=>108,
-            'maxWeight'=>27000,
-            'branch_id'=>$branchId,
-            'tariff_id'=>$tariff,
-            'totalMoney' => 21306.96
-        ]);
+//        $tariff=$this->getId('Кашкар');
+//        TariffPriceHistory::create([
+//            'lowerLimit'=>110,
+//            'mediumLimit'=>170,
+//            'upperLimit'=>200,
+//            'discountForLowerLimit'=>10,
+//            'discountForMediumLimit'=>5,
+//            'pricePerCube'=>155,
+//            'agreedPricePerKg'=>0.6,
+//            'pricePerExtraKg'=>0.33,
+//            'maxWeightPerCube'=>250,
+//            'maxCubage'=>108,
+//            'maxWeight'=>27000,
+//            'branch_id'=>$branchId,
+//            'tariff_id'=>$tariff,
+//            'totalMoney' => 21306.96
+//        ]);
     }
 
     private function getId($tariffName){
