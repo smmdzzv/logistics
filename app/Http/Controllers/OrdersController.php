@@ -7,10 +7,12 @@ use App\Data\RequestWriters\Order\OrderRequestWriter;
 use App\Data\RequestWriters\Order\UpdateOrderRequestWriter;
 use App\Models\Branch;
 use App\Http\Requests\StoreOrderRequest;
+use App\Models\Currency;
 use App\Models\Order;
 use App\Models\Role;
 use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Tariff;
+use App\Models\Till\Account;
 use App\Models\Users\Client;
 use App\User;
 use Illuminate\Support\Facades\Hash;
@@ -127,7 +129,16 @@ class OrdersController extends Controller
             ]);
 
             $client->roles()->attach(Role::where('name', 'client')->first());
+
+            $account = new Account();
+            $account->currencyId = Currency::where('isoName', 'USD')->first()->id;
+            $account->balance = 0;
+            $account->description = 'Долларовый счет пользователя ' . $client->name;
+
+            $client->accounts()->save($account);
         }
+
+
 
         return $client;
     }

@@ -34,7 +34,10 @@
             <label class="col-12">Товаров выбрано на сумму (в долларах)</label>
             <input class="form-control" v-model="paymentSum" disabled>
         </div>
-        <div class="col-12 pb-4" v-if="items && items.length > 0">
+<!--        <div class="col-12 mb-3">-->
+<!--            <button class="btn btn-primary" @click="detailedView = !detailedView">Переключить вид</button>-->
+<!--        </div>-->
+        <div class="col-12 pb-4" v-show="!detailedView">
             <stored-item-info-table
                     :borderless="borderless"
                     :responsive="responsive"
@@ -47,7 +50,7 @@
             </stored-item-info-table>
         </div>
 
-        <div class="col-12 pb-4" v-if="detailedView">
+        <div class="col-12 pb-4" v-show="detailedView">
             <stored-items-table-card
                     :borderless="borderless"
                     :fixed="fixed"
