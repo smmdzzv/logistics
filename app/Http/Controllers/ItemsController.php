@@ -22,8 +22,8 @@ class ItemsController extends Controller
 
     public function all()
     {
-        $paginate = request()->paginate ?? 10;
-        return Item::with('tariff')->paginate($paginate);
+        $paginate = request()->paginate ?? 20;
+        return Item::with('branch')->paginate($paginate);
     }
 
     public function allEager()

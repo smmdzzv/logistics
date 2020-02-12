@@ -73,8 +73,8 @@
                         label: 'Единица',
                         sortable: false
                     },
-                    'tariff.name': {
-                        label: 'Тариф',
+                    'branch.name': {
+                        label: 'Филиал',
                         sortable: true
                     },
                     onlyCustomPrice: {
