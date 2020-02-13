@@ -15,10 +15,9 @@ use App\Models\Tariff;
 use App\Models\Till\Account;
 use App\Models\Users\Client;
 use App\User;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Hash;
 
-class OrdersController extends Controller
+class OrdersController extends BaseController
 {
     public function __construct()
     {
@@ -34,7 +33,7 @@ class OrdersController extends Controller
 
     public function index()
     {
-        $branches = Branch::all();
+        $branches = $this->getBranches();
         return view('orders.index', compact('branches'));
     }
 
@@ -135,8 +134,13 @@ class OrdersController extends Controller
 
     public function all()
     {
-        $paginate = request()->paginate ?? 10;
-        return Order::with(['owner', 'registeredBy'])->latest()->paginate($paginate);
+//        $paginate = request()->paginate ?? 10;
+        $branchIds = $this->getBranches()->map(function ($branch) {
+            return $branch->id;
+        });
+        return Order::whereIn('branchId', $branchIds)->with(['owner', 'registeredBy'])
+            ->latest()
+            ->paginate($this->pagination());
     }
 
     public function activeOrders(Client $client)
