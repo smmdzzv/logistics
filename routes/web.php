@@ -81,6 +81,7 @@ Route::get('/pending-payments/filtered', 'Till\Payments\PendingPaymentsControlle
 
 Route::get('/payments/all', 'Till\Payments\PaymentsController@all')->name('payments.all');
 Route::get('/payments/filtered', 'Till\Payments\PaymentsController@filtered');
+Route::get('/payment/create', 'Till\Payments\PaymentsController@create')->name('payment.create');
 
 Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
     ['except' => ['destroy']])->parameters(['incoming-payments' => 'payment']);

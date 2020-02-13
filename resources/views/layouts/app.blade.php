@@ -89,6 +89,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="tillMenuDropdown">
                                     <h6 class="dropdown-header">Провести платеж</h6>
+                                    <a class="dropdown-item" href="{{route('payment.create')}}">Провести платеж</a>
                                     <a class="dropdown-item" href="{{route('incoming-payments.create')}}">Приход</a>
                                     <a class="dropdown-item" href="{{route('outgoing-payments.create')}}">Расход</a>
                                     <div class="dropdown-divider"></div>

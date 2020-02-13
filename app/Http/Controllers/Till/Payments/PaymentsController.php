@@ -33,6 +33,10 @@ class PaymentsController extends BaseController
             ->paginate($this->pagination());
     }
 
+    public function create(){
+        return view('till.payments.create');
+    }
+
     public function show(Payment $payment){
         $payment->load(
             'cashier',
