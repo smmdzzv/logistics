@@ -46,6 +46,7 @@ class OrdersController extends Controller
             'storedItemInfos.owner',
             'storedItemInfos.billingInfo',
             'storedItemInfos.item',
+            'storedItemInfos.tariff',
             'storedItemInfos.storedItems',
             'orderRemovedItems.storedItemInfo.item',
             'orderRemovedItems.storedItemInfo.deletedBy',

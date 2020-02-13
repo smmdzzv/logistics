@@ -135,8 +135,12 @@
                         label: 'Тип',
                         sortable: true
                     },
-                    'customsCodes.code': {
+                    'customsCode.code': {
                         label: 'Код',
+                        sortable: true
+                    },
+                    'tariff.name': {
+                        label: 'Тариф',
                         sortable: true
                     },
                     count: {
