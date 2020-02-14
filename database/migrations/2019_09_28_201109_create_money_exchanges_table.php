@@ -15,8 +15,8 @@ class CreateMoneyExchangesTable extends Migration
     {
         Schema::create('money_exchanges', function (Blueprint $table) {
             $table->char('id',26)->primary();
-            $table->char('from',26);
-            $table->char('to',26);
+            $table->char('from',26)->index();
+            $table->char('to',26)->index();
             $table->decimal('coefficient', 10, 2);
             $table->timestamps();
         });

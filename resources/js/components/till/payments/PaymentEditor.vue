@@ -157,7 +157,9 @@
                 payment: {
                     status: 'pending',
                     payer: null,
+                    payerType: null,
                     payee: null,
+                    payeeType: null,
                     paymentItem: null,
                     billAmount: 0,
                     billCurrency: null,
@@ -183,16 +185,19 @@
             async submit() {
                 try {
                     let data = {
+                        id: this.payment.id,
+                        status: this.payment.status,
                         payer: this.payment.payer.id,
+                        payerType: this.payment.payerType = this.isPayerIndividual? 'user' : 'branch',
                         payee: this.payment.payee.id,
+                        payeeType: this.payment.payerType = this.isPayeeIndividual? 'user' : 'branch',
                         paymentItem: this.payment.paymentItem.id,
                         billAmount: this.payment.billAmount,
                         billCurrency: this.payment.billCurrency.id,
                         paidAmount: this.payment.paidAmount,
                         paidCurrency: this.payment.paidCurrency.id,
                         comment: this.payment.comment,
-                        status: this.payment.status,
-                        id: this.payment.id
+                        exchangeRate: this.payment.exchangeRate === null? null : this.payment.exchangeRate.id
                     };
 
                     const response = await axios.post('/payment', data);
