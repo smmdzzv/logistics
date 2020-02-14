@@ -3,13 +3,10 @@
 namespace App\Http\Requests\Till;
 
 use App\Models\Branch;
-use App\Models\Currency;
-use App\Models\Till\Account;
 use App\Models\Till\MoneyExchange;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Validator;
 
 class PaymentRequest extends FormRequest
 {
@@ -98,6 +95,18 @@ class PaymentRequest extends FormRequest
             else{
                 if($this->request->get('billAmount') !== $this->request->get('paidAmount'))
                     return $validator->errors()->add('paidAmount', 'Сумма к оплате не равняется требуемой сумме');
+            }
+
+            //Check payer account
+            if($this->request->get('payerType') === 'branch'){
+                $payerAccount = $payer->accounts()->where('currency_id', $this->request->get('paidCurrency'))->first();
+                if(!$payerAccount)
+                    return $validator->errors()->add('paidCurrency', 'Не найден счет плательщика в оплачиваемой валюте');
+
+                $diff = $payerAccount->balance - $this->request->get('paidAmount');
+
+                if($diff < 0)
+                    return $validator->errors()->add('payer', 'Недостаточно средств на счету пользователя - ' . $payerAccount->balance . ' '. $payerAccount->currency->isoName);
             }
         });
     }
