@@ -14,7 +14,7 @@
                     <!--                    </div>-->
                     <div class="col-md-12 form-group">
                         <label for="status">Статус</label>
-                        <b-form-select id="status" class="form-control">
+                        <b-form-select id="status" class="form-control" v-model="payment.status">
                             <option :value="null" disabled>-- Выберите статус операции --</option>
                             <option value="pending">ЗАЯВКА</option>
                             <option value="completed">ПРОВЕДЕННАЯ</option>
@@ -32,8 +32,8 @@
                             </b-form-checkbox>
                         </b-input-group-prepend>
                         <b-input-group-prepend is-text>Плательщик</b-input-group-prepend>
-                        <search-user-dropdown v-if="isPayerIndividual" style="width:50%" :selected="onPayerSelected"></search-user-dropdown>
-                        <b-form-select v-else>
+                        <search-user-dropdown v-if="isPayerIndividual" v-model="payment.payer" style="width:50%" :selected="onPayerSelected"></search-user-dropdown>
+                        <b-form-select v-else v-model="payment.payer">
                             <option :value="null" disabled>-- Выберите филиал --</option>
                             <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
                         </b-form-select>
@@ -48,8 +48,8 @@
                             </b-form-checkbox>
                         </b-input-group-prepend>
                         <b-input-group-prepend is-text>Получатель</b-input-group-prepend>
-                        <search-user-dropdown  v-if="isPayeeIndividual" style="width:51%" :selected="onPayeeSelected"></search-user-dropdown>
-                        <b-form-select v-else>
+                        <search-user-dropdown  v-if="isPayeeIndividual" v-model="payment.payee" style="width:51%" :selected="onPayeeSelected"></search-user-dropdown>
+                        <b-form-select v-else v-model="payment.payee" >
                             <option :value="null" disabled>-- Выберите филиал --</option>
                             <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
                         </b-form-select>
@@ -59,7 +59,7 @@
                 <div class="row">
                     <div class="col-md-4 form-group">
                         <label for="paymentItem">Статья</label>
-                        <b-form-select id="paymentItem" class="form-control">
+                        <b-form-select id="paymentItem" v-model="payment.paymentItem" class="form-control">
                             <option :value="null" disabled>-- Выберите статью --</option>
                             <option v-for="paymentItem in paymentItems" :value="paymentItem">{{paymentItem.title}}</option>
                         </b-form-select>
@@ -67,12 +67,12 @@
 
                     <div class="col-md-4 form-group">
                         <label for="billAmount">Сумма</label>
-                        <b-form-input id="amount" class="form-control" type="number"></b-form-input>
+                        <b-form-input id="billAmount" v-model="payment.billAmount" class="form-control" type="number"></b-form-input>
                     </div>
 
                     <div class="col-md-4 form-group">
                         <label for="billCurrency">Валюта</label>
-                        <b-form-select id="billCurrency">
+                        <b-form-select id="billCurrency" v-model="payment.billCurrency">
                             <option :value="null" disabled>-- Выберите валюту --</option>
                             <option v-for="currency in currencies" :value="currency">
                                 {{currency.name.charAt(0).toUpperCase() + currency.name.slice(1)}}
@@ -89,17 +89,17 @@
                 <div class="row">
                     <div class="col-md-4 form-group">
                         <label for="currentRate">Обменный курс</label>
-                        <b-form-input id="currentRate" class="form-control" type="number" disabled></b-form-input>
+                        <b-form-input id="currentRate" v-model="payment.exchangeRate" class="form-control" type="number" disabled></b-form-input>
                     </div>
 
                     <div class="col-md-4 form-group">
-                        <label for="amount">Сумма</label>
-                        <b-form-input id="amount" class="form-control" type="number" disabled></b-form-input>
+                        <label for="paidAmount">Сумма</label>
+                        <b-form-input id="paidAmount" v-model="payment.paidAmount" class="form-control" type="number" disabled></b-form-input>
                     </div>
 
                     <div class="col-md-4 form-group">
-                        <label for="billCurrency">Валюта оплаты</label>
-                        <b-form-select id="billCurrency">
+                        <label for="paidCurrency">Валюта оплаты</label>
+                        <b-form-select id="paidCurrency" v-model="payment.paidCurrency">
                             <option :value="null" disabled>-- Выберите валюту --</option>
                             <option v-for="currency in currencies" :value="currency">
                                 {{currency.name.charAt(0).toUpperCase() + currency.name.slice(1)}}
@@ -134,14 +134,25 @@
             return {
                 isPayerIndividual: false,
                 isPayeeIndividual: false,
+                payment:{
+                    status:'pending',
+                    payer:null,
+                    payee: null,
+                    paymentItem: null,
+                    billAmount: 0,
+                    billCurrency: null,
+                    exchangeRate:null,
+                    paidAmount: 0,
+                    paidCurrency: null
+                }
             }
         },
         methods:{
-            onPayerSelected(){
-
+            onPayerSelected(user){
+                this.payment.payer = user
             },
-            onPayeeSelected(){
-
+            onPayeeSelected(user){
+                this.payment.payee = user
             }
         },
         components: {
