@@ -25,7 +25,7 @@ class AccountsTableSeeder extends Seeder
             return new Account([
                 'balance' => 0,
                 'description' => "Cчет Дуоб {$currency->isoName} ({$currency->name})",
-                'currencyId' => $currency->id
+                'currency_id' => $currency->id
             ]);
         });
 
@@ -39,7 +39,7 @@ class AccountsTableSeeder extends Seeder
                 $accounts[] = new Account([
                     'balance' => 0,
                     'description' => "Cчет {$branch->name} {$currency->isoName} ({$currency->name})",
-                    'currencyId' => $currency->id
+                    'currency_id' => $currency->id
                 ]);
             }
 
@@ -51,7 +51,7 @@ class AccountsTableSeeder extends Seeder
 
         foreach ($users as $user){
             $account = new Account();
-            $account->currencyId = $usdId;
+            $account->currency_id = $usdId;
             $account->balance = 0;
             $account->description = 'Долларовый счет пользователя '.$user->name;
 
