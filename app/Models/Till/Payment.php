@@ -75,29 +75,29 @@ class Payment extends BaseModel
 //    }
 
     public function paymentItem(){
-        return $this->belongsTo(PaymentItem::class, 'paymentItemId');
+        return $this->belongsTo(PaymentItem::class);
     }
 
     public function branch(){
-        return $this->belongsTo(Branch::class, 'branchId');
+        return $this->belongsTo(Branch::class);
     }
 
-    /**
-     * Used for money transfer only, when accountFrom is null
-     * @return BelongsTo
-     */
-    public function accountFrom()
-    {
-        return $this->belongsTo(Account::class, 'accountFromId');
-    }
-
-    public function accountTo()
-    {
-        return $this->belongsTo(Account::class, 'accountToId');
-    }
+//    /**
+//     * Used for money transfer only, when accountFrom is null
+//     * @return BelongsTo
+//     */
+//    public function accountFrom()
+//    {
+//        return $this->belongsTo(Account::class, 'accountFromId');
+//    }
+//
+//    public function accountTo()
+//    {
+//        return $this->belongsTo(Account::class, 'accountToId');
+//    }
 
     public function exchangeRate(){
-        return $this->belongsTo(MoneyExchange::class, 'exchangeId');
+        return $this->belongsTo(MoneyExchange::class);
     }
 
     public function orderPayments(){
