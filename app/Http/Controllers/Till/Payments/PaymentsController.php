@@ -34,7 +34,10 @@ class PaymentsController extends BaseController
     }
 
     public function create(){
-        return view('till.payments.create');
+        $branches = $this->getBranches();
+        $currencies = Currency::all();
+        $paymentItems = PaymentItem::all();
+        return view('till.payments.create', compact('branches', 'currencies', 'paymentItems'));
     }
 
     public function show(Payment $payment){

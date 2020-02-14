@@ -16,6 +16,8 @@
                         <label for="status">Статус</label>
                         <b-form-select id="status" class="form-control">
                             <option :value="null" disabled>-- Выберите статус операции --</option>
+                            <option value="pending">ЗАЯВКА</option>
+                            <option value="completed">ПРОВЕДЕННАЯ</option>
                         </b-form-select>
                     </div>
                 </div>
@@ -24,28 +26,32 @@
                     <!-- PAYER -->
                     <b-input-group class="col-md-6">
                         <b-input-group-prepend is-text>
-                            <b-form-checkbox v-b-popover.hover.top="'Физ. лицо'" switch class="mr-n2" v-model="isPayerIndividual">
+                            <b-form-checkbox v-b-popover.hover.top="'Физ. лицо'" switch class="mr-n2"
+                                             v-model="isPayerIndividual">
                                 <span class="sr-only">Switch for following text input</span>
                             </b-form-checkbox>
                         </b-input-group-prepend>
                         <b-input-group-prepend is-text>Плательщик</b-input-group-prepend>
-                        <b-form-input placeholder="Введите код пользователя" v-if="isPayerIndividual"></b-form-input>
+                        <search-user-dropdown v-if="isPayerIndividual" style="width:50%" :selected="onPayerSelected"></search-user-dropdown>
                         <b-form-select v-else>
                             <option :value="null" disabled>-- Выберите филиал --</option>
+                            <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
                         </b-form-select>
                     </b-input-group>
 
                     <!-- PAYEE -->
                     <b-input-group class="col-md-6">
                         <b-input-group-prepend is-text>
-                            <b-form-checkbox switch v-b-popover.hover.top="'Физ. лицо'" class="mr-n2" v-model="isPayeeIndividual">
+                            <b-form-checkbox switch v-b-popover.hover.top="'Физ. лицо'" class="mr-n2"
+                                             v-model="isPayeeIndividual">
                                 <span class="sr-only">Switch for following text input</span>
                             </b-form-checkbox>
                         </b-input-group-prepend>
                         <b-input-group-prepend is-text>Получатель</b-input-group-prepend>
-                        <b-form-input placeholder="Введите код пользователя" v-if="isPayeeIndividual"></b-form-input>
+                        <search-user-dropdown  v-if="isPayeeIndividual" style="width:51%" :selected="onPayeeSelected"></search-user-dropdown>
                         <b-form-select v-else>
                             <option :value="null" disabled>-- Выберите филиал --</option>
+                            <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
                         </b-form-select>
                     </b-input-group>
                 </div>
@@ -55,6 +61,7 @@
                         <label for="paymentItem">Статья</label>
                         <b-form-select id="paymentItem" class="form-control">
                             <option :value="null" disabled>-- Выберите статью --</option>
+                            <option v-for="paymentItem in paymentItems" :value="paymentItem">{{paymentItem.title}}</option>
                         </b-form-select>
                     </div>
 
@@ -67,6 +74,10 @@
                         <label for="billCurrency">Валюта</label>
                         <b-form-select id="billCurrency">
                             <option :value="null" disabled>-- Выберите валюту --</option>
+                            <option v-for="currency in currencies" :value="currency">
+                                {{currency.name.charAt(0).toUpperCase() + currency.name.slice(1)}}
+                                {{currency.isoName}}
+                            </option>
                         </b-form-select>
                     </div>
                 </div>
@@ -90,6 +101,10 @@
                         <label for="billCurrency">Валюта оплаты</label>
                         <b-form-select id="billCurrency">
                             <option :value="null" disabled>-- Выберите валюту --</option>
+                            <option v-for="currency in currencies" :value="currency">
+                                {{currency.name.charAt(0).toUpperCase() + currency.name.slice(1)}}
+                                {{currency.isoName}}
+                            </option>
                         </b-form-select>
                     </div>
                 </div>
@@ -101,11 +116,36 @@
 <script>
     export default {
         name: "PaymentEditor",
+        props: {
+            branches: {
+                type: Array,
+                required: true
+            },
+            currencies: {
+                type: Array,
+                required: true
+            },
+            paymentItems:{
+                type: Array,
+                required: true
+            }
+        },
         data() {
             return {
                 isPayerIndividual: false,
                 isPayeeIndividual: false,
             }
+        },
+        methods:{
+            onPayerSelected(){
+
+            },
+            onPayeeSelected(){
+
+            }
+        },
+        components: {
+            'SearchUserDropdown': require('../../users/SearchUserDropdown.vue').default
         }
     }
 </script>
