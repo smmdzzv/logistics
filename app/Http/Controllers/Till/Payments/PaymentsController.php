@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Till\Payments;
 
 use App\Data\Filters\PaymentFilter;
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\Till\PaymentRequest;
 use App\Models\Branch;
 use App\Models\Currency;
 use App\Models\Till\Payment;
@@ -33,14 +34,21 @@ class PaymentsController extends BaseController
             ->paginate($this->pagination());
     }
 
-    public function create(){
+    public function create()
+    {
         $branches = $this->getBranches();
         $currencies = Currency::all();
         $paymentItems = PaymentItem::all();
         return view('till.payments.create', compact('branches', 'currencies', 'paymentItems'));
     }
 
-    public function show(Payment $payment){
+    public function store(PaymentRequest $request){
+        dd($request);
+        return;
+    }
+
+    public function show(Payment $payment)
+    {
         $payment->load(
             'cashier',
             'preparedBy',

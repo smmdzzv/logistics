@@ -32,7 +32,8 @@
                             </b-form-checkbox>
                         </b-input-group-prepend>
                         <b-input-group-prepend is-text>Плательщик</b-input-group-prepend>
-                        <search-user-dropdown v-if="isPayerIndividual" v-model="payment.payer" style="width:50%" :selected="onPayerSelected"></search-user-dropdown>
+                        <search-user-dropdown v-if="isPayerIndividual" v-model="payment.payer" style="width:50%"
+                                              :selected="onPayerSelected"></search-user-dropdown>
                         <b-form-select v-else v-model="payment.payer">
                             <option :value="null" disabled>-- Выберите филиал --</option>
                             <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
@@ -48,8 +49,9 @@
                             </b-form-checkbox>
                         </b-input-group-prepend>
                         <b-input-group-prepend is-text>Получатель</b-input-group-prepend>
-                        <search-user-dropdown  v-if="isPayeeIndividual" v-model="payment.payee" style="width:51%" :selected="onPayeeSelected"></search-user-dropdown>
-                        <b-form-select v-else v-model="payment.payee" >
+                        <search-user-dropdown v-if="isPayeeIndividual" v-model="payment.payee" style="width:51%"
+                                              :selected="onPayeeSelected"></search-user-dropdown>
+                        <b-form-select v-else v-model="payment.payee">
                             <option :value="null" disabled>-- Выберите филиал --</option>
                             <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
                         </b-form-select>
@@ -61,13 +63,15 @@
                         <label for="paymentItem">Статья</label>
                         <b-form-select id="paymentItem" v-model="payment.paymentItem" class="form-control">
                             <option :value="null" disabled>-- Выберите статью --</option>
-                            <option v-for="paymentItem in paymentItems" :value="paymentItem">{{paymentItem.title}}</option>
+                            <option v-for="paymentItem in paymentItems" :value="paymentItem">{{paymentItem.title}}
+                            </option>
                         </b-form-select>
                     </div>
 
                     <div class="col-md-4 form-group">
                         <label for="billAmount">Сумма</label>
-                        <b-form-input id="billAmount" v-model="payment.billAmount" class="form-control" type="number"></b-form-input>
+                        <b-form-input id="billAmount" v-model="payment.billAmount" class="form-control"
+                                      type="number"></b-form-input>
                     </div>
 
                     <div class="col-md-4 form-group">
@@ -89,12 +93,14 @@
                 <div class="row">
                     <div class="col-md-4 form-group">
                         <label for="currentRate">Обменный курс</label>
-                        <b-form-input id="currentRate" v-model="payment.exchangeRate" class="form-control" type="number" disabled></b-form-input>
+                        <b-form-input id="currentRate" v-model="payment.exchangeRate" class="form-control" type="number"
+                                      disabled></b-form-input>
                     </div>
 
                     <div class="col-md-4 form-group">
                         <label for="paidAmount">Сумма</label>
-                        <b-form-input id="paidAmount" v-model="payment.paidAmount" class="form-control" type="number" disabled></b-form-input>
+                        <b-form-input id="paidAmount" v-model="payment.paidAmount" class="form-control" type="number"
+                                      disabled></b-form-input>
                     </div>
 
                     <div class="col-md-4 form-group">
@@ -107,6 +113,20 @@
                             </option>
                         </b-form-select>
                     </div>
+                </div>
+
+                <div>
+                    <b-form-textarea
+                        id="comment"
+                        v-model="payment.comment"
+                        placeholder="Введите комментарий"
+                        rows="3"
+                        max-rows="6"
+                    ></b-form-textarea>
+                </div>
+
+                <div class="row my-4">
+                    <button class="btn btn-primary mx-auto" @click="submit">Сохранить</button>
                 </div>
             </div>
         </div>
@@ -125,7 +145,7 @@
                 type: Array,
                 required: true
             },
-            paymentItems:{
+            paymentItems: {
                 type: Array,
                 required: true
             }
@@ -134,25 +154,51 @@
             return {
                 isPayerIndividual: false,
                 isPayeeIndividual: false,
-                payment:{
-                    status:'pending',
-                    payer:null,
+                payment: {
+                    status: 'pending',
+                    payer: null,
                     payee: null,
                     paymentItem: null,
                     billAmount: 0,
                     billCurrency: null,
-                    exchangeRate:null,
+                    exchangeRate: null,
                     paidAmount: 0,
-                    paidCurrency: null
+                    paidCurrency: null,
+                    comment: null
                 }
             }
         },
-        methods:{
-            onPayerSelected(user){
+        watch:{
+            'payment.billAmount'(){
+                this.payment.paidAmount = this.payment.billAmount;
+            }
+        },
+        methods: {
+            onPayerSelected(user) {
                 this.payment.payer = user
             },
-            onPayeeSelected(user){
+            onPayeeSelected(user) {
                 this.payment.payee = user
+            },
+            async submit() {
+                try {
+                    let data = {
+                        payer: this.payment.payer.id,
+                        payee: this.payment.payee.id,
+                        paymentItem: this.payment.paymentItem.id,
+                        billAmount: this.payment.billAmount,
+                        billCurrency: this.payment.billCurrency.id,
+                        paidAmount: this.payment.paidAmount,
+                        paidCurrency: this.payment.paidCurrency.id,
+                        comment: this.payment.comment,
+                        status: this.payment.status,
+                        id: this.payment.id
+                    };
+
+                    const response = await axios.post('/payment', data);
+                } catch (e) {
+                    console.log(e);
+                }
             }
         },
         components: {
