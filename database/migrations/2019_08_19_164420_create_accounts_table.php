@@ -17,7 +17,7 @@ class CreateAccountsTable extends Migration
             $table->char('id', 26)->primary();
             $table->char('owner_id', 26)->index();
             $table->string('owner_type');
-            $table->char('currencyId',26);
+            $table->char('currency_id',26);
             $table->decimal('balance', 10, 2);
             $table->string('description', 255);
             $table->timestamps();

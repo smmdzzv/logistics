@@ -36,16 +36,16 @@ class Account extends BaseModel
     }
 
     public function currency(){
-        return $this->belongsTo(Currency::class, 'currencyId');
+        return $this->belongsTo(Currency::class, 'currency_id');
     }
-
-    public function paymentsIn(){
-        return $this->hasMany(Payment::class, 'accountToId');
-    }
-
-    public function paymentsOut(){
-        return $this->hasMany(Payment::class, 'accountFromId');
-    }
+//
+//    public function paymentsIn(){
+//        return $this->hasMany(Payment::class, 'accountToId');
+//    }
+//
+//    public function paymentsOut(){
+//        return $this->hasMany(Payment::class, 'accountFromId');
+//    }
 
     public function scopeDollarAccount($query){
         return $query->whereHas('currency', function (Builder $query) {
