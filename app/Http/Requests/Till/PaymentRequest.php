@@ -84,7 +84,7 @@ class PaymentRequest extends FormRequest
 
             if($this->request->get('billCurrency') !== $this->request->get('paidCurrency')){
                 if(!$exchangeRate)
-                    return $validator->errors()->add('paidAmount', 'Валюта оплаты не соотсветсвует валюте платежа. Необходима конвертация');
+                    return $validator->errors()->add('exchangeRate', 'Валюта оплаты не соотсветсвует валюте платежа. Необходима конвертация');
 
                 $amount = round($this->request->get('billAmount') * $exchangeRate->coefficient,2);
 
