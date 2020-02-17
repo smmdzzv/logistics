@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Till\Payments;
 
 use App\Data\Filters\PaymentFilter;
+use App\Data\RequestWriters\Payments\PaymentRequestWriter;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Till\PaymentRequest;
 use App\Models\Branch;
@@ -38,13 +39,14 @@ class PaymentsController extends BaseController
     {
         $branches = $this->getBranches();
         $currencies = Currency::all();
-        $paymentItems = PaymentItem::all();
+        $paymentItems = PaymentItem::public()->get();
         return view('till.payments.create', compact('branches', 'currencies', 'paymentItems'));
     }
 
     public function store(PaymentRequest $request){
-        dd($request);
-        return;
+        $writer = new PaymentRequestWriter($request);
+        $payment = $writer->write();
+        return $payment->id;
     }
 
     public function show(Payment $payment)

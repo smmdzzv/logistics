@@ -46,6 +46,8 @@ class PaymentRequestWriter extends RequestWriter
 
         if ($this->payment->status === 'completed')
             $this->updateAccountsBalance();
+
+        return $this->payment;
     }
 
     private function getPaymentSubjects()

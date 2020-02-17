@@ -11,4 +11,12 @@ use Illuminate\Database\Eloquent\Model;
 class PaymentItem extends BaseModel
 {
     protected $guarded = [];
+
+    public function scopePublic($query){
+        return $query->where('title', '!=', 'Списание с баланса');
+    }
+
+    public function scopeBalanceOperations($query){
+        return $query->where('title', 'Списание с баланса')->orWhere('title', 'Пополнение баланса');
+    }
 }

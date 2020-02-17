@@ -34,7 +34,7 @@ class PaymentItemsController extends Controller
     public function all()
     {
         $paginate = request()->paginate ?? 10;
-        return PaymentItem::where('title', '!=', 'Списание с баланса')->paginate($paginate);
+        return PaymentItem::public()->paginate($paginate);
     }
 
     public function filteredByType($type){
