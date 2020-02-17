@@ -20,6 +20,8 @@
                class="form-control"
                id="userInfoDummy"
                v-model:property="selectedUserDisplayInfo">
+        <span class="invalid-feedback" role="alert" v-if="errorMessages">
+            <strong v-for="message in errorMessages">{{message}}</strong></span>
         <div :class="{show: showOptions && users.length > 0 && userInfo.length > 0}"
              class="dropdown-menu"
              id="usersDropdown">
@@ -58,14 +60,17 @@
                 type: Object,
                 required: false
             },
-            url:{
-                type:String,
-                required:false,
-                default:"/search/user/"
+            url: {
+                type: String,
+                required: false,
+                default: "/search/user/"
+            },
+            errorMessages:{
+                type: Array
             }
         },
-        created(){
-            if(this.preselectedUser){
+        created() {
+            if (this.preselectedUser) {
                 this.selectActive(this.preselectedUser);
             }
         },
@@ -85,9 +90,8 @@
                 this.selectActive(this.preselectedUser);
             },
             userInfo() {
-                if(this.selectedUser
-                    && this.userInfo !== this.selectedUser.code)
-                {
+                if (this.selectedUser
+                    && this.userInfo !== this.selectedUser.code) {
                     this.selectedUser = null;
                     this.selectedUserDisplayInfo = '';
                     this.selected(this.selectedUser);

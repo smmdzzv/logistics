@@ -41,6 +41,7 @@
                         <search-user-dropdown v-if="isPayerIndividual"
                                               v-model="payment.payer"
                                               :isInvalid="errors.payer"
+                                              :errorMessages="errors.payer"
                                               style="width:50%"
                                               :selected="onPayerSelected"></search-user-dropdown>
                         <b-form-select v-else v-model="payment.payer" :class="{'is-invalid':errors.payer}">
@@ -64,6 +65,7 @@
                         <search-user-dropdown v-if="isPayeeIndividual"
                                               v-model="payment.payee"
                                               :isInvalid="errors.payee"
+                                              :errorMessages="errors.payee"
                                               :class="{'is-invalid':errors.payee}"
                                               style="width:51%"
                                               :selected="onPayeeSelected"></search-user-dropdown>
