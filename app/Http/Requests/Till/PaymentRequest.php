@@ -77,8 +77,8 @@ class PaymentRequest extends FormRequest
                 if(!($payer instanceof User))
                     return $validator->errors()->add('payer', 'При пополнении баланса плательщиком должен являться клиент');
 
-                if($payee instanceof User)
-                    return $validator->errors()->add('payee', 'При пополнении баланса получателем должен являться филиал');
+//                if($payee instanceof User)
+//                    return $validator->errors()->add('payee', 'При пополнении баланса получателем должен являться филиал');
 
                 if(Currency::find($this->request->get('billCurrency'))->isoName !== 'USD')
                     return $validator->errors()->add('billCurrency', 'При пополнении баланса счет должен выставляться в долларах');
