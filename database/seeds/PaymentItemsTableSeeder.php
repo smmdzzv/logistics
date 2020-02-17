@@ -67,5 +67,13 @@ class PaymentItemsTableSeeder extends Seeder
 //                'type' => 'out'
             ]
         );
+
+        PaymentItem::create(
+            [
+                'title' => 'Перевод',
+                'description' => 'Перевод денег между счетами',
+//                'type' => 'out'
+            ]
+        );
     }
 }
