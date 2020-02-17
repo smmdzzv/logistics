@@ -88,10 +88,10 @@
                     description: {
                         label: 'Описание'
                     },
-                    type: {
-                        label: 'Тип',
-                        sortable: true
-                    },
+                    // type: {
+                    //     label: 'Тип',
+                    //     sortable: true
+                    // },
                     'edit': {
                         label: ''
                     },

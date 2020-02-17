@@ -46,28 +46,28 @@
                             </div>
 
 
-                            <div class="form-group row">
-                                <label for="type" class="col-md-4 col-form-label text-md-right">Тип</label>
+{{--                            <div class="form-group row">--}}
+{{--                                <label for="type" class="col-md-4 col-form-label text-md-right">Тип</label>--}}
 
-                                <div class="col-md-6">
-                                    <select id="type"
-                                            type="text"
-                                            class="form-control custom-select @error('type') is-invalid @enderror"
-                                            name="type"
-                                            value="{{ old('type') }}"
-                                            autocomplete="type" required>
-                                        <option disabled>--Выберите тип--</option>
-                                        <option value="in">Доход</option>
-                                        <option value="out">Расход</option>
-                                    </select>
+{{--                                <div class="col-md-6">--}}
+{{--                                    <select id="type"--}}
+{{--                                            type="text"--}}
+{{--                                            class="form-control custom-select @error('type') is-invalid @enderror"--}}
+{{--                                            name="type"--}}
+{{--                                            value="{{ old('type') }}"--}}
+{{--                                            autocomplete="type" required>--}}
+{{--                                        <option disabled>--Выберите тип--</option>--}}
+{{--                                        <option value="in">Доход</option>--}}
+{{--                                        <option value="out">Расход</option>--}}
+{{--                                    </select>--}}
 
-                                    @error('type')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
-                            </div>
+{{--                                    @error('type')--}}
+{{--                                    <span class="invalid-feedback" role="alert">--}}
+{{--                                        <strong>{{ $message }}</strong>--}}
+{{--                                    </span>--}}
+{{--                                    @enderror--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">

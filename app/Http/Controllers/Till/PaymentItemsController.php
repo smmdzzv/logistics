@@ -20,10 +20,10 @@ class PaymentItemsController extends Controller
     {
         return [
             'description' => 'nullable|string|max:500',
-            'type' => [
-                'required',
-                Rule::in(['in', 'out'])
-            ],
+//            'type' => [
+//                'required',
+//                Rule::in(['in', 'out'])
+//            ],
             'title' => [
                 'required',
                 Rule::unique('payment_items')->ignore(request()->get('id'))
@@ -34,7 +34,7 @@ class PaymentItemsController extends Controller
     public function all()
     {
         $paginate = request()->paginate ?? 10;
-        return PaymentItem::paginate($paginate);
+        return PaymentItem::where('title', '!=', 'Списание с баланса')->paginate($paginate);
     }
 
     public function filteredByType($type){
