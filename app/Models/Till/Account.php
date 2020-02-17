@@ -48,8 +48,12 @@ class Account extends BaseModel
 //    }
 
     public function scopeDollarAccount($query){
+        return $query->dollarAccounts()->first();
+    }
+
+    public function scopeDollarAccounts($query){
         return $query->whereHas('currency', function (Builder $query) {
             $query->where('isoName', 'USD');
-        })->first();
+        });
     }
 }
