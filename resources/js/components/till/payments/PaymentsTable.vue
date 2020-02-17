@@ -106,13 +106,21 @@
             </div>
         </template>
 
-        <template slot="client.name" slot-scope="{item}">
-            <a :href="'/profile/' + item.payer.id" v-if="item.payer">
-                {{item.payer.name}}
-            </a>
-            <a :href="'/profile/' + item.recipient.id" v-if="item.recipient">
-                {{item.recipient.name}}
-            </a>
+        <!--        <template slot="client.name" slot-scope="{item}">-->
+        <!--            <a :href="'/profile/' + item.payer.id" v-if="item.payer">-->
+        <!--                {{item.payer.name}}-->
+        <!--            </a>-->
+        <!--            <a :href="'/profile/' + item.recipient.id" v-if="item.recipient">-->
+        <!--                {{item.recipient.name}}-->
+        <!--            </a>-->
+        <!--        </template>-->
+
+        <template slot="billAmount" slot-scope="{item}">
+            <span>{{item.billAmount}} {{item.billCurrency.isoName}}</span>
+        </template>
+
+        <template slot="paidAmount" slot-scope="{item}">
+            <span>{{item.paidAmount}} {{item.paidCurrency.isoName}}</span>
         </template>
 
         <template slot="show" slot-scope="{item}">
@@ -177,7 +185,7 @@
                 },
                 items: [],
                 isBusy: false,
-                customCells: ['show', 'client.name'],
+                customCells: ['show', 'billAmount', 'paidAmount'],
                 selectedBranch: null,
                 selectedType: null,
                 selectedPaymentItem: null,
@@ -193,26 +201,27 @@
                         label: 'Дата',
                         sortable: true
                     },
-                    'accountTo.description': {
-                        label: 'Cчет зачисления',
+                    'payer.name': {
+                        label: 'Плательщик',
                         sortable: true
                     },
-                    'client.name': {
-                        label: 'Плательщик/Получатель',
-                        sortable: true
-                    },
-                    amount: {
-                        label: 'Сумма',
-                        sortable: true
-                    },
-                    'currency.isoName': {
-                        label: 'Валюта',
+                    'payee.name': {
+                        label: 'Получатель',
                         sortable: true
                     },
                     'paymentItem.title': {
                         label: 'Статья',
                         sortable: true
                     },
+                    billAmount: {
+                        label: 'Выставленная Сумма',
+                        sortable: true
+                    },
+                    paidAmount: {
+                        label: 'Оплачено',
+                        sortable: true
+                    },
+
                     comment: {
                         label: "Комментарий"
                     },
@@ -220,8 +229,8 @@
                         label: 'Кассир',
                         sortable: true
                     },
-                    'show':{
-                        label:''
+                    'show': {
+                        label: ''
                     }
                 },
             }
@@ -260,7 +269,7 @@
                 this.selectedCashier = cashier;
                 this.getItems();
             },
-            getDetailsUrl(item){
+            getDetailsUrl(item) {
                 return '/payments/' + item.id;
             },
             getItems(page = 1) {
