@@ -67,6 +67,9 @@ class PaymentRequest extends FormRequest
             if(!$payee)
                 return $validator->errors()->add('payee', 'Указанный получатель не найден');
 
+            if($payer instanceof User && $payee instanceof User)
+                return $validator->errors()->add('payer', 'Перевод денег между клиентами запрещен');
+
             $exchangeRate = null;
 
             if($this->request->get('exchangeRate')){
