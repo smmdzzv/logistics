@@ -5,7 +5,8 @@ namespace App\Data\RequestWriters\Payments;
 use App\Data\RequestWriters\RequestWriter;
 use App\Http\Requests\Till\PaymentRequest;
 use App\Models\Branch;
-use App\Models\Currency; 
+use App\Models\Currency;
+use App\Models\Till\Account;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
 use App\User;
@@ -13,13 +14,20 @@ use App\User;
 
 class PaymentRequestWriter extends RequestWriter
 {
+    /**
+     * @var User or Branch $id
+     */
     private $payer;
+
+    /**
+     * @var User or Branch $id
+     */
     private $payee;
 
-    private $payerAccount;
-    private $payeeAccount;
+    private ?Account $payerAccount;
+    private ?Account $payeeAccount;
 
-    private $payment;
+    private Payment $payment;
 
     /**
      * PaymentRequestWriter constructor.
@@ -35,6 +43,9 @@ class PaymentRequestWriter extends RequestWriter
         $this->getPaymentSubjects();
 
         $this->createPayment();
+
+        if ($this->payment->status === 'completed')
+            $this->updateAccountsBalance();
     }
 
     private function getPaymentSubjects()
@@ -50,8 +61,6 @@ class PaymentRequestWriter extends RequestWriter
             && PaymentItem::where('id', $this->request->get('paymentItem'))->where('title', 'Пополнение баланса')->first()
             && Currency::find($this->request->get('billCurrency'))->isoName === 'USD')
             $this->payerAccount = $this->payer->accounts()->dollarAccount();
-
-        dd($this->payerAccount, $this->payeeAccount);
     }
 
     private function getSubject($type, $id)
@@ -113,7 +122,18 @@ class PaymentRequestWriter extends RequestWriter
 
     private function updateAccountsBalance()
     {
-//        $this->payerAccount->balance -=
+        if ($this->payerAccount) {
+            if ($this->payment->paymentItem->title === "Пополнение баланса")
+                $this->payerAccount->balance += $this->payment->paidAmount;
+            else
+                $this->payerAccount->balance -= $this->payment->paidAmount;
+            $this->payerAccount->save();
+        }
+
+        if ($this->payeeAccount) {
+            $this->payeeAccount->balance += $this->payment->paidAmount;
+            $this->payeeAccount->save();
+        }
     }
 
 
