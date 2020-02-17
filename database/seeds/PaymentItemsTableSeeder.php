@@ -16,7 +16,7 @@ class PaymentItemsTableSeeder extends Seeder
             [
                 'title' => 'Списание с баланса',
                 'description' => 'Списание денег с баланса клиента в счет оплаты заказы',
-                'type' => 'internal'
+//                'type' => 'internal'
             ]
         );
 
@@ -32,7 +32,7 @@ class PaymentItemsTableSeeder extends Seeder
             [
                 'title' => 'Пополнение баланса',
                 'description' => 'Пополнение долларового счета пользователя',
-                'type' => 'in'
+//                'type' => 'in'
             ]
         );
 
@@ -40,7 +40,7 @@ class PaymentItemsTableSeeder extends Seeder
             [
                 'title' => 'Аванс',
                 'description' => 'Выплата аванса с заработной платы',
-                'type' => 'out'
+//                'type' => 'out'
             ]
         );
 
@@ -48,7 +48,7 @@ class PaymentItemsTableSeeder extends Seeder
             [
                 'title' => 'Зарплата',
                 'description' => 'Выплата заработной платы',
-                'type' => 'out'
+//                'type' => 'out'
             ]
         );
 
@@ -56,7 +56,7 @@ class PaymentItemsTableSeeder extends Seeder
             [
                 'title' => 'Прием наличных',
                 'description' => 'Прием наличных на счет Дуоб',
-                'type' => 'in'
+//                'type' => 'in'
             ]
         );
 
@@ -64,7 +64,7 @@ class PaymentItemsTableSeeder extends Seeder
             [
                 'title' => 'Выдача наличных',
                 'description' => 'Выдача наличных со счета Дуоб',
-                'type' => 'out'
+//                'type' => 'out'
             ]
         );
     }
