@@ -39,35 +39,35 @@ class Payment extends BaseModel
 
     public function cashier()
     {
-        return $this->belongsTo(User::class, 'cashierId');
+        return $this->belongsTo(User::class);
     }
 
     public function preparedBy()
     {
-        return $this->belongsTo(User::class, 'preparedById');
+        return $this->belongsTo(User::class);
     }
 
-    /**
-     * Used for balance replenishment only, when accountFrom is null
-     * @return BelongsTo
-     */
-    public function payer()
-    {
-        return $this->belongsTo(User::class, 'payerId');
-    }
+//    /**
+//     * Used for balance replenishment only, when accountFrom is null
+//     * @return BelongsTo
+//     */
+//    public function payer()
+//    {
+//        return $this->belongsTo(User::class, 'payer_id');
+//    }
 
-    /**
-     * Used for outgoing payments
-     * @return BelongsTo
-     */
-    public function recipient()
-    {
-        return $this->belongsTo(User::class, 'recipient_id');
-    }
+//    /**
+//     * Used for outgoing payments
+//     * @return BelongsTo
+//     */
+//    public function recipient()
+//    {
+//        return $this->belongsTo(User::class, 'recipient_id');
+//    }
 
     public function currency()
     {
-        return $this->belongsTo(Currency::class, 'currencyId');
+        return $this->belongsTo(Currency::class);
     }
 
 //    public function order(){
