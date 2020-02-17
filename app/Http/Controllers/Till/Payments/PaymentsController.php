@@ -30,7 +30,17 @@ class PaymentsController extends BaseController
 
     public function all()
     {
-        return Payment::with('accountTo', 'cashier', 'payer', 'currency', 'paymentItem', 'recipient')
+        return Payment::with('branch',
+            'preparedBy',
+            'cashier',
+            'payer',
+            'payee',
+            'payerAccount',
+            'payeeAccount',
+            'paymentItem',
+            'billCurrency',
+            'paidCurrency',
+            'exchangeRate')
             ->latest()
             ->paginate($this->pagination());
     }
@@ -43,7 +53,8 @@ class PaymentsController extends BaseController
         return view('till.payments.create', compact('branches', 'currencies', 'paymentItems'));
     }
 
-    public function store(PaymentRequest $request){
+    public function store(PaymentRequest $request)
+    {
         $writer = new PaymentRequestWriter($request);
         $payment = $writer->write();
         return $payment->id;
@@ -68,7 +79,31 @@ class PaymentsController extends BaseController
 
     public function filtered()
     {
-        $query = Payment::with('accountTo', 'cashier', 'payer', 'currency', 'paymentItem', 'recipient')
+
+//        Payment::with('branch',
+//            'preparedBy',
+//            'cashier',
+//            'payer',
+//            'payee',
+//            'payerAccount',
+//            'payeeAccount',
+//            'paymentItem',
+//            'billCurrency',
+//            'paidCurrency',
+//            'exchangeRate')
+
+        $query = Payment::with(
+            'branch',
+            'preparedBy',
+            'cashier',
+            'payer',
+            'payee',
+            'payerAccount',
+            'payeeAccount',
+            'paymentItem',
+            'billCurrency',
+            'paidCurrency',
+            'exchangeRate')
             ->where('status', 'completed')
             ->latest();
 

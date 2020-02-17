@@ -44,6 +44,16 @@ class Payment extends BaseModel
 
     protected $guarded = [];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        Relation::morphMap([
+            'user' => 'App\User',
+            'branch' => 'App\Models\Branch'
+        ]);
+    }
+
     public function branch()
     {
         return $this->belongsTo(Branch::class);
@@ -61,12 +71,12 @@ class Payment extends BaseModel
 
     public function payer()
     {
-        return $this->getSubject($this->payerType);
+        return $this->morphTo();
     }
 
     public function payee()
     {
-        return $this->getSubject($this->payeeType);
+        return $this->morphTo();
     }
 
     private function getSubject($type)
