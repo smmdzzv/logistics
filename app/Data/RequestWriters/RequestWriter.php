@@ -9,6 +9,8 @@ use stdClass;
 
 abstract class RequestWriter
 {
+    protected $request;
+
     /**
      * Holds input data
      *
@@ -30,11 +32,12 @@ abstract class RequestWriter
      */
     protected $saved;
 
-    public function __construct($input)
+    public function __construct($input, $request = null)
     {
         $this->input = $input;
         $this->saved = new stdClass();
         $this->data = new stdClass();
+        $this->request = $request;
     }
 
     /**
