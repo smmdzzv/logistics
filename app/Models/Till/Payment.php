@@ -15,16 +15,22 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @property string branchId
- * @property string cashierId
- * @property string currencyId
- * @property string payerId
- * @property string paymentItemId
- * @property string accountToId
- * @property string exchangeId
- * @property double amount
- * @property Account accountTo
- * @property Account accountFrom
+ * @property string branch_id
+ * @property string cashier_id
+ * @property string prepared_by_id
+ * @property string status
+ * @property string payer_id
+ * @property string payer_account_id
+ * @property string payerType
+ * @property string payee_id
+ * @property string payee_account_id
+ * @property string payeeType
+ * @property string payment_item_id
+ * @property double billAmount
+ * @property double paidAmount
+ * @property string bill_currency_id
+ * @property string paid_currency_id
+ * @property string exchange_rate_id
  * @property string comment
  */
 class Payment extends BaseModel
@@ -32,10 +38,16 @@ class Payment extends BaseModel
     use SoftDeletes;
 
     protected $casts = [
-        'amount' => 'double'
+        'billAmount' => 'double',
+        'paidAmount' => 'double'
     ];
 
     protected $guarded = [];
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
 
     public function cashier()
     {
@@ -47,68 +59,69 @@ class Payment extends BaseModel
         return $this->belongsTo(User::class);
     }
 
-//    /**
-//     * Used for balance replenishment only, when accountFrom is null
-//     * @return BelongsTo
-//     */
-//    public function payer()
-//    {
-//        return $this->belongsTo(User::class, 'payer_id');
-//    }
+    public function payer()
+    {
+        return $this->getSubject($this->payerType);
+    }
 
-//    /**
-//     * Used for outgoing payments
-//     * @return BelongsTo
-//     */
-//    public function recipient()
-//    {
-//        return $this->belongsTo(User::class, 'recipient_id');
-//    }
+    public function payee()
+    {
+        return $this->getSubject($this->payeeType);
+    }
 
-    public function currency()
+    private function getSubject($type)
+    {
+        switch ($type) {
+            case 'user':
+                return $this->belongsTo(User::class);
+            case 'branch':
+                return $this->belongsTo(Branch::class);
+        }
+    }
+
+
+    public function payerAccount()
+    {
+        return $this->belongsTo(Account::class);
+    }
+
+    public function payeeAccount()
+    {
+        return $this->belongsTo(Account::class);
+    }
+
+    public function paymentItem()
+    {
+        return $this->belongsTo(PaymentItem::class);
+    }
+
+    public function billCurrency()
     {
         return $this->belongsTo(Currency::class);
     }
 
-//    public function order(){
-//        return $this->hasOne(Order::class,'paymentId');
-//    }
-
-    public function paymentItem(){
-        return $this->belongsTo(PaymentItem::class);
+    public function paidCurrency()
+    {
+        return $this->belongsTo(Currency::class);
     }
 
-    public function branch(){
-        return $this->belongsTo(Branch::class);
-    }
-
-//    /**
-//     * Used for money transfer only, when accountFrom is null
-//     * @return BelongsTo
-//     */
-//    public function accountFrom()
-//    {
-//        return $this->belongsTo(Account::class, 'accountFromId');
-//    }
-//
-//    public function accountTo()
-//    {
-//        return $this->belongsTo(Account::class, 'accountToId');
-//    }
-
-    public function exchangeRate(){
+    public function exchangeRate()
+    {
         return $this->belongsTo(MoneyExchange::class);
     }
 
-    public function orderPayments(){
+    public function orderPayments()
+    {
         return $this->hasMany(Order\OrderPayment::class);
     }
 
-    public function orderPayment(){
-        return  $this->hasOne(Order\OrderPayment::class);
+    public function orderPayment()
+    {
+        return $this->hasOne(Order\OrderPayment::class);
     }
 
-    public function orderPaymentItems(){
+    public function orderPaymentItems()
+    {
         return $this->hasManyThrough(Order\OrderPaymentItem::class, OrderPayment::class);
     }
 }
