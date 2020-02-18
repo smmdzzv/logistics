@@ -136,7 +136,7 @@
             <a class="btn" :href="'/payments/' + item.id">
                 <img class="icon-btn-sm" src="/svg/file.svg">
             </a>
-            <a class="btn" :href="'/payment/' + item.id + '/edit'">
+            <a v-if="item.status === 'pending'" class="btn" :href="'/payment/' + item.id + '/edit'">
                 <img class="icon-btn-sm" src="/svg/edit.svg">
             </a>
         </template>

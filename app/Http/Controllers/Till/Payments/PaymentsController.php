@@ -55,6 +55,9 @@ class PaymentsController extends BaseController
 
     public function edit(Payment $payment)
     {
+        if ($payment->status === 'completed')
+            abort(403, 'Редактирование проведенных платежей запрещено');
+
         $branches = $this->getBranches();
         $currencies = Currency::all();
         $paymentItems = PaymentItem::public()->get();

@@ -15,7 +15,7 @@
                     <div class="col-md-12 form-group">
                         <label for="status">Статус</label>
                         <b-form-select id="status"
-                                       class="form-control" 
+                                       class="form-control"
                                        v-model="payment.status"
                                        :class="{'is-invalid':errors.status}">
                             <option :value="null" disabled>-- Выберите статус операции --</option>
