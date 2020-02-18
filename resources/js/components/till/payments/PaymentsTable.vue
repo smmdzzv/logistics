@@ -123,9 +123,21 @@
             <span>{{item.paidAmount}} {{item.paidCurrency.isoName}}</span>
         </template>
 
+        <template slot="status" slot-scope="{item}">
+            <span v-if="item.status === 'completed'">
+                Проведенная
+            </span>
+            <span v-else>
+                Заявка
+            </span>
+        </template>
+
         <template slot="show" slot-scope="{item}">
-            <a class="btn" :href="getDetailsUrl(item)">
+            <a class="btn" :href="'/payments/' + item.id">
                 <img class="icon-btn-sm" src="/svg/file.svg">
+            </a>
+            <a class="btn" :href="'/payment/' + item.id + '/edit'">
+                <img class="icon-btn-sm" src="/svg/edit.svg">
             </a>
         </template>
 
@@ -185,7 +197,7 @@
                 },
                 items: [],
                 isBusy: false,
-                customCells: ['show', 'billAmount', 'paidAmount'],
+                customCells: ['show', 'billAmount', 'paidAmount', 'status'],
                 selectedBranch: null,
                 selectedType: null,
                 selectedPaymentItem: null,
@@ -229,6 +241,10 @@
                         label: 'Кассир',
                         sortable: true
                     },
+                    status:{
+                        label: 'Статус',
+                        sortable: true
+                    },
                     'show': {
                         label: ''
                     }
@@ -268,9 +284,6 @@
             cashierSelected(cashier) {
                 this.selectedCashier = cashier;
                 this.getItems();
-            },
-            getDetailsUrl(item) {
-                return '/payments/' + item.id;
             },
             getItems(page = 1) {
                 if (this.trips)
