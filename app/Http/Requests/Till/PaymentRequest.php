@@ -90,8 +90,8 @@ class PaymentRequest extends FormRequest
 
                 $exchangeRate = MoneyExchange::where('id', $this->request->get('exchangeRate'))
                     ->where('id', $this->request->get('exchangeRate'))
-                    ->where('from', $this->request->get('paidCurrency'))
-                    ->where('to', $this->request->get('billCurrency'))
+                    ->where('from', $this->request->get('billCurrency'))
+                    ->where('to', $this->request->get('paidCurrency'))
                     ->first();
 
                 if (!$exchangeRate)
@@ -105,7 +105,7 @@ class PaymentRequest extends FormRequest
 
                 $amount = round($this->request->get('billAmount') * $exchangeRate->coefficient, 2);
 
-                if ($amount !== $this->request->get('paidAmount'))
+                if ($amount - $this->request->get('paidAmount') != 0)
                     return $validator->errors()->add('paidAmount', 'Сумма оплаты не соотвествует требуемой с учетом конвертации');
 
             } else {

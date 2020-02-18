@@ -129,7 +129,7 @@
                     <div class="col-md-4 form-group">
                         <label for="currentRate">Обменный курс</label>
                         <b-form-input id="currentRate"
-                                      v-model="payment.exchangeRate"
+                                      v-model="payment.exchangeRate.coefficient"
                                       :class="{'is-invalid':errors.exchangeRate}"
                                       class="form-control"
                                       type="number"
@@ -203,6 +203,10 @@
             paymentItems: {
                 type: Array,
                 required: true
+            },
+            disable: {
+                type: Boolean,
+                default: false
             }
         },
         data() {
@@ -218,7 +222,7 @@
                     paymentItem: null,
                     billAmount: 0,
                     billCurrency: null,
-                    exchangeRate: null,
+                    exchangeRate: {coefficient: null},
                     paidAmount: 0,
                     paidCurrency: null,
                     comment: null
@@ -242,15 +246,61 @@
         },
         watch: {
             'payment.billAmount'() {
-                this.payment.paidAmount = this.payment.billAmount;
+                this.calculatePaidAmount();
+            },
+            'payment.billCurrency'() {
+                if (!this.payment.paidCurrency)
+                    this.payment.paidCurrency = this.payment.billCurrency;
+                this.checkIfNeededConverting()
+            },
+            'payment.paidCurrency'() {
+                this.checkIfNeededConverting()
+            },
+            'payment.exchangeRate'() {
+                this.calculatePaidAmount();
             }
         },
         methods: {
+            calculatePaidAmount() {
+                if (this.payment.exchangeRate.coefficient)
+                    this.payment.paidAmount = Math.round(this.payment.billAmount * this.payment.exchangeRate.coefficient * 100) / 100;
+                else
+                    this.payment.paidAmount = this.payment.billAmount;
+            },
+            checkIfNeededConverting() {
+                let needConverting = this.payment.billCurrency && this.payment.billCurrency.id !== this.payment.paidCurrency.id;
+
+                if (needConverting)
+                    this.getExchangeRate();
+                else
+                    this.payment.exchangeRate = {coefficient: null};
+            },
             onPayerSelected(user) {
                 this.payment.payer = user
             },
             onPayeeSelected(user) {
                 this.payment.payee = user
+            },
+            async getExchangeRate() {
+                tShowSpinner();
+                if (this.disable)
+                    return;
+
+                let action = `exchange-history/rate/${this.payment.billCurrency.id}/${this.payment.paidCurrency.id}`;
+                try {
+                    const result = await axios.get(action);
+                    this.payment.exchangeRate = result.data;
+                } catch (e) {
+                    this.$root.showErrorMsg('Ошибка загрузки',
+                        'Не удалось загрузить курс валют. Убедитесь, что курс для данной валюты создан.')
+                    this.payment.exchangeRate = {coefficient: null};
+                }
+
+                this.$nextTick(
+                    () => {
+                        tHideSpinner();
+                    }
+                )
             },
             async submit() {
                 try {
