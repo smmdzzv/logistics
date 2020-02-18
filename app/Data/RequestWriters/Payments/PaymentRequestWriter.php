@@ -13,12 +13,12 @@ use App\User;
 class PaymentRequestWriter extends RequestWriter
 {
     /**
-     * @var User or Branch $id
+     * @var User|Branch $id
      */
     protected $payer;
 
     /**
-     * @var User or Branch $id
+     * @var User|Branch $id
      */
     protected $payee;
 
@@ -41,12 +41,18 @@ class PaymentRequestWriter extends RequestWriter
      */
     function write()
     {
-        $this->getPaymentSubjects();
+        if($this->request->get('id')){
+            $this->payment = Payment::findOrFail($this->request->get('id'));
 
-        $this->getAccounts();
+            $this->setSubjectsAndAccounts();
+        }
+        else{
+            $this->getPaymentSubjects();
 
-        $this->createPayment();
+            $this->getAccounts();
 
+            $this->createPayment();
+        }
 
         if ($this->payment->status === 'completed') {
             $this->updatePayerBalance();
@@ -54,6 +60,14 @@ class PaymentRequestWriter extends RequestWriter
         }
 
         return $this->payment;
+    }
+
+    protected function setSubjectsAndAccounts(){
+        $this->payer = $this->payment->payer;
+        $this->payee = $this->payment->payee;
+
+        $this->payerAccount = $this->payment->payerAccount;
+        $this->payeeAccount =  $this->payment->payeeAccount;
     }
 
     protected function getPaymentSubjects()

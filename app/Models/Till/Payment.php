@@ -32,6 +32,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string paid_currency_id
  * @property string exchange_rate_id
  * @property string comment
+ * @property Account payerAccount
+ * @property Account payeeAccount
+ * @property User|Branch payer
+ * @property User|Branch payee
  */
 class Payment extends BaseModel
 {
