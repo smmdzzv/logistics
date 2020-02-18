@@ -41,12 +41,17 @@ class PaymentRequestWriter extends RequestWriter
      */
     function write()
     {
-        if($this->request->get('id')){
+        if ($this->request->get('id')) {
             $this->payment = Payment::findOrFail($this->request->get('id'));
 
+            if ($this->payment->status === 'completed')
+                abort(403, 'Платеж уже проведен');
+
+            $this->payment->status = $this->request->get('status');
+            $this->payment->save();
+
             $this->setSubjectsAndAccounts();
-        }
-        else{
+        } else {
             $this->getPaymentSubjects();
 
             $this->getAccounts();
@@ -62,12 +67,13 @@ class PaymentRequestWriter extends RequestWriter
         return $this->payment;
     }
 
-    protected function setSubjectsAndAccounts(){
+    protected function setSubjectsAndAccounts()
+    {
         $this->payer = $this->payment->payer;
         $this->payee = $this->payment->payee;
 
         $this->payerAccount = $this->payment->payerAccount;
-        $this->payeeAccount =  $this->payment->payeeAccount;
+        $this->payeeAccount = $this->payment->payeeAccount;
     }
 
     protected function getPaymentSubjects()

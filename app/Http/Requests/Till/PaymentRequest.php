@@ -30,7 +30,7 @@ class PaymentRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'nullable|string|exits:payments,id',
+            'id' => 'nullable|string|exists:payments,id',
             'status' => ['required', Rule::in(['pending', 'completed'])],
             'payer' => 'required',
             'payer_type' => ['required', Rule::in(['user', 'branch'])],

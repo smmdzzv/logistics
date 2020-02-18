@@ -4,7 +4,12 @@
     <div class="container col-12">
         <div class="card">
             <div class="card-header">
-                Платеж от {{$payment->updated_at}}
+                @if($payment->status === 'completed')
+                    Платеж
+                @else
+                    Заявка
+                @endif
+                от {{$payment->updated_at}}
             </div>
             <div class="card-body">
                 <h4>Общая информация</h4>
@@ -12,7 +17,9 @@
                     <p>Требуемая сумма: <b>{{$payment->billAmount}} {{$payment->billCurrency->isoName}}</b></p>
                     <p>Оплаченная сумма: <b>{{$payment->paidAmount}} {{$payment->paidCurrency->isoName}}</b></p>
                     @if($payment->exchangeRate)
-                        <p>Обменный курс: <b>{{$payment->exchangeRate->fromCurrency->isoName}} в {{$payment->exchangeRate->toCurrency->isoName}} {{$payment->exchangeRate->coefficient}}</b></p>
+                        <p>Обменный курс: <b>{{$payment->exchangeRate->fromCurrency->isoName}}
+                                в {{$payment->exchangeRate->toCurrency->isoName}} {{$payment->exchangeRate->coefficient}}</b>
+                        </p>
                     @endif
                     @if($payment->payer)
                         <p>
