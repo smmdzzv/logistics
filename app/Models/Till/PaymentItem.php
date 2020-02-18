@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property string description
+ * @property string title
  */
 class PaymentItem extends BaseModel
 {

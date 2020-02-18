@@ -56,33 +56,29 @@ class PaymentRequest extends FormRequest
         return Branch::find($id);
     }
 
+    private $payer;
+
+    private $payee;
 
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
             $payerId = $this->request->get('payer');
-            $payer = $this->request->get('payer_type') === 'branch' ? $this->getBranch($payerId) : $this->getClient($payerId);
-            if (!$payer)
-                return $validator->errors()->add('payer', 'Указанный плательщик не найден');
+            $this->payer = $this->request->get('payer_type') === 'branch' ? $this->getBranch($payerId) : $this->getClient($payerId);
+            if (!$this->payer)
+                return $validator->errors()->add('payer', 'Указанный плательщик не найден.');
 
             $payeeId = $this->request->get('payee');
-            $payee = $this->request->get('payee_type') === 'branch' ? $this->getBranch($payeeId) : $this->getClient($payeeId);
-            if (!$payee)
-                return $validator->errors()->add('payee', 'Указанный получатель не найден');
+            $this->payee = $this->request->get('payee_type') === 'branch' ? $this->getBranch($payeeId) : $this->getClient($payeeId);
+            if (!$this->payee)
+                return $validator->errors()->add('payee', 'Указанный получатель не найден.');
 
-            if ($payer instanceof User && $payee instanceof User)
-                return $validator->errors()->add('payer', 'Перевод денег между клиентами запрещен');
+            if ($this->payer instanceof User && $this->payee instanceof User)
+                return $validator->errors()->add('payer', 'Перевод денег между клиентами запрещен.');
 
-            if(PaymentItem::find($this->request->get('paymentItem'))->title === 'Пополнение баланса'){
-                if(!($payer instanceof User))
-                    return $validator->errors()->add('payer', 'При пополнении баланса плательщиком должен являться клиент');
+            $paymentItem = PaymentItem::find($this->request->get('paymentItem'));
 
-//                if($payee instanceof User)
-//                    return $validator->errors()->add('payee', 'При пополнении баланса получателем должен являться филиал');
-
-                if(Currency::find($this->request->get('billCurrency'))->isoName !== 'USD')
-                    return $validator->errors()->add('billCurrency', 'При пополнении баланса счет должен выставляться в долларах');
-            }
+            $this->validatePaymentItems($paymentItem, $validator);
 
             $exchangeRate = null;
 
@@ -95,35 +91,66 @@ class PaymentRequest extends FormRequest
                     ->first();
 
                 if (!$exchangeRate)
-                    return $validator->errors()->add('exchangeRate', 'Указанный курс валют не найден или не соответствует выбранным валютам');
+                    return $validator->errors()->add('exchangeRate', 'Указанный курс валют не найден или не соответствует выбранным валютам.');
 
             }
 
             if ($this->request->get('billCurrency') !== $this->request->get('paidCurrency')) {
                 if (!$exchangeRate)
-                    return $validator->errors()->add('exchangeRate', 'Валюта оплаты не соотсветсвует валюте платежа. Необходима конвертация');
+                    return $validator->errors()->add('exchangeRate', 'Валюта оплаты не соотсветсвует валюте платежа. Необходима конвертация.');
 
                 $amount = round($this->request->get('billAmount') * $exchangeRate->coefficient, 2);
 
                 if ($amount - $this->request->get('paidAmount') != 0)
-                    return $validator->errors()->add('paidAmount', 'Сумма оплаты не соотвествует требуемой с учетом конвертации');
+                    return $validator->errors()->add('paidAmount', 'Сумма оплаты не соотвествует требуемой с учетом конвертации.');
 
             } else {
                 if ($this->request->get('billAmount') !== $this->request->get('paidAmount'))
-                    return $validator->errors()->add('paidAmount', 'Сумма к оплате не равняется требуемой сумме');
+                    return $validator->errors()->add('paidAmount', 'Сумма к оплате не равняется требуемой сумме.');
             }
 
             //Check payer account
             if ($this->request->get('payer_type') === 'branch') {
-                $payerAccount = $payer->accounts()->where('currency_id', $this->request->get('paidCurrency'))->first();
+                $payerAccount = $this->payer->accounts()->where('currency_id', $this->request->get('paidCurrency'))->first();
                 if (!$payerAccount)
-                    return $validator->errors()->add('paidCurrency', 'Не найден счет плательщика в оплачиваемой валюте');
+                    return $validator->errors()->add('paidCurrency', 'Не найден счет плательщика в оплачиваемой валюте.');
 
                 $diff = $payerAccount->balance - $this->request->get('paidAmount');
 
                 if ($diff < 0)
-                    return $validator->errors()->add('payer', 'Недостаточно средств на счету пользователя - ' . $payerAccount->balance . ' ' . $payerAccount->currency->isoName);
+                    return $validator->errors()->add('payer', 'Недостаточно средств на счету плательщика - ' . $payerAccount->balance . ' ' . $payerAccount->currency->isoName) . '.';
             }
         });
     }
+
+    private function validatePaymentItems(PaymentItem $paymentItem, $validator)
+    {
+        switch ($paymentItem->title) {
+            case 'Пополнение баланса':
+                $this->validateBalanceReplenishment($validator);
+                break;
+            case 'Перевод между филиалами':
+                $this->validateTransferBetweenBranches($validator);
+                break;
+        }
+    }
+
+    private function validateBalanceReplenishment($validator)
+    {
+        if (!($this->payer instanceof User))
+            return $validator->errors()->add('payer', 'При пополнении баланса плательщиком должен являться клиент.');
+
+        if (Currency::find($this->request->get('billCurrency'))->isoName !== 'USD')
+            return $validator->errors()->add('billCurrency', 'При пополнении баланса счет должен выставляться в долларах.');
+    }
+
+    private function validateTransferBetweenBranches($validator)
+    {
+        if (!($this->payer instanceof Branch))
+            return $validator->errors()->add('payer', 'При переводе денег между филиалами плательщиком должен быть филиал.');
+
+        if (!($this->payee instanceof Branch))
+            return $validator->errors()->add('payee', 'При переводе денег между филиалами получателем должен быть филиал.');
+    }
+
 }
