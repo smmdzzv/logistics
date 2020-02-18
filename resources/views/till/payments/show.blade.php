@@ -9,21 +9,34 @@
             <div class="card-body">
                 <h4>Общая информация</h4>
                 <div class="jumbotron">
-                    <p>Сумма: <b>{{$payment->amount}} {{$payment->currency->isoName}}</b></p>
+                    <p>Требуемая сумма: <b>{{$payment->billAmount}} {{$payment->billCurrency->isoName}}</b></p>
+                    <p>Оплаченная сумма: <b>{{$payment->paidAmount}} {{$payment->paidCurrency->isoName}}</b></p>
+                    @if($payment->exchangeRate)
+                        <p>Обменный курс: <b>{{$payment->exchangeRate->fromCurrency->isoName}} в {{$payment->exchangeRate->toCurrency->isoName}} {{$payment->exchangeRate->coefficient}}</b></p>
+                    @endif
                     @if($payment->payer)
-                        <p>Плательщик: <b>{{$payment->payer->name}}</b></p>
+                        <p>
+                            Плательщик: <b>{{$payment->payer->name}}</b>
+                            @if($payment->payerAccount)
+                            &ndash; {{$payment->payerAccount->description}}
+                            @endif
+                        </p>
                     @endif
-                    @if($payment->accountFrom)
-                        <p>Счет списания: <b>{{$payment->accountFrom->description}}</b></p>
+
+                    @if($payment->payee)
+                        <p>
+                            Получатель: <b>{{$payment->payee->name}}</b>
+                            @if($payment->payeeAccount)
+                            &ndash; {{$payment->payeeAccount->description}}
+                            @endif
+                        </p>
                     @endif
-                    @if($payment->accountTo)
-                        <p>Счет зачисления: <b>{{$payment->accountTo->description}}</b></p>
-                    @endif
+
                     <p>Статья: <b>{{$payment->paymentItem->title}}</b></p>
-                    <p>Пояснение: <b>{{$payment->comment}}</b></p>
+                    <p>Комментарий: <b>{{$payment->comment}}</b></p>
                     @if($payment->preparedBy)
                         <p>Заявку подготовил: <b>{{$payment->preparedBy->name}}</b></p>
-                        <p>Дата создания заявки:  <b>{{$payment->created_at}}</b></p>
+                        <p>Дата создания заявки: <b>{{$payment->created_at}}</b></p>
                     @endif
                     <p>Операцию провел: <b>{{$payment->cashier->name}}</b></p>
                     <p>Операция проведена в <b>{{$payment->branch->name}}</b></p>

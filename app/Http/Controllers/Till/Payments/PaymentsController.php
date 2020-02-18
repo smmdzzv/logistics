@@ -30,7 +30,11 @@ class PaymentsController extends BaseController
 
     public function all()
     {
-        return Payment::latest()
+        return Payment::without(
+            'payerAccount',
+            'payeeAccount',
+            'exchangeRate')
+            ->latest()
             ->paginate($this->pagination());
     }
 
@@ -51,48 +55,19 @@ class PaymentsController extends BaseController
 
     public function show(Payment $payment)
     {
-//        $payment->load(
-//            'cashier',
-//            'preparedBy',
-//            'payer',
-//            'currency',
-//            'paymentItem',
-//            'branch',
-//            'accountFrom',
-//            'accountTo',
-//            'exchange',
-//            'orderPaymentItems.storedItem.info.billingInfo',
-//            'orderPaymentItems.storedItem.info.item');
+        $payment->load(
+            'orderPaymentItems.storedItem.info.billingInfo',
+            'orderPaymentItems.storedItem.info.item', 'exchangeRate.fromCurrency', 'exchangeRate.toCurrency');
         return view('till.payments.show', compact('payment'));
     }
 
     public function filtered()
     {
 
-//        Payment::with('branch',
-//            'preparedBy',
-//            'cashier',
-//            'payer',
-//            'payee',
-//            'payerAccount',
-//            'payeeAccount',
-//            'paymentItem',
-//            'billCurrency',
-//            'paidCurrency',
-//            'exchangeRate')
-
         $query = Payment::without(
-//            'branch',
-//            'preparedBy',
-//            'cashier',
-//            'payer',
-//            'payee',
             'payerAccount',
             'payeeAccount',
-//            'paymentItem',
-//            'billCurrency',
-//            'paidCurrency',
-//            'exchangeRate'
+            'exchangeRate'
         )
             ->where('status', 'completed')
             ->latest();
