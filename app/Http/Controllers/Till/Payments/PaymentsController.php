@@ -30,18 +30,7 @@ class PaymentsController extends BaseController
 
     public function all()
     {
-        return Payment::with('branch',
-            'preparedBy',
-            'cashier',
-            'payer',
-            'payee',
-            'payerAccount',
-            'payeeAccount',
-            'paymentItem',
-            'billCurrency',
-            'paidCurrency',
-            'exchangeRate')
-            ->latest()
+        return Payment::latest()
             ->paginate($this->pagination());
     }
 
@@ -62,18 +51,18 @@ class PaymentsController extends BaseController
 
     public function show(Payment $payment)
     {
-        $payment->load(
-            'cashier',
-            'preparedBy',
-            'payer',
-            'currency',
-            'paymentItem',
-            'branch',
-            'accountFrom',
-            'accountTo',
-            'exchange',
-            'orderPaymentItems.storedItem.info.billingInfo',
-            'orderPaymentItems.storedItem.info.item');
+//        $payment->load(
+//            'cashier',
+//            'preparedBy',
+//            'payer',
+//            'currency',
+//            'paymentItem',
+//            'branch',
+//            'accountFrom',
+//            'accountTo',
+//            'exchange',
+//            'orderPaymentItems.storedItem.info.billingInfo',
+//            'orderPaymentItems.storedItem.info.item');
         return view('till.payments.show', compact('payment'));
     }
 
@@ -92,18 +81,19 @@ class PaymentsController extends BaseController
 //            'paidCurrency',
 //            'exchangeRate')
 
-        $query = Payment::with(
-            'branch',
-            'preparedBy',
-            'cashier',
-            'payer',
-            'payee',
-//            'payerAccount',
-//            'payeeAccount',
-            'paymentItem',
-            'billCurrency',
-            'paidCurrency',
-            'exchangeRate')
+        $query = Payment::without(
+//            'branch',
+//            'preparedBy',
+//            'cashier',
+//            'payer',
+//            'payee',
+            'payerAccount',
+            'payeeAccount',
+//            'paymentItem',
+//            'billCurrency',
+//            'paidCurrency',
+//            'exchangeRate'
+        )
             ->where('status', 'completed')
             ->latest();
 

@@ -44,6 +44,25 @@ class Payment extends BaseModel
 
     protected $guarded = [];
 
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [
+        'branch',
+        'preparedBy',
+        'cashier',
+        'payer',
+        'payee',
+        'payerAccount',
+        'payeeAccount',
+        'paymentItem',
+        'billCurrency',
+        'paidCurrency',
+        'exchangeRate'
+    ];
+
     protected static function boot()
     {
         parent::boot();
