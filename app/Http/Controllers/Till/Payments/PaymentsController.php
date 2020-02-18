@@ -45,12 +45,20 @@ class PaymentsController extends BaseController
         return view('till.payments.create', compact('branches', 'currencies', 'paymentItems'));
     }
 
-    public function store(PaymentRequest $request)
+    public function storeOrUpdate(PaymentRequest $request)
     {
         $creator = new PaymentRequestWriterCreator($request);
         $writer = $creator->getWriter();
         $payment = $writer->write();
         return $payment->id;
+    }
+
+    public function edit(Payment $payment)
+    {
+        $branches = $this->getBranches();
+        $currencies = Currency::all();
+        $paymentItems = PaymentItem::public()->get();
+        return view('till.payments.create', compact('branches', 'currencies', 'paymentItems', 'payment'));
     }
 
     public function show(Payment $payment)
@@ -68,9 +76,7 @@ class PaymentsController extends BaseController
             'payerAccount',
             'payeeAccount',
             'exchangeRate'
-        )
-            ->where('status', 'completed')
-            ->latest();
+        )->latest();
 
         $filter = new PaymentFilter(request()->all(), $query);
         $query = $filter->filter();

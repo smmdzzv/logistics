@@ -6,7 +6,8 @@
             <payments-table table-height="65vh"
                             :branches="{{$branches}}"
                             :currencies="{{$currencies}}"
-                            :payment-items="{{$paymentItems}}"></payments-table>
+                            :payment-items="{{$paymentItems}}"
+                            flowable></payments-table>
         </div>
     </div>
 @endsection
