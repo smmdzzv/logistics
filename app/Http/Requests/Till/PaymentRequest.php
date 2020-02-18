@@ -33,9 +33,9 @@ class PaymentRequest extends FormRequest
             'id' => 'nullable|string|exits:payments,id',
             'status' => ['required', Rule::in(['pending', 'completed'])],
             'payer' => 'required',
-            'payerType' => ['required', Rule::in(['user', 'branch'])],
+            'payer_type' => ['required', Rule::in(['user', 'branch'])],
             'payee' => 'required',
-            'payeeType' => ['required', Rule::in(['user', 'branch'])],
+            'payee_type' => ['required', Rule::in(['user', 'branch'])],
             'paymentItem' => 'required|exists:payment_items,id',
             'billAmount' => 'required|numeric|min:1',
             'billCurrency' => 'required|exists:currencies,id',
@@ -61,12 +61,12 @@ class PaymentRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             $payerId = $this->request->get('payer');
-            $payer = $this->request->get('payerType') === 'branch' ? $this->getBranch($payerId) : $this->getClient($payerId);
+            $payer = $this->request->get('payer_type') === 'branch' ? $this->getBranch($payerId) : $this->getClient($payerId);
             if (!$payer)
                 return $validator->errors()->add('payer', 'Указанный плательщик не найден');
 
             $payeeId = $this->request->get('payee');
-            $payee = $this->request->get('payeeType') === 'branch' ? $this->getBranch($payeeId) : $this->getClient($payeeId);
+            $payee = $this->request->get('payee_type') === 'branch' ? $this->getBranch($payeeId) : $this->getClient($payeeId);
             if (!$payee)
                 return $validator->errors()->add('payee', 'Указанный получатель не найден');
 
@@ -90,8 +90,8 @@ class PaymentRequest extends FormRequest
 
                 $exchangeRate = MoneyExchange::where('id', $this->request->get('exchangeRate'))
                     ->where('id', $this->request->get('exchangeRate'))
-                    ->where('from', $this->request->get('billCurrency'))
-                    ->where('to', $this->request->get('paidCurrency'))
+                    ->where('from', $this->request->get('paidCurrency'))
+                    ->where('to', $this->request->get('billCurrency'))
                     ->first();
 
                 if (!$exchangeRate)
@@ -114,7 +114,7 @@ class PaymentRequest extends FormRequest
             }
 
             //Check payer account
-            if ($this->request->get('payerType') === 'branch') {
+            if ($this->request->get('payer_type') === 'branch') {
                 $payerAccount = $payer->accounts()->where('currency_id', $this->request->get('paidCurrency'))->first();
                 if (!$payerAccount)
                     return $validator->errors()->add('paidCurrency', 'Не найден счет плательщика в оплачиваемой валюте');

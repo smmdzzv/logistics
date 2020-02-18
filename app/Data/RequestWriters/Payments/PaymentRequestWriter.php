@@ -52,8 +52,8 @@ class PaymentRequestWriter extends RequestWriter
 
     private function getPaymentSubjects()
     {
-        $this->payer = $this->getSubject($this->request->get('payerType'), $this->request->get('payer'));
-        $this->payee = $this->getSubject($this->request->get('payeeType'), $this->request->get('payee'));
+        $this->payer = $this->getSubject($this->request->get('payer_type'), $this->request->get('payer'));
+        $this->payee = $this->getSubject($this->request->get('payee_type'), $this->request->get('payee'));
 
         $this->payerAccount = $this->getSubjectAccount($this->payer);
         $this->payeeAccount = $this->getSubjectAccount($this->payee);
@@ -108,10 +108,10 @@ class PaymentRequestWriter extends RequestWriter
             'prepared_by_id' => $this->request->get('status') === 'pending' ? auth()->user()->id : null,
             'payer_id' => $this->request->get('payer'),
             'payer_account_id' => $this->payerAccount === null ? null : $this->payerAccount->id,
-            'payer_type' => $this->request->get('payerType'),
+            'payer_type' => $this->request->get('payer_type'),
             'payee_id' => $this->request->get('payee'),
             'payee_account_id' => $this->payeeAccount === null ? null : $this->payeeAccount->id,
-            'payee_type' => $this->request->get('payeeType'),
+            'payee_type' => $this->request->get('payee_type'),
             'payment_item_id' => $this->request->get('paymentItem'),
             'billAmount' => $this->request->get('billAmount'),
             'paidAmount' => $this->request->get('paidAmount'),

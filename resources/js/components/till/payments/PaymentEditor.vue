@@ -212,9 +212,9 @@
                 payment: {
                     status: 'pending',
                     payer: null,
-                    payerType: null,
+                    payer_type: null,
                     payee: null,
-                    payeeType: null,
+                    payee_type: null,
                     paymentItem: null,
                     billAmount: 0,
                     billCurrency: null,
@@ -227,9 +227,9 @@
                     id: null,
                     status: null,
                     payer: null,
-                    payerType: null,
+                    payer_type: null,
                     payee: null,
-                    payeeType: null,
+                    payee_type: null,
                     paymentItem: null,
                     billAmount: null,
                     billCurrency: null,
@@ -258,9 +258,9 @@
                         id: this.payment.id,
                         status: this.payment.status,
                         payer: this.payment.payer.id,
-                        payerType: this.payment.payerType = this.isPayerIndividual ? 'user' : 'branch',
+                        payer_type: this.payment.payer_type = this.isPayerIndividual ? 'user' : 'branch',
                         payee: this.payment.payee.id,
-                        payeeType: this.payment.payerType = this.isPayeeIndividual ? 'user' : 'branch',
+                        payee_type: this.payment.payer_type = this.isPayeeIndividual ? 'user' : 'branch',
                         paymentItem: this.payment.paymentItem.id,
                         billAmount: this.payment.billAmount,
                         billCurrency: this.payment.billCurrency.id,
@@ -276,9 +276,9 @@
                         this.errors.id = e.response.data.errors.id;
                         this.errors.status = e.response.data.errors.status;
                         this.errors.payer = e.response.data.errors.payer;
-                        this.errors.payerType = e.response.data.errors.payerType;
+                        this.errors.payer_type = e.response.data.errors.payer_type;
                         this.errors.payee = e.response.data.errors.payee;
-                        this.errors.payeeType = e.response.data.errors.payeeType;
+                        this.errors.payee_type = e.response.data.errors.payee_type;
                         this.errors.paymentItem = e.response.data.errors.paymentItem;
                         this.errors.billAmount = e.response.data.errors.billAmount;
                         this.errors.billCurrency = e.response.data.errors.billCurrency;
