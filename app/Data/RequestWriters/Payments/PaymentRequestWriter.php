@@ -5,10 +5,8 @@ namespace App\Data\RequestWriters\Payments;
 use App\Data\RequestWriters\RequestWriter;
 use App\Http\Requests\Till\PaymentRequest;
 use App\Models\Branch;
-use App\Models\Currency;
 use App\Models\Till\Account;
 use App\Models\Till\Payment;
-use App\Models\Till\PaymentItem;
 use App\User;
 
 
@@ -17,17 +15,17 @@ class PaymentRequestWriter extends RequestWriter
     /**
      * @var User or Branch $id
      */
-    private $payer;
+    protected $payer;
 
     /**
      * @var User or Branch $id
      */
-    private $payee;
+    protected $payee;
 
-    private ?Account $payerAccount;
-    private ?Account $payeeAccount;
+    protected ?Account $payerAccount;
+    protected ?Account $payeeAccount;
 
-    private Payment $payment;
+    protected Payment $payment;
 
     /**
      * PaymentRequestWriter constructor.
@@ -38,34 +36,47 @@ class PaymentRequestWriter extends RequestWriter
         parent::__construct(null, $request);
     }
 
+    /**
+     * @return Payment
+     */
     function write()
     {
         $this->getPaymentSubjects();
 
+        $this->getAccounts();
+
         $this->createPayment();
 
-        if ($this->payment->status === 'completed')
-            $this->updateAccountsBalance();
+
+        if ($this->payment->status === 'completed') {
+            $this->updatePayerBalance();
+            $this->updatePayeeBalance();
+        }
 
         return $this->payment;
     }
 
-    private function getPaymentSubjects()
+    protected function getPaymentSubjects()
     {
         $this->payer = $this->getSubject($this->request->get('payer_type'), $this->request->get('payer'));
         $this->payee = $this->getSubject($this->request->get('payee_type'), $this->request->get('payee'));
 
-        $this->payerAccount = $this->getSubjectAccount($this->payer);
-        $this->payeeAccount = $this->getSubjectAccount($this->payee);
+
         //Users have only dollar account. All operations should be in dollars
-        if ($this->payerAccount === null
-            && $this->payer instanceof User
-            && PaymentItem::where('id', $this->request->get('paymentItem'))->where('title', 'Пополнение баланса')->first()
-            && Currency::find($this->request->get('billCurrency'))->isoName === 'USD')
-            $this->payerAccount = $this->payer->accounts()->dollarAccount();
+//        if ($this->payerAccount === null
+//            && $this->payer instanceof User
+//            && PaymentItem::where('id', $this->request->get('paymentItem'))->where('title', 'Пополнение баланса')->first()
+//            && Currency::find($this->request->get('billCurrency'))->isoName === 'USD')
+//            $this->payerAccount = $this->payer->accounts()->dollarAccount();
     }
 
-    private function getSubject($type, $id)
+    protected function getAccounts()
+    {
+        $this->payerAccount = $this->getSubjectAccount($this->payer);
+        $this->payeeAccount = $this->getSubjectAccount($this->payee);
+    }
+
+    protected function getSubject($type, $id)
     {
         $subject = null;
 
@@ -81,25 +92,18 @@ class PaymentRequestWriter extends RequestWriter
         return $subject;
     }
 
-    private function getSubjectAccount($subject)
+    protected function getSubjectAccount($subject)
     {
         $account = null;
-
-//        $paymentItem = PaymentItem::balanceOperations()
-//            ->where('id', $this->request->get('paymentItem'))
-//            ->first();
 
         if ($subject instanceof Branch) {
             $account = $subject->accounts()->where('currency_id', $this->request->get('paidCurrency'))->firstOrFail();
         }
-//        elseif($subject instanceof User && $paymentItem){
-//            $account = $subject->accounts()->dollarAccount();
-//        }
 
         return $account;
     }
 
-    private function createPayment()
+    protected function createPayment()
     {
         $this->payment = Payment::create([
             'branch_id' => auth()->user()->branch->id,
@@ -122,21 +126,37 @@ class PaymentRequestWriter extends RequestWriter
         ]);
     }
 
-    private function updateAccountsBalance()
+    protected function updatePayerBalance()
     {
         if ($this->payerAccount) {
-            if ($this->payment->paymentItem->title === "Пополнение баланса")
-                $this->payerAccount->balance += $this->payment->paidAmount;
-            else
-                $this->payerAccount->balance -= $this->payment->paidAmount;
+            $this->payerAccount->balance -= $this->payment->paidAmount;
             $this->payerAccount->save();
         }
+    }
 
+    protected function updatePayeeBalance()
+    {
         if ($this->payeeAccount) {
             $this->payeeAccount->balance += $this->payment->paidAmount;
             $this->payeeAccount->save();
         }
     }
+
+//    protected function updateAccountsBalance()
+//    {
+//        if ($this->payerAccount) {
+//            if ($this->payment->paymentItem->title === "Пополнение баланса")
+//                $this->payerAccount->balance += $this->payment->paidAmount;
+//            else
+//                $this->payerAccount->balance -= $this->payment->paidAmount;
+//            $this->payerAccount->save();
+//        }
+//
+//        if ($this->payeeAccount) {
+//            $this->payeeAccount->balance += $this->payment->paidAmount;
+//            $this->payeeAccount->save();
+//        }
+//    }
 
 
 //    function write()
@@ -144,7 +164,7 @@ class PaymentRequestWriter extends RequestWriter
 //        return $this->writePayment();
 //    }
 //
-//    private function writePayment()
+//    protected function writePayment()
 //    {
 //        $this->input->payment['branchId'] = $this->input->branchId;
 //        $this->input->payment['cashierId'] = $this->input->cashierId;
