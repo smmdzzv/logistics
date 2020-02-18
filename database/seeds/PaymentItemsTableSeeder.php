@@ -16,23 +16,13 @@ class PaymentItemsTableSeeder extends Seeder
             [
                 'title' => 'Списание с баланса',
                 'description' => 'Списание денег с баланса клиента в счет оплаты заказы',
-//                'type' => 'internal'
             ]
         );
-
-//        PaymentItem::create(
-//            [
-//                'title' => 'Оплата заказа',
-//                'description' => 'Оплата заказа наличными без пополнения баланса пользователя',
-//                'type' => 'in'
-//            ]
-//        );
 
         PaymentItem::create(
             [
                 'title' => 'Пополнение баланса',
                 'description' => 'Пополнение долларового счета пользователя',
-//                'type' => 'in'
             ]
         );
 
@@ -40,7 +30,6 @@ class PaymentItemsTableSeeder extends Seeder
             [
                 'title' => 'Аванс',
                 'description' => 'Выплата аванса с заработной платы',
-//                'type' => 'out'
             ]
         );
 
@@ -48,7 +37,6 @@ class PaymentItemsTableSeeder extends Seeder
             [
                 'title' => 'Зарплата',
                 'description' => 'Выплата заработной платы',
-//                'type' => 'out'
             ]
         );
 
@@ -56,7 +44,6 @@ class PaymentItemsTableSeeder extends Seeder
             [
                 'title' => 'Прием наличных',
                 'description' => 'Прием наличных на счет Дуоб',
-//                'type' => 'in'
             ]
         );
 
@@ -64,15 +51,20 @@ class PaymentItemsTableSeeder extends Seeder
             [
                 'title' => 'Выдача наличных',
                 'description' => 'Выдача наличных со счета Дуоб',
-//                'type' => 'out'
             ]
         );
 
         PaymentItem::create(
             [
-                'title' => 'Перевод',
-                'description' => 'Перевод денег между счетами',
-//                'type' => 'out'
+                'title' => 'Перевод между филиалами',
+                'description' => 'Перевод денег между филиалами',
+            ]
+        );
+
+        PaymentItem::create(
+            [
+                'title' => 'Перевод между счетами',
+                'description' => 'Перевод денег между счетами одного филиала',
             ]
         );
     }
