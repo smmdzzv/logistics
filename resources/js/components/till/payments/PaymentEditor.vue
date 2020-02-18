@@ -15,7 +15,7 @@
                     <div class="col-md-12 form-group">
                         <label for="status">Статус</label>
                         <b-form-select id="status"
-                                       class="form-control"
+                                       class="form-control" 
                                        v-model="payment.status"
                                        :class="{'is-invalid':errors.status}">
                             <option :value="null" disabled>-- Выберите статус операции --</option>
@@ -44,7 +44,7 @@
                                               :errorMessages="errors.payer"
                                               style="width:50%"
                                               :selected="onPayerSelected"></search-user-dropdown>
-                        <b-form-select v-else v-model="payment.payer" :class="{'is-invalid':errors.payer}">
+                        <b-form-select v-else :disabled="disable" v-model="payment.payer" :class="{'is-invalid':errors.payer}">
                             <option :value="null" disabled>-- Выберите филиал --</option>
                             <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
                         </b-form-select>
@@ -69,7 +69,7 @@
                                               :class="{'is-invalid':errors.payee}"
                                               style="width:51%"
                                               :selected="onPayeeSelected"></search-user-dropdown>
-                        <b-form-select v-else v-model="payment.payee" :class="{'is-invalid':errors.payee}">
+                        <b-form-select v-else :disabled="disable" v-model="payment.payee" :class="{'is-invalid':errors.payee}">
                             <option :value="null" disabled>-- Выберите филиал --</option>
                             <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
                         </b-form-select>
@@ -83,6 +83,7 @@
                         <label for="paymentItem">Статья</label>
                         <b-form-select id="paymentItem" v-model="payment.paymentItem"
                                        :class="{'is-invalid':errors.paymentItem}"
+                                       :disabled="disable"
                                        class="form-control">
                             <option :value="null" disabled>-- Выберите статью --</option>
                             <option v-for="paymentItem in paymentItems" :value="paymentItem">
@@ -99,6 +100,7 @@
                         <b-form-input id="billAmount"
                                       v-model="payment.billAmount"
                                       :class="{'is-invalid':errors.billAmount}"
+                                      :disabled="disable"
                                       class="form-control"
                                       type="number"></b-form-input>
                         <b-form-invalid-feedback :state="errors.billAmount"><strong
@@ -109,6 +111,7 @@
                         <label for="billCurrency">Валюта</label>
                         <b-form-select id="billCurrency"
                                        v-model="payment.billCurrency"
+                                       :disabled="disable"
                                        :class="{'is-invalid':errors.billCurrency}">
                             <option :value="null" disabled>-- Выберите валюту --</option>
                             <option v-for="currency in currencies" :value="currency">
@@ -126,7 +129,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-4 form-group"  v-if="payment.exchangeRate">
                         <label for="currentRate">Обменный курс</label>
                         <b-form-input id="currentRate"
                                       v-model="payment.exchangeRate.coefficient"
@@ -155,6 +158,7 @@
                         <label for="paidCurrency">Валюта оплаты</label>
                         <b-form-select id="paidCurrency"
                                        v-model="payment.paidCurrency"
+                                       :disabled="disable"
                                        :class="{'is-invalid':errors.paidCurrency}">
                             <option :value="null" disabled>-- Выберите валюту --</option>
                             <option v-for="currency in currencies" :value="currency">
@@ -172,6 +176,7 @@
                         id="comment"
                         v-model="payment.comment"
                         :class="{'is-invalid':errors.comment}"
+                        :disabled="disable"
                         placeholder="Введите комментарий"
                         rows="3"
                         max-rows="6"
@@ -191,6 +196,11 @@
 <script>
     export default {
         name: "PaymentEditor",
+        mounted(){
+            if(this.providedPayment)
+                this.payment = this.providedPayment
+
+        },
         props: {
             branches: {
                 type: Array,
@@ -203,6 +213,9 @@
             paymentItems: {
                 type: Array,
                 required: true
+            },
+            providedPayment: {
+                type: Object
             },
             disable: {
                 type: Boolean,
@@ -222,7 +235,7 @@
                     paymentItem: null,
                     billAmount: 0,
                     billCurrency: null,
-                    exchangeRate: {coefficient: null},
+                    exchangeRate:null,
                     paidAmount: 0,
                     paidCurrency: null,
                     comment: null
@@ -262,7 +275,7 @@
         },
         methods: {
             calculatePaidAmount() {
-                if (this.payment.exchangeRate.coefficient)
+                if (this.payment.exchangeRate)
                     this.payment.paidAmount = Math.round(this.payment.billAmount * this.payment.exchangeRate.coefficient * 100) / 100;
                 else
                     this.payment.paidAmount = this.payment.billAmount;
@@ -273,7 +286,7 @@
                 if (needConverting)
                     this.getExchangeRate();
                 else
-                    this.payment.exchangeRate = {coefficient: null};
+                    this.payment.exchangeRate = null;
             },
             onPayerSelected(user) {
                 this.payment.payer = user
