@@ -70,6 +70,24 @@
 
                 <div class="form-row form-group col-12">
                     <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
+                        <label>Плательщик</label>
+                        <b-select v-model="selectedBranchPayer">
+                            <option :value="null">Все филиалы</option>
+                            <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}
+                            </option>
+                        </b-select>
+                    </div>
+
+                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
+                        <label>Покупатель</label>
+                        <b-select v-model="selectedBranchPayee">
+                            <option :value="null">Все филиалы</option>
+                            <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}
+                            </option>
+                        </b-select>
+                    </div>
+
+                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
                         <label>Мин. сумма</label>
                         <input class="form-control" step="0.01" type="number" v-model.lazy="minPaidAmount">
                     </div>
@@ -205,6 +223,8 @@
                 selectedPaymentItem: null,
                 selectedUserPayer: null,
                 selectedUserPayee: null,
+                selectedBranchPayer: null,
+                selectedBranchPayee: null,
                 selectedCashier: null,
                 selectedPaidCurrency: null,
                 selectedStatus:null,
@@ -269,6 +289,10 @@
                     action += 'userPayer=' + this.selectedUserPayer.id + '&';
                 if (this.selectedUserPayee)
                     action += 'userPayee=' + this.selectedUserPayee.id + '&';
+                if (this.selectedBranchPayee)
+                    action += 'branchPayee=' + this.selectedBranchPayee.id + '&';
+                if (this.selectedBranchPayer)
+                    action += 'branchPayer=' + this.selectedBranchPayer.id + '&';
                 if (this.selectedCashier)
                     action += 'cashier=' + this.selectedCashier.id + '&';
                 if (this.selectedPaidCurrency)
@@ -332,13 +356,16 @@
             selectedBranch() {
                 this.getItems();
             },
+            selectedBranchPayee(){
+                this.getItems();
+            },
+            selectedBranchPayer(){
+                this.getItems();
+            },
             selectedType() {
                 this.getItems();
             },
             selectedPaymentItem() {
-                this.getItems();
-            },
-            selectedUserPayer() {
                 this.getItems();
             },
             selectedPaidCurrency() {
