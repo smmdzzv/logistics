@@ -63,7 +63,7 @@ class PaymentItemsTableSeeder extends Seeder
 
         PaymentItem::create(
             [
-                'title' => 'Перевод между счетами',
+                'title' => 'Перевод между счетами филиала',
                 'description' => 'Перевод денег между счетами одного филиала',
             ]
         );

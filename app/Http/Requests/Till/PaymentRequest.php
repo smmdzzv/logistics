@@ -78,6 +78,9 @@ class PaymentRequest extends FormRequest
 
             $paymentItem = PaymentItem::find($this->request->get('paymentItem'));
 
+            if ($this->payer->id === $this->payee->id && $paymentItem->title !== 'Перевод между счетами филиала')
+                return $validator->errors()->add('payer', 'Плательщиком и получателем является ' . $this->payer->name . '. Необходимо выбрать статью перевод между счетами филиала');
+
             $this->validatePaymentItems($paymentItem, $validator);
 
             $exchangeRate = null;
@@ -132,6 +135,9 @@ class PaymentRequest extends FormRequest
             case 'Перевод между филиалами':
                 $this->validateTransferBetweenBranches($validator);
                 break;
+            case 'Перевод между счетами филиала':
+                $this->validateTransferBetweenBranchAccounts($validator);
+                break;
         }
     }
 
@@ -153,4 +159,12 @@ class PaymentRequest extends FormRequest
             return $validator->errors()->add('payee', 'При переводе денег между филиалами получателем должен быть филиал.');
     }
 
+    private function validateTransferBetweenBranchAccounts($validator)
+    {
+        if ($this->payer->id !== $this->payee->id)
+            return $validator->errors()->add('payer', 'При переводе денег между счетами филиала плательщиком и получателем должен быть один филиал.');
+
+        if ($this->request->get('billCurrency') === $this->request->get('paidCurrency'))
+            return $validator->errors()->add('billCurrency', 'При переводе денег между счетами филиала валюта оплаты и валюта зачисления не должны совпадать');
+    }
 }
