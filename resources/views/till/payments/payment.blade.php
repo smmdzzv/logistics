@@ -1,3 +1,8 @@
+@if($showProfileLink)
+    <div class="row pr-4">
+        <p class="ml-auto "></p><a href="/payments/{{$payment->id}}">Перейти к платежу</a></p>
+    </div>
+@endif
 <div class="jumbotron">
     <p>Требуемая сумма: <b>{{$payment->billAmount}} {{$payment->billCurrency->isoName}}</b></p>
     <p>Оплаченная сумма: <b>{{$payment->paidAmount}} {{$payment->paidCurrency->isoName}}</b></p>

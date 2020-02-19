@@ -13,15 +13,15 @@
             </div>
             <div class="card-body">
                 <h4>Общая информация</h4>
-                @component('till/payments/payment', ['payment' => $payment])@endcomponent
+                @component('till/payments/payment', ['payment' => $payment, 'showProfileLink' => false])@endcomponent
 
                 <h4>Связанные платежи</h4>
                 @if($payment->relatedPayment)
-                    @component('till/payments/payment', ['payment' => $payment->relatedPayment])@endcomponent
+                    @component('till/payments/payment', ['payment' => $payment->relatedPayment, 'showProfileLink' => true])@endcomponent
                 @endif
                 @foreach($payment->relatedPayments as $relatedPayment)
-                    @component('till/payments/payment', ['payment' => $relatedPayment])@endcomponent
-                @endforeach 
+                    @component('till/payments/payment', ['payment' => $relatedPayment, 'showProfileLink' => true])@endcomponent
+                @endforeach
 
                 @if($payment->orderPaymentItems && $payment->orderPaymentItems->count() > 0)
                     <h4>Оплаченные товары</h4>
