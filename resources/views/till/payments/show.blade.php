@@ -13,41 +13,16 @@
             </div>
             <div class="card-body">
                 <h4>Общая информация</h4>
-                <div class="jumbotron">
-                    <p>Требуемая сумма: <b>{{$payment->billAmount}} {{$payment->billCurrency->isoName}}</b></p>
-                    <p>Оплаченная сумма: <b>{{$payment->paidAmount}} {{$payment->paidCurrency->isoName}}</b></p>
-                    @if($payment->exchangeRate)
-                        <p>Обменный курс: <b>{{$payment->exchangeRate->fromCurrency->isoName}}
-                                в {{$payment->exchangeRate->toCurrency->isoName}} {{$payment->exchangeRate->coefficient}}</b>
-                        </p>
-                    @endif
-                    @if($payment->payer)
-                        <p>
-                            Плательщик: <b>{{$payment->payer->name}}</b>
-                            @if($payment->payerAccount)
-                            &ndash; {{$payment->payerAccount->description}}
-                            @endif
-                        </p>
-                    @endif
+                @component('till/payments/payment', ['payment' => $payment])@endcomponent
 
-                    @if($payment->payee)
-                        <p>
-                            Получатель: <b>{{$payment->payee->name}}</b>
-                            @if($payment->payeeAccount)
-                            &ndash; {{$payment->payeeAccount->description}}
-                            @endif
-                        </p>
-                    @endif
+                <h4>Связанные платежи</h4>
+                @if($payment->relatedPayment)
+                    @component('till/payments/payment', ['payment' => $payment->relatedPayment])@endcomponent
+                @endif
+                @foreach($payment->relatedPayments as $relatedPayment)
+                    @component('till/payments/payment', ['payment' => $relatedPayment])@endcomponent
+                @endforeach 
 
-                    <p>Статья: <b>{{$payment->paymentItem->title}}</b></p>
-                    <p>Комментарий: <b>{{$payment->comment}}</b></p>
-                    @if($payment->preparedBy)
-                        <p>Заявку подготовил: <b>{{$payment->preparedBy->name}}</b></p>
-                        <p>Дата создания заявки: <b>{{$payment->created_at}}</b></p>
-                    @endif
-                    <p>Операцию провел: <b>{{$payment->cashier->name}}</b></p>
-                    <p>Операция проведена в <b>{{$payment->branch->name}}</b></p>
-                </div>
                 @if($payment->orderPaymentItems && $payment->orderPaymentItems->count() > 0)
                     <h4>Оплаченные товары</h4>
                     <div class=" ">

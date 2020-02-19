@@ -68,7 +68,11 @@ class PaymentsController extends BaseController
     {
         $payment->load(
             'orderPaymentItems.storedItem.info.billingInfo',
-            'orderPaymentItems.storedItem.info.item', 'exchangeRate.fromCurrency', 'exchangeRate.toCurrency');
+            'orderPaymentItems.storedItem.info.item',
+            'exchangeRate.fromCurrency',
+            'exchangeRate.toCurrency',
+            'relatedPayment',
+            'relatedPayments');
         return view('till.payments.show', compact('payment'));
     }
 
