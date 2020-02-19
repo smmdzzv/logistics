@@ -143,6 +143,10 @@ class Payment extends BaseModel
         return $this->belongsTo(MoneyExchange::class);
     }
 
+    public function relatedPayment(){
+        return $this->belongsTo(Payment::class);
+    }
+
     public function orderPayments()
     {
         return $this->hasMany(Order\OrderPayment::class);
