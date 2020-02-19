@@ -26,6 +26,7 @@ class CreatePaymentsTable extends Migration
             $table->char('payee_account_id', 26)->index()->nullable();
             $table->char('payee_type', 20);
             $table->char('payment_item_id', 26)->index();
+            $table->char('related_payment_id', 26)->index()->nullable();
             $table->decimal('billAmount', 10, 2);
             $table->decimal('paidAmount', 10, 2);
             $table->char('bill_currency_id', 26)->index();
