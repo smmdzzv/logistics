@@ -51,10 +51,14 @@ class PaymentRequestWriter extends RequestWriter
             $this->payment->save();
 
             $this->setSubjectsAndAccounts();
+
+            $this->checkPayerBalance();
         } else {
             $this->getPaymentSubjects();
 
             $this->getAccounts();
+
+            $this->checkPayerBalance();
 
             $this->createPayment();
         }
@@ -94,6 +98,16 @@ class PaymentRequestWriter extends RequestWriter
     {
         $this->payerAccount = $this->getSubjectAccount($this->payer);
         $this->payeeAccount = $this->getSubjectAccount($this->payee);
+    }
+
+    protected function checkPayerBalance()
+    {
+        if ($this->payerAccount) {
+            $amount = $this->payment ? $this->payment->paidAmount : $this->request->get('paidAmount');
+            $diff = $this->payerAccount->balance - $amount;
+            if ($diff < 0)
+                abort(422, 'Недостаточно средств на балансе плательщика');
+        }
     }
 
     protected function getSubject($type, $id)
