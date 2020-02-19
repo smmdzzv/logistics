@@ -48,6 +48,8 @@ class PaymentRequestWriter extends RequestWriter
                 abort(403, 'Платеж уже проведен');
 
             $this->payment->status = $this->request->get('status');
+            $this->payment->cashier_id = auth()->user()->id;
+            $this->payment->branch_id = auth()->user()->branch->id;
             $this->payment->save();
 
             $this->setSubjectsAndAccounts();
@@ -103,7 +105,7 @@ class PaymentRequestWriter extends RequestWriter
     protected function checkPayerBalance()
     {
         if ($this->payerAccount) {
-            $amount = $this->payment ? $this->payment->paidAmount : $this->request->get('paidAmount');
+            $amount = isset($this->payment) ? $this->payment->paidAmount : $this->request->get('paidAmount');
             $diff = $this->payerAccount->balance - $amount;
             if ($diff < 0)
                 abort(422, 'Недостаточно средств на балансе плательщика');
