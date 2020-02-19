@@ -18,7 +18,7 @@ class BalanceReplenishmentPaymentRequestWriter extends PaymentRequestWriter
 
     protected function updatePayerBalance()
     {
-        $this->payerAccount->balance += $this->payment->paidAmount;
+        $this->payerAccount->balance += $this->payment->billAmount;
         $this->payerAccount->save();
     }
 
