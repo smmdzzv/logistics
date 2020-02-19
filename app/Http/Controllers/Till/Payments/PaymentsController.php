@@ -16,7 +16,7 @@ class PaymentsController extends BaseController
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('roles.allow:cashier,director');
+        $this->middleware('roles.allow:cashier,manager');
     }
 
     public function index()
@@ -27,15 +27,15 @@ class PaymentsController extends BaseController
         return view('till.payments.index', compact('branches', 'currencies', 'paymentItems'));
     }
 
-    public function all()
-    {
-        return Payment::without(
-            'payerAccount',
-            'payeeAccount',
-            'exchangeRate')
-            ->latest()
-            ->paginate($this->pagination());
-    }
+//    public function all()
+//    {
+//        return Payment::without(
+//            'payerAccount',
+//            'payeeAccount',
+//            'exchangeRate')
+//            ->latest()
+//            ->paginate($this->pagination());
+//    }
 
     public function create()
     {

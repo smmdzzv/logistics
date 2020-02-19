@@ -13,6 +13,10 @@ class PaymentFilter extends Filter
     {
         $filters = $this->filters;
 
+        if(!auth()->user()->hasRole('admin'))
+            $this->query->where('payer_id', auth()->user()->branch->id)
+                ->orWhere('payee_id', auth()->user()->branch->id);
+        
         if (isset($filters['item']))
             $this->query->whereHas('paymentItem', function (Builder $query) use ($filters) {
                 $query->where('id', $filters['item']);
