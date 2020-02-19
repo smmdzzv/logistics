@@ -16,6 +16,11 @@ class BalanceReplenishmentPaymentRequestWriter extends PaymentRequestWriter
         $this->payeeAccount = $this->getSubjectAccount($this->payee);
     }
 
+    protected function checkPayerBalance()
+    {
+        return;
+    }
+
     protected function updatePayerBalance()
     {
         $this->payerAccount->balance += $this->payment->billAmount;

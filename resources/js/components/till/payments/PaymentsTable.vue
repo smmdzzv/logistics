@@ -327,7 +327,7 @@
 
                 this.isBusy = true;
 
-                let action = this.prepareUrl() + 'paginate=15&page=' + page;
+                let action = this.prepareUrl() + 'paginate=1&page=' + page;
 
                 axios.get(action)
                     .then(response => {
