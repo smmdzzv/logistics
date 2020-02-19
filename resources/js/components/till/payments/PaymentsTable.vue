@@ -10,7 +10,7 @@
         :selectable="selectable"
         :sticky-header="tableHeight"
         :striped="striped"
-        :tableBusy="isBusy"
+        :isBusy="isBusy"
         :customCells="customCells"
         class="shadow"
         excelFileName="История платежей"
