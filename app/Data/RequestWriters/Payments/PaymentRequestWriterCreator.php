@@ -27,6 +27,9 @@ class PaymentRequestWriterCreator
             case 'Пополнение баланса':
                 $this->writer = new BalanceReplenishmentPaymentRequestWriter($this->request);
                 break;
+            case 'Перевод между счетами филиала':
+                $this->writer = new TransferBetweenBranchAccountsRequestWriter($this->request);
+                break;
             default:
                 $this->writer = new PaymentRequestWriter($this->request);
                 break;
