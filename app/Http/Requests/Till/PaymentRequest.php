@@ -182,11 +182,22 @@ class PaymentRequest extends FormRequest
     {
         if (!($this->payee instanceof Branch))
             return $validator->errors()->add('payee', 'При обмене валют получателем должен быть филиал, а плательщиком клиент. ');
+
         if (!($this->payer instanceof User))
             return $validator->errors()->add('payer', 'При обмене валют плательщиком должен быть клиент, а получателем филиал. ');
+
         if($this->request->get('billCurrency') === $this->request->get('paidCurrency'))
             return $validator->errors()->add('billCurrency', 'При обмене валют требуемая валюта должна отличаться от валюты оплаты.');
+
         if(!$this->request->get('exchangeRate'))
             return $validator->errors()->add('exchangeRate', 'Курс обмена не указан. ');
+
+        $payeeAccount = $this->payee->accounts()->where('currency_id', $this->request->get('billCurrency'))->firstOrFail();
+
+        $diff = $payeeAccount->balance - $this->request->get('billAmount');
+
+        if ($diff < 0)
+            return $validator->errors()->add('payee', 'Недостаточно средств на счету филиала для выдачи валюты - ' . $payeeAccount->balance . ' ' . $payeeAccount->currency->isoName) . '.';
+
     }
 }
