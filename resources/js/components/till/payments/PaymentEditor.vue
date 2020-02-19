@@ -32,7 +32,9 @@
                     <!-- PAYER -->
                     <b-input-group class="col-md-6">
                         <b-input-group-prepend is-text>
-                            <b-form-checkbox v-b-popover.hover.top="'Физ. лицо'" switch class="mr-n2"
+                            <b-form-checkbox v-b-popover.hover.top="'Физ. лицо'"
+                                             switch class="mr-n2"
+                                             :disabled="disable"
                                              v-model="isPayerIndividual">
                                 <span class="sr-only">Switch for following text input</span>
                             </b-form-checkbox>
@@ -40,10 +42,14 @@
                         <b-input-group-prepend is-text>Плательщик</b-input-group-prepend>
                         <search-user-dropdown v-if="isPayerIndividual"
                                               v-model="payment.payer"
+                                              :preselectedUser="payment.payer"
                                               :isInvalid="errors.payer"
                                               :errorMessages="errors.payer"
+                                              :disabled="disable"
                                               style="width:50%"
-                                              :selected="onPayerSelected"></search-user-dropdown>
+                                              :selected="onPayerSelected"
+                        >
+                        </search-user-dropdown>
                         <b-form-select v-else :disabled="disable" v-model="payment.payer"
                                        :class="{'is-invalid':errors.payer}">
                             <option :value="null" disabled>-- Выберите филиал --</option>
@@ -57,7 +63,9 @@
                     <!-- PAYEE -->
                     <b-input-group class="col-md-6">
                         <b-input-group-prepend is-text>
-                            <b-form-checkbox switch v-b-popover.hover.top="'Физ. лицо'" class="mr-n2"
+                            <b-form-checkbox switch v-b-popover.hover.top="'Физ. лицо'"
+                                             :disabled="disable"
+                                             class="mr-n2"
                                              v-model="isPayeeIndividual">
                                 <span class="sr-only">Switch for following text input</span>
                             </b-form-checkbox>
@@ -65,6 +73,7 @@
                         <b-input-group-prepend is-text>Получатель</b-input-group-prepend>
                         <search-user-dropdown v-if="isPayeeIndividual"
                                               v-model="payment.payee"
+                                              :preselectedUser="payment.payer"
                                               :isInvalid="errors.payee"
                                               :errorMessages="errors.payee"
                                               :class="{'is-invalid':errors.payee}"
@@ -205,9 +214,11 @@
     export default {
         name: "PaymentEditor",
         mounted() {
-            if (this.providedPayment)
+            if (this.providedPayment) {
+                this.isPayerIndividual = this.providedPayment.payer_type === 'user';
+                this.isPayeeIndividual = this.providedPayment.payee_type === 'user';
                 this.payment = this.providedPayment
-
+            }
         },
         props: {
             branches: {
@@ -303,10 +314,9 @@
                 this.payment.payee = user
             },
             async getExchangeRate() {
-                tShowSpinner();
                 if (this.disable)
                     return;
-
+                tShowSpinner();
                 let action = `exchange-history/rate/${this.payment.billCurrency.id}/${this.payment.paidCurrency.id}`;
                 try {
                     const result = await axios.get(action);

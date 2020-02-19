@@ -2,6 +2,7 @@
     <div class="dropdown">
         <input :class="{'is-invalid': isInvalid, 'd-none': !isEditMode}"
                :placeholder="placeholder"
+               :disabled="disabled"
                @blur="hideDropdown"
                @focus="showDropdown"
                @keyup.enter="onInputEnter"
@@ -16,6 +17,7 @@
                v-model.lazy="userInfo"
                v-on:click.stop.prevent.capture>
         <input :class="{'is-invalid': isInvalid, 'd-none': isEditMode}"
+               :disabled="disabled"
                @click.stop.prevent.capture="editUserInfo"
                class="form-control"
                id="userInfoDummy"
@@ -65,8 +67,11 @@
                 required: false,
                 default: "/search/user/"
             },
-            errorMessages:{
+            errorMessages: {
                 type: Array
+            },
+            disabled: {
+                type: Boolean
             }
         },
         created() {
