@@ -49,6 +49,7 @@ class MoneyExchangePaymentRequestWriter extends PaymentRequestWriter
             'paidAmount' => $this->request->get('billAmount'),
             'bill_currency_id' => $this->request->get('billCurrency'),
             'paid_currency_id' => $this->request->get('billCurrency'),
+            'related_payment_id' => $this->payment->id,
             'exchange_rate_id' => null,
             'comment' => "Выдача наличных от связанной операции",
         ]);
