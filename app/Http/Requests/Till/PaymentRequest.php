@@ -142,6 +142,12 @@ class PaymentRequest extends FormRequest
             case 'Перевод между счетами филиала':
                 $this->validateTransferBetweenBranchAccounts($validator);
                 break;
+            case 'Прием наличных средств':
+                $this->validateCashAccepting($validator);
+                break;
+            case 'Выдача наличных средств':
+                $this->validateCashWithdrawal($validator);
+                break;
             case 'Обмен валют':
                 $this->validateMoneyExchange($validator);
                 break;
@@ -186,10 +192,10 @@ class PaymentRequest extends FormRequest
         if (!($this->payer instanceof User))
             return $validator->errors()->add('payer', 'При обмене валют плательщиком должен быть клиент, а получателем филиал. ');
 
-        if($this->request->get('billCurrency') === $this->request->get('paidCurrency'))
+        if ($this->request->get('billCurrency') === $this->request->get('paidCurrency'))
             return $validator->errors()->add('billCurrency', 'При обмене валют требуемая валюта должна отличаться от валюты оплаты.');
 
-        if(!$this->request->get('exchangeRate'))
+        if (!$this->request->get('exchangeRate'))
             return $validator->errors()->add('exchangeRate', 'Курс обмена не указан. ');
 
         $payeeAccount = $this->payee->accounts()->where('currency_id', $this->request->get('billCurrency'))->firstOrFail();
@@ -199,5 +205,23 @@ class PaymentRequest extends FormRequest
         if ($diff < 0)
             return $validator->errors()->add('payee', 'Недостаточно средств на счету филиала для выдачи валюты - ' . $payeeAccount->balance . ' ' . $payeeAccount->currency->isoName) . '.';
 
+    }
+
+    private function validateCashAccepting($validator)
+    {
+        if (!($this->payer instanceof User))
+            return $validator->errors()->add('payer', 'При приеме наличных средств плательщиком должен быть указан пользователь. ');
+
+        if (!($this->payee instanceof Branch))
+            return $validator->errors()->add('payee', 'При приеме наличных средств получателем должен быть указана филиал. ');
+    }
+
+    private function validateCashWithdrawal($validator)
+    {
+        if (!($this->payer instanceof Branch))
+            return $validator->errors()->add('payer', 'При выдаче наличных средств плательщиком должен быть указан филиал. ');
+
+        if (!($this->payee instanceof User))
+            return $validator->errors()->add('payee', 'При выдаче наличных средств получателем должен быть указана пользователь. ');
     }
 }
