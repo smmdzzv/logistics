@@ -147,6 +147,10 @@ class Payment extends BaseModel
         return $this->belongsTo(Payment::class);
     }
 
+    public function relatedPayments(){
+        return $this->hasMany(Payment::class, 'related_payment_id');
+    }
+
     public function orderPayments()
     {
         return $this->hasMany(Order\OrderPayment::class);
