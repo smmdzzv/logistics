@@ -33,15 +33,6 @@
                     </div>
 
                     <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
-                        <label>Тип</label>
-                        <b-select v-model="selectedType">
-                            <option :value="null">Все типы</option>
-                            <option value="in">Доход</option>
-                            <option value="out">Расход</option>
-                        </b-select>
-                    </div>
-
-                    <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
                         <label>Статья</label>
                         <b-select id="item" v-model="selectedPaymentItem">
                             <option :value="null">Все статьи</option>
@@ -49,10 +40,6 @@
                                 {{item.title}}
                             </option>
                         </b-select>
-                        <b-tooltip target="item" triggers="hover">
-                            При несовпадении статьи и типа операции.
-                            Предпочтение отдается статье
-                        </b-tooltip>
                     </div>
 
                     <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
@@ -78,17 +65,17 @@
                 <div class="form-row form-group col-12">
                     <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
                         <label>Мин. сумма</label>
-                        <input class="form-control" step="0.01" type="number" v-model.lazy="minAmount">
+                        <input class="form-control" step="0.01" type="number" v-model.lazy="minPaidAmount">
                     </div>
 
                     <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2">
                         <label>Макс. сумма</label>
-                        <input class="form-control" step="0.01" type="number" v-model.lazy="maxAmount">
+                        <input class="form-control" step="0.01" type="number" v-model.lazy="maxPaidAmount">
                     </div>
 
                     <div class="col-12 col-md-2 mb-3 mb-md-0 col-md-2" v-if="branches">
                         <label>Валюта</label>
-                        <b-select v-model="selectedCurrency">
+                        <b-select v-model="selectedPaidCurrency">
                             <option :value="null">Все валюты</option>
                             <option :key="currency.id" :value="currency" v-for="currency in currencies">
                                 {{currency.isoName}}
@@ -101,6 +88,15 @@
                         <search-user-dropdown :selected="cashierSelected"
                                               placeholder="Введите ФИО или код пользователя"
                                               url="/user/find?userInfo="/>
+                    </div>
+
+                    <div class="col-12 mb-3 mb-md-0 col-md-2">
+                        <label>Статус</label>
+                        <b-select v-model="selectedStatus">
+                            <option :value="null">Все операции</option>
+                            <option value="pending">Заявки</option>
+                            <option value="completed">Проведенные</option>
+                        </b-select>
                     </div>
                 </div>
             </div>
@@ -203,11 +199,12 @@
                 selectedPaymentItem: null,
                 selectedUser: null,
                 selectedCashier: null,
-                selectedCurrency: null,
+                selectedPaidCurrency: null,
+                selectedStatus:null,
                 dateFrom: null,
                 dateTo: null,
-                minAmount: null,
-                maxAmount: null,
+                minPaidAmount: null,
+                maxPaidAmount: null,
                 fields: {
                     created_at: {
                         label: 'Дата',
@@ -265,16 +262,18 @@
                     action += 'user=' + this.selectedUser.id + '&';
                 if (this.selectedCashier)
                     action += 'cashier=' + this.selectedCashier.id + '&';
-                if (this.selectedCurrency)
-                    action += 'currency=' + this.selectedCurrency.id + '&';
+                if (this.selectedPaidCurrency)
+                    action += 'paidCurrency=' + this.selectedPaidCurrency.id + '&';
                 if (this.dateFrom)
                     action += 'from=' + this.dateFrom + '&';
                 if (this.dateTo)
                     action += 'to=' + this.dateTo + '&';
-                if (this.minAmount)
-                    action += 'min=' + this.minAmount + '&';
-                if (this.maxAmount)
-                    action += 'max=' + this.maxAmount + '&';
+                if (this.minPaidAmount)
+                    action += 'minPaidAmount=' + this.minPaidAmount + '&';
+                if (this.maxPaidAmount)
+                    action += 'maxPaidAmount=' + this.maxPaidAmount + '&';
+                if (this.selectedStatus)
+                    action += 'selectedStatus=' + this.selectedStatus + '&';
                 return action;
             },
             userSelected(user) {
@@ -329,7 +328,7 @@
             selectedUser() {
                 this.getItems();
             },
-            selectedCurrency() {
+            selectedPaidCurrency() {
                 this.getItems();
             },
             dateFrom() {
@@ -338,10 +337,13 @@
             dateTo() {
                 this.getItems();
             },
-            minAmount() {
+            minPaidAmount() {
                 this.getItems();
             },
-            maxAmount() {
+            maxPaidAmount() {
+                this.getItems();
+            },
+            selectedStatus(){
                 this.getItems();
             }
         },

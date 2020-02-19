@@ -14,12 +14,8 @@ class PaymentFilter extends Filter
         $filters = $this->filters;
 
         if (isset($filters['item']))
-            $this->query->whereHas('paymentItem', function (Builder $query) use($filters) {
-                $query->where('id', $filters['item']);
-            });
-        else if (isset($filters['type']))
             $this->query->whereHas('paymentItem', function (Builder $query) use ($filters) {
-                $query->where('type', $filters['type']);
+                $query->where('id', $filters['item']);
             });
 
         if (isset($filters['branch']))
@@ -27,15 +23,10 @@ class PaymentFilter extends Filter
                 $query->where('id', $filters['branch']);
             });
 
-        if (isset($filters['user']))
-            $this->query->whereHas('payer', function (Builder $query) use ($filters) {
-                $query->where('id', $filters['user']);
-            });
-
-        if (isset($filters['currency']))
-            $this->query->whereHas('currency', function (Builder $query) use ($filters) {
-                $query->where('id', $filters['currency']);
-            });
+//        if (isset($filters['user']))
+//            $this->query->whereHas('payer', function (Builder $query) use ($filters) {
+//                $query->where('id', $filters['user']);
+//            });
 
         if (isset($filters['from']))
             $this->query->where('created_at', '>', Carbon::createFromDate($filters['from']));
@@ -48,11 +39,19 @@ class PaymentFilter extends Filter
                 $query->where('id', $filters['cashier']);
             });
 
-        if (isset($filters['min']))
-            $this->query->where('amount', '>=', $filters['min']);
+        if (isset($filters['minPaidAmount']))
+            $this->query->where('paidAmount', '>=', $filters['minPaidAmount']);
 
-        if (isset($filters['max']))
-            $this->query->where('amount', '<=', $filters['max']);
+        if (isset($filters['maxPaidAmount']))
+            $this->query->where('paidAmount', '<=', $filters['maxPaidAmount']);
+
+        if (isset($filters['paidCurrency']))
+            $this->query->whereHas('paidCurrency', function (Builder $query) use ($filters) {
+                $query->where('id', $filters['paidCurrency']);
+            });
+
+        if (isset($filters['selectedStatus']))
+            $this->query->where('status', $filters['selectedStatus']);
 
         return $this->query;
     }
