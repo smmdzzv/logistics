@@ -6,7 +6,7 @@ namespace App\Data\RequestWriters\Payments;
 
 use App\Data\RequestWriters\RequestWriter;
 use App\Models\LegalEntities\LegalEntity;
-use App\Models\Till\MoneyExchange;
+use App\Models\Till\ExchangeRate;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
 use stdClass;
@@ -29,7 +29,7 @@ class ExchangeMoneyRequestWriter extends RequestWriter
 
     public function prepareData()
     {
-        $this->data->rate = MoneyExchange::where('from', $this->input->from)
+        $this->data->rate = ExchangeRate::where('from', $this->input->from)
             ->where('to', $this->input->to)
             ->firstOrFail();
 

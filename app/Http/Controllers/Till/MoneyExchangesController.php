@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Till;
 use App\Data\RequestWriters\Payments\ExchangeMoneyRequestWriter;
 use App\Http\Controllers\Controller;
 use App\Models\Currency;
-use App\Models\Till\MoneyExchange;
+use App\Models\Till\ExchangeRate;
 use Illuminate\Http\Request;
 
 class MoneyExchangesController extends Controller
@@ -19,9 +19,9 @@ class MoneyExchangesController extends Controller
 
     public function exchangeRate($from, $to)
     {
-        return MoneyExchange::with('toCurrency')
-            ->where('from', $from)
-            ->where('to', $to)
+        return ExchangeRate::with('toCurrency')
+            ->where('fromCurrency', $from)
+            ->where('toCurrency', $to)
             ->firstOrFail();
     }
 
@@ -34,7 +34,7 @@ class MoneyExchangesController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate($this->rules());
-        MoneyExchange::create($data);
+        ExchangeRate::create($data);
         return redirect(route('money-exchanges.create'));
     }
 
@@ -47,22 +47,22 @@ class MoneyExchangesController extends Controller
         ];
     }
 
-    public function exchanger(){
-        $currencies = Currency::all();
-        return view('till.money-exchanges.exchanger', compact('currencies'));
-    }
+//    public function exchanger(){
+//        $currencies = Currency::all();
+//        return view('till.money-exchanges.exchanger', compact('currencies'));
+//    }
 
-    public function exchange()
-    {
-        $data = new \stdClass();
-        $data->from = \request('from');
-        $data->to = \request('to');
-        $data->amount = \request('amount');
-        $data->comment = \request('comment');
-        $data->cashier = auth()->user();
-
-        $writer = new ExchangeMoneyRequestWriter($data);
-        $writer->write();
-        return;
-    }
+//    public function exchange()
+//    {
+//        $data = new \stdClass();
+//        $data->from = \request('from');
+//        $data->to = \request('to');
+//        $data->amount = \request('amount');
+//        $data->comment = \request('comment');
+//        $data->cashier = auth()->user();
+//
+//        $writer = new ExchangeMoneyRequestWriter($data);
+//        $writer->write();
+//        return;
+//    }
 }

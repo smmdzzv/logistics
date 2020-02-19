@@ -4,7 +4,7 @@ namespace App\Http\Requests\Till;
 
 use App\Models\Branch;
 use App\Models\Currency;
-use App\Models\Till\MoneyExchange;
+use App\Models\Till\ExchangeRate;
 use App\Models\Till\PaymentItem;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
@@ -90,7 +90,7 @@ class PaymentRequest extends FormRequest
             //Check exchange rate
             if ($this->request->get('exchangeRate')) {
 
-                $exchangeRate = MoneyExchange::where('id', $this->request->get('exchangeRate'))
+                $exchangeRate = ExchangeRate::where('id', $this->request->get('exchangeRate'))
                     ->where('id', $this->request->get('exchangeRate'))
                     ->where('from', $this->request->get('billCurrency'))
                     ->where('to', $this->request->get('paidCurrency'))

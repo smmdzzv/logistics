@@ -140,7 +140,7 @@ class Payment extends BaseModel
 
     public function exchangeRate()
     {
-        return $this->belongsTo(MoneyExchange::class);
+        return $this->belongsTo(ExchangeRate::class);
     }
 
     public function relatedPayment(){

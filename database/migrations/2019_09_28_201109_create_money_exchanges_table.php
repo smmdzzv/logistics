@@ -13,10 +13,10 @@ class CreateMoneyExchangesTable extends Migration
      */
     public function up()
     {
-        Schema::create('money_exchanges', function (Blueprint $table) {
+        Schema::create('exchange_rates', function (Blueprint $table) {
             $table->char('id',26)->primary();
-            $table->char('from',26)->index();
-            $table->char('to',26)->index();
+            $table->char('fromCurrency',26)->index();
+            $table->char('toCurrency',26)->index();
             $table->decimal('coefficient', 10, 2);
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ class CreateMoneyExchangesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('money_exchanges');
+        Schema::dropIfExists('exchange_rates');
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Till\Account;
-use App\Models\Till\MoneyExchange;
+use App\Models\Till\ExchangeRate;
 
 /**
  * @property string shortName
@@ -20,11 +20,11 @@ class Currency extends BaseModel
     }
 
     public function exchangesTo(){
-        return $this->hasMany(MoneyExchange::class, 'to');
+        return $this->hasMany(ExchangeRate::class, 'to');
     }
 
     public function exchangesFrom(){
-        return $this->hasMany(MoneyExchange::class, 'from');
+        return $this->hasMany(ExchangeRate::class, 'from');
     }
 
     public function country(){

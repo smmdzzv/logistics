@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Currency;
 use App\Models\Order;
 use App\Models\Till\Account;
-use App\Models\Till\MoneyExchange;
+use App\Models\Till\ExchangeRate;
 use App\Models\Users\Client;
 use Illuminate\Foundation\Http\FormRequest;
 

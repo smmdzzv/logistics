@@ -5,15 +5,15 @@ namespace App\Models\Till;
 use App\Models\BaseModel;
 use App\Models\Currency;
 
-class MoneyExchange extends BaseModel
+class ExchangeRate extends BaseModel
 {
     protected $guarded = [];
 
     public function fromCurrency(){
-        return $this->belongsTo(Currency::class, 'from');
+        return $this->belongsTo(Currency::class);
     }
 
     public function toCurrency(){
-        return $this->belongsTo(Currency::class, 'to');
+        return $this->belongsTo(Currency::class);
     }
 }

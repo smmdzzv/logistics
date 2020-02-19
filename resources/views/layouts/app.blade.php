@@ -93,8 +93,7 @@
 {{--                                    <a class="dropdown-item" href="{{route('incoming-payments.create')}}">Приход</a>--}}
 {{--                                    <a class="dropdown-item" href="{{route('outgoing-payments.create')}}">Расход</a>--}}
                                     <div class="dropdown-divider"></div>
-{{--                                    <a class="dropdown-item" href="{{route('money-exchange.exchanger')}}">Обмен--}}
-{{--                                        валют</a>--}}
+                                    <a class="dropdown-item" href="{{route('money-exchanges.create')}}">Курсы валют</a>
 {{--                                    <div class="dropdown-divider"></div>--}}
 {{--                                    <a class="dropdown-item" href="{{route('pending-payments.index')}}">Заявки</a>--}}
                                     <a class="dropdown-item" href="{{route('payments.index')}}">История платежей</a>
