@@ -23,10 +23,11 @@ class PaymentFilter extends Filter
                 $query->where('id', $filters['branch']);
             });
 
-//        if (isset($filters['user']))
-//            $this->query->whereHas('payer', function (Builder $query) use ($filters) {
-//                $query->where('id', $filters['user']);
-//            });
+        if (isset($filters['userPayer']))
+            $this->query->where('payer_id', $filters['userPayer']);
+
+        if (isset($filters['userPayee']))
+            $this->query->where('payee_id', $filters['userPayee']);
 
         if (isset($filters['from']))
             $this->query->where('created_at', '>', Carbon::createFromDate($filters['from']));

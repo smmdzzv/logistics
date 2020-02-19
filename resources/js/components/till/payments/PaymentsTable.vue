@@ -25,9 +25,15 @@
 
                 <div class="form-row form-group col-12 ">
                     <div class="col-12 mb-3 mb-md-0 col-md-2">
-                        <label>Плательщик</label>
-                        <search-user-dropdown :selected="userSelected"
-                                              id="user"
+                        <label>Плательщик (Клиент)</label>
+                        <search-user-dropdown :selected="payerSelected"
+                                              placeholder="Введите ФИО или код пользователя"
+                                              url="/user/find?userInfo="/>
+                    </div>
+
+                    <div class="col-12 mb-3 mb-md-0 col-md-2">
+                        <label>Получатель (Клиент)</label>
+                        <search-user-dropdown :selected="payeeSelected"
                                               placeholder="Введите ФИО или код пользователя"
                                               url="/user/find?userInfo="/>
                     </div>
@@ -197,7 +203,8 @@
                 selectedBranch: null,
                 selectedType: null,
                 selectedPaymentItem: null,
-                selectedUser: null,
+                selectedUserPayer: null,
+                selectedUserPayee: null,
                 selectedCashier: null,
                 selectedPaidCurrency: null,
                 selectedStatus:null,
@@ -258,8 +265,10 @@
                     action += 'type=' + this.selectedType + '&';
                 if (this.selectedPaymentItem)
                     action += 'item=' + this.selectedPaymentItem.id + '&';
-                if (this.selectedUser)
-                    action += 'user=' + this.selectedUser.id + '&';
+                if (this.selectedUserPayer)
+                    action += 'userPayer=' + this.selectedUserPayer.id + '&';
+                if (this.selectedUserPayee)
+                    action += 'userPayee=' + this.selectedUserPayee.id + '&';
                 if (this.selectedCashier)
                     action += 'cashier=' + this.selectedCashier.id + '&';
                 if (this.selectedPaidCurrency)
@@ -276,8 +285,12 @@
                     action += 'selectedStatus=' + this.selectedStatus + '&';
                 return action;
             },
-            userSelected(user) {
-                this.selectedUser = user;
+            payerSelected(user) {
+                this.selectedUserPayer = user;
+                this.getItems();
+            },
+            payeeSelected(user) {
+                this.selectedUserPayee = user;
                 this.getItems();
             },
             cashierSelected(cashier) {
@@ -325,7 +338,7 @@
             selectedPaymentItem() {
                 this.getItems();
             },
-            selectedUser() {
+            selectedUserPayer() {
                 this.getItems();
             },
             selectedPaidCurrency() {
