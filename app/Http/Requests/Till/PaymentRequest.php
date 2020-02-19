@@ -63,6 +63,7 @@ class PaymentRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
+            //Check payer and payee
             $payerId = $this->request->get('payer');
             $this->payer = $this->request->get('payer_type') === 'branch' ? $this->getBranch($payerId) : $this->getClient($payerId);
             if (!$this->payer)
@@ -78,13 +79,15 @@ class PaymentRequest extends FormRequest
 
             $paymentItem = PaymentItem::find($this->request->get('paymentItem'));
 
-            if ($this->payer->id === $this->payee->id && $paymentItem->title !== 'Перевод между счетами филиала')
-                return $validator->errors()->add('payer', 'Плательщиком и получателем является ' . $this->payer->name . '. Необходимо выбрать статью перевод между счетами филиала');
+            if ($this->payer instanceof Branch && $this->payee instanceof Branch
+                && $paymentItem->title !== 'Перевод между счетами филиала' && $paymentItem->title !== 'Перевод между филиалами')
+                return $validator->errors()->add('payer', 'Перевод денег между филиалами возможен для статей "Перевод между филиалами" или "Перевод между счетами филиала"');
 
             $this->validatePaymentItems($paymentItem, $validator);
 
             $exchangeRate = null;
 
+            //Check exchange rate
             if ($this->request->get('exchangeRate')) {
 
                 $exchangeRate = MoneyExchange::where('id', $this->request->get('exchangeRate'))
@@ -98,6 +101,7 @@ class PaymentRequest extends FormRequest
 
             }
 
+            //Check payment amount
             if ($this->request->get('billCurrency') !== $this->request->get('paidCurrency')) {
                 if (!$exchangeRate)
                     return $validator->errors()->add('exchangeRate', 'Валюта оплаты не соотсветсвует валюте платежа. Необходима конвертация.');
@@ -112,7 +116,7 @@ class PaymentRequest extends FormRequest
                     return $validator->errors()->add('paidAmount', 'Сумма к оплате не равняется требуемой сумме.');
             }
 
-            //Check payer account
+            //Check payer account balance
             if ($this->request->get('payer_type') === 'branch') {
                 $payerAccount = $this->payer->accounts()->where('currency_id', $this->request->get('paidCurrency'))->first();
                 if (!$payerAccount)
