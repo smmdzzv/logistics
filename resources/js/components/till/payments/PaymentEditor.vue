@@ -351,7 +351,8 @@
                         exchangeRate: this.payment.exchangeRate === null ? null : this.payment.exchangeRate.id
                     };
 
-                    const response = await axios.post('/payment', data);
+                    const response = await axios.post('/payment', data); 
+                    window.location.href = '/payments/' + response.data;
                 } catch (e) {
                     if (e.response && e.response.status === 422) {
                         this.errors.id = e.response.data.errors.id;
