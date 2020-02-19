@@ -113,7 +113,9 @@
                                               placeholder="Введите ФИО или код пользователя"
                                               url="/user/find?userInfo="/>
                     </div>
+                </div>
 
+                <div class="form-row form-group col-12">
                     <div class="col-12 mb-3 mb-md-0 col-md-2">
                         <label>Статус</label>
                         <b-select v-model="selectedStatus">
