@@ -67,5 +67,12 @@ class PaymentItemsTableSeeder extends Seeder
                 'description' => 'Перевод денег между счетами одного филиала',
             ]
         );
+
+        PaymentItem::create(
+            [
+                'title' => 'Обмен валют',
+                'description' => 'Обмен валют для клиентов',
+            ]
+        );
     }
 }
