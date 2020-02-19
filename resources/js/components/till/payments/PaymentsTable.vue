@@ -313,15 +313,19 @@
             },
             payerSelected(user) {
                 this.selectedUserPayer = user;
-                this.getItems();
+                this.getFilteredItems()
             },
             payeeSelected(user) {
                 this.selectedUserPayee = user;
-                this.getItems();
+                this.getFilteredItems()
             },
             cashierSelected(cashier) {
                 this.selectedCashier = cashier;
-                this.getItems();
+                this.getFilteredItems()
+            },
+            getFilteredItems(){
+                this.items = [];
+                this.getItems()
             },
             getItems(page = 1) {
                 if (this.trips)
@@ -356,37 +360,37 @@
         },
         watch: {
             selectedBranch() {
-                this.getItems();
+                this.getFilteredItems();
             },
             selectedBranchPayee(){
-                this.getItems();
+                this.getFilteredItems();
             },
             selectedBranchPayer(){
-                this.getItems();
+                this.getFilteredItems();
             },
             selectedType() {
-                this.getItems();
+                this.getFilteredItems();
             },
             selectedPaymentItem() {
-                this.getItems();
+                this.getFilteredItems();
             },
             selectedPaidCurrency() {
-                this.getItems();
+                this.getFilteredItems();
             },
             dateFrom() {
-                this.getItems();
+                this.getFilteredItems();
             },
             dateTo() {
-                this.getItems();
+                this.getFilteredItems();
             },
             minPaidAmount() {
-                this.getItems();
+                this.getFilteredItems();
             },
             maxPaidAmount() {
-                this.getItems();
+                this.getFilteredItems();
             },
             selectedStatus(){
-                this.getItems();
+                this.getFilteredItems()
             }
         },
         components: {
