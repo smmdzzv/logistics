@@ -81,7 +81,7 @@
                             </li>
                         @endif
                     <!--Till-->
-                        @if(Auth::user()->hasAnyRole(['admin', 'cashier']))
+                        @if(Auth::user()->hasAnyRole(['admin', 'cashier','manager']))
                             <li class="nav-item dropdown">
                                 <a id="tillMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -93,14 +93,14 @@
 {{--                                    <a class="dropdown-item" href="{{route('incoming-payments.create')}}">Приход</a>--}}
 {{--                                    <a class="dropdown-item" href="{{route('outgoing-payments.create')}}">Расход</a>--}}
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{route('money-exchange.exchanger')}}">Обмен
-                                        валют</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{route('pending-payments.index')}}">Заявки</a>
+{{--                                    <a class="dropdown-item" href="{{route('money-exchange.exchanger')}}">Обмен--}}
+{{--                                        валют</a>--}}
+{{--                                    <div class="dropdown-divider"></div>--}}
+{{--                                    <a class="dropdown-item" href="{{route('pending-payments.index')}}">Заявки</a>--}}
                                     <a class="dropdown-item" href="{{route('payments.index')}}">История платежей</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{route('branches.accounts.index')}}">Счета
-                                        Дуоб</a>
+{{--                                    <div class="dropdown-divider"></div>--}}
+{{--                                    <a class="dropdown-item" href="{{route('branches.accounts.index')}}">Счета--}}
+{{--                                        Дуоб</a>--}}
                                     @if(Auth::user()->hasRole('admin'))
                                         <div class="dropdown-divider"></div>
                                         <h6 class="dropdown-header">Статьи прихода/расхода</h6>
