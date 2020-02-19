@@ -30,6 +30,9 @@ class PaymentRequestWriterCreator
             case 'Перевод между счетами филиала':
                 $this->writer = new TransferBetweenBranchAccountsRequestWriter($this->request);
                 break;
+            case 'Обмен валют':
+                $this->writer = new MoneyExchangePaymentRequestWriter($this->request);
+                break;
             default:
                 $this->writer = new PaymentRequestWriter($this->request);
                 break;
