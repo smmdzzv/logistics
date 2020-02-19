@@ -327,12 +327,12 @@
 
                 this.isBusy = true;
 
-                let action = this.prepareUrl() + 'paginate=1&page=' + page;
+                let action = this.prepareUrl() + 'paginate=20&page=' + page;
 
                 axios.get(action)
                     .then(response => {
                         this.pagination = response.data;
-                        if (this.flowablePagination)
+                        if (this.flowable)
                             response.data.data.forEach(item => {
                                 this.items.push(item);
                             });
