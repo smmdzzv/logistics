@@ -20,8 +20,8 @@ class MoneyExchangesController extends Controller
     public function exchangeRate($from, $to)
     {
         return ExchangeRate::with('toCurrency')
-            ->where('fromCurrency', $from)
-            ->where('toCurrency', $to)
+            ->where('from_currency_id', $from)
+            ->where('to_currency_id', $to)
             ->firstOrFail();
     }
 

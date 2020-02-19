@@ -1,6 +1,5 @@
 <?php
 
-use App\Branch;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -30,7 +29,7 @@ class DatabaseSeeder extends Seeder
          $this->call(TariffPriceHistoriesTableSeeder::class);
 
          $this->call(PaymentItemsTableSeeder::class);
-         $this->call(MoneyExchangesTableSeeder::class);
+         $this->call(ExchangeRatesTableSeeder::class);
 
          $this->call(CustomsCodesTableSeeder::class);
     }
