@@ -19,9 +19,9 @@ class MoneyExchangesController extends Controller
 
     public function exchangeRate($from, $to)
     {
-        return ExchangeRate::with('toCurrency')
-            ->where('from_currency_id', $from)
+        return ExchangeRate::where('from_currency_id', $from)
             ->where('to_currency_id', $to)
+            ->latest()
             ->firstOrFail();
     }
 
@@ -41,8 +41,8 @@ class MoneyExchangesController extends Controller
     private function rules()
     {
         return [
-            'from' => 'required|exists:currencies,id',
-            'to' => 'required|exists:currencies,id|different:from',
+            'from_currency_id' => 'required|exists:currencies,id',
+            'to_currency_id' => 'required|exists:currencies,id|different:from_currency_id',
             'coefficient' => 'required|numeric'
         ];
     }

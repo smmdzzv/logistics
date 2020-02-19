@@ -9,6 +9,8 @@ class ExchangeRate extends BaseModel
 {
     protected $guarded = [];
 
+    protected $with = ['fromCurrency', 'toCurrency'];
+
     public function fromCurrency(){
         return $this->belongsTo(Currency::class);
     }

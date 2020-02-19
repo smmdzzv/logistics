@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col">
                 <div class="card shadow">
                     <div class="card-header">Добавить курс валюты</div>
 
@@ -19,19 +19,19 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Из</span>
                                         </div>
-                                        <select id="from"
+                                        <select id="from_currency_id"
                                                 type="text"
-                                                class="form-control custom-select @error('from') is-invalid @enderror"
-                                                name="from"
+                                                class="form-control custom-select @error('from_currency_id') is-invalid @enderror"
+                                                name="from_currency_id"
                                                 autocomplete="type" required>
                                             <option disabled>--Выберите валюту--</option>
                                             @foreach($currencies as $currency)
                                                 <option value="{{$currency->id}}"
-                                                        @if($currency->id === old('from')) selected @endif>
+                                                        @if($currency->id === old('from_currency_id')) selected @endif>
                                                     {{$currency->name}} {{$currency->isoName}}</option>
                                             @endforeach
                                         </select>
-                                        @error('from')
+                                        @error('from_currency_id')
                                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -39,24 +39,24 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-3 ">
-                                    <label for="to">Целевая</label>
+                                    <label for="to_currency_id">Целевая</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">В</span>
                                         </div>
-                                        <select id="to"
+                                        <select id="to_currency_id"
                                                 type="text"
-                                                class="form-control custom-select @error('to') is-invalid @enderror"
-                                                name="to"
+                                                class="form-control custom-select @error('to_currency_id') is-invalid @enderror"
+                                                name="to_currency_id"
                                                 autocomplete="type" required>
                                             <option disabled>--Выберите валюту--</option>
                                             @foreach($currencies as $currency)
                                                 <option value="{{$currency->id}}"
-                                                        @if($currency->id === old('to')) selected @endif>
+                                                        @if($currency->id === old('to_currency_id')) selected @endif>
                                                     {{$currency->name}} {{$currency->isoName}}</option>
                                             @endforeach
                                         </select>
-                                        @error('to')
+                                        @error('to_currency_id')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>

@@ -17,7 +17,7 @@ class CreateExchangeRatesTable extends Migration
             $table->char('id',26)->primary();
             $table->char('from_currency_id',26)->index();
             $table->char('to_currency_id',26)->index();
-            $table->decimal('coefficient', 10, 2);
+            $table->decimal('coefficient', 10, 3);
             $table->timestamps();
         });
     }

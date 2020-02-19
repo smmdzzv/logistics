@@ -88,15 +88,13 @@
                                     Касса <span class="caret"></span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="tillMenuDropdown">
-                                    <h6 class="dropdown-header">Платеж</h6>
+                                    <h6 class="dropdown-header">Платежи</h6>
                                     <a class="dropdown-item" href="{{route('payment.create')}}">Провести платеж</a>
-{{--                                    <a class="dropdown-item" href="{{route('incoming-payments.create')}}">Приход</a>--}}
+                                    <a class="dropdown-item" href="{{route('payments.index')}}">История платежей</a>
+                                    {{--                                    <a class="dropdown-item" href="{{route('incoming-payments.create')}}">Приход</a>--}}
 {{--                                    <a class="dropdown-item" href="{{route('outgoing-payments.create')}}">Расход</a>--}}
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{route('money-exchanges.create')}}">Курсы валют</a>
 {{--                                    <div class="dropdown-divider"></div>--}}
 {{--                                    <a class="dropdown-item" href="{{route('pending-payments.index')}}">Заявки</a>--}}
-                                    <a class="dropdown-item" href="{{route('payments.index')}}">История платежей</a>
 {{--                                    <div class="dropdown-divider"></div>--}}
 {{--                                    <a class="dropdown-item" href="{{route('branches.accounts.index')}}">Счета--}}
 {{--                                        Дуоб</a>--}}
@@ -109,6 +107,7 @@
                                             статей</a>
                                         <div class="dropdown-divider"></div>
                                         <h6 class="dropdown-header">Валюта</h6>
+                                        <a class="dropdown-item" href="{{route('money-exchanges.create')}}">Курсы валют</a>
                                         <a class="dropdown-item" href="{{route('currencies.create')}}">Добавить
                                             валюту</a>
                                         <a class="dropdown-item" href="{{route('currencies.index')}}">Список валют</a>
