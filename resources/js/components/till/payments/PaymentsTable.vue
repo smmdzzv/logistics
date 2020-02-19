@@ -23,7 +23,7 @@
                 <!--                    <div class=" mr-auto">История платежей</div>-->
                 <!--                </div>-->
 
-                <div class="form-row form-group col-12 ">
+                <div class="form-row form-group col-12 align-items-baseline">
                     <div class="col-12 mb-3 mb-md-0 col-md-2">
                         <label>Плательщик (Клиент)</label>
                         <search-user-dropdown :selected="payerSelected"
