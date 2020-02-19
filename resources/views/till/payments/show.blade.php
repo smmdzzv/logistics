@@ -14,8 +14,9 @@
             <div class="card-body">
                 <h4>Общая информация</h4>
                 @component('till/payments/payment', ['payment' => $payment, 'showProfileLink' => false])@endcomponent
-
-                <h4>Связанные платежи</h4>
+                @if($payment->relatedPayment || $payment->relatedPayment && count($payment->relatedPayment) > 0)
+                    <h4>Связанные платежи</h4>
+                @endif
                 @if($payment->relatedPayment)
                     @component('till/payments/payment', ['payment' => $payment->relatedPayment, 'showProfileLink' => true])@endcomponent
                 @endif
