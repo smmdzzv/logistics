@@ -44,7 +44,8 @@
                                               :errorMessages="errors.payer"
                                               style="width:50%"
                                               :selected="onPayerSelected"></search-user-dropdown>
-                        <b-form-select v-else :disabled="disable" v-model="payment.payer" :class="{'is-invalid':errors.payer}">
+                        <b-form-select v-else :disabled="disable" v-model="payment.payer"
+                                       :class="{'is-invalid':errors.payer}">
                             <option :value="null" disabled>-- Выберите филиал --</option>
                             <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
                         </b-form-select>
@@ -69,7 +70,8 @@
                                               :class="{'is-invalid':errors.payee}"
                                               style="width:51%"
                                               :selected="onPayeeSelected"></search-user-dropdown>
-                        <b-form-select v-else :disabled="disable" v-model="payment.payee" :class="{'is-invalid':errors.payee}">
+                        <b-form-select v-else :disabled="disable" v-model="payment.payee"
+                                       :class="{'is-invalid':errors.payee}">
                             <option :value="null" disabled>-- Выберите филиал --</option>
                             <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
                         </b-form-select>
@@ -110,6 +112,10 @@
                     <div class="col-md-4 form-group">
                         <label for="billCurrency">Валюта</label>
                         <b-form-select id="billCurrency"
+                                       v-b-tooltip.hover
+                                       title="Валюта в которой определяется необходимая сумма платежа.
+                                       Для некоторых статей оплаты определяет счет зачисления.
+                                       Наример, при обмене валют определяет желаемую клиентом валюту. "
                                        v-model="payment.billCurrency"
                                        :disabled="disable"
                                        :class="{'is-invalid':errors.billCurrency}">
@@ -129,7 +135,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 form-group"  v-if="payment.exchangeRate">
+                    <div class="col-md-4 form-group" v-if="payment.exchangeRate">
                         <label for="currentRate">Обменный курс</label>
                         <b-form-input id="currentRate"
                                       v-model="payment.exchangeRate.coefficient"
@@ -157,6 +163,8 @@
                     <div class="col-md-4 form-group">
                         <label for="paidCurrency">Валюта оплаты</label>
                         <b-form-select id="paidCurrency"
+                                       v-b-tooltip.hover
+                                       title="Валюта в которой принимаются деньги у клиента. Валюта оплаты также определяет счет списания."
                                        v-model="payment.paidCurrency"
                                        :disabled="disable"
                                        :class="{'is-invalid':errors.paidCurrency}">
@@ -196,8 +204,8 @@
 <script>
     export default {
         name: "PaymentEditor",
-        mounted(){
-            if(this.providedPayment)
+        mounted() {
+            if (this.providedPayment)
                 this.payment = this.providedPayment
 
         },
@@ -235,7 +243,7 @@
                     paymentItem: null,
                     billAmount: 0,
                     billCurrency: null,
-                    exchangeRate:null,
+                    exchangeRate: null,
                     paidAmount: 0,
                     paidCurrency: null,
                     comment: null
