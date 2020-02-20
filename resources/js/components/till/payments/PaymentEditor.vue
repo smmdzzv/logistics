@@ -1,5 +1,10 @@
 <template>
     <div class="container">
+        <div class="alert alert-info" v-if="payerAccounts">
+            <span>{{payment.payer.name}} &ndash; <span v-for="account in payerAccounts">
+                {{account.balance}} {{account.currency.isoName}} | </span>
+            </span>
+        </div>
         <div class="card">
             <div class="card-header">
                 Провести платеж
@@ -259,6 +264,7 @@
                     paidCurrency: null,
                     comment: null
                 },
+                payerAccounts: null,
                 errors: {
                     id: null,
                     status: null,
@@ -290,6 +296,16 @@
             },
             'payment.exchangeRate'() {
                 this.calculatePaidAmount();
+            },
+            isPayerIndividual() {
+                this.payment.payer = null
+            },
+            isPayeeIndividual() {
+                this.payment.payee = null
+            },
+            'payment.payer'() {
+                this.payerAccounts = null;
+                this.getPayerAccounts();
             }
         },
         methods: {
@@ -332,6 +348,19 @@
                         tHideSpinner();
                     }
                 )
+            },
+            async getPayerAccounts() {
+                if (!this.payment.payer)
+                    return;
+
+                try {
+                    let action = '/accounts/' + this.payment.payer.id;
+                    const response = await axios.get(action);
+                    this.payerAccounts = response.data;
+                } catch (e) {
+                    this.$root.showErrorMsg('Ошибка загрузки',
+                        'Не удалось загрузить информацию о счетах плательщика')
+                }
             },
             async submit() {
                 try {
