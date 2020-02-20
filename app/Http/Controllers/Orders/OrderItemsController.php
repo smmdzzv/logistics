@@ -79,15 +79,15 @@ class OrderItemsController extends Controller
             'payee_account_id' => auth()->user()->branch->accounts()->dollarAccount()->id,
             'payee_type' => 'branch',
             'payment_item_id' => PaymentItem::firstOrCreate([
-                'title' => 'Списание с баланса',
-                'description' => 'Списание денег с баланса клиента в счет оплаты заказы'
+                'title' => 'Пополнение баланса',
+                'description' => 'Пополнение долларового счета пользователя'
             ])->id,
             'billAmount' => $paymentSum,
             'paidAmount' => $paymentSum,
             'bill_currency_id' => $dollar,
             'paid_currency_id' => $dollar,
             'exchange_rate_id' => null,
-            'comment' => 'Списание денег с баланса в счет оплаты заказа',
+            'comment' => 'Пополнение баланса пользователя для оплаты заказа',
         ]);
 
         $orderPayment = OrderPayment::create([
