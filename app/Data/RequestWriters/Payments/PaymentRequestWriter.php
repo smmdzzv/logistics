@@ -86,14 +86,6 @@ class PaymentRequestWriter extends RequestWriter
     {
         $this->payer = $this->getSubject($this->request->get('payer_type'), $this->request->get('payer'));
         $this->payee = $this->getSubject($this->request->get('payee_type'), $this->request->get('payee'));
-
-
-        //Users have only dollar account. All operations should be in dollars
-//        if ($this->payerAccount === null
-//            && $this->payer instanceof User
-//            && PaymentItem::where('id', $this->request->get('paymentItem'))->where('title', 'Пополнение баланса')->first()
-//            && Currency::find($this->request->get('billCurrency'))->isoName === 'USD')
-//            $this->payerAccount = $this->payer->accounts()->dollarAccount();
     }
 
     protected function getAccounts()
@@ -177,51 +169,4 @@ class PaymentRequestWriter extends RequestWriter
             $this->payeeAccount->save();
         }
     }
-
-//    protected function updateAccountsBalance()
-//    {
-//        if ($this->payerAccount) {
-//            if ($this->payment->paymentItem->title === "Пополнение баланса")
-//                $this->payerAccount->balance += $this->payment->paidAmount;
-//            else
-//                $this->payerAccount->balance -= $this->payment->paidAmount;
-//            $this->payerAccount->save();
-//        }
-//
-//        if ($this->payeeAccount) {
-//            $this->payeeAccount->balance += $this->payment->paidAmount;
-//            $this->payeeAccount->save();
-//        }
-//    }
-
-
-//    function write()
-//    {
-//        return $this->writePayment();
-//    }
-//
-//    protected function writePayment()
-//    {
-//        $this->input->payment['branchId'] = $this->input->branchId;
-//        $this->input->payment['cashierId'] = $this->input->cashierId;
-//
-//        if (!isset($this->input->payment['currencyId'])) {
-//            $this->data->duobAccount = LegalEntity::first()->accounts()->with('currency')->first();
-//            $this->input->payment['currencyId'] = $this->data->duobAccount->currency->id;
-//        }
-//
-//        $filter = ['orderId', 'accountTo', 'accountFrom', 'recipient'];
-//        $data = array_filter($this->input->payment, function ($key) use ($filter) {
-//            return !in_array($key, $filter);
-//        }, ARRAY_FILTER_USE_KEY);
-//
-//        if(isset($data['id'])){
-//            $this->saved->payment = Payment::findOrFail($data['id']);
-//            $this->saved->payment->fill($data);
-//        }
-//        else
-//            $this->saved->payment = new Payment($data);
-//
-//        $this->saved->payment->save();
-//    }
 }
