@@ -94,17 +94,7 @@ class OrderItemsController extends Controller
             ]);
         });
 
-//        StoredItem::whereIn('id', request()->input('items'))->update([
-//            'deleted_at' => Carbon::now(),
-//            'deleted_by_id' => auth()->user()->id
-//        ]);
-
         return $payment->id;
-    }
-
-    private function getStoredItems()
-    {
-        return StoredItem::whereIn('id', \request()->get('items'))->get();
     }
 
     public function storedItems(Order $order)
