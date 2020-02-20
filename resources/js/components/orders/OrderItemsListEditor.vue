@@ -151,7 +151,7 @@
 
                 try {
                     const response = await axios.post(action, data);
-                    window.location = `/incoming-payments/${response.data}/edit`;
+                    // window.location = `/incoming-payments/${response.data}/edit`;
                 } catch (e) {
                     if (e.response.status === 400) {
                         this.errorMessage = e.response.data.message;
@@ -178,7 +178,7 @@
 
                 try {
                     const response = await axios.post(action, data);
-                    window.location = `/payments/${response.data}`;
+                    // window.location = `/payments/${response.data}`;
                 } catch (e) {
                     if (e.response.status === 400) {
                         this.errorMessage = e.response.data.message;

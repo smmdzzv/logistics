@@ -6,18 +6,39 @@ namespace App\Data\RequestWriters\Order;
 
 use App\Data\RequestWriters\RequestWriter;
 use App\Models\Currency;
+use App\Models\Order;
 use App\Models\Order\OrderPayment;
 use App\Models\Order\OrderPaymentItem;
 use App\Models\StoredItems\StoredItem;
+use App\Models\Till\Account;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
 use App\Models\Users\TrustedUser;
 use App\StoredItems\StorageHistory;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder; 
 
 class DeliverOrderItemsRequestWriter extends RequestWriter
 {
+    private $storedItems;
+    private Order $order;
+
+    private Account $clientAccount;
+
+    private Payment $payment;
+
+    public function __construct($request, Order $order)
+    {
+        parent::__construct(null);
+
+        $this->request = $request;
+        $this->storedItems = StoredItem::whereIn('id', \request()->get('items'))->get();
+        $this->order = $order;
+    }
+
+    /**
+     * @return Payment
+     */
     function write()
     {
         $this->checkPayment();
@@ -26,27 +47,15 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
 
         $this->changeOrderStatus();
 
-        return $this->saved;
+        return $this->payment;
     }
 
     private function checkPayment()
     {
         //Filter unpaid items
-
-        $ids = $this->input->storedItems->map(function ($item) {
+        $ids = $this->storedItems->map(function ($item) {
             return $item->id;
         });
-
-//        $paidItemsIds = OrderPaymentItem::whereIn('stored_item_id', $ids)
-//            ->get()
-//            ->map(function ($item) {
-//                return $item->stored_item_id;
-//            });
-
-//        $unpaidItems = $this->input->storedItems
-//            ->filter(function ($storedItemId, $key) use ($paidItemsIds) {
-//                return !$paidItemsIds->contains($storedItemId);
-//            });
 
         $unpaidItems = StoredItem::whereIn('id', $ids)->get();
 
@@ -60,49 +69,30 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
             return $info->billingInfo->pricePerItem;
         });
 
-//        $unpaidStoredItemInfos->each(function (StoredItemInfo $info, $key) use ($paymentSum) {
-//            $paymentSum += $info->billingInfo->pricePerItem;
-//
-//        });
-
         if ($paymentSum > 0) {
-            $this->data->account = $this->input->order->owner->accounts()->first();
+            $this->clientAccount = $this->order->owner->accounts()->dollarAccount();
 
-            if ($this->data->account->balance < $paymentSum) {
-                if (!$this->input->isDebtRequested)
-                    abort(400, "Недостаточно средств на балансе");
+            if ($this->clientAccount->balance < $paymentSum) {
+                if (!$this->request->get('isDebtRequested'))
+                    abort(422, "Недостаточно средств на балансе");
                 else if (!$this->checkForDebtPossibility($paymentSum))
-                    abort(400, "Доверительный платеж не возможен");
+                    abort(422, "Доверительный платеж не возможен");
             }
 
             $this->createPayment($paymentSum, $unpaidItems);
         }
-
-
-//        $order = $this->input->order;
-//        $this->data->client = $order->owner;
-//
-//        if (!$order->payment) {
-//
-//            $this->data->account = $this->data->client->accounts()->first();
-//
-//            if ($this->data->account->balance < $order->totalPrice
-//                && !$this->checkForDebtPossibility())
-//                abort(400, "Недостаточно средств на балансе");
-//            else
-//                $this->createPayment();
-//        }
     }
 
     private function checkForDebtPossibility($paymentSum): bool
     {
-        $trusted = TrustedUser::where('user_id', $this->input->order->owner->id)->where('to', '>=', Carbon::now()->toDateString())
+        $trusted = TrustedUser::where('user_id', $this->order->owner->id)
+            ->where('to', '>=', Carbon::now()->toDateString())
             ->first();
 
         if (!$trusted)
             return false;
 
-        $overallDebt = $this->data->account->balance - $paymentSum;
+        $overallDebt = $this->clientAccount->balance - $paymentSum;
 
         if (abs($overallDebt) > $trusted->maxDebt)
             abort(400,
@@ -116,31 +106,37 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
 
     private function createPayment($paymentSum, $unpaidStoredItems)
     {
+        $dollar = Currency::where('isoName', 'USD')->first()->id;
 
-        $this->saved->payment = Payment::create([
-            'branchId' => $this->input->employee->branch->id,
-            'cashierId' => $this->input->employee->id,
-            'currencyId' => Currency::where('isoName', 'USD')->first()->id,
-            'payerId' => $this->input->order->owner->id,
-            'preparedById' => auth()->user()->id,
-            'paymentItemId' => PaymentItem::firstOrCreate([
+        $this->payment = Payment::create([
+            'branch_id' => auth()->user()->branch->id,
+            'cashier_id' => auth()->user()->id,
+            'status' => 'completed',
+            'prepared_by_id' => null,
+            'payer_id' => $this->order->owner->id,
+            'payer_account_id' => $this->clientAccount->id,
+            'payer_type' => 'user',
+            'payee_id' => auth()->user()->branch->id,
+            'payee_account_id' => auth()->user()->branch->accounts()->dollarAccount()->id,
+            'payee_type' => 'branch',
+            'payment_item_id' => PaymentItem::firstOrCreate([
                 'title' => 'Списание с баланса',
-                'type' => 'internal',
                 'description' => 'Списание денег с баланса клиента в счет оплаты заказы'
             ])->id,
-            'accountFromId' => $this->data->account->id,
-            'amount' => $paymentSum,
-            'status' => 'completed',
-            'comment' => 'Списание денег с баланса в счет оплаты заказа'
+            'billAmount' => $paymentSum,
+            'paidAmount' => $paymentSum,
+            'bill_currency_id' => $dollar,
+            'paid_currency_id' => $dollar,
+            'exchange_rate_id' => null,
+            'comment' => 'Списание денег с баланса в счет оплаты заказа',
         ]);
 
-//        $this->data->account->balance -= $this->input->order->totalPrice;
-        $this->data->account->balance -= $paymentSum;
-        $this->data->account->save();
+        $this->clientAccount->balance -= $paymentSum;
+        $this->clientAccount->save();
 
         $orderPayment = OrderPayment::create([
-            'order_id' => $this->input->order->id,
-            'payment_id' => $this->saved->payment->id
+            'order_id' => $this->order->id,
+            'payment_id' => $this->payment->id
         ]);
 
         $unpaidStoredItems->each(function ($item, $key) use ($orderPayment) {
@@ -149,14 +145,11 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
                 'order_payment_id' => $orderPayment->id
             ]);
         });
-
-//        $this->input->order->paymentId = $this->saved->payment->id;
-//        $this->input->order->save();
     }
 
     private function deliverItems()
     {
-        $ids = $this->input->storedItems->map(function ($item) {
+        $ids = $this->storedItems->map(function ($item) {
             return $item->id;
         });
 
@@ -165,19 +158,19 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
             $query->whereIn('id', $ids->all());
         })->update([
             'deleted_at' => Carbon::now(),
-            'deletedById' => $this->input->employee->id
+            'deletedById' => auth()->user()->id
         ]);
 
         StoredItem::whereIn('id', $ids->all())->update([
             'deleted_at' => Carbon::now(),
-            'deleted_by_id' => $this->input->employee->id
+            'deleted_by_id' => auth()->user()->id
         ]);
     }
 
     private function changeOrderStatus()
     {
-        if ($this->input->order->storedItems()->count() === 0)
-            $this->input->order->complete();
+        if ($this->order->storedItems()->count() === 0)
+            $this->order->complete();
     }
 
 }

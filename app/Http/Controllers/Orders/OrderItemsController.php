@@ -14,6 +14,7 @@ use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
 use App\Models\Users\TrustedUser;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class OrderItemsController extends Controller
 {
@@ -28,19 +29,11 @@ class OrderItemsController extends Controller
         return view('orders.edit-items-list');
     }
 
-    //TODO refactoring check items
-    public function deliver(Order $order)
+    public function deliver(Order $order, Request $request)
     {
-        $data = new \stdClass();
-        $data->order = $order;
-        $data->employee = auth()->user();
-        $data->storedItems = $this->getStoredItems();
-        $data->isDebtRequested = request()->get('isDebtRequested');
-
-        $writer = new DeliverOrderItemsRequestWriter($data);
-        $result = $writer->write();
-
-        return $result->payment->id;
+        $writer = new DeliverOrderItemsRequestWriter($request, $order);
+        $payment = $writer->write();
+        return $payment->id;
     }
 
     //TODO refactor this and DeliverOrderItemsRequestWriter
@@ -69,7 +62,7 @@ class OrderItemsController extends Controller
             }
         }
 
-        if($paymentSum <= 0){
+        if ($paymentSum <= 0) {
             return abort(400, 'На балансе клиента достаточно денег для оплаты выбранных товаров');
         }
 
@@ -126,10 +119,11 @@ class OrderItemsController extends Controller
             ->unpaid()->get();
     }
 
-    public function orderPayments(Order $order){
+    public function orderPayments(Order $order)
+    {
         $order->load('orderPayments.paidItems.storedItem');
-        $payments = $order->orderPayments->filter(function ($payment){
-            $storedItems = $payment->paidItems->filter(function ($paidItem){
+        $payments = $order->orderPayments->filter(function ($payment) {
+            $storedItems = $payment->paidItems->filter(function ($paidItem) {
                 return $paidItem->storedItem->deleted_at == null;
             });
 
