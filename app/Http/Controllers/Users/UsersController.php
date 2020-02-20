@@ -24,7 +24,7 @@ class UsersController extends Controller
 
         $except = ['all', 'index'];
 
-        $this->middleware('roles.allow:admin,director')->except($except);
+        $this->middleware('roles.allow:admin,manager')->except($except);
         $this->middleware('roles.deny:client')->only($except);
     }
 
@@ -109,7 +109,7 @@ class UsersController extends Controller
         $user->email = $request['email'];
         $user->phone = $request['phone'];
         $user->code = $request['code'];
-        if (isset($data['password']))
+        if (isset($request['password']))
             $user->password = Hash::make($request['password']);
 
         $user->position_id = $request['position'] ? Position::firstOrCreate(['name' => $request['position']])->id : null;
@@ -126,7 +126,7 @@ class UsersController extends Controller
                 $user->roles()->attach($role);
         }
 
-        if($user->hasRole('admin') && !Role::whereIn('id', $request['roles'])->where('name', 'admin')->first())
+        if ($user->hasRole('admin') && !Role::whereIn('id', $request['roles'])->where('name', 'admin')->first())
             $user->roles()->detach(
                 $user->roles()->where('name', '=', 'admin')->get()
             );
@@ -140,7 +140,8 @@ class UsersController extends Controller
         return redirect(route('users.index'));
     }
 
-    public function find()
+    public
+    function find()
     {
         $userInfo = request('userInfo');
         $users = User::whereRaw("name LIKE '%$userInfo%' OR code LIKE '%$userInfo%'")->get();
