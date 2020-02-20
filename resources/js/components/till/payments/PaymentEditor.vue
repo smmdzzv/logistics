@@ -317,7 +317,7 @@
                 if (this.disable)
                     return;
                 tShowSpinner();
-                let action = `exchange-history/rate/${this.payment.billCurrency.id}/${this.payment.paidCurrency.id}`;
+                let action = `exchange-history/rate/${this.payment.paidCurrency.id}/${this.payment.billCurrency.id}`;
                 try {
                     const result = await axios.get(action);
                     this.payment.exchangeRate = result.data;
@@ -351,7 +351,7 @@
                         exchangeRate: this.payment.exchangeRate === null ? null : this.payment.exchangeRate.id
                     };
 
-                    const response = await axios.post('/payment', data); 
+                    const response = await axios.post('/payment', data);
                     window.location.href = '/payments/' + response.data;
                 } catch (e) {
                     if (e.response && e.response.status === 422) {

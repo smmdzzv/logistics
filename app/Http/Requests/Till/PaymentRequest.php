@@ -92,8 +92,8 @@ class PaymentRequest extends FormRequest
 
                 $exchangeRate = ExchangeRate::where('id', $this->request->get('exchangeRate'))
                     ->where('id', $this->request->get('exchangeRate'))
-                    ->where('from_currency_id', $this->request->get('billCurrency'))
-                    ->where('to_currency_id', $this->request->get('paidCurrency'))
+                    ->where('from_currency_id', $this->request->get('paidCurrency'))
+                    ->where('to_currency_id', $this->request->get('billCurrency'))
                     ->first();
 
                 if (!$exchangeRate)
