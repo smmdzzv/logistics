@@ -22,7 +22,10 @@
                                     <label for="toChina_forEmpty" class="col-md-4 col-form-label text-md-right">Расход
                                         пустой машины</label>
                                     <div class="col-md-6">
-                                        <input id="toChina_forEmpty" placeholder="в литрах на 100 км" type="text"
+                                        <input id="toChina_forEmpty"
+                                               placeholder="в литрах на 100 км"
+                                               type="number"
+                                               step="0.01"
                                                class="form-control @error('toChina_forEmpty') is-invalid @enderror"
                                                name="toChina_forEmpty"
                                                value="{{ old('toChina_forEmpty') ?? $toChina->forEmpty}}" required
@@ -40,7 +43,10 @@
                                     <label for="toChina_forLoaded" class="col-md-4 col-form-label text-md-right">Расход
                                         загруженной машины</label>
                                     <div class="col-md-6">
-                                        <input id="toChina_forLoaded" placeholder="в литрах на 100 км" type="text"
+                                        <input id="toChina_forLoaded"
+                                               placeholder="в литрах на 100 км"
+                                               type="number"
+                                               step="0.01"
                                                class="form-control @error('toChina_forLoaded') is-invalid @enderror"
                                                name="toChina_forLoaded"
                                                value="{{ old('toChina_forLoaded') ?? $toChina->forLoaded}}" required
@@ -59,7 +65,10 @@
                                         Расход пустой машины с прицепом
                                     </label>
                                     <div class="col-md-6">
-                                        <input id="toChina_forEmptyTrailer" placeholder="в литрах на 100 км" type="text"
+                                        <input id="toChina_forEmptyTrailer"
+                                               placeholder="в литрах на 100 км"
+                                               type="number"
+                                               step="0.01"
                                                class="form-control @error('toChina_forEmptyTrailer') is-invalid @enderror"
                                                name="toChina_forEmptyTrailer"
                                                value="{{ old('toChina_forEmptyTrailer') ?? $toChina->forEmptyTrailer}}"
@@ -81,8 +90,10 @@
                                     <label for="toChina_forLoadedTrailer" class="col-md-4 col-form-label text-md-right">Расход
                                         загруженной машины с прицепом</label>
                                     <div class="col-md-6">
-                                        <input id="toChina_forLoadedTrailer" placeholder="в литрах на 100 км"
-                                               type="text"
+                                        <input id="toChina_forLoadedTrailer"
+                                               placeholder="в литрах на 100 км"
+                                               type="number"
+                                               step="0.01"
                                                class="form-control @error('toChina_forLoadedTrailer') is-invalid @enderror"
                                                name="toChina_forLoadedTrailer"
                                                value="{{ old('toChina_forLoadedTrailer') ?? $toChina->forLoaded}}"
@@ -110,7 +121,10 @@
                                     <label for="fromChina_forEmpty" class="col-md-4 col-form-label text-md-right">Расход
                                         пустой машины</label>
                                     <div class="col-md-6">
-                                        <input id="fromChina_forEmpty" placeholder="в литрах на 100 км" type="text"
+                                        <input id="fromChina_forEmpty"
+                                               placeholder="в литрах на 100 км"
+                                               type="number"
+                                               step="0.01"
                                                class="form-control @error('fromChina_forEmpty') is-invalid @enderror"
                                                name="fromChina_forEmpty"
                                                value="{{ old('fromChina_forEmpty') ?? $fromChina->forEmpty}}" required
@@ -128,7 +142,10 @@
                                     <label for="fromChina_forLoaded" class="col-md-4 col-form-label text-md-right">Расход
                                         загруженной машины</label>
                                     <div class="col-md-6">
-                                        <input id="fromChina_forLoaded" placeholder="в литрах на 100 км" type="text"
+                                        <input id="fromChina_forLoaded"
+                                               placeholder="в литрах на 100 км"
+                                               type="number"
+                                               step="0.01"
                                                class="form-control @error('fromChina_forLoaded') is-invalid @enderror"
                                                name="fromChina_forLoaded"
                                                value="{{ old('fromChina_forLoaded') ?? $fromChina->forLoaded}}" required
@@ -148,8 +165,10 @@
                                         Расход пустой машины с прицепом
                                     </label>
                                     <div class="col-md-6">
-                                        <input id="fromChina_forEmptyTrailer" placeholder="в литрах на 100 км"
-                                               type="text"
+                                        <input id="fromChina_forEmptyTrailer"
+                                               placeholder="в литрах на 100 км"
+                                               type="number"
+                                               step="0.01"
                                                class="form-control @error('fromChina_forEmptyTrailer') is-invalid @enderror"
                                                name="fromChina_forEmptyTrailer"
                                                value="{{ old('fromChina_forEmptyTrailer') ?? $fromChina->forEmptyTrailer}}"
@@ -172,8 +191,10 @@
                                            class="col-md-4 col-form-label text-md-right">Расход
                                         загруженной машины с прицепом</label>
                                     <div class="col-md-6">
-                                        <input id="fromChina_forLoadedTrailer" placeholder="в литрах на 100 км"
-                                               type="text"
+                                        <input id="fromChina_forLoadedTrailer"
+                                               placeholder="в литрах на 100 км"
+                                               type="number"
+                                               step="0.01"
                                                class="form-control @error('fromChina_forLoadedTrailer') is-invalid @enderror"
                                                name="fromChina_forLoadedTrailer"
                                                value="{{ old('fromChina_forLoadedTrailer') ?? $fromChina->forLoadedTrailer}}"
