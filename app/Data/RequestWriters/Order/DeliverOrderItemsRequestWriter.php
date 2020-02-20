@@ -16,7 +16,7 @@ use App\Models\Till\PaymentItem;
 use App\Models\Users\TrustedUser;
 use App\StoredItems\StorageHistory;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder; 
+use Illuminate\Database\Eloquent\Builder;
 
 class DeliverOrderItemsRequestWriter extends RequestWriter
 {
@@ -57,7 +57,7 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
             return $item->id;
         });
 
-        $unpaidItems = StoredItem::whereIn('id', $ids)->get();
+        $unpaidItems = StoredItem::whereIn('id', $ids)->unpaid()->get();
 
         //Calculate bill
         $unpaidStoredItemInfos = $unpaidItems->load('info.billingInfo')
