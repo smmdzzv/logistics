@@ -145,6 +145,8 @@ class PaymentRequest extends FormRequest
             case 'Прием наличных средств':
                 $this->validateCashAccepting($validator);
                 break;
+            case 'Аванс':
+            case 'Зарплата':
             case 'Выдача наличных средств':
                 $this->validateCashWithdrawal($validator);
                 break;
