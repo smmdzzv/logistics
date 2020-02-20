@@ -36,7 +36,7 @@ class OrderItemsController extends Controller
         return $payment->id;
     }
 
-    //TODO refactor this and DeliverOrderItemsRequestWriter
+
     public function storePaymentRequest(Order $order)
     {
         $items = StoredItem::whereIn('id', \request()->input('items'))->unpaid()->get();
@@ -66,20 +66,28 @@ class OrderItemsController extends Controller
             return abort(400, 'На балансе клиента достаточно денег для оплаты выбранных товаров');
         }
 
+        $dollar = Currency::where('isoName', 'USD')->first()->id;
         $payment = Payment::create([
-            'branchId' => auth()->user()->branch->id,
-            'cashierId' => auth()->user()->id,
-            'currencyId' => Currency::where('isoName', 'USD')->first()->id,
-            'payerId' => $order->owner->id,
-            'paymentItemId' => PaymentItem::where('title', 'Пополнение баланса')->first()->id,
-            'preparedById' => auth()->user()->id,
-//            'accountToId' => LegalEntity::first()->accounts()->whereHas('currency', function (Builder $query) {
-//                $query->where('isoName', 'USD');
-//            })->first()->id,
-            'accountToId' => LegalEntity::first()->accounts()->dollarAccount()->id,
-            'amount' => $paymentSum,
+            'branch_id' => auth()->user()->branch->id,
+            'cashier_id' => auth()->user()->id,
             'status' => 'pending',
-            'comment' => 'Пополнение баланса для оплаты заказа'
+            'prepared_by_id' => auth()->user()->id,
+            'payer_id' => $order->owner->id,
+            'payer_account_id' => $order->owner->accounts()->dollarAccount()->id,
+            'payer_type' => 'user',
+            'payee_id' => auth()->user()->branch->id,
+            'payee_account_id' => auth()->user()->branch->accounts()->dollarAccount()->id,
+            'payee_type' => 'branch',
+            'payment_item_id' => PaymentItem::firstOrCreate([
+                'title' => 'Списание с баланса',
+                'description' => 'Списание денег с баланса клиента в счет оплаты заказы'
+            ])->id,
+            'billAmount' => $paymentSum,
+            'paidAmount' => $paymentSum,
+            'bill_currency_id' => $dollar,
+            'paid_currency_id' => $dollar,
+            'exchange_rate_id' => null,
+            'comment' => 'Списание денег с баланса в счет оплаты заказа',
         ]);
 
         $orderPayment = OrderPayment::create([
