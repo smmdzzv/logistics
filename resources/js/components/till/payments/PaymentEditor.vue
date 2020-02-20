@@ -220,6 +220,8 @@
         name: "PaymentEditor",
         mounted() {
             if (this.providedPayment) {
+                this.pausePayerWatcher = true;
+                this.pausePayeeWatcher = true;
                 this.isPayerIndividual = this.providedPayment.payer_type === 'user';
                 this.isPayeeIndividual = this.providedPayment.payee_type === 'user';
                 this.payment = this.providedPayment
@@ -265,6 +267,7 @@
                     comment: null
                 },
                 payerAccounts: null,
+                pausePayerWatcher: false,
                 errors: {
                     id: null,
                     status: null,
@@ -298,10 +301,16 @@
                 this.calculatePaidAmount();
             },
             isPayerIndividual() {
-                this.payment.payer = null
+                if (!this.pausePayerWatcher)
+                    this.payment.payer = null;
+                else
+                    this.pausePayerWatcher = false;
             },
             isPayeeIndividual() {
-                this.payment.payee = null
+                if (!this.pausePayeeWatcher)
+                    this.payment.payee = null;
+                else
+                    this.pausePayeeWatcher = false;
             },
             'payment.payer'() {
                 this.payerAccounts = null;
@@ -325,6 +334,7 @@
             },
             onPayerSelected(user) {
                 this.payment.payer = user
+
             },
             onPayeeSelected(user) {
                 this.payment.payee = user
