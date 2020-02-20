@@ -43,7 +43,8 @@ class TripsController extends Controller
             'fromConsumption',
             'storedItems.info.owner',
             'storedItems.info.item',
-            'storedItems.info.item.tariff',
+            'storedItems.info.item',
+            'storedItems.info.tariff',
             'storedItems.info.customsCode',
             'storedItems.storageHistory.storage');
 
