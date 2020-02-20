@@ -31,12 +31,12 @@
                                            required
                                            v-bind:options="filteredItems"/>
                         <b-popover
-                                :show.sync="$v.storedItem.item.$error"
-                                content="Найдите товар по имени"
-                                placement="bottom"
-                                target="item"
-                                triggers="null"
-                                variant="danger"/>
+                            :show.sync="$v.storedItem.item.$error"
+                            content="Найдите товар по имени"
+                            placement="bottom"
+                            target="item"
+                            triggers="null"
+                            variant="danger"/>
                     </div>
 
 
@@ -45,18 +45,20 @@
                         <input @blur="$v.storedItem.weight.$touch()"
                                class="form-control"
                                id="weight"
-                               maxlength="6"
+                               type="number"
+                               step="0.01"
                                name="weight"
                                placeholder="в кг"
                                required
+                               autofocus
                                v-model.number="storedItem.weight">
                         <b-popover
-                                :show.sync="$v.storedItem.weight.$error"
-                                content="Введите вес в килограммах"
-                                placement="bottom"
-                                target="weight"
-                                triggers="null"
-                                variant="danger"/>
+                            :show.sync="$v.storedItem.weight.$error"
+                            content="Введите вес в килограммах"
+                            placement="bottom"
+                            target="weight"
+                            triggers="null"
+                            variant="danger"/>
                     </div>
                 </div>
                 <div class="row">
@@ -65,18 +67,19 @@
                         <input @blur="$v.storedItem.width.$touch()"
                                class="form-control"
                                id="width"
-                               maxlength="6"
+                               type="number"
+                               step="0.01"
                                name="width"
                                placeholder="в метрах"
                                required
                                v-model.number="storedItem.width">
                         <b-popover
-                                :show.sync="$v.storedItem.width.$error"
-                                content="Введите ширину в метрах"
-                                placement="bottom"
-                                target="width"
-                                triggers="null"
-                                variant="danger"/>
+                            :show.sync="$v.storedItem.width.$error"
+                            content="Введите ширину в метрах"
+                            placement="bottom"
+                            target="width"
+                            triggers="null"
+                            variant="danger"/>
                     </div>
 
                     <div class="form-group col-md-3">
@@ -84,17 +87,18 @@
                         <input @blur="$v.storedItem.height.$touch()"
                                class="form-control"
                                id="height"
-                               maxlength="6"
+                               type="number"
+                               step="0.01"
                                name="height"
                                placeholder="в метрах"
                                required v-model.number="storedItem.height">
                         <b-popover
-                                :show.sync="$v.storedItem.height.$error"
-                                content="Введите высоту в метрах"
-                                placement="bottom"
-                                target="height"
-                                triggers="null"
-                                variant="danger"/>
+                            :show.sync="$v.storedItem.height.$error"
+                            content="Введите высоту в метрах"
+                            placement="bottom"
+                            target="height"
+                            triggers="null"
+                            variant="danger"/>
                     </div>
 
                     <div class="form-group col-md-3">
@@ -102,17 +106,18 @@
                         <input @blur="$v.storedItem.length.$touch()"
                                class="form-control"
                                id="length"
-                               maxlength="6"
+                               type="number"
+                               step="0.01"
                                name="length"
                                placeholder="в метрах"
                                required v-model.number="storedItem.length">
                         <b-popover
-                                :show.sync="$v.storedItem.length.$error"
-                                content="Введите длину в метрах"
-                                placement="bottom"
-                                target="length"
-                                triggers="null"
-                                variant="danger"/>
+                            :show.sync="$v.storedItem.length.$error"
+                            content="Введите длину в метрах"
+                            placement="bottom"
+                            target="length"
+                            triggers="null"
+                            variant="danger"/>
                     </div>
 
                     <div class="form-group col-md-3">
@@ -126,12 +131,12 @@
                                placeholder="в ед. товара"
                                required v-model.number="storedItem.count">
                         <b-popover
-                                :show.sync="$v.storedItem.count.$error"
-                                content="Определите количество товаров"
-                                placement="bottom"
-                                target="count"
-                                triggers="null"
-                                variant="danger"/>
+                            :show.sync="$v.storedItem.count.$error"
+                            content="Определите количество товаров"
+                            placement="bottom"
+                            target="count"
+                            triggers="null"
+                            variant="danger"/>
                     </div>
                 </div>
 
@@ -159,12 +164,12 @@
                             </option>
                         </select>
                         <b-popover
-                                :show.sync="$v.storedItem.tariff.$error"
-                                content="Выберите тариф из списка"
-                                placement="bottom"
-                                target="tariff"
-                                triggers="null"
-                                variant="danger"/>
+                            :show.sync="$v.storedItem.tariff.$error"
+                            content="Выберите тариф из списка"
+                            placement="bottom"
+                            target="tariff"
+                            triggers="null"
+                            variant="danger"/>
                     </div>
 
                     <div class="form-group col-md-4">
@@ -180,12 +185,12 @@
                             </option>
                         </select>
                         <b-popover
-                                :show.sync="$v.storedItem.customsCode.$error"
-                                content="Выберите таможенный код из списка"
-                                placement="bottom"
-                                target="customs-code"
-                                triggers="null"
-                                variant="danger"/>
+                            :show.sync="$v.storedItem.customsCode.$error"
+                            content="Выберите таможенный код из списка"
+                            placement="bottom"
+                            target="customs-code"
+                            triggers="null"
+                            variant="danger"/>
                     </div>
 
                     <div class="form-group col-md-4">
@@ -202,28 +207,28 @@
 
         <!--         Custom price modal-->
         <b-modal
-                @hidden="resetModal"
-                @ok="handleOk"
-                @show="resetModal"
-                ok-title="Сохранить"
-                cancel-title="Отменить"
-                id="customPriceModal"
-                ref="customPriceModal"
-                title="Введите ручную цену за единицу товара"
+            @hidden="resetModal"
+            @ok="handleOk"
+            @show="resetModal"
+            ok-title="Сохранить"
+            cancel-title="Отменить"
+            id="customPriceModal"
+            ref="customPriceModal"
+            title="Введите ручную цену за единицу товара"
         >
             <form @submit.stop.prevent="handleSubmit" ref="customPriceForm">
                 <b-form-group
-                        :state="customPriceState"
-                        invalid-feedback="Необходимо ввести ручную стоимость товара"
-                        label="Ручная стоимость"
-                        label-for="customPrice"
+                    :state="customPriceState"
+                    invalid-feedback="Необходимо ввести ручную стоимость товара"
+                    label="Ручная стоимость"
+                    label-for="customPrice"
                 >
                     <b-form-input
-                            id="customPrice"
-                            required
-                            step="0.01"
-                            type="number"
-                            v-model="customPrice"
+                        id="customPrice"
+                        required
+                        step="0.01"
+                        type="number"
+                        v-model="customPrice"
                     ></b-form-input>
                 </b-form-group>
             </form>

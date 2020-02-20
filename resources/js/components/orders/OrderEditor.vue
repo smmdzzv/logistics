@@ -3,7 +3,7 @@
         <div class="row justify-content-center px-3">
             <div class="form-group col-12">
                 <label class="col-form-label text-md-right" for="user">Клиент</label>
-                <input class="form-control" id="user" placeholder="Введите код клиента" v-model="clientCode">
+                <input class="form-control" id="user" placeholder="Введите код клиента" v-model="clientCode" autofocus>
                 <!--                <search-user-dropdown :selected="onUserSelected"-->
                 <!--                                      :preselectedUser="client"-->
                 <!--                                      class="col-12"-->
