@@ -85,7 +85,7 @@
                 }, this);
             },
             groupByTariffAndCode() {
-                let groupedByTariff = groupBy(this.items, i => i.info.item.tariff.id);
+                let groupedByTariff = groupBy(this.items, i => i.info.tariff.id);
                 let groupedByCode = [];
 
                 groupedByTariff.forEach((arr) => {
@@ -161,7 +161,7 @@
                         label: 'Код',
                         sortable: true
                     },
-                    'info.item.tariff.name': {
+                    'info.tariff.name': {
                         label: 'Тариф',
                         sortable: true
                     },
