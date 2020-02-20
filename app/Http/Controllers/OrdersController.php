@@ -180,6 +180,9 @@ class OrdersController extends BaseController
         if (!$client) {
             $client = User::create([
                 'code' => $code,
+                'name' => request()->get('clientName'),
+                'phone' => request()->get('clientPhone'),
+                'email' => request()->get('clientEmail'),
                 'password' => Hash::make(PasswordGenerator::generate()),
                 'branch_id' => auth()->user()->branch->id
             ]);
@@ -187,7 +190,7 @@ class OrdersController extends BaseController
             $client->roles()->attach(Role::where('name', 'client')->first());
 
             $account = new Account();
-            $account->currencyId = Currency::where('isoName', 'USD')->first()->id;
+            $account->currency_id = Currency::where('isoName', 'USD')->first()->id;
             $account->balance = 0;
             $account->description = 'Долларовый счет пользователя ' . $client->name;
 

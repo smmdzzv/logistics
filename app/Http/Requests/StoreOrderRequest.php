@@ -21,6 +21,9 @@ class StoreOrderRequest extends FormRequest
         $rules['orderId'] = 'nullable|exists:orders,id';
 //        $rules['clientId'] = 'nullable|string';
         $rules['clientCode'] = 'nullable|string';
+        $rules['clientName'] = 'nullable|string';
+        $rules['clientPhone'] = 'nullable|string';
+        $rules['clientEmail'] = 'nullable|string';
 
         $rules['storedItemInfos.*.width'] = 'required|numeric';
         $rules['storedItemInfos.*.height'] = 'required|numeric';

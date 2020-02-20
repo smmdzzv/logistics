@@ -13,15 +13,29 @@
                 <!--                                      url="/concrete/client/filter?userInfo="/>-->
 
                 <b-popover
-                        :show.sync="clientError"
-                        content="Введите код клиента"
-                        placement="bottom"
-                        target="user"
-                        triggers="null"
-                        variant="danger"/>
+                    :show.sync="clientError"
+                    content="Введите код клиента"
+                    placement="bottom"
+                    target="user"
+                    triggers="null"
+                    variant="danger"/>
             </div>
         </div>
-
+        <div class="row px-3">
+            <div class="form-group col-4">
+                <label class="col-form-label text-md-right" for="clientName">ФИО</label>
+                <input class="form-control" id="clientName" placeholder="Необязательно" v-model="clientName">
+            </div>
+            <div class="form-group col-4">
+                <label class="col-form-label text-md-right" for="clientPhone">Телефон</label>
+                <input class="form-control" id="clientPhone" placeholder="Необязательно" v-model="clientPhone">
+            </div>
+            <div class="form-group col-4">
+                <label class="col-form-label text-md-right" for="clientEmail">E-mail</label>
+                <input class="form-control" id="clientEmail" placeholder="Необязательно" v-model="clientEmail">
+            </div>
+        </div>
+        <hr>
         <order-items-box :tariffs="tariffs"
                          :order="order"
                          :user="user"
@@ -54,6 +68,9 @@
         data() {
             return {
                 clientCode: null,
+                clientName: null,
+                clientPhone: null,
+                clientEmail: null,
                 storedItems: [],
                 clientError: false
             }
@@ -82,7 +99,10 @@
                         } else {
                             response = await axios.post('/orders', {
                                 storedItemInfos: this.storedItems,
-                                clientCode: this.clientCode
+                                clientCode: this.clientCode,
+                                clientName: this.clientName,
+                                clientPhone: this.clientPhone,
+                                clientEmail: this.clientEmail
                             });
                         }
 
