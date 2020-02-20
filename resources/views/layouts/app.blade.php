@@ -96,8 +96,8 @@
 {{--                                    <div class="dropdown-divider"></div>--}}
 {{--                                    <a class="dropdown-item" href="{{route('pending-payments.index')}}">Заявки</a>--}}
 {{--                                    <div class="dropdown-divider"></div>--}}
-{{--                                    <a class="dropdown-item" href="{{route('branches.accounts.index')}}">Счета--}}
-{{--                                        Дуоб</a>--}}
+                                    <a class="dropdown-item" href="{{route('branches.accounts.index')}}">Счета
+                                        Дуоб</a>
                                     @if(Auth::user()->hasRole('admin'))
                                         <div class="dropdown-divider"></div>
                                         <h6 class="dropdown-header">Статьи прихода/расхода</h6>

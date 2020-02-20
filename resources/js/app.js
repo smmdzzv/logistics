@@ -71,7 +71,7 @@ Vue.component('CustomsCodesTable', require('./components/customs/CustomsCodesTab
 
 Vue.component('CreateLostItem', require('./components/lost-and-found/CreateLostItem.vue').default);
 
-Vue.component('DuobAccountsViewer', require('./components/accounts/branches/DuobAccountsViewer.vue').default);
+// Vue.component('DuobAccountsViewer', require('./components/accounts/branches/DuobAccountsViewer.vue').default);
 
 Vue.component('MainPaginator', require('./components/common/MainPaginator.vue').default);
 

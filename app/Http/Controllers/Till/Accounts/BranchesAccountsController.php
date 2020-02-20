@@ -18,11 +18,8 @@ class BranchesAccountsController extends BaseController
     }
 
     public function index(){
-        $branches = [];
-        if(auth()->user()->hasRole('admin'))
-            $branches = Branch::all();
-        else
-            $branches[] = auth()->user()->branch;
+        $branches = $this->getBranches();
+        $branches->load('accounts.currency');
         return view('accounts.branches.index', compact('branches'));
     }
 }
