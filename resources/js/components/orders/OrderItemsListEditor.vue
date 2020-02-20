@@ -153,7 +153,7 @@
                     const response = await axios.post(action, data);
                     // window.location = `/incoming-payments/${response.data}/edit`;
                 } catch (e) {
-                    if (e.response.status === 400) {
+                    if (e.response&& e.response.status === 400 || e.response.status === 422) {
                         this.errorMessage = e.response.data.message;
                         this.$bvModal.show('payment-error');
                     }
@@ -180,7 +180,7 @@
                     const response = await axios.post(action, data);
                     // window.location = `/payments/${response.data}`;
                 } catch (e) {
-                    if (e.response.status === 400) {
+                    if (e.response&& e.response.status === 400 || e.response.status === 422) {
                         this.errorMessage = e.response.data.message;
                     } else {
                         this.errorMessage = "Не удалось оформить выдачу товаров. Повтороите попытку после перезагрузки страницы"
