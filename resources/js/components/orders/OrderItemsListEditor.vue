@@ -90,8 +90,6 @@
 
         <b-modal id="payment-error" title="Ошибка оплаты" ok-only centered ok-title="Закрыть">
             <p class="my-4">{{errorMessage}}</p>
-            <!--            <a href="#" @click.prevent="submit(e, true)">Доверительный платеж</a><br>-->
-            <!--            <a href="#" @click.prevent="createPendingPayment">Оформить платежную заявку на пополнение баланса</a>-->
         </b-modal>
     </div>
 
@@ -151,7 +149,7 @@
 
                 try {
                     const response = await axios.post(action, data);
-                    // window.location = `/incoming-payments/${response.data}/edit`;
+                    window.location = `/payment/${response.data}/edit`;
                 } catch (e) {
                     if (e.response&& e.response.status === 400 || e.response.status === 422) {
                         this.errorMessage = e.response.data.message;
@@ -178,7 +176,7 @@
 
                 try {
                     const response = await axios.post(action, data);
-                    // window.location = `/payments/${response.data}`;
+                    window.location = `/payments/${response.data}`;
                 } catch (e) {
                     if (e.response&& e.response.status === 400 || e.response.status === 422) {
                         this.errorMessage = e.response.data.message;
@@ -227,9 +225,6 @@
                 tHideSpinner();
             },
             selectedOrderPayment() {
-
-                // TODO refactor
-                // this.$refs.storedItemsTable.$refs.tableCard.selected
                 let ids = this.selectedOrderPayment.paidItems.map(function (paidItem) {
                         return paidItem.storedItem.id;
                     });
@@ -237,15 +232,6 @@
                 this.selectedItems = this.items.filter(function (item) {
                         return ids.includes(item.id);
                     });
-
-                //
-                // this.$refs.storedItemsTable.$refs.tableCard.selected = this.items.filter(function (item) {
-                //     return ids.includes(item.id);
-                // });
-                //
-                // this.$refs.storedItemsTable.$refs.tableCard.$emit(
-                //     'itemsSelected',
-                //     this.$refs.storedItemsTable.$refs.tableCard.selected);
             }
         }
     }
