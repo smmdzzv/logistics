@@ -140,8 +140,7 @@ class UsersController extends Controller
         return redirect(route('users.index'));
     }
 
-    public
-    function find()
+    public function find()
     {
         $userInfo = request('userInfo');
         $users = User::whereRaw("name LIKE '%$userInfo%' OR code LIKE '%$userInfo%'")->get();

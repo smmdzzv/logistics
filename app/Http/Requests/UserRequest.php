@@ -33,7 +33,8 @@ class UserRequest extends FormRequest
             'password' => [
                 Rule::requiredIf(function (){
                     return !isset(request()->user);
-                })
+                }),
+                'confirmed'
             ],
             'email' => [
                 'nullable',
