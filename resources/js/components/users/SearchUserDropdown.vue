@@ -13,8 +13,7 @@
                name="userInfo"
                type="text"
                v-bind:property="isEditMode"
-               v-debounce="100"
-               v-model.lazy="userInfo"
+               v-model="userInfo"
                v-on:click.stop.prevent.capture>
         <input :class="{'is-invalid': isInvalid, 'd-none': isEditMode}"
                :disabled="disabled"
@@ -40,6 +39,8 @@
 </template>
 
 <script>
+    var cancel;
+    var CancelToken = axios.CancelToken;
     export default {
         mounted() {
         },
@@ -101,6 +102,9 @@
                     this.selectedUserDisplayInfo = '';
                     this.selected(this.selectedUser);
                 }
+                if ((cancel != undefined)) {
+                    cancel(); 
+                }
 
                 this.loadUsers()
             }
@@ -108,7 +112,13 @@
         methods: {
             loadUsers() {
                 if (this.userInfo.length > 0) {
-                    axios.get(this.url + this.userInfo)
+                    axios.get(this.url + this.userInfo, {
+                        cancelToken: new CancelToken(function executor(c) {
+                            cancel = c;
+                        })
+                    })
+                        .catch(e => {
+                        })
                         .then(result => {
                             if (result) {
                                 this.setUsers(result.data);
@@ -176,30 +186,30 @@
             },
 
         },
-        directives: {
-            debounce: {
-                inserted: function (el, binding) {
-                    if (binding.value !== binding.oldValue) {
-                        let debounce = function debounce(fn, delay = 300) {
-                            let timeoutID = null;
-
-                            return function () {
-                                clearTimeout(timeoutID);
-
-                                let args = arguments;
-                                let that = this;
-
-                                timeoutID = setTimeout(function () {
-                                    fn.apply(that, args);
-                                }, delay);
-                            }
-                        };
-                        el.oninput = debounce(ev => {
-                            el.dispatchEvent(new Event('change'));
-                        }, parseInt(binding.value) || 300);
-                    }
-                }
-            }
-        }
+        // directives: {
+        //     debounce: {
+        //         inserted: function (el, binding) {
+        //             if (binding.value !== binding.oldValue) {
+        //                 let debounce = function debounce(fn, delay = 300) {
+        //                     let timeoutID = null;
+        //
+        //                     return function () {
+        //                         clearTimeout(timeoutID);
+        //
+        //                         let args = arguments;
+        //                         let that = this;
+        //
+        //                         timeoutID = setTimeout(function () {
+        //                             fn.apply(that, args);
+        //                         }, delay);
+        //                     }
+        //                 };
+        //                 el.oninput = debounce(ev => {
+        //                     el.dispatchEvent(new Event('change'));
+        //                 }, parseInt(binding.value) || 300);
+        //             }
+        //         }
+        //     }
+        // }
     }
 </script>
