@@ -73,7 +73,7 @@
                                         <input id="coefficient" type="text" placeholder="на единицу конвертируемой"
                                                class="form-control @error('coefficient') is-invalid @enderror" name="coefficient"
                                                value="{{ old('coefficient') }}" required autocomplete="coefficient" autofocus>
-                                        <small class="form-text text-muted">Курс является коэффициентом на который домножается конвертируемая валюта.</small>
+                                        <small class="form-text text-muted">Курс является коэффициентом на который домножается целевая валюта.</small>
                                         @error('coefficient')
                                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
