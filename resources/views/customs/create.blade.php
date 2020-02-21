@@ -158,9 +158,11 @@
                                 <label for="isCalculatedByPiece" class="col-md-4 col-form-label text-md-right">Поштучный рассчет</label>
                                 <input type="hidden" name="isCalculatedByPiece" value="0">
                                 <div class="col-md-6">
+                                    <input type="hidden" name="isCalculatedByPiece" value="0">
                                     <input id="isCalculatedByPiece" type="checkbox"
                                            class="form-control @error('isCalculatedByPiece') is-invalid @enderror"
                                            name="isCalculatedByPiece"
+                                           value="1"
                                            @if(old('isCalculatedByPiece') && old('isCalculatedByPiece') === 'on')
                                            checked
                                         @endif

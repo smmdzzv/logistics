@@ -24,7 +24,7 @@ class CustomsCodeController extends Controller
             'interestRate' => 'required|numeric',
             'totalRate' => 'required|numeric',
             'vat' => 'required|numeric',
-            'isCalculatedByPiece' => 'required'
+            'isCalculatedByPiece' => 'required|in:0,1'
         ];
     }
 

@@ -42,7 +42,7 @@
                  :primary-key="primaryKey"
                  :responsive="responsive"
                  :select-mode="selectMode"
-                 :selectable="selectable" 
+                 :selectable="selectable"
                  :striped="striped"
                  :hover="hover"
                  :tbody-tr-class="rowClass"
