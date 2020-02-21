@@ -19,13 +19,13 @@ class ExchangeRatesTableSeeder extends Seeder
         $exchange = new ExchangeRate();
         $exchange->from_currency_id = $dollar->id;
         $exchange->to_currency_id = $somoni->id;
-        $exchange->coefficient = 9.69;
+        $exchange->coefficient = 0.95;
         $exchange->save();
 
         $exchange = new ExchangeRate();
         $exchange->from_currency_id = $somoni->id;
         $exchange->to_currency_id = $dollar->id;
-        $exchange->coefficient = 0.1;
+        $exchange->coefficient = 9.9;
         $exchange->save();
     }
 }
