@@ -149,47 +149,83 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 form-group" v-if="payment.exchangeRate">
-                        <label for="currentRate">Обменный курс</label>
-                        <b-form-input id="currentRate"
-                                      v-model="payment.exchangeRate.coefficient"
-                                      :class="{'is-invalid':errors.exchangeRate}"
+                    <!--                    <div class="col-md-3 form-group" v-if="payment.exchangeRate">-->
+                    <!--                        <label for="currentRate">Обменный курс</label>-->
+                    <!--                        <b-form-input id="currentRate"-->
+                    <!--                                      v-model="payment.exchangeRate.coefficient"-->
+                    <!--                                      :class="{'is-invalid':errors.exchangeRate}"-->
+                    <!--                                      class="form-control"-->
+                    <!--                                      type="number"-->
+                    <!--                                      disabled></b-form-input>-->
+                    <!--                        <b-form-invalid-feedback :state="errors.exchangeRate"><strong-->
+                    <!--                            v-for="message in errors.exchangeRate">{{message}}</strong>-->
+                    <!--                        </b-form-invalid-feedback>-->
+                    <!--                    </div>-->
+
+                    <div class="col-md-3 form-group">
+                        <label for="paidAmount">Сумма</label>
+                        <b-form-input id="paidAmountInBillCurrency"
+                                      v-model="payment.paidAmountInBillCurrency"
+                                      :class="{'is-invalid':errors.paidAmountInBillCurrency}"
                                       class="form-control"
                                       type="number"
-                                      disabled></b-form-input>
-                        <b-form-invalid-feedback :state="errors.exchangeRate"><strong
-                            v-for="message in errors.exchangeRate">{{message}}</strong>
+                        ></b-form-input>
+                        <b-form-invalid-feedback :state="errors.paidAmountInBillCurrency"><strong
+                            v-for="message in errors.paidAmountInBillCurrency">{{message}}</strong>
                         </b-form-invalid-feedback>
                     </div>
 
-                    <div class="col-md-4 form-group">
-                        <label for="paidAmount">Сумма</label>
-                        <b-form-input id="paidAmount"
-                                      v-model="payment.paidAmount"
-                                      :class="{'is-invalid':errors.paidAmount}"
-                                      class="form-control"
-                                      type="number"
-                                      disabled></b-form-input>
-                        <b-form-invalid-feedback :state="errors.paidAmount"><strong
-                            v-for="message in errors.paidAmount">{{message}}</strong></b-form-invalid-feedback>
-                    </div>
-
-                    <div class="col-md-4 form-group">
-                        <label for="paidCurrency">Валюта оплаты</label>
-                        <b-form-select id="paidCurrency"
+                    <div class="col-md-3 form-group">
+                        <label for="paymentCurrency">Валюта оплаты</label>
+                        <b-form-select id="paymentCurrency"
                                        v-b-tooltip.hover
                                        title="Валюта в которой принимаются деньги у клиента. Валюта оплаты также определяет счет списания."
-                                       v-model="payment.paidCurrency"
-                                       :disabled="disable"
-                                       :class="{'is-invalid':errors.paidCurrency}">
+                                       v-model="payment.billCurrency"
+                                       disabled>
                             <option :value="null" disabled>-- Выберите валюту --</option>
                             <option v-for="currency in currencies" :value="currency">
                                 {{currency.name.charAt(0).toUpperCase() + currency.name.slice(1)}}
                                 {{currency.isoName}}
                             </option>
                         </b-form-select>
-                        <b-form-invalid-feedback :state="errors.paidCurrency"><strong
-                            v-for="message in errors.paidCurrency">{{message}}</strong></b-form-invalid-feedback>
+                    </div>
+
+                    <div class="col-md-3 form-group">
+                        <label for="paidAmountInBillCurrency">Сумма</label>
+                        <b-input-group>
+                            <template v-slot:prepend>
+                                <b-input-group-text>
+                                    <strong v-if="payment.exchangeRate">{{payment.exchangeRate.coefficient}}</strong>
+                                </b-input-group-text>
+                            </template>
+                            <b-form-input id="paidAmountInBillCurrency"
+                                          v-model="payment.paidAmountInSecondCurrency"
+                                          :class="{'is-invalid':errors.paidAmountInSecondCurrency}"
+                                          class="form-control"
+                                          type="number">
+                            </b-form-input>
+                            <b-form-invalid-feedback :state="errors.paidAmountInSecondCurrency"><strong
+                                v-for="message in errors.paidAmountInSecondCurrency">{{message}}</strong>
+                            </b-form-invalid-feedback>
+                        </b-input-group>
+                    </div>
+
+                    <div class="col-md-3 form-group">
+                        <label for="secondPaidCurrency">Доп. валюта оплаты</label>
+                        <b-form-select id="secondPaidCurrency"
+                                       v-b-tooltip.hover
+                                       title="Валюта в которой принимаются деньги у клиента. Валюта оплаты также определяет счет списания."
+                                       v-model="payment.secondPaidCurrency"
+                                       :disabled="disable"
+                                       :class="{'is-invalid':errors.secondPaidCurrency}">
+                            <option :value="null" disabled>-- Выберите валюту --</option>
+                            <option v-for="currency in currencies" :value="currency">
+                                {{currency.name.charAt(0).toUpperCase() + currency.name.slice(1)}}
+                                {{currency.isoName}}
+                            </option>
+                        </b-form-select>
+                        <b-form-invalid-feedback :state="errors.secondPaidCurrency"><strong
+                            v-for="message in errors.secondPaidCurrency">{{message}}</strong></b-form-invalid-feedback>
                     </div>
                 </div>
 
@@ -262,8 +298,9 @@
                     billAmount: 0,
                     billCurrency: null,
                     exchangeRate: null,
-                    paidAmount: 0,
-                    paidCurrency: null,
+                    paidAmountInBillCurrency: 0,
+                    paidAmountInSecondCurrency: 0,
+                    secondPaidCurrency: null,
                     comment: null
                 },
                 payerAccounts: null,
@@ -278,8 +315,9 @@
                     paymentItem: null,
                     billAmount: null,
                     billCurrency: null,
-                    paidAmount: null,
-                    paidCurrency: null,
+                    paidAmountInBillCurrency: null,
+                    paidAmountInSecondCurrency:null,
+                    secondPaidCurrency: null,
                     comment: null,
                     exchangeRate: null
                 }
@@ -290,11 +328,9 @@
                 this.calculatePaidAmount();
             },
             'payment.billCurrency'() {
-                if (!this.payment.paidCurrency)
-                    this.payment.paidCurrency = this.payment.billCurrency;
                 this.checkIfNeededConverting()
             },
-            'payment.paidCurrency'() {
+            'payment.secondPaidCurrency'() {
                 this.checkIfNeededConverting()
             },
             'payment.exchangeRate'() {
@@ -320,12 +356,12 @@
         methods: {
             calculatePaidAmount() {
                 if (this.payment.exchangeRate)
-                    this.payment.paidAmount = Math.round(this.payment.billAmount * this.payment.exchangeRate.coefficient * 100) / 100;
+                    this.payment.paidAmountInBillCurrency = Math.round(this.payment.billAmount * this.payment.exchangeRate.coefficient * 100) / 100;
                 else
-                    this.payment.paidAmount = this.payment.billAmount;
+                    this.payment.paidAmountInBillCurrency = this.payment.billAmount;
             },
             checkIfNeededConverting() {
-                let needConverting = this.payment.billCurrency && this.payment.billCurrency.id !== this.payment.paidCurrency.id;
+                let needConverting = this.payment.billCurrency && this.payment.secondPaidCurrency && this.payment.billCurrency.id !== this.payment.secondPaidCurrency.id;
 
                 if (needConverting)
                     this.getExchangeRate();
@@ -343,7 +379,7 @@
                 if (this.disable)
                     return;
                 tShowSpinner();
-                let action = `exchange-history/rate/${this.payment.paidCurrency.id}/${this.payment.billCurrency.id}`;
+                let action = `exchange-history/rate/${this.payment.secondPaidCurrency.id}/${this.payment.billCurrency.id}`;
                 try {
                     const result = await axios.get(action);
                     this.payment.exchangeRate = result.data;
@@ -384,8 +420,9 @@
                         paymentItem: this.payment.paymentItem.id,
                         billAmount: this.payment.billAmount,
                         billCurrency: this.payment.billCurrency.id,
-                        paidAmount: this.payment.paidAmount,
-                        paidCurrency: this.payment.paidCurrency.id,
+                        paidAmountInBillCurrency: this.payment.paidAmountInBillCurrency,
+                        paidAmountInSecondCurrency: this.payment.paidAmountInSecondCurrency,
+                        secondPaidCurrency: this.payment.secondPaidCurrency.id,
                         comment: this.payment.comment,
                         exchangeRate: this.payment.exchangeRate === null ? null : this.payment.exchangeRate.id
                     };
@@ -403,8 +440,9 @@
                         this.errors.paymentItem = e.response.data.errors.paymentItem;
                         this.errors.billAmount = e.response.data.errors.billAmount;
                         this.errors.billCurrency = e.response.data.errors.billCurrency;
-                        this.errors.paidAmount = e.response.data.errors.paidAmount;
-                        this.errors.paidCurrency = e.response.data.errors.paidCurrency;
+                        this.errors.paidAmountInBillCurrency = e.response.data.errors.paidAmountInBillCurrency;
+                        this.errors.paidAmountInSecondCurrency = e.response.data.errors.paidAmountInSecondCurrency;
+                        this.errors.secondPaidCurrency = e.response.data.errors.secondPaidCurrency;
                         this.errors.comment = e.response.data.errors.comment;
                         this.errors.exchangeRate = e.response.data.errors.exchangeRate;
                     } else {

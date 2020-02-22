@@ -103,7 +103,7 @@
                     this.selected(this.selectedUser);
                 }
                 if ((cancel != undefined)) {
-                    cancel(); 
+                    cancel();
                 }
 
                 this.loadUsers()
