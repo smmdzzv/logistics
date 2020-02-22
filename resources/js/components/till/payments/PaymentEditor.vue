@@ -325,7 +325,10 @@
         },
         watch: {
             'payment.billAmount'() {
-                this.calculatePaidAmount();
+                this.calculatePaidInBillCurrencyAmount();
+            },
+            'payment.paidAmountInSecondCurrency'() {
+                this.calculatePaidInBillCurrencyAmount();
             },
             'payment.billCurrency'() {
                 this.checkIfNeededConverting()
@@ -334,7 +337,7 @@
                 this.checkIfNeededConverting()
             },
             'payment.exchangeRate'() {
-                this.calculatePaidAmount();
+                this.calculatePaidInBillCurrencyAmount();
             },
             isPayerIndividual() {
                 if (!this.pausePayerWatcher)
@@ -354,9 +357,9 @@
             }
         },
         methods: {
-            calculatePaidAmount() {
-                if (this.payment.exchangeRate)
-                    this.payment.paidAmountInBillCurrency = Math.round(this.payment.billAmount * this.payment.exchangeRate.coefficient * 100) / 100;
+            calculatePaidInBillCurrencyAmount() { console.log('calc')
+                if (this.payment.secondPaidCurrency && this.payment.exchangeRate && this.payment.paidAmountInSecondCurrency > 0)
+                    this.payment.paidAmountInBillCurrency = this.payment.billAmount - Math.round(this.payment.paidAmountInSecondCurrency / this.payment.exchangeRate.coefficient * 100) / 100;
                 else
                     this.payment.paidAmountInBillCurrency = this.payment.billAmount;
             },
