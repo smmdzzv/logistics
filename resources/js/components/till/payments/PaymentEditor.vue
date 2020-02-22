@@ -219,7 +219,7 @@
                                        :disabled="disable"
                                        :class="{'is-invalid':errors.secondPaidCurrency}">
                             <option :value="null" disabled>-- Выберите валюту --</option>
-                            <option v-for="currency in currencies" :value="currency">
+                            <option v-for="currency in currencies" :value="currency" :disabled="payment.billCurrency && currency.id === payment.billCurrency.id">
                                 {{currency.name.charAt(0).toUpperCase() + currency.name.slice(1)}}
                                 {{currency.isoName}}
                             </option>
