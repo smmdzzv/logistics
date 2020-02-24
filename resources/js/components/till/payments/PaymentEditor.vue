@@ -190,7 +190,7 @@
                     </div>
 
                     <div class="col-md-3 form-group">
-                        <label for="paidAmountInBillCurrency">Сумма</label>
+                        <label for="paidAmountInSecondCurrency">Сумма</label>
                         <b-input-group>
                             <template v-slot:prepend>
                                 <b-input-group-text>
@@ -367,9 +367,9 @@
                     this.payment.paidAmountInSecondCurrency = 0;
                 }
             },
-            calculatePaidInBillCurrencyAmount() { 
+            calculatePaidInBillCurrencyAmount() {
                 if (this.payment.secondPaidCurrency && this.payment.exchangeRate && this.payment.paidAmountInSecondCurrency > 0)
-                    this.payment.paidAmountInBillCurrency = this.payment.billAmount - Math.round(this.payment.paidAmountInSecondCurrency / this.payment.exchangeRate.coefficient * 100) / 100;
+                    this.payment.paidAmountInBillCurrency = Math.round((this.payment.billAmount - this.payment.paidAmountInSecondCurrency / this.payment.exchangeRate.coefficient) * 100) / 100;
                 else
                     this.payment.paidAmountInBillCurrency = this.payment.billAmount;
             },
