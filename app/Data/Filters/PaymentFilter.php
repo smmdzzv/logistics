@@ -13,7 +13,7 @@ class PaymentFilter extends Filter
     {
         $filters = $this->filters;
 
-        if(!auth()->user()->hasRole('admin'))
+        if (!auth()->user()->hasRole('admin'))
             $this->query->where('payer_id', auth()->user()->branch->id)
                 ->orWhere('payee_id', auth()->user()->branch->id);
 
@@ -51,15 +51,19 @@ class PaymentFilter extends Filter
             });
 
         if (isset($filters['minPaidAmount']))
-            $this->query->where('paidAmount', '>=', $filters['minPaidAmount']);
+            $this->query->where('paidAmountInBillCurrency', '>=', $filters['minPaidAmount'])
+                ->where('paidAmountInSecondCurrency', '>=', $filters['minPaidAmount']);
 
         if (isset($filters['maxPaidAmount']))
-            $this->query->where('paidAmount', '<=', $filters['maxPaidAmount']);
+            $this->query->where('paidAmountInBillCurrency', '<=', $filters['maxPaidAmount'])
+                ->where('paidAmountInSecondCurrency', '<=', $filters['maxPaidAmount']);
 
         if (isset($filters['paidCurrency']))
-            $this->query->whereHas('paidCurrency', function (Builder $query) use ($filters) {
-                $query->where('id', $filters['paidCurrency']);
-            });
+//            $this->query->whereHas('paidCurrency', function (Builder $query) use ($filters) {
+//                $query->where('id', $filters['paidCurrency']);
+//            });
+            $this->query->where('bill_currency_id', $filters['paidCurrency'])
+                ->orWhere('second_paid_currency_id', $filters['paidCurrency']);
 
         if (isset($filters['selectedStatus']))
             $this->query->where('status', $filters['selectedStatus']);
