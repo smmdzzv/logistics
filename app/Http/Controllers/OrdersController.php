@@ -82,15 +82,16 @@ class OrdersController extends BaseController
     {
         if ($order->status == 'completed')
             return abort(403, 'Доступ запрещен');
+
         $order->load([
             'storedItemInfos',
             'storedItemInfos.customsCode',
             'storedItemInfos.owner',
-            'storedItemInfos.tariff',
             'storedItemInfos.billingInfo.tariffPricing',
-            'storedItemInfos.item.tariff',
-            'storedItemInfos.item.codes',
+            'storedItemInfos.item',
+            'storedItemInfos.tariff',
             'storedItemInfos.storedItems',
+            'orderRemovedItems.storedItemInfo.item', 
             'owner'
         ]);
 
