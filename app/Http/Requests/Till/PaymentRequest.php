@@ -209,17 +209,22 @@ class PaymentRequest extends FormRequest
             return $validator->errors()->add('payer', 'При обмене валют плательщиком должен быть клиент, а получателем филиал. ');
 
         if ($this->request->get('billCurrency') === $this->request->get('secondPaidCurrency'))
-            return $validator->errors()->add('billCurrency', 'При обмене валют требуемая валюта должна отличаться от валюты оплаты.');
+            return $validator->errors()->add('secondPaidCurrency', 'При обмене валют требуемая валюта должна отличаться от валюты оплаты.');
 
         if (!$this->request->get('exchangeRate'))
             return $validator->errors()->add('exchangeRate', 'Курс обмена не указан. ');
 
+        if($this->request->get('paidAmountInBillCurrency') > 0)
+            return $validator->errors()->add('paidAmountInBillCurrency', 'Сумма в целевой валюте должна равняться нулю. ');
+
+        //check branch payment account
         $payeeAccount = $this->payee->accounts()->where('currency_id', $this->request->get('billCurrency'))->firstOrFail();
 
-        $diff = $payeeAccount->balance - $this->request->get('billAmount');
-
-        if ($diff < 0)
-            return $validator->errors()->add('payee', 'Недостаточно средств на счету филиала для выдачи валюты - ' . $payeeAccount->balance . ' ' . $payeeAccount->currency->isoName) . '.';
+        if ($payeeAccount->balance - $this->request->get('billAmount') < 0)
+            return $validator->errors()->add('payee',
+                    'Недостаточно средств на счету филиала для выдачи валюты - '
+                    . $payeeAccount->balance
+                    . ' ' . $payeeAccount->currency->isoName) . '. ';
 
     }
 
