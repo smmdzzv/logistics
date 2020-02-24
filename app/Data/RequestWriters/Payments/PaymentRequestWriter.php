@@ -60,7 +60,9 @@ class PaymentRequestWriter extends RequestWriter
         } else {
             $this->getPaymentSubjects();
 
-            $this->getAccounts();
+            $this->getPayerAccounts();
+
+            $this->getPayeeAccounts();
 
             $this->checkPayerBalance();
 
@@ -90,15 +92,32 @@ class PaymentRequestWriter extends RequestWriter
         $this->payee = $this->getSubject($this->request->get('payee_type'), $this->request->get('payee'));
     }
 
-    protected function getAccounts()
-    {
-        $this->payerAccountInBillCurrency = $this->getSubjectAccount($this->payer, $this->request->get('billCurrency'));
-        $this->payeeAccountInBillCurrency = $this->getSubjectAccount($this->payee, $this->request->get('billCurrency'));
+//    protected function getAccounts()
+//    {
+//        $this->payerAccountInBillCurrency = $this->getSubjectAccount($this->payer, $this->request->get('billCurrency'));
+//        $this->payeeAccountInBillCurrency = $this->getSubjectAccount($this->payee, $this->request->get('billCurrency'));
+//
+//        if ($this->request->get('paidAmountInSecondCurrency') > 0) {
+//            $this->payerAccountInSecondCurrency = $this->getSubjectAccount($this->payer, $this->request->get('secondPaidCurrency'));
+//            $this->payeeAccountInSecondCurrency = $this->getSubjectAccount($this->payee, $this->request->get('secondPaidCurrency'));
+//        }
+//    }
 
-        if ($this->request->get('paidAmountInSecondCurrency') > 0) {
-            $this->payerAccountInSecondCurrency = $this->getSubjectAccount($this->payer, $this->request->get('secondPaidCurrency'));
-            $this->payeeAccountInSecondCurrency = $this->getSubjectAccount($this->payee, $this->request->get('secondPaidCurrency'));
-        }
+    protected function getPayerAccounts()
+    {
+        $this->getAccounts($this->payer, $this->payerAccountInBillCurrency, $this->payerAccountInSecondCurrency);
+    }
+
+    protected function getPayeeAccounts()
+    {
+        $this->getAccounts($this->payee, $this->payeeAccountInBillCurrency, $this->payeeAccountInSecondCurrency);
+    }
+
+    protected function getAccounts($owner, &$accountInBillCurrency, &$accountInSecondCurrency)
+    {
+        $accountInBillCurrency = $this->getSubjectAccount($owner, $this->request->get('billCurrency'));
+        if ($this->request->get('paidAmountInSecondCurrency') > 0)
+            $accountInSecondCurrency = $this->getSubjectAccount($owner, $this->request->get('secondPaidCurrency'));
     }
 
     protected function checkPayerBalance()
