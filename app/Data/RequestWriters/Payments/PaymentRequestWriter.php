@@ -22,8 +22,10 @@ class PaymentRequestWriter extends RequestWriter
      */
     protected $payee;
 
-    protected ?Account $payerAccount;
-    protected ?Account $payeeAccount;
+    protected ?Account $payerAccountInBillCurrency = null;
+    protected ?Account $payeeAccountInBillCurrency = null;
+    protected ?Account $payerAccountInSecondCurrency = null;
+    protected ?Account $payeeAccountInSecondCurrency = null;
 
     protected Payment $payment;
 
@@ -78,8 +80,8 @@ class PaymentRequestWriter extends RequestWriter
         $this->payer = $this->payment->payer;
         $this->payee = $this->payment->payee;
 
-        $this->payerAccount = $this->payment->payerAccount;
-        $this->payeeAccount = $this->payment->payeeAccount;
+        $this->payerAccountInBillCurrency = $this->payment->payerAccountInBillCurrency;
+        $this->payeeAccountInBillCurrency = $this->payment->payeeAccountInBillCurrency;
     }
 
     protected function getPaymentSubjects()
@@ -90,17 +92,33 @@ class PaymentRequestWriter extends RequestWriter
 
     protected function getAccounts()
     {
-        $this->payerAccount = $this->getSubjectAccount($this->payer);
-        $this->payeeAccount = $this->getSubjectAccount($this->payee);
+        $this->payerAccountInBillCurrency = $this->getSubjectAccount($this->payer, $this->request->get('billCurrency'));
+        $this->payeeAccountInBillCurrency = $this->getSubjectAccount($this->payee, $this->request->get('billCurrency'));
+
+        if ($this->request->get('paidAmountInSecondCurrency') > 0) {
+            $this->payerAccountInSecondCurrency = $this->getSubjectAccount($this->payer, $this->request->get('secondPaidCurrency'));
+            $this->payeeAccountInSecondCurrency = $this->getSubjectAccount($this->payee, $this->request->get('secondPaidCurrency'));
+        }
     }
 
     protected function checkPayerBalance()
     {
-        if ($this->payerAccount) {
-            $amount = isset($this->payment) ? $this->payment->paidAmount : $this->request->get('paidAmount');
-            $diff = $this->payerAccount->balance - $amount;
-            if ($diff < 0)
-                abort(422, 'Недостаточно средств на балансе плательщика');
+        if ($this->payerAccountInBillCurrency) {
+            $amount = isset($this->payment) ? $this->payment->paidAmountInBillCurrency : $this->request->get('paidAmountInBillCurrency');
+            if ($this->payerAccountInBillCurrency->balance - $amount < 0)
+                abort(422,
+                    'Недостаточно средств на балансе плательщика '
+                    . $this->payerAccountInBillCurrency->balance
+                    . ' ' . $this->payerAccountInBillCurrency->currency->isoName);
+        }
+
+        if ($this->payerAccountInSecondCurrency) {
+            $amount = isset($this->payment) ? $this->payment->paidAmountInSecondCurrency : $this->request->get('paidAmountInSecondCurrency');
+            if ($this->payerAccountInSecondCurrency->balance - $amount < 0)
+                abort(422,
+                    'Недостаточно средств на балансе плательщика '
+                    . $this->payerAccountInSecondCurrency->balance
+                    . ' ' . $this->payerAccountInSecondCurrency->currency->isoName);
         }
     }
 
@@ -120,12 +138,12 @@ class PaymentRequestWriter extends RequestWriter
         return $subject;
     }
 
-    protected function getSubjectAccount($subject)
+    protected function getSubjectAccount($subject, $currencyId)
     {
         $account = null;
 
         if ($subject instanceof Branch) {
-            $account = $subject->accounts()->where('currency_id', $this->request->get('paidCurrency'))->firstOrFail();
+            $account = $subject->accounts()->where('currency_id', $currencyId)->firstOrFail();
         }
 
         return $account;
@@ -139,16 +157,19 @@ class PaymentRequestWriter extends RequestWriter
             'status' => $this->request->get('status'),
             'prepared_by_id' => $this->request->get('status') === 'pending' ? auth()->user()->id : null,
             'payer_id' => $this->request->get('payer'),
-            'payer_account_id' => $this->payerAccount === null ? null : $this->payerAccount->id,
+            'payer_account_in_bill_currency_id' => $this->payerAccountInBillCurrency === null ? null : $this->payerAccountInBillCurrency->id,
+            'payer_account_in_second_currency_id' => $this->payerAccountInSecondCurrency === null ? null : $this->payerAccountInSecondCurrency->id,
             'payer_type' => $this->request->get('payer_type'),
             'payee_id' => $this->request->get('payee'),
-            'payee_account_id' => $this->payeeAccount === null ? null : $this->payeeAccount->id,
+            'payee_account_in_bill_currency_id' => $this->payeeAccountInBillCurrency === null ? null : $this->payeeAccountInBillCurrency->id,
+            'payee_account_in_second_currency_id' => $this->payeeAccountInSecondCurrency === null ? null : $this->payeeAccountInSecondCurrency->id,
             'payee_type' => $this->request->get('payee_type'),
             'payment_item_id' => $this->request->get('paymentItem'),
             'billAmount' => $this->request->get('billAmount'),
-            'paidAmount' => $this->request->get('paidAmount'),
+            'paidAmountInBillCurrency' => $this->request->get('paidAmountInBillCurrency'),
+            'paidAmountInSecondCurrency' => $this->request->get('paidAmountInSecondCurrency'),
             'bill_currency_id' => $this->request->get('billCurrency'),
-            'paid_currency_id' => $this->request->get('paidCurrency'),
+            'second_paid_currency_id' => $this->request->get('paidCurrency'),
             'exchange_rate_id' => $this->request->get('exchangeRate'),
             'comment' => $this->request->get('comment'),
         ]);
@@ -156,17 +177,27 @@ class PaymentRequestWriter extends RequestWriter
 
     protected function updatePayerBalance()
     {
-        if ($this->payerAccount) {
-            $this->payerAccount->balance -= $this->payment->paidAmount;
-            $this->payerAccount->save();
+        if ($this->payerAccountInBillCurrency) {
+            $this->payerAccountInBillCurrency->balance -= $this->payment->paidAmountInBillCurrency;
+            $this->payerAccountInBillCurrency->save();
+        }
+
+        if ($this->payerAccountInSecondCurrency) {
+            $this->payerAccountInSecondCurrency->balance -= $this->payment->paidAmountInSecondCurrency;
+            $this->payerAccountInSecondCurrency->save();
         }
     }
 
     protected function updatePayeeBalance()
     {
-        if ($this->payeeAccount) {
-            $this->payeeAccount->balance += $this->payment->paidAmount;
-            $this->payeeAccount->save();
+        if ($this->payeeAccountInBillCurrency) {
+            $this->payeeAccountInBillCurrency->balance += $this->payment->paidAmountInBillCurrency;
+            $this->payeeAccountInBillCurrency->save();
+        }
+
+        if ($this->payeeAccountInSecondCurrency) {
+            $this->payeeAccountInSecondCurrency->balance += $this->payment->paidAmountInSecondCurrency;
+            $this->payeeAccountInSecondCurrency->save();
         }
     }
 }

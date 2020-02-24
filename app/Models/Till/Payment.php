@@ -20,22 +20,25 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string prepared_by_id
  * @property string status
  * @property string payer_id
- * @property string payer_account_id
+ * @property string payer_account_in_bill_currency_id
+ * @property string payer_account_in_second_currency_id
  * @property string payerType
  * @property string payee_id
- * @property string payee_account_id
+ * @property string payee_account_in_bill_currency_id
+ * @property string payee_account_in_second_currency_id
  * @property string payeeType
  * @property string payment_item_id
  * @property double billAmount
- * @property double paidAmount
+ * @property double paidAmountInBillCurrency
+ * @property mixed paidAmountInSecondCurrency
  * @property string bill_currency_id
  * @property string paid_currency_id
  * @property string exchange_rate_id
  * @property string comment
- * @property Account payerAccount
- * @property Account payeeAccount
  * @property User|Branch payer
  * @property User|Branch payee
+ * @property Account payerAccountInBillCurrency
+ * @property Account payeeAccountInBillCurrency
  */
 class Payment extends BaseModel
 {
@@ -43,7 +46,8 @@ class Payment extends BaseModel
 
     protected $casts = [
         'billAmount' => 'double',
-        'paidAmount' => 'double'
+        'paidAmountInBillCurrency' => 'double',
+        'paidAmountInSecondCurrency' => 'double'
     ];
 
     protected $guarded = [];
@@ -113,12 +117,12 @@ class Payment extends BaseModel
     }
 
 
-    public function payerAccount()
+    public function payerAccountInBillCurrency()
     {
         return $this->belongsTo(Account::class);
     }
 
-    public function payeeAccount()
+    public function payeeAccountInBillCurrency()
     {
         return $this->belongsTo(Account::class);
     }

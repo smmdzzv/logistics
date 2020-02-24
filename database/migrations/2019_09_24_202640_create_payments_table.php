@@ -20,17 +20,20 @@ class CreatePaymentsTable extends Migration
             $table->char('prepared_by_id', 26)->index()->nullable();
             $table->char('status', 20);
             $table->char('payer_id', 26)->index()->nullable();
-            $table->char('payer_account_id', 26)->index()->nullable();
+            $table->char('payer_account_in_bill_currency_id', 26)->index()->nullable();
+            $table->char('payer_account_in_second_currency_id', 26)->index()->nullable();
             $table->char('payer_type', 20);
             $table->char('payee_id', 26)->index()->nullable();
-            $table->char('payee_account_id', 26)->index()->nullable();
+            $table->char('payee_account_in_bill_currency_id', 26)->index()->nullable();
+            $table->char('payee_account_in_second_currency_id', 26)->index()->nullable();
             $table->char('payee_type', 20);
             $table->char('payment_item_id', 26)->index();
             $table->char('related_payment_id', 26)->index()->nullable();
             $table->decimal('billAmount', 10, 2);
-            $table->decimal('paidAmount', 10, 2);
+            $table->decimal('paidAmountInBillCurrency', 10, 2);
+            $table->decimal('paidAmountInSecondCurrency', 10, 2);
             $table->char('bill_currency_id', 26)->index();
-            $table->char('paid_currency_id', 26)->index();
+            $table->char('second_paid_currency_id', 26)->index()->nullable();
             $table->char('exchange_rate_id', 26)->index()->nullable();
             $table->string('comment')->nullable();
 

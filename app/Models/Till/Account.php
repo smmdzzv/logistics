@@ -7,6 +7,9 @@ use App\Models\Currency;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
+/**
+ * @property string id
+ */
 class Account extends BaseModel
 {
     protected $casts = [
