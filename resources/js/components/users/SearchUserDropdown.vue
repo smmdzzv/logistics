@@ -111,7 +111,7 @@
         },
         methods: {
             loadUsers() {
-                if (this.userInfo.length > 0) {
+                if (this.userInfo && this.userInfo.length > 0) {
                     axios.get(this.url + this.userInfo, {
                         cancelToken: new CancelToken(function executor(c) {
                             cancel = c;
