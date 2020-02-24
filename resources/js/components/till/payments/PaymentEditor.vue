@@ -113,12 +113,12 @@
 
                     <div class="col-md-4 form-group">
                         <label for="billAmount">Сумма</label>
-                        <b-form-input id="billAmount"
-                                      v-model="payment.billAmount"
-                                      :class="{'is-invalid':errors.billAmount}"
-                                      :disabled="disable"
-                                      class="form-control"
-                                      type="number"></b-form-input>
+                        <input id="billAmount"
+                               v-model.lazy="payment.billAmount"
+                               class="form-control"
+                               :class="{'is-invalid':errors.billAmount}"
+                               :disabled="disable"
+                               type="number">
                         <b-form-invalid-feedback :state="errors.billAmount"><strong
                             v-for="message in errors.billAmount">{{message}}</strong></b-form-invalid-feedback>
                     </div>
@@ -164,12 +164,11 @@
 
                     <div class="col-md-3 form-group">
                         <label for="paidAmount">Сумма</label>
-                        <b-form-input id="paidAmountInBillCurrency"
-                                      v-model="payment.paidAmountInBillCurrency"
-                                      :class="{'is-invalid':errors.paidAmountInBillCurrency}"
-                                      class="form-control"
-                                      type="number"
-                        ></b-form-input>
+                        <input id="paidAmountInBillCurrency"
+                               v-model.lazy="payment.paidAmountInBillCurrency"
+                               :class="{'is-invalid':errors.paidAmountInBillCurrency}"
+                               class="form-control"
+                               type="number">
                         <b-form-invalid-feedback :state="errors.paidAmountInBillCurrency"><strong
                             v-for="message in errors.paidAmountInBillCurrency">{{message}}</strong>
                         </b-form-invalid-feedback>
@@ -198,12 +197,11 @@
                                     <strong v-if="payment.exchangeRate">{{payment.exchangeRate.coefficient}}</strong>
                                 </b-input-group-text>
                             </template>
-                            <b-form-input id="paidAmountInBillCurrency"
-                                          v-model="payment.paidAmountInSecondCurrency"
-                                          :class="{'is-invalid':errors.paidAmountInSecondCurrency}"
-                                          class="form-control"
-                                          type="number">
-                            </b-form-input>
+                            <input id="paidAmountInSecondCurrency"
+                                   v-model.lazy="payment.paidAmountInSecondCurrency"
+                                   :class="{'is-invalid':errors.paidAmountInSecondCurrency}"
+                                   class="form-control"
+                                   type="number">
                             <b-form-invalid-feedback :state="errors.paidAmountInSecondCurrency"><strong
                                 v-for="message in errors.paidAmountInSecondCurrency">{{message}}</strong>
                             </b-form-invalid-feedback>
@@ -219,7 +217,8 @@
                                        :disabled="disable"
                                        :class="{'is-invalid':errors.secondPaidCurrency}">
                             <option :value="null" disabled>-- Выберите валюту --</option>
-                            <option v-for="currency in currencies" :value="currency" :disabled="payment.billCurrency && currency.id === payment.billCurrency.id">
+                            <option v-for="currency in currencies" :value="currency"
+                                    :disabled="payment.billCurrency && currency.id === payment.billCurrency.id">
                                 {{currency.name.charAt(0).toUpperCase() + currency.name.slice(1)}}
                                 {{currency.isoName}}
                             </option>
@@ -316,7 +315,7 @@
                     billAmount: null,
                     billCurrency: null,
                     paidAmountInBillCurrency: null,
-                    paidAmountInSecondCurrency:null,
+                    paidAmountInSecondCurrency: null,
                     secondPaidCurrency: null,
                     comment: null,
                     exchangeRate: null
@@ -329,6 +328,9 @@
             },
             'payment.paidAmountInSecondCurrency'() {
                 this.calculatePaidInBillCurrencyAmount();
+            },
+            'payment.paidAmountInBillCurrency'() {
+                this.calculatePaidInSecondCurrencyAmount();
             },
             'payment.billCurrency'() {
                 this.checkIfNeededConverting()
@@ -357,7 +359,15 @@
             }
         },
         methods: {
-            calculatePaidInBillCurrencyAmount() { console.log('calc')
+            calculatePaidInSecondCurrencyAmount() {
+                if (this.payment.secondPaidCurrency && this.payment.exchangeRate)
+                    this.payment.paidAmountInSecondCurrency = Math.round((this.payment.billAmount - this.payment.paidAmountInBillCurrency) * this.payment.exchangeRate.coefficient * 100) / 100;
+                else {
+                    this.payment.paidAmountInBillCurrency = this.payment.billAmount;
+                    this.payment.paidAmountInSecondCurrency = 0;
+                }
+            },
+            calculatePaidInBillCurrencyAmount() { 
                 if (this.payment.secondPaidCurrency && this.payment.exchangeRate && this.payment.paidAmountInSecondCurrency > 0)
                     this.payment.paidAmountInBillCurrency = this.payment.billAmount - Math.round(this.payment.paidAmountInSecondCurrency / this.payment.exchangeRate.coefficient * 100) / 100;
                 else
