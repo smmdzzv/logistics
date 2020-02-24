@@ -142,7 +142,8 @@
         </template>
 
         <template slot="paidAmount" slot-scope="{item}">
-            <span>{{item.paidAmount}} {{item.paidCurrency.isoName}}</span>
+            <span v-if="item.paidAmountInBillCurrency > 0">{{item.paidAmountInBillCurrency}} {{item.billCurrency.isoName}}</span>
+            <span v-if="item.paidAmountInSecondCurrency > 0">{{item.paidAmountInSecondCurrency}} {{item.secondPaidCurrency.isoName}}</span>
         </template>
 
         <template slot="status" slot-scope="{item}">

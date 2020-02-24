@@ -63,11 +63,13 @@ class Payment extends BaseModel
         'cashier',
         'payer',
         'payee',
-        'payerAccount',
-        'payeeAccount',
+        'payerAccountInBillCurrency',
+        'payerAccountInSecondCurrency',
+        'payeeAccountInBillCurrency',
+        'payeeAccountInSecondCurrency',
         'paymentItem',
         'billCurrency',
-        'paidCurrency',
+        'secondPaidCurrency',
         'exchangeRate'
     ];
 
@@ -122,7 +124,17 @@ class Payment extends BaseModel
         return $this->belongsTo(Account::class);
     }
 
+    public function payerAccountInSecondCurrency()
+    {
+        return $this->belongsTo(Account::class);
+    }
+
     public function payeeAccountInBillCurrency()
+    {
+        return $this->belongsTo(Account::class);
+    }
+
+    public function payeeAccountInSecondCurrency()
     {
         return $this->belongsTo(Account::class);
     }
@@ -134,6 +146,10 @@ class Payment extends BaseModel
 
     public function billCurrency()
     {
+        return $this->belongsTo(Currency::class);
+    }
+
+    public function secondPaidCurrency(){
         return $this->belongsTo(Currency::class);
     }
 

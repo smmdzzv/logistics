@@ -188,7 +188,7 @@ class PaymentRequestWriter extends RequestWriter
             'paidAmountInBillCurrency' => $this->request->get('paidAmountInBillCurrency'),
             'paidAmountInSecondCurrency' => $this->request->get('paidAmountInSecondCurrency'),
             'bill_currency_id' => $this->request->get('billCurrency'),
-            'second_paid_currency_id' => $this->request->get('paidCurrency'),
+            'second_paid_currency_id' => $this->request->get('secondPaidCurrency'),
             'exchange_rate_id' => $this->request->get('exchangeRate'),
             'comment' => $this->request->get('comment'),
         ]);
