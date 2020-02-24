@@ -136,7 +136,7 @@ class PaymentRequest extends FormRequest
 
                 if ($payerAccountSecondCurrency->balance -  $this->request->get('paidAmountInSecondCurrency') < 0)
                     return $validator->errors()->add('payer',
-                            'Недостаточно средств на счету плательщика - ' . $payerAccountSecondCurrency->balance . ' ' . $payerAccountBillCurrency->currency->isoName) . '.';
+                            'Недостаточно средств на счету плательщика - ' . $payerAccountSecondCurrency->balance . ' ' . $payerAccountSecondCurrency->currency->isoName) . '.';
             }
         });
     }
@@ -195,6 +195,9 @@ class PaymentRequest extends FormRequest
 
         if ($this->request->get('billCurrency') === $this->request->get('secondPaidCurrency'))
             return $validator->errors()->add('billCurrency', 'При переводе денег между счетами филиала валюта оплаты и валюта зачисления не должны совпадать. ');
+
+        if($this->request->get('paidAmountInBillCurrency') > 0)
+            return $validator->errors()->add('paidInBillCurrency', 'При переводе денег между счетами филиала сумма в валюте оплаты должны быть равна 0. ');
     }
 
     private function validateMoneyExchange($validator)
