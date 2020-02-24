@@ -197,7 +197,7 @@ class PaymentRequest extends FormRequest
             return $validator->errors()->add('billCurrency', 'При переводе денег между счетами филиала валюта оплаты и валюта зачисления не должны совпадать. ');
 
         if($this->request->get('paidAmountInBillCurrency') > 0)
-            return $validator->errors()->add('paidInBillCurrency', 'При переводе денег между счетами филиала сумма в валюте оплаты должны быть равна 0. ');
+            return $validator->errors()->add('paidAmountInBillCurrency', 'При переводе денег между счетами филиала сумма в валюте оплаты должны быть равна 0. ');
     }
 
     private function validateMoneyExchange($validator)
