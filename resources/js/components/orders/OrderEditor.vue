@@ -106,7 +106,7 @@
                             });
                         }
 
-                        window.location.href = '/orders/' + response.data.id;
+                        window.location.href = '/orders/create';
                     } catch (e) {
                         tHideSpinner();
                         this.$root.showErrorMsg(

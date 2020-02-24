@@ -91,7 +91,7 @@ class OrdersController extends BaseController
             'storedItemInfos.item',
             'storedItemInfos.tariff',
             'storedItemInfos.storedItems',
-            'orderRemovedItems.storedItemInfo.item', 
+            'orderRemovedItems.storedItemInfo.item',
             'owner'
         ]);
 
