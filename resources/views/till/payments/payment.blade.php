@@ -5,7 +5,12 @@
 @endif
 <div class="jumbotron">
     <p>Требуемая сумма: <b>{{$payment->billAmount}} {{$payment->billCurrency->isoName}}</b></p>
-    <p>Оплаченная сумма: <b>{{$payment->paidAmount}} {{$payment->paidCurrency->isoName}}</b></p>
+    <p>Оплаченная сумма:
+        <b>{{$payment->paidAmountInBillCurrency}} {{$payment->billCurrency->isoName}}</b>
+        @if($payment->paidAmountInSecondCurrency > 0 && $payment->secondPaidCurrency)
+            <b>+ {{$payment->paidAmountInSecondCurrency}} {{$payment->secondPaidCurrency->isoName}}</b>
+        @endif
+    </p>
     @if($payment->exchangeRate)
         <p>Обменный курс: <b>{{$payment->exchangeRate->fromCurrency->isoName}}
                 в {{$payment->exchangeRate->toCurrency->isoName}} {{$payment->exchangeRate->coefficient}}</b>
