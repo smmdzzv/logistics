@@ -39,8 +39,9 @@ class PaymentRequest extends FormRequest
             'paymentItem' => 'required|exists:payment_items,id',
             'billAmount' => 'required|numeric|min:1',
             'billCurrency' => 'required|exists:currencies,id',
-            'paidAmount' => 'required|numeric|min:1',
-            'paidCurrency' => 'required|exists:currencies,id',
+            'paidAmountInBillCurrency' => 'required|numeric|min:1',
+            'paidAmountInSecondCurrency' => 'required|numeric',
+            'secondPaidCurrency' => 'nullable|exists:currencies,id',
             'exchangeRate' => 'nullable|string',
             'comment' => 'nullable|string',
         ];
@@ -92,7 +93,7 @@ class PaymentRequest extends FormRequest
 
                 $exchangeRate = ExchangeRate::where('id', $this->request->get('exchangeRate'))
                     ->where('id', $this->request->get('exchangeRate'))
-                    ->where('from_currency_id', $this->request->get('paidCurrency'))
+                    ->where('from_currency_id', $this->request->get('secondPaidCurrency'))
                     ->where('to_currency_id', $this->request->get('billCurrency'))
                     ->first();
 
@@ -102,30 +103,40 @@ class PaymentRequest extends FormRequest
             }
 
             //Check payment amount
-            if ($this->request->get('billCurrency') !== $this->request->get('paidCurrency')) {
+            if ($this->request->get('secondPaidCurrency') && $this->request->get('paidAmountInSecondCurrency') > 0) {
                 if (!$exchangeRate)
-                    return $validator->errors()->add('exchangeRate', 'Валюта оплаты не соотсветсвует валюте платежа. Необходима конвертация. ');
+                    return $validator->errors()->add('secondPaidCurrency', 'Для указанной валюты Необходима конвертация. ');
 
-                $amount = round($this->request->get('billAmount') * $exchangeRate->coefficient, 2);
+//                $amount = round($this->request->get('billAmount') * $exchangeRate->coefficient, 2);
+                $amount = round($this->request->get('paidAmountInBillCurrency') + $this->request->get('paidAmountInSecondCurrency') / $exchangeRate->coefficient, 2);
 
-                if ($amount - $this->request->get('paidAmount') != 0)
-                    return $validator->errors()->add('paidAmount', 'Сумма оплаты не соотвествует требуемой с учетом конвертации. ');
+                if ($this->request->get('billAmount') - $amount != 0)
+                    return $validator->errors()->add('paidAmountInBillCurrency',
+                        'Сумма оплаты не соотвествует требуемой с учетом конвертации. Требуемая ' . $this->request->get('billAmount') . '. Оплаченная ' . $amount);
 
             } else {
-                if ($this->request->get('billAmount') !== $this->request->get('paidAmount'))
-                    return $validator->errors()->add('paidAmount', 'Сумма к оплате не равняется требуемой сумме. ');
+                if ($this->request->get('billAmount') !== $this->request->get('paidAmountInBillCurrency'))
+                    return $validator->errors()->add('paidAmountInBillCurrency', 'Сумма к оплате не равняется требуемой сумме. ');
             }
 
             //Check payer account balance
             if ($this->request->get('payer_type') === 'branch') {
-                $payerAccount = $this->payer->accounts()->where('currency_id', $this->request->get('paidCurrency'))->first();
-                if (!$payerAccount)
-                    return $validator->errors()->add('paidCurrency', 'Не найден счет плательщика в оплачиваемой валюте. ');
+                $payerAccountBillCurrency = $this->payer->accounts()->where('currency_id', $this->request->get('billCurrency'))->first();
+                $payerAccountSecondCurrency = $this->payer->accounts()->where('currency_id', $this->request->get('secondPaidCurrency'))->first();
 
-                $diff = $payerAccount->balance - $this->request->get('paidAmount');
+                if (!$payerAccountBillCurrency)
+                    return $validator->errors()->add('secondPaidCurrency', 'Не найден счет плательщика в оплачиваемой валюте. ');
 
-                if ($diff < 0)
-                    return $validator->errors()->add('payer', 'Недостаточно средств на счету плательщика - ' . $payerAccount->balance . ' ' . $payerAccount->currency->isoName) . '.';
+                if (!$payerAccountSecondCurrency)
+                    return $validator->errors()->add('secondPaidCurrency', 'Не найден счет плательщика в оплачиваемой валюте. ');
+
+                if ($payerAccountBillCurrency->balance -  $this->request->get('paidAmountInBillCurrency') < 0)
+                    return $validator->errors()->add('payer',
+                            'Недостаточно средств на счету плательщика - ' . $payerAccountBillCurrency->balance . ' ' . $payerAccountBillCurrency->currency->isoName) . '.';
+
+                if ($payerAccountSecondCurrency->balance -  $this->request->get('paidAmountInSecondCurrency') < 0)
+                    return $validator->errors()->add('payer',
+                            'Недостаточно средств на счету плательщика - ' . $payerAccountSecondCurrency->balance . ' ' . $payerAccountBillCurrency->currency->isoName) . '.';
             }
         });
     }
@@ -182,7 +193,7 @@ class PaymentRequest extends FormRequest
         if ($this->payer->id !== $this->payee->id)
             return $validator->errors()->add('payer', 'При переводе денег между счетами филиала плательщиком и получателем должен быть один филиал. ');
 
-        if ($this->request->get('billCurrency') === $this->request->get('paidCurrency'))
+        if ($this->request->get('billCurrency') === $this->request->get('secondPaidCurrency'))
             return $validator->errors()->add('billCurrency', 'При переводе денег между счетами филиала валюта оплаты и валюта зачисления не должны совпадать. ');
     }
 
@@ -194,7 +205,7 @@ class PaymentRequest extends FormRequest
         if (!($this->payer instanceof User))
             return $validator->errors()->add('payer', 'При обмене валют плательщиком должен быть клиент, а получателем филиал. ');
 
-        if ($this->request->get('billCurrency') === $this->request->get('paidCurrency'))
+        if ($this->request->get('billCurrency') === $this->request->get('secondPaidCurrency'))
             return $validator->errors()->add('billCurrency', 'При обмене валют требуемая валюта должна отличаться от валюты оплаты.');
 
         if (!$this->request->get('exchangeRate'))
