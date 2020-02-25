@@ -20,6 +20,11 @@ class OrderFilter extends Filter
         if (isset($filters['branch']) && auth()->user()->hasRole('admin'))
             $this->query->where('branchId', $filters['branch']);
 
+        if (isset($filters['client']))
+            $this->query->whereHas('owner', function ($query) use ($filters) {
+                $query->where('code', $filters['client']);
+            });
+
         if (isset($filters['employee']))
             $this->query->whereHas('registeredBy', function ($query) use ($filters) {
                 $query->where('code', $filters['employee']);

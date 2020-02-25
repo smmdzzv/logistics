@@ -8,7 +8,8 @@
                 </div>
                 <div class="form-group col-md">
                     <label for="employeeCode">Код сотрудника</label>
-                    <input id="employeeCode" type="text" v-model.lazy="employeeCode" class="form-control form-control-sm">
+                    <input id="employeeCode" type="text" v-model.lazy="employeeCode"
+                           class="form-control form-control-sm">
                 </div>
                 <div class="form-group col-md">
                     <label for="minCubage">Мин кубатура</label>
@@ -50,6 +51,7 @@
             :fields="fields"
             :isBusy="isBusy"
             :items="orders"
+            :setRowClass="setRowClass"
             striped
             class="shadow"
             excelFileName="Список заказов"
@@ -72,12 +74,13 @@
             </template>
 
             <template slot="details" slot-scope="{item}">
-                <a :href="getDetailsUrl(item)"><img class="icon-btn-sm" src="/svg/file.svg"></a>
+                <a :href="getDetailsUrl(item)" v-if="item.id !== 'dummyStatItem'"><img class="icon-btn-sm"
+                                                                                       src="/svg/file.svg"></a>
             </template>
 
             <template slot="edit" slot-scope="{item}">
-                <a v-if="item.status !== 'completed'" :href="getEditUrl(item)"><img class="icon-btn-sm"
-                                                                                    src="/svg/edit.svg"></a>
+                <a v-if="item.status !== 'completed' && item.id !== 'dummyStatItem'" :href="getEditUrl(item)">
+                    <img class="icon-btn-sm" src="/svg/edit.svg"></a>
             </template>
 
             <template #footer>
@@ -121,33 +124,33 @@
             }
         },
         methods: {
-            prepareUrl(){
+            prepareUrl() {
                 let action = '/orders/filtered?';
-                if(this.clientCode)
+                if (this.clientCode)
                     action += `client=${this.clientCode}&`;
-                if(this.employeeCode)
+                if (this.employeeCode)
                     action += `employee=${this.employeeCode}&`;
-                if(this.minCubage)
+                if (this.minCubage)
                     action += `minCubage=${this.minCubage}&`;
-                if(this.maxCubage)
+                if (this.maxCubage)
                     action += `maxCubage=${this.maxCubage}&`;
-                if(this.minWeight)
+                if (this.minWeight)
                     action += `minWeight=${this.minWeight}&`;
-                if(this.maxWeight)
+                if (this.maxWeight)
                     action += `maxWeight=${this.maxWeight}&`;
-                if(this.minPrice)
+                if (this.minPrice)
                     action += `minPrice=${this.minPrice}&`;
-                if(this.maxPrice)
+                if (this.maxPrice)
                     action += `maxPrice=${this.maxPrice}&`;
-                if(this.dateFrom)
+                if (this.dateFrom)
                     action += `dateFrom=${this.dateFrom}&`;
-                if(this.dateTo)
+                if (this.dateTo)
                     action += `dateTo=${this.dateTo}&`;
-                if(this.selectedBranch)
+                if (this.selectedBranch)
                     action += `branch=${this.selectedBranch.id}&`;
                 return action;
             },
-            getOrders(page = 1) {
+            async getOrders(page = 1) {
                 this.isBusy = true;
                 // let action = this.action;
                 // if (this.selectedBranch)
@@ -155,25 +158,56 @@
                 // action += '?paginate=7&page=' + page;
                 let action = this.prepareUrl() + 'paginate=20&page=' + page;
 
-                axios.get(action)
-                    .then(response => {
-                        this.pagination = response.data;
-                        if (this.flowable)
-                            response.data.data.forEach(item => {
-                                this.orders.push(item);
-                            });
-                        else
-                            this.orders = response.data.data;
-                        this.$nextTick(() => {
-                            this.isBusy = false;
-                        })
-                    });
+                try {
+                    const response = await axios.get(action);
+                    this.pagination = response.data;
+                    if (this.flowable)
+                        response.data.data.forEach(item => {
+                            this.orders.push(item);
+                        });
+                    else
+                        this.orders = response.data.data;
+                } catch (e) {
+
+                }
+
+                this.updateStat();
+
+                this.$nextTick(() => {
+                    this.isBusy = false;
+                })
+            },
+            updateStat() {
+                if (!this.orders)
+                    return;
+
+                let dummyStatItem = {
+                    id: 'dummyStatItem',
+                    owner: {code: 'Суммарные данные'},
+                    totalPrice: 0,
+                    totalWeight: 0,
+                    totalDiscount: 0,
+                    totalCubage: 0
+                };
+
+                for (let i = 0; i < this.orders.length; i++) {
+                    dummyStatItem.totalPrice += this.orders[i].totalPrice;
+                    dummyStatItem.totalWeight += this.orders[i].totalWeight;
+                    dummyStatItem.totalDiscount += this.orders[i].totalDiscount;
+                    dummyStatItem.totalCubage += this.orders[i].totalCubage;
+                }
+
+                this.orders.unshift(dummyStatItem)
             },
             getDetailsUrl(order) {
                 return '/orders/' + order.id;
             },
             getEditUrl(order) {
                 return '/orders/' + order.id + '/edit';
+            },
+            setRowClass(item, type) {
+                if (item && item.id === 'dummyStatItem')
+                    return 'table-success';
             }
         },
         computed: {
@@ -185,34 +219,34 @@
             selectedBranch: function () {
                 this.getOrders();
             },
-            clientCode:function () {
+            clientCode: function () {
                 this.getOrders()
             },
-            employeeCode:function () {
+            employeeCode: function () {
                 this.getOrders()
             },
-            minCubage:function () {
+            minCubage: function () {
                 this.getOrders()
             },
-            maxCubage:function () {
+            maxCubage: function () {
                 this.getOrders()
             },
-            minWeight:function () {
+            minWeight: function () {
                 this.getOrders()
             },
-            maxWeight:function () {
+            maxWeight: function () {
                 this.getOrders()
             },
-            minPrice:function () {
+            minPrice: function () {
                 this.getOrders()
             },
-            maxPrice:function () {
+            maxPrice: function () {
                 this.getOrders()
             },
-            dateFrom:function () {
+            dateFrom: function () {
                 this.getOrders()
             },
-            dateTo:function () {
+            dateTo: function () {
                 this.getOrders()
             },
         },
@@ -224,16 +258,16 @@
                 action: this.url,
                 isBusy: false,
                 customCells: ['details', 'edit'],
-                clientCode:null,
-                employeeCode:null,
-                minCubage:null,
-                maxCubage:null,
-                minWeight:null,
-                maxWeight:null,
-                minPrice:null,
-                maxPrice:null,
-                dateFrom:null,
-                dateTo:null,
+                clientCode: null,
+                employeeCode: null,
+                minCubage: null,
+                maxCubage: null,
+                minWeight: null,
+                maxWeight: null,
+                minPrice: null,
+                maxPrice: null,
+                dateFrom: null,
+                dateTo: null,
                 fields: {
                     'owner.code': {
                         label: 'Владелец',
