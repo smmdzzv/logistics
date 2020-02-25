@@ -141,6 +141,7 @@
                 })
             },
             async submit() {
+                tShowSpinner();
                 let data = {
                     storedItems: this.storedItems.map(function (item) {
                         return item.id;
@@ -155,6 +156,7 @@
                         'Не удалось закрепить список товаров за рейсом. Повторите попытку после перезагрузки страницы.'
                     );
                 }
+                tHideSpinner();
             },
             prepareUrl(page, vm) {
                 let action = `/trip/stored-items/available`;
