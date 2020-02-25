@@ -63,6 +63,14 @@
                 </span>
             </template>
 
+            <template slot="created_at" slot-scope="{item}">
+                <span> {{item.created_at | luxon}} </span>
+            </template>
+
+            <template slot="updated_at" slot-scope="{item}">
+                <span> {{item.updated_at | luxon}} </span>
+            </template>
+
             <template :slot="cell" slot-scope="data" v-for="cell in customCells">
                 <slot :name="cell" v-bind:item="data.item"></slot>
             </template>

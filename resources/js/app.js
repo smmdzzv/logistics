@@ -10,12 +10,24 @@ let BootstrapVue = require('bootstrap-vue').default;
 let Vuelidate = require('vuelidate').default;
 let VueEasyPrint = require('vue-easy-print');
 let VueExcelXlsx = require('vue-excel-xlsx').default;
+let VueLuxon = require('vue-luxon');
 
 window.Vue = require('vue');
 window.Vue.use(BootstrapVue);
 window.Vue.use(Vuelidate);
 window.Vue.use(VueEasyPrint);
 window.Vue.use(VueExcelXlsx);
+window.Vue.use(VueLuxon,{
+    serverZone: 'utc',
+    serverFormat: 'sql',
+    clientZone: 'Asia/Dushanbe',
+    clientFormat: 'H:mm:ss dd-MM-yyyy',
+    localeLang: null,
+    localeFormat: {},
+    diffForHumans: {},
+    i18n: {}
+});
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

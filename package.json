@@ -30,6 +30,7 @@
         "vue": "^2.6.10",
         "vue-easy-print": "0.0.8",
         "vue-excel-xlsx": "^1.0.11",
+        "vue-luxon": "^0.7.0",
         "vuelidate": "^0.7.4"
     }
 }

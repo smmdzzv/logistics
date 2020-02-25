@@ -9,7 +9,7 @@
                 @else
                     Заявка
                 @endif
-                от {{$payment->updated_at}}
+                от <span v-luxon="{ value: '{{$payment->updated_at}}' }" />
             </div>
             <div class="card-body">
                 <h4>Общая информация</h4>
