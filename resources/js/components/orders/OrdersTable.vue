@@ -43,6 +43,14 @@
                     <label for="dateTo">До</label>
                     <input id="dateTo" type="date" v-model.lazy="dateTo" class="form-control form-control-sm">
                 </div>
+                <div class="form-group col-md">
+                    <label for="status">Статус</label>
+                    <select id="status" v-model.lazy="status" class="form-control form-control-sm">
+                        <option :value="null">--Любые--</option>
+                        <option value="accepted">Активный</option>
+                        <option value="completed">Завершенный</option>
+                    </select>
+                </div>
             </div>
         </div>
         <table-card
@@ -148,6 +156,8 @@
                     action += `dateTo=${this.dateTo}&`;
                 if (this.selectedBranch)
                     action += `branch=${this.selectedBranch.id}&`;
+                if(this.status)
+                    action += `status=${this.status}&`;
                 return action;
             },
             async getOrders(page = 1) {
@@ -249,6 +259,9 @@
             dateTo: function () {
                 this.getOrders()
             },
+            status: function () {
+                this.getOrders()
+            }
         },
         data() {
             return {
@@ -268,6 +281,7 @@
                 maxPrice: null,
                 dateFrom: null,
                 dateTo: null,
+                status:null,
                 fields: {
                     'owner.code': {
                         label: 'Владелец',

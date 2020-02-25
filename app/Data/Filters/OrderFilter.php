@@ -54,6 +54,9 @@ class OrderFilter extends Filter
         if (isset($filters['dateTo']))
             $this->query->where('created_at', '<=', Carbon::createFromDate($filters['dateTo'])->addDay());
 
+        if(isset($filters['status']))
+            $this->query->where('status', $filters['status']);
+
         return $this->query;
     }
 }
