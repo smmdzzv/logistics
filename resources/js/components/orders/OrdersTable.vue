@@ -1,45 +1,93 @@
 <template>
-    <table-card
-        :customCells="customCells"
-        :excelSheetName="selectedBranch ? selectedBranch.name : 'Все филиалы'"
-        :fields="fields"
-        :isBusy="isBusy"
-        :items="orders"
-        striped
-        class="shadow"
-        excelFileName="Список заказов"
-        primary-key="id"
-        responsive>
-        <template #header>
-            <div class="row align-items-baseline">
-                <div class="col-6 col-md-4">Заказы</div>
-                <template v-if="branches">
-                    <label class="col-6 col-md-4 text-right" for="branch">Филиалы</label>
-                    <div class="col-md-4">
-                        <select class="form-control custom-select" id="branch" v-model="selectedBranch">
-                            <option :value="null">--Все филиалы--</option>
-                            <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}</option>
-                        </select>
-                    </div>
-                </template>
+    <div>
+        <div class="alert alert-secondary">
+            <div class="form-row align-items-baseline">
+                <div class="form-group col-md">
+                    <label for="clientCode">Код клиента</label>
+                    <input id="clientCode" type="text" v-model.lazy="clientCode" class="form-control form-control-sm">
+                </div>
+                <div class="form-group col-md">
+                    <label for="employeeCode">Код сотрудника</label>
+                    <input id="employeeCode" type="text" v-model.lazy="employeeCode" class="form-control form-control-sm">
+                </div>
+                <div class="form-group col-md">
+                    <label for="minCubage">Мин кубатура</label>
+                    <input id="minCubage" type="number" v-model.lazy="minCubage" class="form-control form-control-sm">
+                </div>
+                <div class="form-group col-md">
+                    <label for="maxCubage">Макс кубатура</label>
+                    <input id="maxCubage" type="number" v-model.lazy="maxCubage" class="form-control form-control-sm">
+                </div>
+                <div class="form-group col-md">
+                    <label for="minWeight">Мин вес</label>
+                    <input id="minWeight" type="number" v-model.lazy="minWeight" class="form-control form-control-sm">
+                </div>
+                <div class="form-group col-md">
+                    <label for="maxWeight">Макс вес</label>
+                    <input id="maxWeight" type="number" v-model.lazy="maxWeight" class="form-control form-control-sm">
+                </div>
+                <div class="form-group col-md">
+                    <label for="minPrice">Мин цена</label>
+                    <input id="minPrice" type="number" v-model.lazy="minPrice" class="form-control form-control-sm">
+                </div>
+                <div class="form-group col-md">
+                    <label for="maxPrice">Макс цена</label>
+                    <input id="maxPrice" type="number" v-model.lazy="maxPrice" class="form-control form-control-sm">
+                </div>
+                <div class="form-group col-md">
+                    <label for="dateFrom">От</label>
+                    <input id="dateFrom" type="date" v-model.lazy="dateFrom" class="form-control form-control-sm">
+                </div>
+                <div class="form-group col-md">
+                    <label for="dateTo">До</label>
+                    <input id="dateTo" type="date" v-model.lazy="dateTo" class="form-control form-control-sm">
+                </div>
             </div>
-        </template>
+        </div>
+        <table-card
+            :customCells="customCells"
+            :excelSheetName="selectedBranch ? selectedBranch.name : 'Все филиалы'"
+            :fields="fields"
+            :isBusy="isBusy"
+            :items="orders"
+            striped
+            class="shadow"
+            excelFileName="Список заказов"
+            primary-key="id"
+            responsive>
+            <template #header>
+                <div class="row align-items-baseline">
+                    <div class="col-6 col-md-4">Заказы</div>
+                    <template v-if="branches">
+                        <label class="col-6 col-md-4 text-right" for="branch">Филиалы</label>
+                        <div class="col-md-4">
+                            <select class="form-control custom-select" id="branch" v-model.lazy="selectedBranch">
+                                <option :value="null">--Все филиалы--</option>
+                                <option :key="branch.id" :value="branch" v-for="branch in branches">{{branch.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </template>
+                </div>
+            </template>
 
-        <template slot="details" slot-scope="{item}">
-            <a :href="getDetailsUrl(item)"><img class="icon-btn-sm" src="/svg/file.svg"></a>
-        </template>
+            <template slot="details" slot-scope="{item}">
+                <a :href="getDetailsUrl(item)"><img class="icon-btn-sm" src="/svg/file.svg"></a>
+            </template>
 
-        <template slot="edit" slot-scope="{item}">
-            <a v-if="item.status !== 'completed'" :href="getEditUrl(item)"><img class="icon-btn-sm" src="/svg/edit.svg"></a>
-        </template>
+            <template slot="edit" slot-scope="{item}">
+                <a v-if="item.status !== 'completed'" :href="getEditUrl(item)"><img class="icon-btn-sm"
+                                                                                    src="/svg/edit.svg"></a>
+            </template>
 
-        <template #footer>
-            <div class="card-footer">
-                <main-paginator :flowable="flowable" :onPageChange="getOrders"
-                                :pagination="pagination"></main-paginator>
-            </div>
-        </template>
-    </table-card>
+            <template #footer>
+                <div class="card-footer">
+                    <main-paginator :flowable="flowable" :onPageChange="getOrders"
+                                    :pagination="pagination"></main-paginator>
+                </div>
+            </template>
+        </table-card>
+    </div>
 </template>
 
 <script>
@@ -73,12 +121,40 @@
             }
         },
         methods: {
+            prepareUrl(){
+                let action = '/orders/filtered?';
+                if(this.clientCode)
+                    action += `client=${this.clientCode}&`;
+                if(this.employeeCode)
+                    action += `employee=${this.employeeCode}&`;
+                if(this.minCubage)
+                    action += `minCubage=${this.minCubage}&`;
+                if(this.maxCubage)
+                    action += `maxCubage=${this.maxCubage}&`;
+                if(this.minWeight)
+                    action += `minWeight=${this.minWeight}&`;
+                if(this.maxWeight)
+                    action += `maxWeight=${this.maxWeight}&`;
+                if(this.minPrice)
+                    action += `minPrice=${this.minPrice}&`;
+                if(this.maxPrice)
+                    action += `maxPrice=${this.maxPrice}&`;
+                if(this.dateFrom)
+                    action += `dateFrom=${this.dateFrom}&`;
+                if(this.dateTo)
+                    action += `dateTo=${this.dateTo}&`;
+                if(this.selectedBranch)
+                    action += `branch=${this.selectedBranch.id}&`;
+                return action;
+            },
             getOrders(page = 1) {
                 this.isBusy = true;
-                let action = this.action;
-                if (this.selectedBranch)
-                    action = `branch/${this.selectedBranch.id}/orders`;
-                action += '?paginate=7&page=' + page;
+                // let action = this.action;
+                // if (this.selectedBranch)
+                //     action = `branch/${this.selectedBranch.id}/orders`;
+                // action += '?paginate=7&page=' + page;
+                let action = this.prepareUrl() + 'paginate=20&page=' + page;
+
                 axios.get(action)
                     .then(response => {
                         this.pagination = response.data;
@@ -108,7 +184,37 @@
         watch: {
             selectedBranch: function () {
                 this.getOrders();
-            }
+            },
+            clientCode:function () {
+                this.getOrders()
+            },
+            employeeCode:function () {
+                this.getOrders()
+            },
+            minCubage:function () {
+                this.getOrders()
+            },
+            maxCubage:function () {
+                this.getOrders()
+            },
+            minWeight:function () {
+                this.getOrders()
+            },
+            maxWeight:function () {
+                this.getOrders()
+            },
+            minPrice:function () {
+                this.getOrders()
+            },
+            maxPrice:function () {
+                this.getOrders()
+            },
+            dateFrom:function () {
+                this.getOrders()
+            },
+            dateTo:function () {
+                this.getOrders()
+            },
         },
         data() {
             return {
@@ -118,6 +224,16 @@
                 action: this.url,
                 isBusy: false,
                 customCells: ['details', 'edit'],
+                clientCode:null,
+                employeeCode:null,
+                minCubage:null,
+                maxCubage:null,
+                minWeight:null,
+                maxWeight:null,
+                minPrice:null,
+                maxPrice:null,
+                dateFrom:null,
+                dateTo:null,
                 fields: {
                     totalWeight: {
                         label: 'Вес',

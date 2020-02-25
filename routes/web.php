@@ -32,7 +32,8 @@ Route::resource('trusted-user', 'Users\TrustedUserController');
 Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 
 //Order
-Route::get('/orders/all', 'OrdersController@all')->name('order.all');
+//Route::get('/orders/all', 'OrdersController@all')->name('order.all');
+Route::get('/orders/filtered', 'OrdersController@filtered')->name('order.filtered');
 Route::get('/orders/{client}/active', 'OrdersController@activeOrders')->name('client.orders.active');
 
 Route::post('/order/{order}/update-price', 'Orders\OrderPriceController@update')->name('order-price.update');

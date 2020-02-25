@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Common\PasswordGenerator;
+use App\Data\Filters\OrderFilter;
 use App\Data\RequestWriters\Order\OrderRequestWriter;
 use App\Data\RequestWriters\Order\UpdateOrderRequestWriter;
 use App\Models\Branch;
@@ -133,16 +134,16 @@ class OrdersController extends BaseController
         return $customPrices;
     }
 
-    public function all()
-    {
-//        $paginate = request()->paginate ?? 10;
-        $branchIds = $this->getBranches()->map(function ($branch) {
-            return $branch->id;
-        });
-        return Order::whereIn('branchId', $branchIds)->with(['owner', 'registeredBy'])
-            ->latest()
-            ->paginate($this->pagination());
-    }
+//    public function all()
+//    {
+////        $paginate = request()->paginate ?? 10;
+//        $branchIds = $this->getBranches()->map(function ($branch) {
+//            return $branch->id;
+//        });
+//        return Order::whereIn('branchId', $branchIds)->with(['owner', 'registeredBy'])
+//            ->latest()
+//            ->paginate($this->pagination());
+//    }
 
     public function activeOrders(Client $client)
     {
@@ -226,5 +227,19 @@ class OrdersController extends BaseController
         }
 
         return $storedItemInfos;
+    }
+
+    public function filtered()
+    {
+        $branches = $this->getBranches()->map(function ($branch) {
+            return $branch->id;
+        });
+        $query = Order::whereIn('branchId', $branches)
+            ->with(['owner', 'registeredBy'])
+            ->latest();
+        $filter = new OrderFilter(request()->all(), $query);
+        $query = $filter->filter();
+
+        return $query->paginate($this->pagination());
     }
 }
