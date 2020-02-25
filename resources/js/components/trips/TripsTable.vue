@@ -19,6 +19,14 @@
             </a>
         </template>
 
+        <template slot="departureDate" slot-scope="{item}">
+            <span> {{item.departureDate | luxon:format('dd-MM-yyyy')}} </span>
+        </template>
+
+        <template slot="returnDate" slot-scope="{item}">
+            <span> {{item.returnDate | luxon:format('dd-MM-yyyy')}} </span>
+        </template>
+
         <template #footer>
             <div class="card-footer">
                 <main-paginator :pagination="pagination" :onPageChange="getTrips" :flowable="flowable" ></main-paginator>
@@ -61,7 +69,7 @@
                 },
                 items:[],
                 isBusy: false,
-                customCells:['buttons'],
+                customCells:['buttons', 'returnDate', 'departureDate'],
                 fields: {
                     code: {
                         label: 'Номер',
