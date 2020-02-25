@@ -3,14 +3,15 @@
         <div class="row justify-content-center px-3">
             <div class="form-group col-12">
                 <label class="col-form-label text-md-right" for="user">Клиент</label>
-                <input class="form-control" id="user" placeholder="Введите код клиента" v-model="clientCode" autofocus>
-                <!--                <search-user-dropdown :selected="onUserSelected"-->
-                <!--                                      :preselectedUser="client"-->
-                <!--                                      class="col-12"-->
-                <!--                                      id="user"-->
-                <!--                                      ref="clientDropdown"-->
-                <!--                                      placeholder="Введите ФИО или код клиента"-->
-                <!--                                      url="/concrete/client/filter?userInfo="/>-->
+                <!--                <input class="form-control" id="user" placeholder="Введите код клиента" v-model="clientCode" autofocus>-->
+                <search-user-dropdown :selected="onUserSelected"
+                                      :preselectedUser="client"
+                                      class="col-12"
+                                      id="user"
+                                      ref="clientDropdown"
+                                      placeholder="Введите ФИО или код клиента"
+                                      url="/concrete/client/filter?userInfo="
+                                      autofocus/>
 
                 <b-popover
                     :show.sync="clientError"
@@ -21,7 +22,7 @@
                     variant="danger"/>
             </div>
         </div>
-        <div class="row px-3">
+        <div class="row px-3" v-if="!client">
             <div class="form-group col-4">
                 <label class="col-form-label text-md-right" for="clientName">ФИО</label>
                 <input class="form-control" id="clientName" placeholder="Необязательно" v-model="clientName">
@@ -67,6 +68,7 @@
         },
         data() {
             return {
+                client: null,
                 clientCode: null,
                 clientName: null,
                 clientPhone: null,
@@ -76,10 +78,10 @@
             }
         },
         methods: {
-            // onUserSelected(user) {
-            //     this.client = user;
-            //     this.clientError = false;
-            // },
+            onUserSelected(user) {
+                this.client = user;
+                this.clientCode = this.client ? this.client.code : this.$refs.clientDropdown.userInfo;
+            },
             async submitData() {
                 if (!this.clientCode) {
                     this.clientError = true;

@@ -143,8 +143,8 @@
                 this.selectedUser = user;
                 // this.selectedUserDisplayInfo = user.code + ' ' + user.name;
                 // this.selectedUserDisplayInfo = user.code;
-                this.selectedUserDisplayInfo = user.code;
-                this.userInfo = user.code;
+                this.selectedUserDisplayInfo = user? user.code : this.userInfo;
+                this.userInfo = user? user.code : this.userInfo;
                 this.isEditMode = false;
                 this.selected(this.selectedUser);
             },
