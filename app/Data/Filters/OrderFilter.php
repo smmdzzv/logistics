@@ -4,6 +4,7 @@
 namespace App\Data\Filters;
 
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 class OrderFilter extends Filter
@@ -46,7 +47,7 @@ class OrderFilter extends Filter
             $this->query->where('created_at', '>=', $filters['dateFrom']);
 
         if (isset($filters['dateTo']))
-            $this->query->where('created_at', '<=', $filters['dateTo']);
+            $this->query->where('created_at', '<=', Carbon::createFromDate($filters['dateTo'])->addDay());
 
         return $this->query;
     }
