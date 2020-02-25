@@ -142,7 +142,7 @@
             setSelectedUser(user) {
                 this.selectedUser = user;
                 // this.selectedUserDisplayInfo = user.code + ' ' + user.name;
-                this.selectedUserDisplayInfo = user.code;
+                // this.selectedUserDisplayInfo = user.code;
                 this.selectedUserDisplayInfo = user.code;
                 this.userInfo = user.code;
                 this.isEditMode = false;
