@@ -12,6 +12,8 @@ let VueEasyPrint = require('vue-easy-print');
 let VueExcelXlsx = require('vue-excel-xlsx').default;
 let VueLuxon = require('vue-luxon');
 
+import {DateTime} from 'luxon';
+
 window.Vue = require('vue');
 window.Vue.use(BootstrapVue);
 window.Vue.use(Vuelidate);
@@ -20,7 +22,7 @@ window.Vue.use(VueExcelXlsx);
 window.Vue.use(VueLuxon,{
     serverZone: 'utc',
     serverFormat: 'sql',
-    clientZone: 'Asia/Dushanbe',
+    clientZone: DateTime.local().zoneName,
     clientFormat: 'H:mm:ss dd-MM-yyyy',
     localeLang: null,
     localeFormat: {},
