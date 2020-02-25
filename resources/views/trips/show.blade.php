@@ -52,13 +52,22 @@
                         @endif
                     </p>
 
-                    <p>Длина маршрута до пункта назначения: <span class="font-weight-bold">{{$trip->routeLengthToDestination}} км</span></p>
-                    <p>Длина обратного пути: <span class="font-weight-bold">{{$trip->routeLengthFromDestination}} км</span></p>
-                    <p>Планируемый расход топлива: <span class="font-weight-bold">{{$calculatedConsumptionTo + $calculatedConsumptionFrom}} (до {{$calculatedConsumptionTo}}, от {{$calculatedConsumptionFrom}}) л</span></p>
-                    <p>Дата отправления: <span class="font-weight-bold">{{$trip->departureDate}}</span></p>
-                    <p>Дата возвращения: <span class="font-weight-bold">{{$trip->returnDate}}</span></p>
-                    <p>Факт. дата отправления: <span class="font-weight-bold">{{$trip->departureAt}}</span></p>
-                    <p>Факт. дата возвращения: <span class="font-weight-bold">{{$trip->returnedAt}}</span></p>
+                    <p>Длина маршрута до пункта назначения: <span class="font-weight-bold">{{$trip->routeLengthToDestination}} км</span>
+                    </p>
+                    <p>Длина обратного пути: <span
+                            class="font-weight-bold">{{$trip->routeLengthFromDestination}} км</span></p>
+                    <p>Планируемый расход топлива: <span class="font-weight-bold">{{$calculatedConsumptionTo + $calculatedConsumptionFrom}} (до {{$calculatedConsumptionTo}}, от {{$calculatedConsumptionFrom}}) л</span>
+                    </p>
+                    <p>Дата отправления: <span class="font-weight-bold" v-luxon="{ value: '{{$trip->departureDate}}',  clientFormat: 'dd-MM-yyyy'}"></span></p>
+                    <p>Дата возвращения: <span class="font-weight-bold" v-luxon="{ value: '{{$trip->returnDate}}',  clientFormat: 'dd-MM-yyyy'}"></span></p>
+                    @if($trip->departureAt)
+                        <p>Факт. дата отправления: <span class="font-weight-bold"
+                                                         v-luxon="{ value: '{{$trip->departureAt}}' }"/></p>
+                    @endif
+                    @if($trip->returnedAt)
+                        <p>Факт. дата возвращения: <span class="font-weight-bold"
+                                                         v-luxon="{ value: '{{$trip->returnedAt}}' }"></span></p>
+                    @endif
 
                     <form method="post" action="{{route('trip.status', $trip)}}">
                         @csrf
