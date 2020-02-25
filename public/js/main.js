@@ -59,7 +59,7 @@ jQuery.extend(jQuery.expr[':'], {
     }
 });
 
-$(document).on('keyup', 'input,select', function (e) {
+$(document).on('keydown', 'input,select', function (e) {
     if (e.which == 13) {
         e.preventDefault();
         // Get all focusable elements on the page

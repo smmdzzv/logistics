@@ -45,7 +45,8 @@
                  :selectable="selectable"
                  :striped="striped"
                  :hover="hover"
-                 :tbody-tr-class="rowClass"
+                 :tbody-tr-class="setRowClass? setRowClass:rowClass"
+                 small
                  @row-clicked="onRowClick">
 
             <template v-slot:table-busy>
@@ -64,11 +65,11 @@
             </template>
 
             <template slot="created_at" slot-scope="{item}">
-                <span> {{item.created_at | luxon}} </span>
+                <span v-if="item.created_at"> {{item.created_at | luxon}} </span>
             </template>
 
             <template slot="updated_at" slot-scope="{item}">
-                <span> {{item.updated_at | luxon}} </span>
+                <span v-if="item.updated_at"> {{item.updated_at | luxon}} </span>
             </template>
 
             <template :slot="cell" slot-scope="data" v-for="cell in customCells">
@@ -110,6 +111,9 @@
             customCells: {
                 type: Array,
                 default: () => []
+            },
+            setRowClass:{
+                type:Function
             }
         },
         methods: {
