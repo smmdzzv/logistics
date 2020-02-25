@@ -59,6 +59,8 @@
         mounted() {
             if (this.order) {
                 this.clientCode = this.order.owner.code;
+                this.$refs.clientDropdown.userInfo = this.clientCode;
+                this.$refs.clientDropdown.selectedUserDisplayInfo = this.clientCode;
             }
         },
         props: {
