@@ -235,6 +235,10 @@
                 dateFrom:null,
                 dateTo:null,
                 fields: {
+                    'owner.code': {
+                        label: 'Владелец',
+                        sortable: true
+                    },
                     totalWeight: {
                         label: 'Вес',
                         sortable: true
@@ -251,12 +255,8 @@
                         label: 'Цена',
                         sortable: true
                     },
-                    'registeredBy.name': {
+                    'registeredBy.code': {
                         label: 'Принял',
-                        sortable: true
-                    },
-                    'owner.code': {
-                        label: 'Владелец',
                         sortable: true
                     },
                     created_at: {
