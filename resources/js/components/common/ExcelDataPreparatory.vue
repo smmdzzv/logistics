@@ -1,7 +1,7 @@
 <script>
     export default {
         name: "ExcelDataPreparatory",
-        props:{
+        props: {
             excelSheetName: {
                 type: String,
                 default: 'Лист 1'
@@ -27,14 +27,15 @@
                 }, this);
             },
             prepareExcelData() {
-                for (let i = 0; i < this.items.length; i++) {
-                    let data = {};
-                    this.excelColumns.forEach(column => {
-                        let keys = column.field.split('.');
-                        data[column.field.replace('.', '')] = this.getValue(keys, this.items[i]);
-                    }, this);
-                    this.excelData.push(data);
-                }
+                if (this.items)
+                    for (let i = 0; i < this.items.length; i++) {
+                        let data = {};
+                        this.excelColumns.forEach(column => {
+                            let keys = column.field.split('.');
+                            data[column.field.replace('.', '')] = this.getValue(keys, this.items[i]);
+                        }, this);
+                        this.excelData.push(data);
+                    }
             },
             trimExcelColumnsFields() {
                 this.excelColumns.forEach(column => {
