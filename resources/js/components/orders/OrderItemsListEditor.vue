@@ -15,7 +15,7 @@
             <b-form-select v-model="selectedOrder">
                 <option disabled value="null">-- Выберите заказ --</option>
                 <option :key="order.id" :value="order" v-for="order in orders">{{order.totalPrice}}$ от
-                    {{order.created_at}}
+                    {{order.created_at | luxon}}
                 </option>
             </b-form-select>
         </div>
@@ -26,7 +26,7 @@
                 <option :key="orderPayments.id"
                         :value="orderPayment"
                         v-for="orderPayment in orderPayments">
-                    {{orderPayment.created_at}}
+                    {{orderPayment.created_at | luxon}}
                 </option>
             </b-form-select>
         </div>
