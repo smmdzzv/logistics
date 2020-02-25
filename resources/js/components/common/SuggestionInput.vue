@@ -78,23 +78,24 @@
         },
         methods: {
             onInputChanged() {
-                this.$props.onItemSearchInputChange(this.query);
+                this.onItemSearchInputChange(this.query);
                 this.activeOptionIndex = 0
             },
             onOptionSelected(option) {
                 this.hideDropdown();
                 if (!option) {
-                    option = this.$props.options.find((item, index) => {
+                    option = this.options.find((item, index) => {
                         return index === this.activeOptionIndex
                     })
                 }
                 if (option === 'undefined')
-                    option = this.$props.options[0];
+                    option = this.options[0];
 
                 this.activeOptionIndex = 0;
-                this.query = option[this.$props.displayPropertyName];
-                this.$props.onSelected(option);
-                this.$props.onItemSearchInputChange(this.query);
+                if(option)
+                    this.query = option[this.displayPropertyName];
+                this.onSelected(option);
+                this.onItemSearchInputChange(this.query);
                 $('#query').blur();
             },
             onKeyDown(e) {
@@ -122,8 +123,8 @@
                 else newActiveIndex--;
 
                 if (newActiveIndex < 0)
-                    newActiveIndex = this.$props.options.length - 1;
-                if (newActiveIndex >= this.$props.options.length)
+                    newActiveIndex = this.options.length - 1;
+                if (newActiveIndex >= this.options.length)
                     newActiveIndex = 0;
                 this.activeOptionIndex = newActiveIndex
             },

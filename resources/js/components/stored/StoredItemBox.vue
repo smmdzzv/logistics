@@ -329,7 +329,8 @@
             onItemSelected(item) {
                 this.storedItem.item = item;
                 // this.tariff = this.tariffs.find(x => x.id === item.tariffId);
-                this.customsCodes = item.codes;
+                if (item)
+                    this.customsCodes = item.codes;
             },
             clearForm(e) {
                 if (e) e.preventDefault();
