@@ -5,7 +5,7 @@
             :isBusy="isBusy"
             :items="items"
             :striped="true"
-            :customCells="['edit']"
+            :customCells="['edit', 'created_at']"
             class="shadow"
             excelFileName="История тарифных планов"
             hover
@@ -13,6 +13,10 @@
             responsive>
             <template #header>
                 История тарифных планов
+            </template>
+
+            <template slot="created_at" slot-scope="{item}">
+                <span> {{item.created_at | luxon:format('dd-MM-yyyy')}} </span>
             </template>
 
             <template slot="edit" slot-scope="{item}">
