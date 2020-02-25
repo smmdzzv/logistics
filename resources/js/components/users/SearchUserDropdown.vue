@@ -18,7 +18,7 @@
         <input :class="{'is-invalid': isInvalid, 'd-none': isEditMode}"
                :disabled="disabled"
                @click.stop.prevent.capture="editUserInfo"
-               class="form-control"
+               class="form-control dummy"
                id="userInfoDummy"
                v-model:property="selectedUserDisplayInfo">
         <span class="invalid-feedback" role="alert" v-if="errorMessages">

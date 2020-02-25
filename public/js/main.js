@@ -59,16 +59,31 @@ jQuery.extend(jQuery.expr[':'], {
     }
 });
 
-$(document).on('keypress', 'input,select', function (e) {
+$(document).on('keyup', 'input,select', function (e) {
     if (e.which == 13) {
         e.preventDefault();
         // Get all focusable elements on the page
-        var $canfocus = $(':focusable');
-        var index = $canfocus.index(this) + 1;
-        if (index >= $canfocus.length) index = 0;
-        $canfocus.eq(index).focus();
+        switchFocus(this)
     }
 });
+
+function switchFocus(el) {
+    // Get all focusable elements on the page
+    let $canfocus = $(':focusable');
+    let index = $canfocus.index(el) + 1;
+    if(isHidden($canfocus.eq(index)) || isDummy($canfocus.eq(index)))
+        index++;
+    if (index >= $canfocus.length) index = 0;
+    $canfocus.eq(index).focus();
+}
+
+function isHidden(el) {
+    return $(el).hasClass('d-none');
+}
+
+function isDummy(el) {
+    return $(el).hasClass('dummy');
+}
 
 function groupBy(list, keyGetter) {
     const map = new Map();
