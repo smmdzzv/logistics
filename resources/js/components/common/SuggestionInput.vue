@@ -59,11 +59,11 @@
             }
         },
         //TODO v-model binding
-        // created(){
-        //     if(this.initQuery){
-        //         this.query = this.initQuery;
-        //     }
-        // },
+        created(){
+            if(this.initQuery){
+                this.query = this.initQuery;
+            }
+        },
         data() {
             return {
                 query: '',
