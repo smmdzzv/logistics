@@ -75,24 +75,24 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="departure_branch"
+                                <label for="departureBranch"
                                        class="col-md-4 col-form-label text-md-right">
                                     Филиал отправления</label>
 
                                 <div class="col-md-6">
-                                    <select id="departure_branch"
+                                    <select id="departureBranch"
                                             class="form-control custom-select"
-                                            :class="{'is-invalid':$v.data.departure_branch.$error || errors.departure_branch}"
-                                            name="departure_branch"
-                                            v-model="data.departure_branch"
+                                            :class="{'is-invalid':$v.data.departureBranch.$error || errors.departureBranch}"
+                                            name="departureBranch"
+                                            v-model="data.departureBranch"
                                             required>
                                         <option value="null" disabled>-- Выберите филиал отправления --</option>
                                         <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
                                     </select>
                                     <span class="invalid-feedback" role="alert"
-                                          v-if="$v.data.departure_branch.$error || errors.departure_branch">
+                                          v-if="$v.data.departureBranch.$error || errors.departureBranch">
                                         <strong>Необходимо выбрать филиал отправления.</strong>
-                                        <strong v-for="message in errors.departure_branch">{{message}}.</strong>
+                                        <strong v-for="message in errors.departureBranch">{{message}}.</strong>
                                     </span>
                                 </div>
                             </div>
@@ -106,19 +106,19 @@
                                 <div class="col-md-6">
                                     <select id="destination_branch"
                                             class="form-control custom-select"
-                                            :class="{'is-invalid':$v.data.destination_branch.$error || errors.destination_branch}"
-                                            name="destination_branch"
-                                            v-model="data.destination_branch"
+                                            :class="{'is-invalid':$v.data.destinationBranch.$error || errors.destinationBranch}"
+                                            name="destinationBranch"
+                                            v-model="data.destinationBranch"
                                             required>
                                         <option value="null" disabled>-- Выберите филиал назначения --</option>
                                         <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
                                     </select>
                                     <span class="invalid-feedback" role="alert"
-                                          v-if="$v.data.destination_branch.$error || errors.destination_branch">
-                                        <strong v-if="$v.data.destination_branch.required">
+                                          v-if="$v.data.destinationBranch.$error || errors.destinationBranch">
+                                        <strong v-if="$v.data.destinationBranch.required">
                                             Необходимо выбрать филиал назначения.
                                             Пункт назначения не должен совпадать с пунктом отправления</strong>
-                                        <strong v-for="message in errors.destination_branch">{{message}}.</strong>
+                                        <strong v-for="message in errors.destinationBranch">{{message}}.</strong>
                                     </span>
                                 </div>
                             </div>
@@ -436,8 +436,8 @@
                         number: null
                     },
                     driver: null,
-                    departure_branch: null,
-                    destination_branch: null,
+                    departureBranch: null,
+                    destinationBranch: null,
                     departureDate: null,
                     returnDate: null,
                     // emptyToDestination: null,
@@ -473,8 +473,8 @@
                     departureDate: null,
                     returnDate: null,
                     hasTrailer: null,
-                    departure_branch: null,
-                    destination_branch: null,
+                    departureBranch: null,
+                    destinationBranch: null,
                     // emptyToDestination: null,
                     // emptyFromDestination: null,
                     routeLengthToDestination: null,
@@ -518,8 +518,8 @@
                         hasTrailer: this.data.hasTrailer === true,
                         // emptyToDestination: this.data.emptyToDestination === true,
                         // emptyFromDestination: this.data.emptyFromDestination === true,
-                        departure_branch_id: this.data.departure_branch.id,
-                        destination_branch_id: this.data.destination_branch.id,
+                        departure_branch_id: this.data.departureBranch.id,
+                        destination_branch_id: this.data.destinationBranch.id,
                         id: this.data.id,
                         routeLengthToDestination: this.data.routeLengthToDestination,
                         routeLengthWithCargoTo: this.data.routeLengthWithCargoTo,
@@ -545,8 +545,8 @@
                         this.errors.departureDate = e.response.data.errors.departureDate;
                         this.errors.returnDate = e.response.data.errors.returnDate;
                         this.errors.hasTrailer = e.response.data.errors.hasTrailer;
-                        this.errors.departure_branch = e.response.data.errors.departure_branch_id;
-                        this.errors.destination_branch = e.response.data.errors.destination_branch_id;
+                        this.errors.departureBranch = e.response.data.errors.departure_branch_id;
+                        this.errors.destinationBranch = e.response.data.errors.destination_branch_id;
                         // this.errors.emptyToDestination = e.response.data.errors.emptyToDestination;
                         // this.errors.emptyFromDestination = e.response.data.errors.emptyFromDestination;
                         this.errors.routeLengthToDestination = e.response.data.errors.routeLengthToDestination;
@@ -600,12 +600,12 @@
                 returnDate: {
                     required
                 },
-                departure_branch: {
+                departureBranch: {
                     required
                 },
-                destination_branch: {
+                destinationBranch: {
                     required,
-                    isNotSameAsDepartureBranch: not(sameAs('departure_branch'))
+                    isNotSameAsDepartureBranch: not(sameAs('departureBranch'))
                 },
                 routeLengthToDestination: {
                     required
