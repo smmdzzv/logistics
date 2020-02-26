@@ -235,7 +235,7 @@ class OrdersController extends BaseController
             return $branch->id;
         });
         $query = Order::whereIn('branchId', $branches)
-            ->with(['owner', 'registeredBy'])
+            ->with(['owner', 'registeredBy', 'storedItemInfos'])
             ->latest();
         $filter = new OrderFilter(request()->all(), $query);
         $query = $filter->filter();

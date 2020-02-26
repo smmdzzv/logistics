@@ -156,7 +156,7 @@
                     action += `dateTo=${this.dateTo}&`;
                 if (this.selectedBranch)
                     action += `branch=${this.selectedBranch.id}&`;
-                if(this.status)
+                if (this.status)
                     action += `status=${this.status}&`;
                 return action;
             },
@@ -166,17 +166,18 @@
                 // if (this.selectedBranch)
                 //     action = `branch/${this.selectedBranch.id}/orders`;
                 // action += '?paginate=7&page=' + page;
-                let action = this.prepareUrl() + 'paginate=20&page=' + page;
+                let action = this.prepareUrl() + 'paginate=50&page=' + page;
 
                 try {
                     const response = await axios.get(action);
                     this.pagination = response.data;
+                    let orders = this.prepareOrders(response.data.data);
                     if (this.flowable)
-                        response.data.data.forEach(item => {
+                        orders.forEach(item => {
                             this.orders.push(item);
                         });
                     else
-                        this.orders = response.data.data;
+                        this.orders = orders;
                 } catch (e) {
 
                 }
@@ -187,6 +188,15 @@
                     this.isBusy = false;
                 })
             },
+            prepareOrders(orders) {
+                if (orders)
+                    for (let i = 0; i < orders.length; i++) {
+                        orders[i].placesCount = orders[i].storedItemInfos.reduce((sum, info) => sum + info.count, 0);
+                        console.log(orders[i].placesCount)
+                    }
+
+                return orders;
+            },
             updateStat() {
                 if (!this.orders)
                     return;
@@ -194,6 +204,7 @@
                 let dummyStatItem = {
                     id: 'dummyStatItem',
                     owner: {code: 'Суммарные данные'},
+                    placesCount:0,
                     totalPrice: 0,
                     totalWeight: 0,
                     totalDiscount: 0,
@@ -201,10 +212,11 @@
                 };
 
                 for (let i = 0; i < this.orders.length; i++) {
-                    dummyStatItem.totalPrice += this.orders[i].totalPrice;
+                    dummyStatItem.placesCount += this.orders[i].placesCount;
                     dummyStatItem.totalWeight += this.orders[i].totalWeight;
                     dummyStatItem.totalDiscount += this.orders[i].totalDiscount;
                     dummyStatItem.totalCubage += this.orders[i].totalCubage;
+                    dummyStatItem.totalPrice += this.orders[i].totalPrice;
                 }
 
                 this.orders.unshift(dummyStatItem)
@@ -281,10 +293,14 @@
                 maxPrice: null,
                 dateFrom: null,
                 dateTo: null,
-                status:null,
+                status: null,
                 fields: {
                     'owner.code': {
                         label: 'Владелец',
+                        sortable: true
+                    },
+                    placesCount:{
+                        label: 'Кол-во мест',
                         sortable: true
                     },
                     totalWeight: {
