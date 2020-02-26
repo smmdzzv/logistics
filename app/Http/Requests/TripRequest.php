@@ -37,10 +37,16 @@ class TripRequest extends FormRequest
             'departureDate' => 'required|date',
             'carId' => 'required|exists:cars,id',
             'hasTrailer' => 'required|boolean',
-            'emptyToDestination' => 'required|boolean',
-            'emptyFromDestination' => 'required|boolean',
+//            'emptyToDestination' => 'required|boolean',
+//            'emptyFromDestination' => 'required|boolean',
             'routeLengthToDestination' => 'required|integer|min:0',
+            'routeLengthWithCargoTo' => 'required|integer|min:0',
             'routeLengthFromDestination' => 'required|integer|min:0',
+            'cargoWeightTo' => 'required|integer|min:0',
+            'trailerCargoWeightTo' => 'required|integer|min:0',
+            'cargoWeightFrom' => 'required|integer|min:0',
+            'trailerCargoWeightFrom' => 'required|integer|min:0',
+            'mileageBefore' => 'required|integer|min:0',
             'driverId' => 'required',
             'code' => [
                 'required',
@@ -91,6 +97,12 @@ class TripRequest extends FormRequest
                     'to_consumption_id' => $destinationConsumption->id,
                     'from_consumption_id' => $departureConsumption->id,
                 ]);
+
+                if(!$this->request->get('mileageAfter'))
+                    Input::merge([
+                        'mileageAfter' => $this->request->get('routeLengthFromDestination')
+                    ]);
+
             });
     }
 }
