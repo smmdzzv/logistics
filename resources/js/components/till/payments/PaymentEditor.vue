@@ -213,7 +213,7 @@
                         <b-form-select id="secondPaidCurrency"
                                        v-b-tooltip.hover
                                        title="Валюта в которой принимаются деньги у клиента. Валюта оплаты также определяет счет списания."
-                                       v-model="payment.secondPaidCurrency" 
+                                       v-model="payment.secondPaidCurrency"
                                        :class="{'is-invalid':errors.secondPaidCurrency}">
                             <option :value="null" disabled>-- Выберите валюту --</option>
                             <option v-for="currency in currencies" :value="currency"
@@ -387,9 +387,7 @@
             onPayeeSelected(user) {
                 this.payment.payee = user
             },
-            async getExchangeRate() {
-                if (this.disable)
-                    return;
+            async getExchangeRate() { 
                 tShowSpinner();
                 let action = `exchange-history/rate/${this.payment.secondPaidCurrency.id}/${this.payment.billCurrency.id}`;
                 try {
