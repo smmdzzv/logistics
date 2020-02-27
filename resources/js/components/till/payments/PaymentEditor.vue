@@ -435,14 +435,14 @@
                         billCurrency: this.payment.billCurrency.id,
                         paidAmountInBillCurrency: this.payment.paidAmountInBillCurrency,
                         paidAmountInSecondCurrency: this.payment.paidAmountInSecondCurrency,
-                        secondPaidCurrency: this.payment.secondPaidCurrency.id,
+                        secondPaidCurrency: this.payment.secondPaidCurrency ? this.payment.secondPaidCurrency.id : null,
                         comment: this.payment.comment,
                         exchangeRate: this.payment.exchangeRate === null ? null : this.payment.exchangeRate.id
                     };
 
                     const response = await axios.post('/payment', data);
                     window.location.href = '/payments/' + response.data;
-                } catch (e) {
+                } catch (e) {console.log(e);
                     if (e.response && e.response.status === 422) {
                         this.errors.id = e.response.data.errors.id;
                         this.errors.status = e.response.data.errors.status;
