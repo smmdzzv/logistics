@@ -49,14 +49,15 @@ class PaymentRequestWriter extends RequestWriter
             if ($this->payment->status === 'completed')
                 abort(403, 'Платеж уже проведен');
 
-            $this->payment->status = $this->request->get('status');
-            $this->payment->cashier_id = auth()->user()->id;
-            $this->payment->branch_id = auth()->user()->branch->id;
-            $this->payment->save();
+            $this->setSubjects();
 
-            $this->setSubjectsAndAccounts();
+            $this->getPayerAccounts();
+
+            $this->getPayeeAccounts();
 
             $this->checkPayerBalance();
+
+            $this->updatePayment();
         } else {
             $this->getPaymentSubjects();
 
@@ -77,13 +78,13 @@ class PaymentRequestWriter extends RequestWriter
         return $this->payment;
     }
 
-    protected function setSubjectsAndAccounts()
+    protected function setSubjects()
     {
         $this->payer = $this->payment->payer;
         $this->payee = $this->payment->payee;
 
-        $this->payerAccountInBillCurrency = $this->payment->payerAccountInBillCurrency;
-        $this->payeeAccountInBillCurrency = $this->payment->payeeAccountInBillCurrency;
+//        $this->payerAccountInBillCurrency = $this->payment->payerAccountInBillCurrency;
+//        $this->payeeAccountInBillCurrency = $this->payment->payeeAccountInBillCurrency;
     }
 
     protected function getPaymentSubjects()
@@ -166,6 +167,19 @@ class PaymentRequestWriter extends RequestWriter
         }
 
         return $account;
+    }
+
+    protected function updatePayment(){
+        $this->payment->status = $this->request->get('status');
+        $this->payment->cashier_id = auth()->user()->id;
+        $this->payment->branch_id = auth()->user()->branch->id;
+        $this->payment->billAmount = $this->request->get('billAmount');
+        $this->payment->paidAmountInBillCurrency = $this->request->get('paidAmountInBillCurrency');
+        $this->payment->paidAmountInSecondCurrency = $this->request->get('paidAmountInSecondCurrency');
+        $this->payment->second_paid_currency_id = $this->request->get('secondPaidCurrency');
+        $this->payment->exchange_rate_id = $this->request->get('exchangeRate');
+        $this->payment->comment = $this->request->get('comment');
+        $this->payment->save();
     }
 
     protected function createPayment()

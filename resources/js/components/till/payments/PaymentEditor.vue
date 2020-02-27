@@ -387,7 +387,7 @@
             onPayeeSelected(user) {
                 this.payment.payee = user
             },
-            async getExchangeRate() { 
+            async getExchangeRate() {
                 tShowSpinner();
                 let action = `exchange-history/rate/${this.payment.secondPaidCurrency.id}/${this.payment.billCurrency.id}`;
                 try {
