@@ -40,7 +40,7 @@
 
                                 <div class="col-sm-3">
                                     <label for="lowerLimit" class="col-form-label">Нижний предел</label>
-                                    <input id="lowerLimit" placeholder="в кг" type="text"
+                                    <input id="lowerLimit" placeholder="в кг" type="number" step="0.01"
                                            class="form-control @error('lowerLimit') is-invalid @enderror"
                                            name="lowerLimit" value="{{ old('lowerLimit') ??  $history->lowerLimit}}" required
                                            autocomplete="lowerLimit" autofocus>
@@ -54,7 +54,7 @@
 
                                 <div class="col-sm-3">
                                     <label for="mediumLimit" class="col-form-label">Средний предел</label>
-                                    <input id="mediumLimit" placeholder="в кг" type="text"
+                                    <input id="mediumLimit" placeholder="в кг" type="number" step="0.01"
                                            class="form-control @error('mediumLimit') is-invalid @enderror"
                                            name="mediumLimit" value="{{ old('mediumLimit') ?? $history->mediumLimit }}" required
                                            autocomplete="mediumLimit" autofocus>
@@ -68,7 +68,7 @@
 
                                 <div class="col-sm-3">
                                     <label for="upperLimit" class="col-form-label">Верхний предел</label>
-                                    <input id="upperLimit" placeholder="в кг" type="text"
+                                    <input id="upperLimit" placeholder="в кг" type="number" step="0.01"
                                            class="form-control @error('upperLimit') is-invalid @enderror"
                                            name="upperLimit" value="{{ old('upperLimit') ?? $history->upperLimit }}" required
                                            autocomplete="upperLimit" autofocus>
@@ -84,7 +84,7 @@
                             <div class="form-group row align-items-baseline">
                                 <div class="col-sm-3">
                                     <label for="pricePerCube" class="col-form-label">Цена за куб</label>
-                                    <input id="pricePerCube" placeholder="в долларах" type="text"
+                                    <input id="pricePerCube" placeholder="в долларах" type="number" step="0.01"
                                            class="form-control @error('pricePerCube') is-invalid @enderror"
                                            name="pricePerCube" value="{{ old('pricePerCube') ?? $history->pricePerCube  }}" required
                                            autocomplete="pricePerCube" autofocus>
@@ -98,7 +98,7 @@
 
                                 <div class="col-sm-3">
                                     <label for="discountForLowerLimit" class="col-form-label">Скидка НП</label>
-                                    <input id="discountForLowerLimit" placeholder="нижний предел" type="text"
+                                    <input id="discountForLowerLimit" placeholder="нижний предел" type="number" step="0.01"
                                            class="form-control @error('discountForLowerLimit') is-invalid @enderror"
                                            name="discountForLowerLimit" value="{{ old('discountForLowerLimit') ?? $history->discountForLowerLimit  }}"
                                            required autocomplete="discountForLowerLimit" autofocus>
@@ -112,7 +112,7 @@
 
                                 <div class="col-sm-3">
                                     <label for="discountForMediumLimit" class="col-form-label">Скидка СП</label>
-                                    <input id="discountForMediumLimit" placeholder="средний предел" type="text"
+                                    <input id="discountForMediumLimit" placeholder="средний предел" type="number" step="0.01"
                                            class="form-control @error('discountForMediumLimit') is-invalid @enderror"
                                            name="discountForMediumLimit" value="{{ old('discountForMediumLimit')  ?? $history->discountForMediumLimit }}"
                                            required autocomplete="discountForMediumLimit" autofocus>
@@ -126,7 +126,7 @@
 
                                 <div class="col-sm-3">
                                     <label for="maxWeightPerCube" class="col-form-label">Макс. вес куба</label>
-                                    <input id="maxWeightPerCube" placeholder="норма в кг" type="text"
+                                    <input id="maxWeightPerCube" placeholder="норма в кг" type="number" step="0.01"
                                            class="form-control @error('maxWeightPerCube') is-invalid @enderror"
                                            name="maxWeightPerCube" value="{{ old('maxWeightPerCube')  ?? $history->maxWeightPerCube }}" required
                                            autocomplete="maxWeightPerCube" autofocus>
@@ -145,7 +145,7 @@
                                     <label for="agreedPricePerKg" class="col-form-label">Цена за кг (дог-ная)</label>
                                     <input id="agreedPricePerKg"
                                            placeholder="договорная"
-                                           type="text"
+                                           type="number" step="0.01"
                                            class="form-control @error('agreedPricePerKg') is-invalid @enderror"
                                            name="agreedPricePerKg"
                                            value="{{ old('agreedPricePerKg')  ?? $history->agreedPricePerKg }}"
@@ -162,7 +162,7 @@
 
                                 <div class="col-sm-3">
                                     <label for="pricePerExtraKg" class="col-form-label">Цена за кг (сверхнор-ая)</label>
-                                    <input id="pricePerExtraKg" placeholder="сверх нормы" type="text"
+                                    <input id="pricePerExtraKg" placeholder="сверх нормы" type="number" step="0.01"
                                            class="form-control @error('pricePerExtraKg') is-invalid @enderror"
                                            name="pricePerExtraKg" value="{{ old('pricePerExtraKg') ?? $history->pricePerExtraKg  }}" required
                                            autocomplete="pricePerExtraKg" autofocus>
@@ -176,7 +176,7 @@
 
                                 <div class="col-sm-3">
                                     <label for="maxCubage" class="col-form-label">Макс. кубатура</label>
-                                    <input id="maxCubage" placeholder="рейса" type="text"
+                                    <input id="maxCubage" placeholder="рейса" type="number" step="0.01"
                                            class="form-control @error('maxCubage') is-invalid @enderror"
                                            name="maxCubage" value="{{ old('maxCubage') ?? $history->maxCubage  }}" required
                                            autocomplete="maxCubage" autofocus>
@@ -191,7 +191,7 @@
 
                                 <div class="col-sm-3">
                                     <label for="maxWeight" class="col-form-label">Макс. вес</label>
-                                    <input id="maxWeight" placeholder="рейса" type="text"
+                                    <input id="maxWeight" placeholder="рейса" type="number" step="0.01"
                                            class="form-control @error('maxWeight') is-invalid @enderror"
                                            name="maxWeight" value="{{ old('maxWeight')  ?? $history->maxWeight }}" required
                                            autocomplete="maxWeight" autofocus>
@@ -209,7 +209,7 @@
                                     <label for="totalMoney" class="col-form-label">Сумма</label>
                                     <input id="totalMoney"
                                            placeholder="в долларах"
-                                           type="text"
+                                           type="number" step="0.01"
                                            class="form-control
                                             @error('totalMoney') is-invalid @enderror"
                                            name="totalMoney"
