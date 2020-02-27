@@ -213,8 +213,7 @@
                         <b-form-select id="secondPaidCurrency"
                                        v-b-tooltip.hover
                                        title="Валюта в которой принимаются деньги у клиента. Валюта оплаты также определяет счет списания."
-                                       v-model="payment.secondPaidCurrency"
-                                       :disabled="disable"
+                                       v-model="payment.secondPaidCurrency" 
                                        :class="{'is-invalid':errors.secondPaidCurrency}">
                             <option :value="null" disabled>-- Выберите валюту --</option>
                             <option v-for="currency in currencies" :value="currency"
