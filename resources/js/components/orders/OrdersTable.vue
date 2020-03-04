@@ -262,7 +262,8 @@
                 }
             },
             getWeightPerCube(order) {
-                return order.weightPerCube = Math.round(order.totalWeight / order.totalCubage * 100) / 100;
+                return order.weightPerCube
+                    = order.totalCubage ? Math.round(order.totalWeight / order.totalCubage * 100) / 100 : 0;
             },
             getDetailsUrl(order) {
                 return '/orders/' + order.id;
@@ -341,7 +342,7 @@
                 orders: [],
                 action: this.url,
                 isBusy: false,
-                customCells: ['weightPerCube','details', 'edit'],
+                customCells: ['weightPerCube', 'details', 'edit'],
                 clientCode: null,
                 employeeCode: null,
                 minCubage: null,
