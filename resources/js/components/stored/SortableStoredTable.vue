@@ -108,9 +108,14 @@
                 groupedByCode.forEach((arr) => {
                     let totalDutyPrice = 0;
                     let totalWeight = 0;
+                    let count = 0;
+                    let totalPrice = 0;
+
                     arr.forEach((item) => {
                         totalDutyPrice += item.dutyPrice;
                         totalWeight += item.info.weight;
+                        totalPrice += item.info.billingInfo.pricePerItem;
+                        count++;
                     });
 
                     let customsCode = arr[0].info.customsCode;
@@ -118,8 +123,11 @@
                     this.groupedData.push({
                         name: customsCode.name,
                         code: customsCode.code,
-                        weight: totalWeight,
-                        dutyPrice: totalDutyPrice
+                        count: count,
+                        totalWeight: totalWeight,
+                        totalPrice: totalPrice,
+                        averagePricePerItem: Math.round(totalPrice / count * 100) / 100,
+                        totalDutyPrice: totalDutyPrice
                     });
                 });
             },
@@ -217,12 +225,24 @@
                         field: 'code'
                     },
                     {
+                        label: 'Количество',
+                        field: 'count'
+                    },
+                    {
                         label: 'Вес',
-                        field: 'weight'
+                        field: 'totalWeight'
+                    },
+                    {
+                        label: 'Средняя цена за штуку',
+                        field: 'averagePricePerItem'
+                    },
+                    {
+                        label: 'Общая стоимость',
+                        field: 'totalPrice'
                     },
                     {
                         label: 'Таможенная пошлина',
-                        field: 'dutyPrice'
+                        field: 'totalDutyPrice'
                     }
                 ]
             }
