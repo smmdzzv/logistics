@@ -222,21 +222,20 @@
             },
             async getClientStat() {
                 if (!this.clientCode || !this.dateFrom) {
-                    this.clearClientStat();
                     return;
                 }
                 try {
                     let dateFrom = new Date().getFullYear() + '-01-01';
-                    const response = axios.get(
+                    const response = await axios.get(
                         `/orders/${this.clientCode}/statistics?dateFrom=${dateFrom}&dateTo=${this.dateFrom}`
                     );
-                    console.log(response);
-                } catch {
+                    let dummyItem = response.data;
+                    dummyItem.id = 'dummyStatItemPreviousData';
+                    dummyItem.owner = {code: 'Данные до начала периода'};
+                    this.orders.unshift(dummyItem);
+                } catch (e) {
 
                 }
-            },
-            clearClientStat() {
-
             },
             getDetailsUrl(order) {
                 return '/orders/' + order.id;
@@ -247,6 +246,8 @@
             setRowClass(item, type) {
                 if (item && item.id === 'dummyStatItem')
                     return 'table-success';
+                if (item && item.id === 'dummyStatItemPreviousData')
+                    return 'table-warning';
             }
         },
         computed: {
