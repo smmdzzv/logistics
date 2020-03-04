@@ -12,7 +12,7 @@
                     <select class="form-control custom-select" id="branch" v-model="selectedClient">
                         <option :value="null">--Все клиенты--</option>
                         <option :key="client.id" :value="client" v-for="client in clients">
-                            {{client.name}}
+                            {{client.code}}
                         </option>
                     </select>
                 </div>
