@@ -47,6 +47,7 @@ Route::post('/deliver/{order}/items/pending-payment', 'Orders\OrderItemsControll
 
 Route::get('/orders/{client}/unpaid', 'Orders\ClientOrdersController@unpaid');
 Route::get('/orders/{client}/debt', 'Orders\ClientOrdersController@totalDebt');
+Route::get('/orders/{clientCode}/statistics', 'Orders\ClientOrdersController@getStatistics');
 
 Route::resource('orders', 'OrdersController', ['except' => ['delete']]);
 

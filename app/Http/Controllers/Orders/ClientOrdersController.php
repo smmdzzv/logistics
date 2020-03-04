@@ -24,4 +24,14 @@ class ClientOrdersController extends Controller
             ->whereDoesntHave('payment')
             ->sum('totalPrice');
     }
+
+    public function getStatistics($clientCode)
+    {
+        $client = Client::where('code', $clientCode)->first();
+        if(!$client)
+            abort(400, 'Клиент не найден');
+        if (request()->get('dateFrom') && request()->get('dateTo'))
+            return $client->getOrdersStatistics(request()->get('dateFrom'), request()->get('dateTo'));
+        else abort(400, 'Необходимо указать дату начала и конца периода');
+    }
 }
