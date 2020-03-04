@@ -81,6 +81,10 @@
                 </div>
             </template>
 
+            <template slot="weightPerCube" slot-scope="{item}">
+                <span>{{getWeightPerCube(item)}}</span>
+            </template>
+
             <template slot="details" slot-scope="{item}">
                 <a :href="getDetailsUrl(item)"
                    v-if="item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'">
@@ -257,6 +261,9 @@
 
                 }
             },
+            getWeightPerCube(order) {
+                return order.weightPerCube = Math.round(order.totalWeight / order.totalCubage * 100) / 100;
+            },
             getDetailsUrl(order) {
                 return '/orders/' + order.id;
             },
@@ -334,7 +341,7 @@
                 orders: [],
                 action: this.url,
                 isBusy: false,
-                customCells: ['details', 'edit'],
+                customCells: ['weightPerCube','details', 'edit'],
                 clientCode: null,
                 employeeCode: null,
                 minCubage: null,
@@ -357,6 +364,10 @@
                     },
                     totalWeight: {
                         label: 'Вес',
+                        sortable: true
+                    },
+                    weightPerCube: {
+                        label: 'Кг в 1 кубе',
                         sortable: true
                     },
                     totalCubage: {
