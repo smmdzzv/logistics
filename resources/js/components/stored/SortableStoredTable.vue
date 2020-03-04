@@ -47,14 +47,18 @@
             <template slot="owner" slot-scope="{item}">
                 <span>{{item.info.owner.code}} {{item.info.owner.name}}</span>
             </template>
+
+            <template slot="info.cubage" slot-scope="{item}">
+                <span>{{calculateCubage(item.info)}}</span>
+            </template>
         </b-table>
         <vue-excel-xlsx
-                id="grouped-data"
-                :columns="groupedDataColumns"
-                :data="groupedData"
-                sheetname="Лист 1"
-                class="btn"
-                filename="Таможенные выплаты">
+            id="grouped-data"
+            :columns="groupedDataColumns"
+            :data="groupedData"
+            sheetname="Лист 1"
+            class="btn"
+            filename="Таможенные выплаты">
         </vue-excel-xlsx>
     </div>
 </template>
@@ -99,7 +103,7 @@
                 this.fillGroupedData();
                 $('#grouped-data').click();
             },
-            fillGroupedData(){
+            fillGroupedData() {
                 let groupedByCode = groupBy(this.items, i => i.info.customsCode.id);
                 groupedByCode.forEach((arr) => {
                     let totalDutyPrice = 0;
@@ -111,22 +115,29 @@
 
                     let customsCode = arr[0].info.customsCode;
 
-                    this.groupedData.push({name: customsCode.name, code: customsCode.code, weight: totalWeight, dutyPrice: totalDutyPrice});
+                    this.groupedData.push({
+                        name: customsCode.name,
+                        code: customsCode.code,
+                        weight: totalWeight,
+                        dutyPrice: totalDutyPrice
+                    });
                 });
             },
-            calculateDutyPrices(){
-                this.items.forEach((item)=> {
+            calculateDutyPrices() {
+                this.items.forEach((item) => {
                     let dutyPrice = 0;
                     let customsTariff = item.info.customsCode;
-                    if(customsTariff.isCalculatedByPiece){
+                    if (customsTariff.isCalculatedByPiece) {
                         dutyPrice = customsTariff.price * customsTariff.totalRate / 100
-                    }
-                    else{
+                    } else {
                         let tonnage = item.info.weight / 1000;
                         dutyPrice = tonnage * customsTariff.price * customsTariff.totalRate / 100
                     }
                     item.dutyPrice = Math.round(dutyPrice * 100) / 100;
                 })
+            },
+            calculateCubage(info) {
+                return info.cubage = Math.round(info.height * info.width * info.length * 100) / 100;
             }
         },
         watch: {
@@ -147,7 +158,7 @@
                 isBusy: false,
                 selectedClient: null,
                 clients: [],
-                groupedData:[],
+                groupedData: [],
                 fields: {
                     'owner': {
                         label: 'Владелец',
@@ -181,6 +192,10 @@
                         label: 'Длина',
                         sortable: true
                     },
+                    'info.cubage': {
+                        label: 'Кубатура',
+                        sortable: true
+                    },
                     'info.weight': {
                         label: 'Вес',
                         sortable: true
@@ -188,12 +203,12 @@
                     'storageHistory.storage.name': {
                         label: 'Склад'
                     },
-                    'dutyPrice':{
+                    'dutyPrice': {
                         label: 'Таможенная пошлина'
                     }
                 },
-                groupedDataColumns:[
-                   {
+                groupedDataColumns: [
+                    {
                         label: 'Наименование',
                         field: 'name'
                     },
