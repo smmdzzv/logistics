@@ -82,12 +82,12 @@
             </template>
 
             <template slot="details" slot-scope="{item}">
-                <a :href="getDetailsUrl(item)" v-if="item.id !== 'dummyStatItem'"><img class="icon-btn-sm"
-                                                                                       src="/svg/file.svg"></a>
+                <a :href="getDetailsUrl(item)" v-if="item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'">
+                    <img class="icon-btn-sm" src="/svg/file.svg"></a>
             </template>
 
             <template slot="edit" slot-scope="{item}">
-                <a v-if="item.status !== 'completed' && item.id !== 'dummyStatItem'" :href="getEditUrl(item)">
+                <a v-if="item.status !== 'completed' && item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'" :href="getEditUrl(item)">
                     <img class="icon-btn-sm" src="/svg/edit.svg"></a>
             </template>
 
