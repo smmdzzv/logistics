@@ -82,12 +82,14 @@
             </template>
 
             <template slot="details" slot-scope="{item}">
-                <a :href="getDetailsUrl(item)" v-if="item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'">
+                <a :href="getDetailsUrl(item)"
+                   v-if="item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'">
                     <img class="icon-btn-sm" src="/svg/file.svg"></a>
             </template>
 
             <template slot="edit" slot-scope="{item}">
-                <a v-if="item.status !== 'completed' && item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'" :href="getEditUrl(item)">
+                <a v-if="item.status !== 'completed' && item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'"
+                   :href="getEditUrl(item)">
                     <img class="icon-btn-sm" src="/svg/edit.svg"></a>
             </template>
 
@@ -223,6 +225,13 @@
                     dummyStatItem.totalCubage += this.orders[i].totalCubage;
                     dummyStatItem.totalPrice += this.orders[i].totalPrice;
                 }
+
+                dummyStatItem.placesCount = Math.round(dummyStatItem.placesCount * 100) / 100;
+                dummyStatItem.totalWeight = Math.round(dummyStatItem.totalWeight * 100) / 100;
+                dummyStatItem.totalDiscount = Math.round(dummyStatItem.totalDiscount * 100) / 100;
+                dummyStatItem.totalCubage = Math.round(dummyStatItem.totalCubage * 100) / 100;
+                dummyStatItem.totalPrice = Math.round(dummyStatItem.totalPrice * 100) / 100;
+
 
                 if (this.orders[0] && this.orders[0].id === 'dummyStatItemPreviousData') {
                     let previous = this.orders.shift();
