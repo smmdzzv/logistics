@@ -66,11 +66,11 @@ class Client extends RoleUser
         }
 
         return [
-            'totalWeight' => $totalWeight,
-            'totalCubage' => $totalCubage,
-            'totalDiscount' => $totalDiscount,
-            'totalPrice' => $totalPrice,
-            'placesCount' => $placesCount
+            'totalWeight' => round($totalWeight, 2),
+            'totalCubage' => round($totalCubage, 2),
+            'totalDiscount' => round($totalDiscount, 2),
+            'totalPrice' => round($totalPrice, 2),
+            'placesCount' => round($placesCount, 2)
         ];
     }
 }
