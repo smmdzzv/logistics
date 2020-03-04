@@ -173,11 +173,8 @@
             async getOrders(page = 1) {
                 this.clearOrderStat();
 
-                this.isBusy = true;
-                // let action = this.action;
-                // if (this.selectedBranch)
-                //     action = `branch/${this.selectedBranch.id}/orders`;
-                // action += '?paginate=7&page=' + page;
+                // this.isBusy = true;
+                tShowSpinner();
                 let action = this.prepareUrl() + 'paginate=50&page=' + page;
 
                 try {
@@ -197,7 +194,8 @@
                 this.updateStat();
 
                 this.$nextTick(() => {
-                    this.isBusy = false;
+                    // this.isBusy = false;
+                    tHideSpinner();
                 })
             },
             prepareOrders(orders) {
