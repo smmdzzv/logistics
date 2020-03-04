@@ -105,7 +105,8 @@
     export default {
         name: "OrdersTable",
         mounted() {
-            this.orders = this.providedOrders;
+            if (this.providedOrders)
+                this.orders = this.providedOrders;
 
             if (this.loadItems)
                 this.getOrders();
@@ -160,7 +161,12 @@
                     action += `status=${this.status}&`;
                 return action;
             },
+            clearOrderStat() {
+                this.orders = this.orders.filter((order) => order.id !== 'dummyStatItem');
+            },
             async getOrders(page = 1) {
+                this.clearOrderStat();
+
                 this.isBusy = true;
                 // let action = this.action;
                 // if (this.selectedBranch)
@@ -218,9 +224,14 @@
                     dummyStatItem.totalPrice += this.orders[i].totalPrice;
                 }
 
-                this.orders.unshift(dummyStatItem)
+                if (this.orders[0].id === 'dummyStatItemPreviousData') {
+                    let previous = this.orders.shift();
+                    this.orders.unshift(previous, dummyStatItem)
+                } else
+                    this.orders.unshift(dummyStatItem)
             },
             async getClientStat() {
+                this.orders = this.orders.filter((order) => order.id !== 'dummyStatItemPreviousData');
                 if (!this.clientCode || !this.dateFrom) {
                     return;
                 }
@@ -257,41 +268,53 @@
         },
         watch: {
             selectedBranch: function () {
+                this.orders = [];
                 this.getOrders();
             },
             clientCode: function () {
+                this.orders = [];
                 this.getOrders();
                 this.getClientStat();
             },
             employeeCode: function () {
+                this.orders = [];
                 this.getOrders()
             },
             minCubage: function () {
+                this.orders = [];
                 this.getOrders()
             },
             maxCubage: function () {
+                this.orders = [];
                 this.getOrders()
             },
             minWeight: function () {
+                this.orders = [];
                 this.getOrders()
             },
             maxWeight: function () {
+                this.orders = [];
                 this.getOrders()
             },
             minPrice: function () {
+                this.orders = [];
                 this.getOrders()
             },
             maxPrice: function () {
+                this.orders = [];
                 this.getOrders()
             },
             dateFrom: function () {
+                this.orders = [];
                 this.getOrders();
                 this.getClientStat();
             },
             dateTo: function () {
+                this.orders = [];
                 this.getOrders()
             },
             status: function () {
+                this.orders = [];
                 this.getOrders()
             }
         },

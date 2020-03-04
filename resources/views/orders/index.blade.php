@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container col-12">
-        <orders-table action='orders/all' :branches="{{$branches}}"></orders-table>
+        <orders-table action='orders/all' flowable :branches="{{$branches}}"></orders-table>
     </div>
 @endsection
 
