@@ -192,7 +192,6 @@
                 if (orders)
                     for (let i = 0; i < orders.length; i++) {
                         orders[i].placesCount = orders[i].storedItemInfos.reduce((sum, info) => sum + info.count, 0);
-                        console.log(orders[i].placesCount)
                     }
 
                 return orders;
@@ -204,7 +203,7 @@
                 let dummyStatItem = {
                     id: 'dummyStatItem',
                     owner: {code: 'Суммарные данные'},
-                    placesCount:0,
+                    placesCount: 0,
                     totalPrice: 0,
                     totalWeight: 0,
                     totalDiscount: 0,
@@ -220,6 +219,24 @@
                 }
 
                 this.orders.unshift(dummyStatItem)
+            },
+            async getClientStat() {
+                if (!this.clientCode || !this.dateFrom) {
+                    this.clearClientStat();
+                    return;
+                }
+                try {
+                    let dateFrom = new Date().getFullYear() + '-01-01';
+                    const response = axios.get(
+                        `/orders/${this.clientCode}/statistics?dateFrom=${dateFrom}&dateTo=${this.dateFrom}`
+                    );
+                    console.log(response);
+                } catch {
+
+                }
+            },
+            clearClientStat() {
+
             },
             getDetailsUrl(order) {
                 return '/orders/' + order.id;
@@ -242,7 +259,8 @@
                 this.getOrders();
             },
             clientCode: function () {
-                this.getOrders()
+                this.getOrders();
+                this.getClientStat();
             },
             employeeCode: function () {
                 this.getOrders()
@@ -266,7 +284,8 @@
                 this.getOrders()
             },
             dateFrom: function () {
-                this.getOrders()
+                this.getOrders();
+                this.getClientStat();
             },
             dateTo: function () {
                 this.getOrders()
@@ -299,7 +318,7 @@
                         label: 'Владелец',
                         sortable: true
                     },
-                    placesCount:{
+                    placesCount: {
                         label: 'Кол-во мест',
                         sortable: true
                     },
