@@ -108,6 +108,8 @@
 </template>
 
 <script>
+    import {showBusySpinner, hideBusySpinner} from '../../tools.js'
+
     export default {
         name: "OrdersTable",
         mounted() {
@@ -174,7 +176,7 @@
                 this.clearOrderStat();
 
                 // this.isBusy = true;
-                tShowSpinner();
+                showBusySpinner();
                 let action = this.prepareUrl() + 'paginate=50&page=' + page;
 
                 try {
@@ -195,7 +197,7 @@
 
                 this.$nextTick(() => {
                     // this.isBusy = false;
-                    tHideSpinner();
+                    hideBusySpinner();
                 })
             },
             prepareOrders(orders) {
