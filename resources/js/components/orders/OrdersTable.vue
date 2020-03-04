@@ -224,7 +224,7 @@
                     dummyStatItem.totalPrice += this.orders[i].totalPrice;
                 }
 
-                if (this.orders[0].id === 'dummyStatItemPreviousData') {
+                if (this.orders[0] && this.orders[0].id === 'dummyStatItemPreviousData') {
                     let previous = this.orders.shift();
                     this.orders.unshift(previous, dummyStatItem)
                 } else
