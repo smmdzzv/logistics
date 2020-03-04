@@ -110,6 +110,9 @@
 <script>
     import {showBusySpinner, hideBusySpinner} from '../../tools.js'
 
+    let cancel;
+    let CancelToken = axios.CancelToken;
+
     export default {
         name: "OrdersTable",
         mounted() {
@@ -175,12 +178,22 @@
             async getOrders(page = 1) {
                 this.clearOrderStat();
 
+                if ((cancel != undefined)) {
+                    cancel();
+                }
+
                 // this.isBusy = true;
                 showBusySpinner();
                 let action = this.prepareUrl() + 'paginate=50&page=' + page;
 
                 try {
-                    const response = await axios.get(action);
+                    const response = await axios.get(action,
+                        {
+                            cancelToken: new CancelToken(function executor(c) {
+                                cancel = c;
+                            })
+                        });
+
                     this.pagination = response.data;
                     let orders = this.prepareOrders(response.data.data);
                     if (this.flowable)
@@ -236,8 +249,9 @@
                 dummyStatItem.totalCubage = Math.round(dummyStatItem.totalCubage * 100) / 100;
                 dummyStatItem.totalPrice = Math.round(dummyStatItem.totalPrice * 100) / 100;
 
+                this.clearOrderStat();
 
-                if (this.orders[0] && this.orders[0].id === 'dummyStatItemPreviousData') {
+                if (this.orders[0] && this.orders[0].id === 'dummyStatItemPreviousData') {console.log('old is first')
                     let previous = this.orders.shift();
                     this.orders.unshift(previous, dummyStatItem)
                 } else
