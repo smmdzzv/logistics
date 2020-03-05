@@ -149,19 +149,6 @@
                 </div>
 
                 <div class="row">
-                    <!--                    <div class="col-md-3 form-group" v-if="payment.exchangeRate">-->
-                    <!--                        <label for="currentRate">Обменный курс</label>-->
-                    <!--                        <b-form-input id="currentRate"-->
-                    <!--                                      v-model="payment.exchangeRate.coefficient"-->
-                    <!--                                      :class="{'is-invalid':errors.exchangeRate}"-->
-                    <!--                                      class="form-control"-->
-                    <!--                                      type="number"-->
-                    <!--                                      disabled></b-form-input>-->
-                    <!--                        <b-form-invalid-feedback :state="errors.exchangeRate"><strong-->
-                    <!--                            v-for="message in errors.exchangeRate">{{message}}</strong>-->
-                    <!--                        </b-form-invalid-feedback>-->
-                    <!--                    </div>-->
-
                     <div class="col-md-3 form-group">
                         <label for="paidAmount">Сумма</label>
                         <input id="paidAmountInBillCurrency"
@@ -177,6 +164,7 @@
                     <div class="col-md-3 form-group">
                         <label for="paymentCurrency">Валюта оплаты</label>
                         <b-form-select id="paymentCurrency"
+                                       class="dummy"
                                        v-b-tooltip.hover
                                        title="Валюта в которой принимаются деньги у клиента. Валюта оплаты также определяет счет списания."
                                        v-model="payment.billCurrency"
