@@ -77,7 +77,7 @@ function switchFocus(el) {
     // Get all focusable elements on the page
     let $canfocus = $(':focusable');
     let index = $canfocus.index(el) + 1;
-    if(isHidden($canfocus.eq(index)) || isDummy($canfocus.eq(index)) || $canfocus.is(':disabled'))
+    if(isHidden($canfocus.eq(index)) || isDummy($canfocus.eq(index)))
         index++;
     if (index >= $canfocus.length) index = 0;
     $canfocus.eq(index).focus();
