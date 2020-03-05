@@ -1,22 +1,22 @@
 <template>
     <div>
         <table-card
-                :borderless="borderless"
-                :fields="fields"
-                :fixed="fixed"
-                :hover="hover"
-                :items="items"
-                :responsive="responsive"
-                :select-mode="selectMode"
-                :selectable="selectable"
-                :sticky-header="tableHeight"
-                :striped="striped"
-                :tableBusy="false"
-                :customCells="customCells"
-                excelFileName="Список доступных товаров"
-                excelSheetName="Лист 1"
-                :primaryKey="'primaryKey'"
-                responsive>
+            :borderless="borderless"
+            :fields="fields"
+            :fixed="fixed"
+            :hover="hover"
+            :items="items"
+            :responsive="responsive"
+            :select-mode="selectMode"
+            :selectable="selectable"
+            :sticky-header="tableHeight"
+            :striped="striped"
+            :tableBusy="false"
+            :customCells="customCells"
+            excelFileName="Список доступных товаров"
+            excelSheetName="Лист 1"
+            :primaryKey="'primaryKey'"
+            responsive>
             <template slot="header">
                 <div class="row">
                     <span class="ml-2">
@@ -35,6 +35,10 @@
                     </template>
                 </div>
             </template>
+            <template slot="cubage" slot-scope="{item}">
+                <span>{{getCubage(item)}}</span>
+            </template>
+
             <template slot="selectedCount" slot-scope="{item}">
                 <input class="form-control" type="text" maxlength="3" style="width:6em" v-model="item.selectedCount"
                        @change="updateSelectedStoredItems">
@@ -61,10 +65,10 @@
         name: "StoredItemInfoTable",
         mixins: [ExcelDataPreparatory, TableCardProps],
         mounted() {
-            if(this.columnsToHide)
+            if (this.columnsToHide)
                 this.hideColumns();
             this.setItems();
-            if(!this.preventItemLoading)
+            if (!this.preventItemLoading)
                 this.getItems();
         },
         props: {
@@ -78,15 +82,15 @@
             providedStoredItems: {
                 type: Array
             },
-            providedSelectedStoredItems:{
+            providedSelectedStoredItems: {
                 type: Array
             },
             preventItemLoading: {
-                type:Boolean,
-                default:false
+                type: Boolean,
+                default: false
             },
-            columnsToHide:{
-                type:Array
+            columnsToHide: {
+                type: Array
             },
             prepareUrl: {
                 type: Function,
@@ -105,7 +109,7 @@
                 pagination: null,
                 isBusy: false,
                 items: [],
-                customCells: ['selectedCount', 'groupedStoredItemsCount'],
+                customCells: ['cubage', 'selectedCount', 'groupedStoredItemsCount'],
                 fields: {
                     'owner.code': {
                         label: 'Владелец',
@@ -127,6 +131,10 @@
                         label: 'Длина',
                         sortable: true
                     },
+                    'cubage': {
+                        label: 'Кубатура',
+                        sortable: true
+                    },
                     'weight': {
                         label: 'Вес',
                         sortable: true
@@ -146,18 +154,21 @@
             }
         },
         methods: {
-            hideColumns(){
+            hideColumns() {
                 let newFields = {};
 
                 Object.keys(this.fields).map((key) => {
-                    if(!this.columnsToHide.includes(key)){
+                    if (!this.columnsToHide.includes(key)) {
                         newFields[key] = this.fields[key];
                     }
                 });
 
                 this.fields = newFields;
             },
-            getItemsLength(item){
+            getCubage(item) {
+                return item.cubage = Math.round(item.length * item.width * item.height * 100) / 100
+            },
+            getItemsLength(item) {
                 this.$set(item, 'groupedStoredItemsCount', item.storedItems.length);
                 return item.groupedStoredItemsCount;
             },
@@ -190,7 +201,7 @@
 
                 infos.forEach(info => {
                     let groupedStoredItems = info.storedItems.reduce((r, stored) => {
-                        if(!stored.storageHistory)
+                        if (!stored.storageHistory)
                             stored.storageHistory = {storage: {id: null}};
                         r[stored.storageHistory.storage.id] = [...r[stored.storageHistory.storage.id] || [], stored];
                         return r;
@@ -285,14 +296,14 @@
                         } else break;
                     }
                 });
-                if(fireEvent)
+                if (fireEvent)
                     this.$emit('onItemsSelected', selectedItems);
             }
         },
 
-        watch:{
-            selectedBranch(){
-                if(!this.preventItemLoading){
+        watch: {
+            selectedBranch() {
+                if (!this.preventItemLoading) {
                     this.items.splice(0, this.items.length);
                     this.setItems();
                     this.getItems();
@@ -300,19 +311,19 @@
 
                 this.$emit('branchSelected', this.selectedBranch);
             },
-            providedStoredItems(){
+            providedStoredItems() {
                 this.items.splice(0, this.items.length);
                 this.setItems();
-                if(!this.preventItemLoading)
+                if (!this.preventItemLoading)
                     this.getItems();
             },
-            providedSelectedStoredItems(){
+            providedSelectedStoredItems() {
                 this.items.forEach(function (storedItemInfo) {
                     storedItemInfo.selectedCount = 0;
 
                     storedItemInfo.storedItems.forEach(function (storedItem) {
                         let exists = this.providedSelectedStoredItems.find(provided => provided.id === storedItem.id);
-                        if(exists) storedItemInfo.selectedCount++;
+                        if (exists) storedItemInfo.selectedCount++;
                     }, this);
                 }, this);
 
