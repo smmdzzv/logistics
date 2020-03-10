@@ -108,7 +108,7 @@
 </template>
 
 <script>
-    import {showBusySpinner, hideBusySpinner} from '../../tools.js'
+    import {hideBusySpinner, showBusySpinner} from '../../tools.js'
 
     let cancel;
     let CancelToken = axios.CancelToken;
@@ -174,6 +174,9 @@
             },
             clearOrderStat() {
                 this.orders = this.orders.filter((order) => order.id !== 'dummyStatItem');
+            },
+            clearOldStat() {
+                this.orders = this.orders.filter((order) => order.id !== 'dummyStatItemPreviousData');
             },
             async getOrders(page = 1) {
                 this.clearOrderStat();
@@ -251,7 +254,7 @@
 
                 this.clearOrderStat();
 
-                if (this.orders[0] && this.orders[0].id === 'dummyStatItemPreviousData') {console.log('old is first')
+                if (this.orders[0] && this.orders[0].id === 'dummyStatItemPreviousData') {
                     let previous = this.orders.shift();
                     this.orders.unshift(previous, dummyStatItem)
                 } else
@@ -270,9 +273,11 @@
                     let dummyItem = response.data;
                     dummyItem.id = 'dummyStatItemPreviousData';
                     dummyItem.owner = {code: 'Данные до начала периода'};
-                    this.orders.unshift(dummyItem);
-                } catch (e) {
 
+                    this.clearOldStat();
+
+                    this.orders.unshift(dummyItem); 
+                } catch (e) {
                 }
             },
             getWeightPerCube(order) {
