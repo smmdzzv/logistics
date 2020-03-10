@@ -12,6 +12,9 @@ use Illuminate\Validation\Rule;
 
 class PaymentRequest extends FormRequest
 {
+    private $payer;
+    private $payee;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -40,26 +43,12 @@ class PaymentRequest extends FormRequest
             'billAmount' => 'required|numeric|min:1',
             'billCurrency' => 'required|exists:currencies,id',
             'paidAmountInBillCurrency' => 'required|numeric|min:0',
-            'paidAmountInSecondCurrency' => 'required|numeric|min:0',
+            'paidAmountInSecondCurrency' => 'nullable|numeric|min:0',
             'secondPaidCurrency' => 'nullable|exists:currencies,id',
             'exchangeRate' => 'nullable|string',
             'comment' => 'nullable|string',
         ];
     }
-
-    private function getClient($id)
-    {
-        return User::find($id);
-    }
-
-    private function getBranch($id)
-    {
-        return Branch::find($id);
-    }
-
-    private $payer;
-
-    private $payee;
 
     public function withValidator($validator)
     {
@@ -125,20 +114,33 @@ class PaymentRequest extends FormRequest
                 $payerAccountSecondCurrency = $this->payer->accounts()->where('currency_id', $this->request->get('secondPaidCurrency'))->first();
 
                 if (!$payerAccountBillCurrency)
-                    return $validator->errors()->add('secondPaidCurrency', 'Не найден счет плательщика в оплачиваемой валюте. ');
+                    return $validator->errors()->add('billCurrency', 'Не найден счет плательщика в оплачиваемой валюте. ');
 
-                if (!$payerAccountSecondCurrency)
-                    return $validator->errors()->add('secondPaidCurrency', 'Не найден счет плательщика в оплачиваемой валюте. ');
-
-                if ($payerAccountBillCurrency->balance -  $this->request->get('paidAmountInBillCurrency') < 0)
+                if ($payerAccountBillCurrency->balance - $this->request->get('paidAmountInBillCurrency') < 0)
                     return $validator->errors()->add('payer',
                             'Недостаточно средств на счету плательщика - ' . $payerAccountBillCurrency->balance . ' ' . $payerAccountBillCurrency->currency->isoName) . '.';
 
-                if ($payerAccountSecondCurrency->balance -  $this->request->get('paidAmountInSecondCurrency') < 0)
-                    return $validator->errors()->add('payer',
-                            'Недостаточно средств на счету плательщика - ' . $payerAccountSecondCurrency->balance . ' ' . $payerAccountSecondCurrency->currency->isoName) . '.';
+                if ($this->request->get('paidAmountInSecondCurrency') > 0) {
+                    if (!$payerAccountSecondCurrency)
+                        return $validator->errors()->add('secondPaidCurrency', 'Не найден счет плательщика в оплачиваемой валюте. ');
+
+                    if ($payerAccountSecondCurrency->balance - $this->request->get('paidAmountInSecondCurrency') < 0)
+                        return $validator->errors()->add('payer',
+                                'Недостаточно средств на счету плательщика - ' . $payerAccountSecondCurrency->balance . ' ' . $payerAccountSecondCurrency->currency->isoName) . '.';
+
+                }
             }
         });
+    }
+
+    private function getBranch($id)
+    {
+        return Branch::find($id);
+    }
+
+    private function getClient($id)
+    {
+        return User::find($id);
     }
 
     private function validatePaymentItems(PaymentItem $paymentItem, $validator)
@@ -196,36 +198,8 @@ class PaymentRequest extends FormRequest
         if ($this->request->get('billCurrency') === $this->request->get('secondPaidCurrency'))
             return $validator->errors()->add('billCurrency', 'При переводе денег между счетами филиала валюта оплаты и валюта зачисления не должны совпадать. ');
 
-        if($this->request->get('paidAmountInBillCurrency') > 0)
+        if ($this->request->get('paidAmountInBillCurrency') > 0)
             return $validator->errors()->add('paidAmountInBillCurrency', 'При переводе денег между счетами филиала сумма в валюте оплаты должны быть равна 0. ');
-    }
-
-    private function validateMoneyExchange($validator)
-    {
-        if (!($this->payee instanceof Branch))
-            return $validator->errors()->add('payee', 'При обмене валют получателем должен быть филиал, а плательщиком клиент. ');
-
-        if (!($this->payer instanceof User))
-            return $validator->errors()->add('payer', 'При обмене валют плательщиком должен быть клиент, а получателем филиал. ');
-
-        if ($this->request->get('billCurrency') === $this->request->get('secondPaidCurrency'))
-            return $validator->errors()->add('secondPaidCurrency', 'При обмене валют требуемая валюта должна отличаться от валюты оплаты.');
-
-        if (!$this->request->get('exchangeRate'))
-            return $validator->errors()->add('exchangeRate', 'Курс обмена не указан. ');
-
-        if($this->request->get('paidAmountInBillCurrency') > 0)
-            return $validator->errors()->add('paidAmountInBillCurrency', 'Сумма в целевой валюте должна равняться нулю. ');
-
-        //check branch payment account
-        $payeeAccount = $this->payee->accounts()->where('currency_id', $this->request->get('billCurrency'))->firstOrFail();
-
-        if ($payeeAccount->balance - $this->request->get('billAmount') < 0)
-            return $validator->errors()->add('payee',
-                    'Недостаточно средств на счету филиала для выдачи валюты - '
-                    . $payeeAccount->balance
-                    . ' ' . $payeeAccount->currency->isoName) . '. ';
-
     }
 
     private function validateCashAccepting($validator)
@@ -244,5 +218,33 @@ class PaymentRequest extends FormRequest
 
         if (!($this->payee instanceof User))
             return $validator->errors()->add('payee', 'При выдаче наличных средств получателем должен быть указана пользователь. ');
+    }
+
+    private function validateMoneyExchange($validator)
+    {
+        if (!($this->payee instanceof Branch))
+            return $validator->errors()->add('payee', 'При обмене валют получателем должен быть филиал, а плательщиком клиент. ');
+
+        if (!($this->payer instanceof User))
+            return $validator->errors()->add('payer', 'При обмене валют плательщиком должен быть клиент, а получателем филиал. ');
+
+        if ($this->request->get('billCurrency') === $this->request->get('secondPaidCurrency'))
+            return $validator->errors()->add('secondPaidCurrency', 'При обмене валют требуемая валюта должна отличаться от валюты оплаты.');
+
+        if (!$this->request->get('exchangeRate'))
+            return $validator->errors()->add('exchangeRate', 'Курс обмена не указан. ');
+
+        if ($this->request->get('paidAmountInBillCurrency') > 0)
+            return $validator->errors()->add('paidAmountInBillCurrency', 'Сумма в целевой валюте должна равняться нулю. ');
+
+        //check branch payment account
+        $payeeAccount = $this->payee->accounts()->where('currency_id', $this->request->get('billCurrency'))->firstOrFail();
+
+        if ($payeeAccount->balance - $this->request->get('billAmount') < 0)
+            return $validator->errors()->add('payee',
+                    'Недостаточно средств на счету филиала для выдачи валюты - '
+                    . $payeeAccount->balance
+                    . ' ' . $payeeAccount->currency->isoName) . '. ';
+
     }
 }
