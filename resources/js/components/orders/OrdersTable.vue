@@ -276,7 +276,7 @@
 
                     this.clearOldStat();
 
-                    this.orders.unshift(dummyItem); 
+                    this.orders.unshift(dummyItem);
                 } catch (e) {
                 }
             },

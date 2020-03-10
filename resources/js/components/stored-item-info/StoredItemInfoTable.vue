@@ -39,6 +39,14 @@
                 <span>{{getCubage(item)}}</span>
             </template>
 
+            <template slot="totalCubage" slot-scope="{item}">
+                <span>{{getTotalCubage(item)}}</span>
+            </template>
+
+            <template slot="totalWeight" slot-scope="{item}">
+                <span>{{getTotalWeight(item)}}</span>
+            </template>
+
             <template slot="selectedCount" slot-scope="{item}">
                 <input class="form-control" type="text" maxlength="3" style="width:6em" v-model="item.selectedCount"
                        @change="updateSelectedStoredItems">
@@ -109,14 +117,22 @@
                 pagination: null,
                 isBusy: false,
                 items: [],
-                customCells: ['cubage', 'selectedCount', 'groupedStoredItemsCount'],
+                customCells: ['cubage', 'totalCubage', 'totalWeight', 'selectedCount', 'groupedStoredItemsCount'],
                 fields: {
                     'owner.code': {
                         label: 'Владелец',
                         sortable: true
                     },
+                    'shop': {
+                        label: 'Магазин',
+                        sortable: true
+                    },
                     'item.name': {
                         label: 'Наименование',
+                        sortable: true
+                    },
+                    'weight': {
+                        label: 'Вес',
                         sortable: true
                     },
                     'width': {
@@ -135,16 +151,20 @@
                         label: 'Кубатура',
                         sortable: true
                     },
-                    'weight': {
-                        label: 'Вес',
-                        sortable: true
-                    },
                     'groupedStoredItemsCount': {
                         label: 'Остаток',
                         sortable: true
                     },
                     'selectedCount': {
                         label: 'Кол-во мест'
+                    },
+                    'totalCubage': {
+                        label: 'Общ. Кубатура',
+                        sortable: true
+                    },
+                    'totalWeight': {
+                        label: 'Общ. Вес',
+                        sortable: true
                     },
                     'groupedStoredItemsStorage.name': {
                         label: 'Склад',
@@ -167,6 +187,12 @@
             },
             getCubage(item) {
                 return item.cubage = Math.round(item.length * item.width * item.height * 100) / 100
+            },
+            getTotalCubage(item) {
+                return item.totalCubage = Math.round(item.cubage * item.groupedStoredItemsCount * 100) / 100
+            },
+            getTotalWeight(item) {
+                return item.totalWeight = Math.round(item.weight * item.groupedStoredItemsCount * 100) / 100
             },
             getItemsLength(item) {
                 this.$set(item, 'groupedStoredItemsCount', item.storedItems.length);
