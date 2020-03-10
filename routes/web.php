@@ -81,6 +81,9 @@ Route::resource('customs-code', 'Customs\CustomsCodeController')->parameters(['c
 Route::get('/pending-payments', 'Till\Payments\PendingPaymentsController@index')->name('pending-payments.index');
 Route::get('/pending-payments/filtered', 'Till\Payments\PendingPaymentsController@filtered');
 
+Route::get('/reports/expenses', 'Till\Reports\ClientExpenseReportsController@index')->name('expense-report.index');
+Route::get('/reports/expenses/generate', 'Till\Reports\ClientExpenseReportsController@generateReport');
+
 Route::get('/payments/all', 'Till\Payments\PaymentsController@all')->name('payments.all');
 Route::get('/payments/filtered', 'Till\Payments\PaymentsController@filtered');
 Route::post('/payment', 'Till\Payments\PaymentsController@storeOrUpdate');
