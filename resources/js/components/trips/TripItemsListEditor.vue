@@ -4,8 +4,8 @@
             <button class="ml-auto mr-5 btn btn-sm btn-primary" @click="toggleTable">Переключить вид</button>
         </div>
         <div class="row p-3">
-            <div class="col-lg-4 mb-4">
-                <div class="card shadow">
+            <div class="col-12 mb-4">
+                <div class="card">
                     <div class="card-header">
                         Детали рейса
                     </div>
@@ -23,7 +23,7 @@
                     </div>
                     <div class="card-footer">
                         <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
+                            <div class="col-md-6 offset-md-5">
                                 <button :disabled="isSubmitting" @click="submit" class="btn btn-primary">
                                     Сохранить
                                 </button>
@@ -34,7 +34,7 @@
 
             </div>
 
-            <div class="col-lg-8" v-show="detailedMode">
+            <div class="col-12" v-show="detailedMode">
                 <stored-table
                         :branches="branches"
                         :prepareUrl="prepareUrl"
@@ -51,7 +51,7 @@
                         hover
                         selectable/>
             </div>
-            <div class="col-lg-8" v-show="!detailedMode">
+            <div class="col-12" v-show="!detailedMode">
                 <stored-item-info-table :branches="branches"
                                         :providedStoredItems="trip.storedItems"
                                         :providedSelectedStoredItems="storedItems"
