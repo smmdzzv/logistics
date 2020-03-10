@@ -3,14 +3,12 @@
 namespace App;
 
 use App\Models\Branch;
-use App\Models\Order;
-use App\Models\Position;
 use App\Models\Role;
 use App\Models\StoredItem;
 use App\Models\Till\Account;
 use App\Models\Till\Payment;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Rorecek\Ulid\HasUlid;
 
 /**
@@ -62,8 +60,19 @@ class User extends Authenticatable
         return $this->belongsTo(Branch::class);
     }
 
-    public function accounts(){
+    public function accounts()
+    {
         return $this->morphMany(Account::class, 'owner');
+    }
+
+    public function incomingPayments()
+    {
+        return $this->hasMany(Payment::class, 'payee_id');
+    }
+
+    public function outgoingPayments()
+    {
+        return $this->hasMany(Payment::class, 'payer_id');
     }
 
     public function hasAnyRole($roles)

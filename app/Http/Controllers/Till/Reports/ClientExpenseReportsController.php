@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Till\Reports;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\Users\Client;
+use Carbon\Carbon;
 
 class ClientExpenseReportsController extends Controller
 {
@@ -20,6 +22,8 @@ class ClientExpenseReportsController extends Controller
 
     public function generateReport()
     {
-        return 2;
+        $client = Client::findOrFail(request()->get('client'));
+
+        return $client->getExpensesReport(request()->get('dateFrom'), request()->get('dateTo'));
     }
 }

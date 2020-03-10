@@ -19,11 +19,12 @@
         <div class="row">
             <button class="mx-auto btn btn-primary" @click="fetchData">Сформировать отчет</button>
         </div>
+        {{reportData}}
     </div>
 </template>
 
 <script>
-    import {showBusySpinner, hideBusySpinner} from "../../../tools";
+    import {hideBusySpinner, showBusySpinner} from "../../../tools";
 
     export default {
         name: "ClientExpensesReport",
@@ -39,12 +40,20 @@
             onClientSelected(client) {
                 this.client = client;
             },
-            fetchData() {
+            fetchData: function () {
+                if (!this.dateFrom || !this.client)
+                    return;
+
                 showBusySpinner();
-                axios.get('/reports/expenses/generate')
+
+                let action = `/reports/expenses/generate?client=${this.client.id}&dateFrom=${this.dateFrom}`
+                if (this.dateTo)
+                    action += `&dateTo=${this.dateTo}`;
+
+                axios.get(action)
                     .then(response => this.reportData = response)
                     .catch(e => console.log(e))
-                    .then(hideBusySpinner())
+                    .then(_ => hideBusySpinner())
 
             }
         },

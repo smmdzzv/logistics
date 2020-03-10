@@ -4,8 +4,10 @@ namespace App\Models\Users;
 
 use App\Models\Order;
 use App\Models\StoredItems\StoredItem;
+use App\Models\Till\ClientExpenseDto;
 use Carbon\Carbon;
-use mysql_xdevapi\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @property Collection activeOrders
@@ -24,14 +26,14 @@ class Client extends RoleUser
         return $this->hasMany(StoredItem::class, 'ownerId');
     }
 
-    public function orders()
-    {
-        return $this->hasMany(Order::class, 'ownerId');
-    }
-
     public function unpaidOrders()
     {
         return $this->orders()->where('paymentId', null);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'ownerId');
     }
 
     public function activeOrders()
@@ -72,5 +74,52 @@ class Client extends RoleUser
             'totalPrice' => round($totalPrice, 2),
             'placesCount' => round($placesCount, 2)
         ];
+    }
+
+    public function getExpensesReport(string $dateFrom, ?string $dateTo)
+    {
+        $expensesDto = new ClientExpenseDto();
+        $dateTo = $dateTo ? Carbon::createFromDate($dateTo)->addDay() : Carbon::now();
+
+        $expensesDto->orderPayments = $this->orderPayments()->without([
+            'branch',
+            'preparedBy',
+            'cashier',
+            'payer',
+            'payee',
+            'payerAccountInBillCurrency',
+            'payerAccountInSecondCurrency',
+            'payeeAccountInBillCurrency',
+            'payeeAccountInSecondCurrency',
+            'paymentItem',
+            'billCurrency',
+            'secondPaidCurrency',
+            'exchangeRate'
+        ])
+            ->where('updated_at', '>=', Carbon::now()->startOfYear())
+            ->where('updated_at', '<', $dateTo)
+            ->withCount('orderPaymentItems')
+            ->get();
+
+        $expensesDto->orders = $this->orders()
+            ->where('created_at', '>=', Carbon::now()->startOfYear())
+            ->where('created_at', '<', $dateTo)
+            ->with('storedItemInfos')
+            ->get();
+
+
+        $expensesDto->orders->each(function ($order) {
+            $order->storedItemsCount = $order->storedItemInfos->sum('count');
+        });
+
+        $expensesDto->prepareReport($dateFrom);
+        return $expensesDto->toJson();
+    }
+
+    public function orderPayments()
+    {
+        return $this->outgoingPayments()->whereHas('paymentItem', function (Builder $query) {
+            return $query->where('title', 'Списание с баланса');
+        });
     }
 }
