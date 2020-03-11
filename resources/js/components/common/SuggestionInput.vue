@@ -1,7 +1,7 @@
 <template>
     <div class="dropdown">
-        <input @click.stop.prevent.capture
-               @keydown="onKeyDown"
+        <input
+               @keyup="onKeyUp"
                autocomplete="query"
                autofocus
                class="form-control col-md-12"
@@ -12,7 +12,8 @@
                v-bind:placeholder="placeholder"
                v-model="query"
                :class="{'is-invalid': isInvalid}"
-               v-on:blur="hideDropdown" v-on:focus="showDropdown"
+               v-on:blur="hideDropdown"
+               v-on:focus="showDropdown"
                v-on:input="onInputChanged">
         <div :class="{show: showOptions && options.length > 0}"
              class="dropdown-menu"
@@ -82,7 +83,6 @@
                 this.activeOptionIndex = 0
             },
             onOptionSelected(option) {
-                this.hideDropdown();
                 if (!option) {
                     option = this.options.find((item, index) => {
                         return index === this.activeOptionIndex
@@ -98,7 +98,7 @@
                 this.onItemSearchInputChange(this.query);
                 $('#query').blur();
             },
-            onKeyDown(e) {
+            onKeyUp(e) {
                 switch (e.keyCode) {
                     case 40:
                         e.preventDefault();
