@@ -3,15 +3,16 @@
         <div class="row justify-content-center px-3">
             <div class="form-group col-12">
                 <label class="col-form-label text-md-right" for="user">Клиент</label>
-                <!--                <input class="form-control" id="user" placeholder="Введите код клиента" v-model="clientCode" autofocus>-->
-                <search-user-dropdown :selected="onUserSelected"
-                                      :preselectedUser="client"
-                                      class="col-12"
-                                      id="user"
-                                      ref="clientDropdown"
-                                      placeholder="Введите ФИО или код клиента"
-                                      url="/concrete/client/filter?userInfo="
-                                      autofocus/>
+                <input class="form-control" id="user" placeholder="Введите код клиента" v-model.lazy="clientCode"
+                       autofocus>
+                <!--                <search-user-dropdown :selected="onUserSelected"-->
+                <!--                                      :preselectedUser="client"-->
+                <!--                                      class="col-12"-->
+                <!--                                      id="user"-->
+                <!--                                      ref="clientDropdown"-->
+                <!--                                      placeholder="Введите ФИО или код клиента"-->
+                <!--                                      url="/concrete/client/filter?userInfo="-->
+                <!--                                      autofocus/>-->
 
                 <b-popover
                     :show.sync="clientError"
@@ -25,15 +26,18 @@
         <div class="row px-3" v-if="!client">
             <div class="form-group col-4">
                 <label class="col-form-label text-md-right" for="clientName">ФИО</label>
-                <input class="form-control" id="clientName" placeholder="Необязательно" v-model="clientName">
+                <input class="form-control client-input-form" id="clientName" placeholder="Необязательно"
+                       v-model="clientName">
             </div>
             <div class="form-group col-4">
                 <label class="col-form-label text-md-right" for="clientPhone">Телефон</label>
-                <input class="form-control" id="clientPhone" placeholder="Необязательно" v-model="clientPhone">
+                <input class="form-control client-input-form" id="clientPhone" placeholder="Необязательно"
+                       v-model="clientPhone">
             </div>
             <div class="form-group col-4">
                 <label class="col-form-label text-md-right" for="clientEmail">E-mail</label>
-                <input class="form-control" id="clientEmail" placeholder="Необязательно" v-model="clientEmail">
+                <input class="form-control client-input-form" id="clientEmail" placeholder="Необязательно"
+                       v-model="clientEmail">
             </div>
         </div>
         <hr>
@@ -59,8 +63,8 @@
         mounted() {
             if (this.order) {
                 this.clientCode = this.order.owner.code;
-                this.$refs.clientDropdown.userInfo = this.clientCode;
-                this.$refs.clientDropdown.selectedUserDisplayInfo = this.clientCode;
+                // this.$refs.clientDropdown.userInfo = this.clientCode;
+                // this.$refs.clientDropdown.selectedUserDisplayInfo = this.clientCode;
             }
         },
         props: {
@@ -80,10 +84,10 @@
             }
         },
         methods: {
-            onUserSelected(user) {
-                this.client = user;
-                this.clientCode = this.client ? this.client.code : this.$refs.clientDropdown.userInfo;
-            },
+            // onUserSelected(user) {
+            //     this.client = user;
+            //     this.clientCode = this.client ? this.client.code : this.$refs.clientDropdown.userInfo;
+            // },
             async submitData() {
                 if (!this.clientCode) {
                     this.clientError = true;
@@ -127,6 +131,21 @@
             onStoredItemsChange(items) {
                 if (items)
                     this.storedItems = items;
+            }
+        },
+        watch: {
+            clientCode() {
+                if (this.clientCode)
+                    axios.get(`/concrete/client/findByCode?code=${this.clientCode}`)
+                        .then(response => {
+                            this.client = response;
+
+                            if ($('.client-input-form:focus').length > 0)
+                                $('#shop').focus();
+                        })
+                        .catch(e => {
+                            this.client = null;
+                        })
             }
         },
         components: {

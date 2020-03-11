@@ -15,6 +15,7 @@ class ConcreteUsersRoutesController extends Controller
     private $methodParams = [
         'all' => '',
         'filter' => 'userInfo',
+        'findByCode' => 'code',
         'index' => '',
         'orders' => 'client'
     ];

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
-use PhpParser\Builder;
 
 /**
  * Controller for concrete users: driver, manager,etc.
@@ -33,6 +31,11 @@ abstract class AbstractRoleUsersController extends Controller
 
         return $this->entityClass::whereRaw("code LIKE '%$info%'")
             ->orWhereRaw("name LIKE '%$info%'")->roleConstraint()->get();
+    }
+
+    public function findByCode()
+    {
+        return $this->entityClass::where('code', request()->get('code'))->roleConstraint()->firstOrFail();
     }
 
     abstract protected function index();
