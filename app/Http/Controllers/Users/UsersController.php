@@ -30,7 +30,7 @@ class UsersController extends Controller
 
     public function all()
     {
-        return User::with('roles')->paginate(10);
+        return User::whereNotIn('code', ['1010011', '1010010'])->with('roles')->paginate(15);
     }
 
     public function index()
