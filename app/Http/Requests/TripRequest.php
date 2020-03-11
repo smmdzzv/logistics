@@ -53,7 +53,13 @@ class TripRequest extends FormRequest
                 'string',
                 'max:20',
                 Rule::unique('trips')->ignore(request()->get('id'))
-            ]
+            ],
+            'mileageAfter' => 'nullable|number',
+            'contractPrice' => 'nullable|number',
+            'driverSalary' => 'nullable|number',
+            'tripCoast' => 'nullable|number',
+            'otherExpanses' => 'nullable|number',
+            'fine' => 'nullable|number'
         ];
     }
 
@@ -78,7 +84,7 @@ class TripRequest extends FormRequest
                 $destinationConsumption = $car->fuelConsumption()
                     ->latest()
                     ->whereHas('destination', function (Builder $query) use ($destinationCountryId) {
-                        $query->where('id', '=',$destinationCountryId);
+                        $query->where('id', '=', $destinationCountryId);
                     })->first();
 
                 if (!$destinationConsumption)
@@ -98,7 +104,7 @@ class TripRequest extends FormRequest
                     'from_consumption_id' => $departureConsumption->id,
                 ]);
 
-                if(!$this->request->get('mileageAfter'))
+                if (!$this->request->get('mileageAfter'))
                     Input::merge([
                         'mileageAfter' => $this->request->get('routeLengthFromDestination')
                     ]);
