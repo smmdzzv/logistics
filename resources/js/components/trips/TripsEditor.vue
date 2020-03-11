@@ -124,7 +124,8 @@
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-md-4 col-form-label text-md-right" for="mileageBefore">Пробег машины до отправки</label>
+                                <label class="col-md-4 col-form-label text-md-right" for="mileageBefore">Пробег машины
+                                    до отправки</label>
                                 <div class="col-md-6">
                                     <input
                                         :class="{'is-invalid':$v.data.mileageBefore.$error || errors.mileageBefore}"
@@ -145,17 +146,27 @@
                                 </div>
                             </div>
 
-                            <!--                            <div class="form-group row justify-content-center" v-if="data.car.trailerNumber">-->
-                            <!--                                <div class="input-group offset-md-2 col-md-6">-->
-                            <!--                                    <div class="input-group-prepend">-->
-                            <!--                                        <div class="input-group-text">-->
-                            <!--                                            <input type="checkbox" v-model="data.hasTrailer" name="hasTrailer">-->
-                            <!--                                        </div>-->
-                            <!--                                    </div>-->
-                            <!--                                    <input type="text" class="form-control"-->
-                            <!--                                           value="С прицепом" disabled>-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label text-md-right" for="mileageBefore">Пробег машины в
+                                    конце рейса</label>
+                                <div class="col-md-6">
+                                    <input
+                                        :class="{'is-invalid': errors.mileageAfter}"
+                                        autocomplete="mileageAfter"
+                                        autofocus
+                                        class="form-control"
+                                        id="mileageAfter"
+                                        name="mileageAfter"
+                                        type="number"
+                                        min="0"
+                                        v-model="data.mileageAfter">
+
+                                    <span class="invalid-feedback" role="alert"
+                                          v-if="errors.mileageAfter">
+                                        <strong v-for="message in errors.mileageAfter">{{message}}</strong>
+                                    </span>
+                                </div>
+                            </div>
 
                             <div class="form-group row" v-if="data.car.trailerNumber">
                                 <label class="col-md-4 col-form-label text-md-right">Наличие прицепа</label>
@@ -172,34 +183,6 @@
                                     </b-input-group>
                                 </div>
                             </div>
-
-                            <!--                            <div class="form-group row">-->
-                            <!--                                <label class="col-md-4 col-form-label text-md-right">Машина без груза</label>-->
-                            <!--                                <div class="col-md-6">-->
-                            <!--                                    <b-input-group  v-b-tooltip.hover title="Учитывается при расчете расхода топлива">-->
-                            <!--                                        <b-input-group-prepend is-text>-->
-                            <!--                                            <b-form-checkbox switch v-model="data.emptyToDestination" class="mr-n2">-->
-                            <!--                                                <span class="sr-only">Switch for following text input</span>-->
-                            <!--                                            </b-form-checkbox>-->
-                            <!--                                        </b-input-group-prepend>-->
-                            <!--                                        <b-form-input disabled value="До филиала назначения"></b-form-input>-->
-                            <!--                                    </b-input-group>-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
-
-                            <!--                            <div class="form-group row">-->
-                            <!--                                <label class="col-md-4 col-form-label text-md-right">Машина без груза</label>-->
-                            <!--                                <div class="col-md-6">-->
-                            <!--                                    <b-input-group v-b-tooltip.hover title="Учитывается при расчете расхода топлива">-->
-                            <!--                                        <b-input-group-prepend is-text>-->
-                            <!--                                            <b-form-checkbox v-model="data.emptyFromDestination" switch class="mr-n2">-->
-                            <!--                                                <span class="sr-only">Switch for following text input</span>-->
-                            <!--                                            </b-form-checkbox>-->
-                            <!--                                        </b-input-group-prepend>-->
-                            <!--                                        <b-form-input disabled value="От филиала назначения"></b-form-input>-->
-                            <!--                                    </b-input-group>-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
                             <hr>
                             <div class="form-group row">
                                 <label class="col-md-4 col-form-label text-md-right" for="routeLengthToDestination">Длина
@@ -395,6 +378,91 @@
                                 </div>
                             </div>
 
+                            <hr>
+                            <h6 class="text-center my-3">Суммы указываются в сомони</h6>
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label text-md-right" for="contractPrice">Сумма
+                                    контракта</label>
+                                <div class="col-md-6">
+                                    <b-form-input
+                                        :class="{'is-invalid': errors.contractPrice}"
+                                        id="contractPrice"
+                                        type="number"
+                                        v-model="data.contractPrice"></b-form-input>
+
+                                    <span class="invalid-feedback" role="alert"
+                                          v-if="errors.contractPrice">
+                                        <strong v-for="message in errors.contractPrice">{{message}}.</strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label text-md-right" for="driverSalary">Оплата водителя</label>
+                                <div class="col-md-6">
+                                    <b-form-input
+                                        :class="{'is-invalid': errors.driverSalary}"
+                                        id="driverSalary"
+                                        type="number"
+                                        v-model="data.driverSalary"></b-form-input>
+
+                                    <span class="invalid-feedback" role="alert"
+                                          v-if="errors.driverSalary">
+                                        <strong v-for="message in errors.driverSalary">{{message}}.</strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label text-md-right" for="tripCoast">Стоимость
+                                    рейса</label>
+                                <div class="col-md-6">
+                                    <b-form-input
+                                        :class="{'is-invalid': errors.tripCoast}"
+                                        id="tripCoast"
+                                        type="number"
+                                        v-model="data.tripCoast"></b-form-input>
+
+                                    <span class="invalid-feedback" role="alert"
+                                          v-if="errors.tripCoast">
+                                        <strong v-for="message in errors.tripCoast">{{message}}.</strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label text-md-right" for="otherExpanses">Стоимость
+                                    рейса</label>
+                                <div class="col-md-6">
+                                    <b-form-input
+                                        :class="{'is-invalid': errors.otherExpanses}"
+                                        id="otherExpanses"
+                                        type="number"
+                                        v-model="data.otherExpanses"></b-form-input>
+
+                                    <span class="invalid-feedback" role="alert"
+                                          v-if="errors.otherExpanses">
+                                        <strong v-for="message in errors.otherExpanses">{{message}}.</strong>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label text-md-right" for="fine">Удержание</label>
+                                <div class="col-md-6">
+                                    <b-form-input
+                                        :class="{'is-invalid': errors.fine}"
+                                        id="fine"
+                                        type="number"
+                                        v-model="data.fine"></b-form-input>
+
+                                    <span class="invalid-feedback" role="alert"
+                                          v-if="errors.fine">
+                                        <strong v-for="message in errors.fine">{{message}}.</strong>
+                                    </span>
+                                </div>
+                            </div>
+
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button @click="submitForm" class="btn btn-primary">
@@ -415,7 +483,7 @@
 </template>
 
 <script>
-    import {required, maxLength, not, sameAs} from 'vuelidate/lib/validators/';
+    import {maxLength, not, required, sameAs} from 'vuelidate/lib/validators/';
 
     export default {
         name: "TripsEditor",
@@ -449,7 +517,13 @@
                     trailerCargoWeightTo: 0,
                     cargoWeightFrom: 0,
                     trailerCargoWeightFrom: 0,
-                    mileageBefore: 0
+                    mileageBefore: 0,
+                    mileageAfter: 0,
+                    contractPrice: 0,
+                    driverSalary: 0,
+                    tripCoast: 0,
+                    otherExpanses: 0,
+                    fine: 0
                 })
             },
             branches: {
@@ -484,7 +558,13 @@
                     trailerCargoWeightTo: null,
                     cargoWeightFrom: null,
                     trailerCargoWeightFrom: null,
-                    mileageBefore: null
+                    mileageBefore: null,
+                    mileageAfter: null,
+                    contractPrice: null,
+                    driverSalary: null,
+                    tripCoast: null,
+                    otherExpanses: null,
+                    fine: null
                 }
             }
         },
