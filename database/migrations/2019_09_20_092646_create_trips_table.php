@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTripsTable extends Migration
 {
@@ -39,6 +39,11 @@ class CreateTripsTable extends Migration
             $table->boolean('hasTrailer');
             $table->date('departureAt')->nullable();
             $table->date('returnedAt')->nullable();
+            $table->double('contractPrice')->default(0);
+            $table->double('driverSalary')->default(0);
+            $table->double('tripCoast')->default(0);
+            $table->double('otherExpanses')->default(0);
+            $table->double('fine')->default(0);
             $table->timestamps();
         });
     }
