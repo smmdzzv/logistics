@@ -71,9 +71,12 @@
                                             <span class="input-group-text">&times;</span>
                                         </div>
                                         <input id="coefficient" type="text" placeholder="на единицу конвертируемой"
-                                               class="form-control @error('coefficient') is-invalid @enderror" name="coefficient"
-                                               value="{{ old('coefficient') }}" required autocomplete="coefficient" autofocus>
-                                        <small class="form-text text-muted">Курс является коэффициентом на который домножается целевая валюта.</small>
+                                               class="form-control @error('coefficient') is-invalid @enderror"
+                                               name="coefficient"
+                                               value="{{ old('coefficient') }}" required autocomplete="coefficient"
+                                               autofocus>
+                                        <small class="form-text text-muted">Курс является коэффициентом на который
+                                            домножается целевая валюта.</small>
                                         @error('coefficient')
                                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -82,7 +85,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <p>1 ед. конвертируемая валюта равна __ целевой валюте.</p>
                             <div class="form-group row mb-0">
                                 <div class="col-md-12 text-md-center">
                                     <button type="submit" class="btn btn-primary">
