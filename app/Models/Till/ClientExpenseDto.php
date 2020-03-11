@@ -5,6 +5,7 @@ namespace App\Models\Till;
 
 
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class ClientExpenseDto
@@ -15,7 +16,7 @@ class ClientExpenseDto
 
     public Collection $reportData;
 
-    public float $balanceAtStart = 0;
+    public float $debtAtStart = 0;
 
     public int $placesCountAtStart = 0;
 
@@ -27,14 +28,16 @@ class ClientExpenseDto
     public function toArray()
     {
         return [
-            'reportData' => $this->reportData->all(),
-            'balanceAtStart' => $this->balanceAtStart,
+            'reportData' => $this->reportData->values()->all(),
+            'debtAtStart' => $this->debtAtStart,
             'placesCountAtStart' => $this->placesCountAtStart
         ];
     }
 
     public function prepareReport(string $dateFrom)
     {
+        $dateFrom = Carbon::createFromDate($dateFrom);
+
         $data = $this->orders->merge($this->orderPayments)->sortBy(function ($item, $key) {
             if ($item instanceof Order)
                 return $item->created_at;
@@ -64,14 +67,14 @@ class ClientExpenseDto
         $dataAtStart->each(function ($item) {
             if ($item['type'] === 'in') {
                 $this->placesCountAtStart += $item['placesCount'];
-                $this->balanceAtStart += $item['amount'];
+                $this->debtAtStart += $item['amount'];
             } else {
                 $this->placesCountAtStart -= $item['placesCount'];
-                $this->balanceAtStart -= $item['amount'];
+                $this->debtAtStart -= $item['amount'];
             }
         });
 
-        $this->balanceAtStart = round($this->balanceAtStart, 2);
+        $this->debtAtStart = round($this->debtAtStart, 2);
 
         $this->reportData = $data->filter(function ($item) use ($dateFrom) {
             return $item['date'] >= $dateFrom;

@@ -24,6 +24,7 @@
                         primary-key="date"
                         :fields="fields"
                         :items="reportData"
+                        :setRowClass="setRowClass"
                         responsive>
                 <template #header>
                     Акт Сверки
@@ -97,15 +98,16 @@
 
                 for (let i = 0; i < data.reportData.length; i++) {
                     let obj = {
-                        date: DateTime.fromISO(data.reportData[i].date).toFormat('dd-MM-yyyy'),
+                        date: DateTime.fromISO(data.reportData[i].date).setZone('utc').toFormat('dd-MM-yyyy'),
                         out: {amount: 0, placesCount: 0, discount: 0},
                         in: {amount: 0, placesCount: 0, discount: 0}
                     };
 
                     let key = data.reportData[i].type;
                     obj[key] = data.reportData[i];
-
+                    console.log(obj.date);
                     let existing = objects.find(item => item.date === obj.date);
+                    console.log('existing', existing);
                     if (existing) {
                         existing[key].amount += obj[key].amount;
                         existing[key].placesCount += obj[key].placesCount;
@@ -114,6 +116,44 @@
                 }
 
                 this.reportData = objects;
+
+                this.insertDummyItems(data);
+            },
+            // filterDummyItems(){
+            //     this.reportData = this.reportData.filter(data => data.date !== 'Итого');
+            // },
+            insertDummyItems(data) {
+                // this.filterDummyItems();
+
+                let total = {
+                    out: {amount: 0, placesCount: 0, discount: 0},
+                    in: {amount: 0, placesCount: 0, discount: 0}
+                };
+
+                for (let i = 0; i < this.reportData.length; i++) {
+                    total.date = 'Итого';
+                    total.out.amount += this.reportData[i].out.amount;
+                    total.out.placesCount += this.reportData[i].out.placesCount;
+                    total.out.discount += this.reportData[i].out.discount;
+                    total.in.amount += this.reportData[i].in.amount;
+                    total.in.placesCount += this.reportData[i].in.placesCount;
+                    total.in.discount += this.reportData[i].in.discount;
+                }
+
+                let previous = {
+                    date: 'До начала периода',
+                    in: {amount: data.debtAtStart, placesCount: data.placesCountAtStart, discount: null},
+                    out: {amount: null, placesCount: null, discount: null}
+                };
+                this.reportData.unshift(previous);
+
+                this.reportData.push(total);
+            },
+            setRowClass(item, type) {
+                if (item && item.date === 'Итого')
+                    return 'table-success';
+                if (item && item.date === 'До начала периода')
+                    return 'table-warning';
             }
         },
         components: {
