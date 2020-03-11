@@ -69,6 +69,12 @@
                     },
                     'out.placesCount': {
                         label: 'Оплата кол-во мест'
+                    },
+                    placesLeft: {
+                        label: 'Остаток кол-ва мест'
+                    },
+                    debt: {
+                        label: 'Задолженность'
                     }
                 }
             }
@@ -105,14 +111,30 @@
 
                     let key = data.reportData[i].type;
                     obj[key] = data.reportData[i];
-                    console.log(obj.date);
+
                     let existing = objects.find(item => item.date === obj.date);
-                    console.log('existing', existing);
+
                     if (existing) {
                         existing[key].amount += obj[key].amount;
                         existing[key].placesCount += obj[key].placesCount;
                         existing[key].discount += obj[key].discount;
                     } else objects.push(obj);
+                }
+
+                for (let i = 0; i < objects.length; i++) {
+                    let prevDebt = 0;
+                    let prevPlacesLeft = 0;
+                    if (i === 0) {
+                        prevPlacesLeft = data.placesCountAtStart;
+                        prevDebt = data.debtAtStart;
+                    } else {
+                        prevPlacesLeft = objects[i - 1].placesLeft;
+                        prevDebt = objects[i - 1].debt;
+                    }
+
+
+                    objects[i].debt = Math.round((prevDebt + objects[i].in.amount - objects[i].out.amount) * 100) / 100;
+                    objects[i].placesLeft = prevPlacesLeft + objects[i].in.placesCount - objects[i].out.placesCount;
                 }
 
                 this.reportData = objects;
