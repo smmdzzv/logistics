@@ -20,7 +20,8 @@
             <button class="mx-auto btn btn-primary" @click="fetchData">Сформировать отчет</button>
         </div>
         <div class="col-12">
-            <table-card excelFileName="Акт сверки"
+            <table-card :excelFileName="`Акт сверки от ${dateFrom} клиента ${client.code}`"
+                        :excelSheetName="`${client.code}  ${dateFrom}`"
                         primary-key="date"
                         :fields="fields"
                         :items="reportData"
@@ -49,7 +50,7 @@
             return {
                 dateFrom: null,
                 dateTo: null,
-                client: null,
+                client: {code: ''},
                 reportData: [],
                 fields: {
                     date: {
