@@ -67,8 +67,9 @@ class Trip extends BaseModel
 
     public function isEditable()
     {
-        $current = Carbon::now()->toDateString();
-        return $this->departureDate >= $current && $this->status === 'created';
+//        $current = Carbon::now()->toDateString();
+//        return $this->departureDate >= $current && $this->status === 'created';
+        return $this->status === 'created';
     }
 
     public function destinationBranch()

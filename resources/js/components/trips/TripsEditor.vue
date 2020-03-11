@@ -168,21 +168,21 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row" v-if="data.car.trailerNumber">
-                                <label class="col-md-4 col-form-label text-md-right">Наличие прицепа</label>
-                                <div class="col-md-6">
-                                    <b-input-group v-b-tooltip.hover
-                                                   title="Учитывается при расчете грузоподъемности и кубатуры машины">
-                                        <b-input-group-prepend is-text>
-                                            <b-form-checkbox switch class="mr-n2" v-model="data.hasTrailer"
-                                                             name="hasTrailer">
-                                                <span class="sr-only">Switch for following text input</span>
-                                            </b-form-checkbox>
-                                        </b-input-group-prepend>
-                                        <b-form-input disabled value="С прицепом"></b-form-input>
-                                    </b-input-group>
-                                </div>
-                            </div>
+<!--                            <div class="form-group row" v-if="data.car.trailerNumber">-->
+<!--                                <label class="col-md-4 col-form-label text-md-right">Наличие прицепа</label>-->
+<!--                                <div class="col-md-6">-->
+<!--                                    <b-input-group v-b-tooltip.hover-->
+<!--                                                   title="Учитывается при расчете грузоподъемности и кубатуры машины">-->
+<!--                                        <b-input-group-prepend is-text>-->
+<!--                                            <b-form-checkbox switch class="mr-n2" v-model="data.hasTrailer"-->
+<!--                                                             name="hasTrailer">-->
+<!--                                                <span class="sr-only">Switch for following text input</span>-->
+<!--                                            </b-form-checkbox>-->
+<!--                                        </b-input-group-prepend>-->
+<!--                                        <b-form-input disabled value="С прицепом"></b-form-input>-->
+<!--                                    </b-input-group>-->
+<!--                                </div>-->
+<!--                            </div>-->
                             <hr>
                             <div class="form-group row">
                                 <label class="col-md-4 col-form-label text-md-right" for="routeLengthToDestination">Длина
@@ -398,7 +398,8 @@
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-md-4 col-form-label text-md-right" for="driverSalary">Оплата водителя</label>
+                                <label class="col-md-4 col-form-label text-md-right" for="driverSalary">Оплата
+                                    водителя</label>
                                 <div class="col-md-6">
                                     <b-form-input
                                         :class="{'is-invalid': errors.driverSalary}"
@@ -608,7 +609,13 @@
                         trailerCargoWeightTo: this.data.trailerCargoWeightTo,
                         cargoWeightFrom: this.data.cargoWeightFrom,
                         trailerCargoWeightFrom: this.data.trailerCargoWeightFrom,
-                        mileageBefore: this.data.mileageBefore
+                        mileageBefore: this.data.mileageBefore,
+                        mileageAfter: this.data.mileageAfter,
+                        contractPrice: this.data.contractPrice,
+                        driverSalary: this.data.driverSalary,
+                        tripCoast: this.data.tripCoast,
+                        otherExpanses: this.data.otherExpanses,
+                        fine: this.data.fine
                     };
 
                     let response;
@@ -624,19 +631,25 @@
                         this.errors.driver = e.response.data.errors.driverId;
                         this.errors.departureDate = e.response.data.errors.departureDate;
                         this.errors.returnDate = e.response.data.errors.returnDate;
-                        this.errors.hasTrailer = e.response.data.errors.hasTrailer;
+                        // this.errors.hasTrailer = e.response.data.errors.hasTrailer;
                         this.errors.departureBranch = e.response.data.errors.departure_branch_id;
                         this.errors.destinationBranch = e.response.data.errors.destination_branch_id;
                         // this.errors.emptyToDestination = e.response.data.errors.emptyToDestination;
                         // this.errors.emptyFromDestination = e.response.data.errors.emptyFromDestination;
                         this.errors.routeLengthToDestination = e.response.data.errors.routeLengthToDestination;
-                        this.errors.routeLengthWithCargoTo = this.data.routeLengthWithCargoTo;
+                        this.errors.routeLengthWithCargoTo = e.response.data.errors.routeLengthWithCargoTo;
                         this.errors.routeLengthFromDestination = e.response.data.errors.routeLengthFromDestination;
-                        this.errors.cargoWeightTo = this.data.cargoWeightTo;
-                        this.errors.trailerCargoWeightTo = this.data.trailerCargoWeightTo;
-                        this.errors.cargoWeightFrom = this.data.cargoWeightFrom;
-                        this.errors.trailerCargoWeightFrom = this.data.trailerCargoWeightFrom;
-                        this.errors.mileageBefore = this.data.mileageBefore;
+                        this.errors.cargoWeightTo = e.response.data.errors.cargoWeightTo;
+                        this.errors.trailerCargoWeightTo = e.response.data.errors.trailerCargoWeightTo;
+                        this.errors.cargoWeightFrom = e.response.data.errors.cargoWeightFrom;
+                        this.errors.trailerCargoWeightFrom = e.response.data.errors.trailerCargoWeightFrom;
+                        this.errors.mileageBefore = e.response.data.errors.mileageBefore;
+                        this.errors.mileageAfter = e.response.data.errors.mileageAfter;
+                        this.errors.contractPrice = e.response.data.errors.contractPrice;
+                        this.errors.driverSalary = e.response.data.errors.driverSalary;
+                        this.errors.tripCoast = e.response.data.errors.tripCoast;
+                        this.errors.otherExpanses = e.response.data.errors.otherExpanses;
+                        this.errors.fine = e.response.data.errors.fine;
                     } else {
                         this.$root.showErrorMsg(
                             "Ошибка сохранения",

@@ -36,7 +36,7 @@ class TripRequest extends FormRequest
             'departure_branch_id' => 'required|string',
             'departureDate' => 'required|date',
             'carId' => 'required|exists:cars,id',
-            'hasTrailer' => 'required|boolean',
+//            'hasTrailer' => 'required|boolean',
 //            'emptyToDestination' => 'required|boolean',
 //            'emptyFromDestination' => 'required|boolean',
             'routeLengthToDestination' => 'required|integer|min:0',
@@ -54,12 +54,12 @@ class TripRequest extends FormRequest
                 'max:20',
                 Rule::unique('trips')->ignore(request()->get('id'))
             ],
-            'mileageAfter' => 'nullable|number',
-            'contractPrice' => 'nullable|number',
-            'driverSalary' => 'nullable|number',
-            'tripCoast' => 'nullable|number',
-            'otherExpanses' => 'nullable|number',
-            'fine' => 'nullable|number'
+            'mileageAfter' => 'nullable|numeric',
+            'contractPrice' => 'nullable|numeric',
+            'driverSalary' => 'nullable|numeric',
+            'tripCoast' => 'nullable|numeric',
+            'otherExpanses' => 'nullable|numeric',
+            'fine' => 'nullable|numeric'
         ];
     }
 

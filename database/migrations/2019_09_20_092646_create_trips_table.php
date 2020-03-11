@@ -36,7 +36,7 @@ class CreateTripsTable extends Migration
             $table->char('status', 15);
             $table->date('departureDate');
             $table->date('returnDate');
-            $table->boolean('hasTrailer');
+            $table->boolean('hasTrailer')->nullable();
             $table->date('departureAt')->nullable();
             $table->date('returnedAt')->nullable();
             $table->double('contractPrice')->default(0);
