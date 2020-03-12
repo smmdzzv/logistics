@@ -32,7 +32,7 @@
                                 <div class="col-md-6">
                                     <input id="unit" placeholder="например, шт, ед, пачка" type="text"
                                            class="form-control @error('unit') is-invalid @enderror"
-                                           name="unit" value="{{ old('unit') }}" required
+                                           name="unit" value="{{ old('unit') }}"
                                            autocomplete="unit" autofocus>
 
                                     @error('unit')

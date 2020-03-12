@@ -54,7 +54,7 @@ class ItemsController extends Controller
     private function rules()
     {
         return [
-            'unit' => 'required|string|max:10',
+            'unit' => 'nullable|string|max:10',
             'onlyCustomPrice' => "required|in:0,1",
             'applyDiscount' => "required|in:0,1",
             'onlyAgreedPrice' => "required|in:0,1",

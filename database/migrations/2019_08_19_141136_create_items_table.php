@@ -18,7 +18,7 @@ class CreateItemsTable extends Migration
 //            $table->char('tariffId', 26);
 //            $table->char('branch_id', 26)->index();
             $table->string('name', 255)->unique();
-            $table->char('unit', 10);
+            $table->char('unit', 10)->nullable();
             $table->boolean('onlyCustomPrice')->default(false);
             $table->boolean('onlyAgreedPrice')->default(false);
             $table->boolean('applyDiscount')->default(false);
