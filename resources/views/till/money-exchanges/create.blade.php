@@ -70,19 +70,18 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">&times;</span>
                                         </div>
-                                        <input id="coefficient" type="text" placeholder="на единицу конвертируемой"
+                                        <input id="coefficient" type="number" step="0.001" placeholder="на единицу конвертируемой"
                                                class="form-control @error('coefficient') is-invalid @enderror"
                                                name="coefficient"
                                                value="{{ old('coefficient') }}" required autocomplete="coefficient"
                                                autofocus>
-                                        <small class="form-text text-muted">Курс является коэффициентом на который
-                                            домножается целевая валюта.</small>
+
                                         @error('coefficient')
                                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                         @enderror
-                                    </div>
+                                    </div> 
                                 </div>
                             </div>
                             <p>1 ед. конвертируемая валюта равна __ целевой валюте.</p>
