@@ -444,8 +444,8 @@
                         this.errors.comment = e.response.data.errors.comment;
                         this.errors.exchangeRate = e.response.data.errors.exchangeRate;
                     } else {
-                        this.$root.showErrorMsg('Ошибка соранения',
-                            'Не удалось провести платеж. Обновите странице и повторите попытку')
+                        this.$root.showErrorMsg('Ошибка сохранения',
+                            'Убедитесь, что все поля были заполнены корректно.')
                     }
                 }
             }
