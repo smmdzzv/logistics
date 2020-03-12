@@ -108,10 +108,12 @@
                                             статей</a>
                                         <div class="dropdown-divider"></div>
                                         <h6 class="dropdown-header">Валюта</h6>
-                                        <a class="dropdown-item" href="{{route('money-exchanges.create')}}">Курсы валют</a>
                                         <a class="dropdown-item" href="{{route('currencies.create')}}">Добавить
                                             валюту</a>
                                         <a class="dropdown-item" href="{{route('currencies.index')}}">Список валют</a>
+                                    @endif
+                                    @if(Auth::user()->hasAnyRole(['admin', 'cashier']))
+                                    <a class="dropdown-item" href="{{route('money-exchanges.create')}}">Курсы валют</a>
                                     @endif
                                 </div>
                             </li>
