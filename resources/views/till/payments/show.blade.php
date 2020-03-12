@@ -47,8 +47,15 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="3"> Сумма прописью: <span class="number-as-string"></span></td>
+                <td> Сумма прописью: <span class="number-as-string"
+                                           style="font-style: italic;text-decoration: underline;"></span></td>
+                <td> Статья: <strong>{{$payment->paymentItem->title}}</strong></td>
             </tr>
+            @if($payment->comment)
+                <tr>
+                    <td>Пояснение: {{$payment->comment}}</td>
+                </tr>
+            @endif
             <tr>
                 <td>
                     @if($payment->orderPaymentItems && $payment->orderPaymentItems->count() > 0)
