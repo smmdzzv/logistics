@@ -27,7 +27,7 @@
 
     @if($payment->payee)
         <p>
-            Получатель: <b>{{$payment->payer->code}} {{$payment->payer->name}}</b>
+            Получатель: <b>{{$payment->payee->code}} {{$payment->payee->name}}</b>
             @if($payment->payeeAccount)
             &ndash; {{$payment->payeeAccount->description}}
             @endif

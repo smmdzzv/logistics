@@ -4,7 +4,6 @@ namespace App;
 
 use App\Models\Branch;
 use App\Models\Role;
-use App\Models\StoredItem;
 use App\Models\Till\Account;
 use App\Models\Till\Payment;
 use Illuminate\Foundation\Auth\User as Authenticatable;
