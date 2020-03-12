@@ -1,89 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="p-5">
-        <table style="width:100%" cellpadding="6">
-            <tr>
-                <td>Платеж от <strong><span v-luxon="{ value: '{{$payment->updated_at}}' }"/></strong></td>
-                <td>Кассир <strong>{{$payment->cashier->name}}</strong></td>
-                <td>Склад</td>
-            </tr>
-            <tr>
-                <td>
-                    @if($payment->payer)
-                        @if($payment->payer_type === 'user')
-                            Код клиента <strong>{{$payment->payer->code}}</strong>
-                        @elseif($payment->payer_type === 'branch')
-                            Филиал <strong>{{$payment->payer->name}}</strong>
-                        @endif
-                    @endif
-                </td>
-                <td>
-                    @if($payment->payee)
-                        @if($payment->payee_type === 'user')
-                            Код клиента <strong>{{$payment->payee->code}}</strong>
-                        @elseif($payment->payee_type === 'branch')
-                            Филиал <strong>{{$payment->payee->name}}</strong>
-                        @endif
-                    @endif
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Сумма к олплате <strong>{{$payment->billAmount}} {{$payment->billCurrency->isoName}}</strong>
-                </td>
-                <td>
-                    Оплачено <strong>{{$payment->paidAmountInBillCurrency}} {{$payment->billCurrency->isoName}}</strong>
-
-                    @if($payment->paidAmountInSecondCurrency > 0)
-                        +
-                        <strong>{{$payment->paidAmountInSecondCurrency}} {{$payment->secondPaidCurrency->isoName}}</strong>
-                    @endif
-                </td>
-                <td>
-                    @if($payment->exchangeRate)
-                        Курс конвертации: <strong>{{$payment->exchangeRate->coefficient}}</strong>
-                    @endif
-                </td>
-            </tr>
-            <tr>
-                <td> Сумма прописью: <span class="number-as-string"
-                                           style="font-style: italic;text-decoration: underline;"></span></td>
-                <td> Статья: <strong>{{$payment->paymentItem->title}}</strong></td>
-            </tr>
-            @if($payment->comment)
-                <tr>
-                    <td>Пояснение: {{$payment->comment}}</td>
-                </tr>
-            @endif
-            <tr>
-                <td>
-                    @if($payment->orderPaymentItems && $payment->orderPaymentItems->count() > 0)
-                        Количество оплаченных мест: <strong>{{$payment->orderPaymentItems->count()}}</strong>
-                    @endif
-                </td>
-                <td></td>
-                <td rowspan="3">
-                    <qr-code value="{{route('payment.show',$payment->id )}}" :options="{ width: 120 }"></qr-code>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2"> Подпись менеджера ________________________
-            </tr>
-            <tr>
-                <td colspan="2"> Подпись клиента ________________________
-            </tr>
-        </table>
-    </div>
-    <div class="container col-12">
+    <div class="container col-12 no-print" style="">
         <div class="card">
             <div class="card-header">
-                @if($payment->status === 'completed')
-                    Платеж
-                @else
-                    Заявка
-                @endif
-                от <span v-luxon="{ value: '{{$payment->updated_at}}' }"/>
+                <div class="row">
+                    <div class="ml-3">
+                        @if($payment->status === 'completed')
+                            Платеж
+                        @else
+                            Заявка
+                        @endif
+                        от <span v-luxon="{ value: '{{$payment->updated_at}}' }"/>
+                    </div>
+                    <div class="ml-auto mr-3">
+                        <button class="btn btn-outline-primary" onclick="printContent()">
+                            Распечатать чек
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <h4>Общая информация</h4>
@@ -166,6 +101,15 @@
         </div>
 
     </div>
+
+
+    <div class="d-none" id="cheques">
+        @component('till/payments/cheque', ['payment' => $payment, 'title' => "Касса"])@endcomponent
+        <hr>
+        @component('till/payments/cheque', ['payment' => $payment, 'title' => "Склад"])@endcomponent
+        <hr>
+        @component('till/payments/cheque', ['payment' => $payment, 'title' => "Клиент"])@endcomponent
+    </div>
 @endsection
 
 <script>
@@ -196,5 +140,16 @@
             $(arr[i]).text(str);
         }
     });
+
+    function printContent() {
+        $('#cheques').removeClass('d-none');
+        window.print();
+        $('#cheques').addClass('d-none');
+    }
 </script>
 
+<style media="print">
+    .no-print, .no-print * {
+        display: none !important;
+    }
+</style>
