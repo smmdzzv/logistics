@@ -348,7 +348,7 @@
         methods: {
             calculatePaidInSecondCurrencyAmount() {
                 if (this.payment.secondPaidCurrency && this.payment.exchangeRate)
-                    this.payment.paidAmountInSecondCurrency = Math.round((this.payment.billAmount - this.payment.paidAmountInBillCurrency) * this.payment.exchangeRate.coefficient * 100) / 100;
+                    this.payment.paidAmountInSecondCurrency = Math.round((this.payment.billAmount - this.payment.paidAmountInBillCurrency) / this.payment.exchangeRate.coefficient * 100) / 100;
                 else {
                     this.payment.paidAmountInBillCurrency = this.payment.billAmount;
                     this.payment.paidAmountInSecondCurrency = 0;
@@ -356,7 +356,7 @@
             },
             calculatePaidInBillCurrencyAmount() {
                 if (this.payment.secondPaidCurrency && this.payment.exchangeRate && this.payment.paidAmountInSecondCurrency > 0)
-                    this.payment.paidAmountInBillCurrency = Math.round((this.payment.billAmount - this.payment.paidAmountInSecondCurrency / this.payment.exchangeRate.coefficient) * 100) / 100;
+                    this.payment.paidAmountInBillCurrency = Math.round((this.payment.billAmount - this.payment.paidAmountInSecondCurrency * this.payment.exchangeRate.coefficient) * 100) / 100;
                 else
                     this.payment.paidAmountInBillCurrency = this.payment.billAmount;
             },

@@ -81,7 +81,7 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                         @enderror
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
                             <p>1 ед. конвертируемая валюта равна __ целевой валюте.</p>
