@@ -97,7 +97,7 @@ class PaymentRequest extends FormRequest
                     return $validator->errors()->add('secondPaidCurrency', 'Для указанной валюты Необходима конвертация. ');
 
 //                $amount = round($this->request->get('billAmount') * $exchangeRate->coefficient, 2);
-                $amount = round($this->request->get('paidAmountInBillCurrency') + $this->request->get('paidAmountInSecondCurrency') / $exchangeRate->coefficient, 2);
+                $amount = round($this->request->get('paidAmountInBillCurrency') + $this->request->get('paidAmountInSecondCurrency') * $exchangeRate->coefficient, 2);
 
                 if ($this->request->get('billAmount') - $amount != 0)
                     return $validator->errors()->add('paidAmountInBillCurrency',
