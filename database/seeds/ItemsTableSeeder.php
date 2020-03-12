@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Customs\CustomsCode;
 use App\Models\StoredItems\Item;
 use Illuminate\Database\Seeder;
 
@@ -368,6 +369,12 @@ class ItemsTableSeeder extends Seeder
             $item->onlyCustomPrice = $itemData[2];
             $item->applyDiscount = true;
             $item->save();
+
+            foreach ($itemData[3] as $code) {
+                $customsCode = CustomsCode::where('code', $code)->first();
+                if ($customsCode)
+                    $item->codes()->attach($customsCode);
+            }
         }
     }
 }

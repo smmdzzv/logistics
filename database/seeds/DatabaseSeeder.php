@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
          $this->call(CountriesTableSeeder::class);
          $this->call(BranchesTableSeeder::class);
          $this->call(TariffsTableSeeder::class);
-         $this->call(ItemsTableSeeder::class);
+
          $this->call(CurrenciesTableSeeder::class);
          $this->call(RolesTableSeeder::class);
          $this->call(PositionsTableSeeder::class);
@@ -26,11 +26,12 @@ class DatabaseSeeder extends Seeder
 
          $this->call(CarsTableSeeder::class);
 //         $this->call(FuelConsumptionsTableSeeder::class);
-         $this->call(TariffPriceHistoriesTableSeeder::class);
+//         $this->call(TariffPriceHistoriesTableSeeder::class);
 
          $this->call(PaymentItemsTableSeeder::class);
-         $this->call(ExchangeRatesTableSeeder::class);
+//         $this->call(ExchangeRatesTableSeeder::class);
 
          $this->call(CustomsCodesTableSeeder::class);
+        $this->call(ItemsTableSeeder::class);
     }
 }
