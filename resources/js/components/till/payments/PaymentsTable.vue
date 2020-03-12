@@ -156,7 +156,7 @@
         </template>
 
         <template slot="show" slot-scope="{item}">
-            <a class="btn" :href="'/payments/' + item.id">
+            <a class="btn" :href="'/payment/' + item.id">
                 <img class="icon-btn-sm" src="/svg/file.svg">
             </a>
             <a v-if="item.status === 'pending'" class="btn" :href="'/payment/' + item.id + '/edit'">

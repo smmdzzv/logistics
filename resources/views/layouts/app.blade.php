@@ -90,7 +90,7 @@
                                 <div class="dropdown-menu" aria-labelledby="tillMenuDropdown">
                                     <h6 class="dropdown-header">Платежи</h6>
                                     <a class="dropdown-item" href="{{route('payment.create')}}">Провести платеж</a>
-                                    <a class="dropdown-item" href="{{route('payments.index')}}">История платежей</a>
+                                    <a class="dropdown-item" href="{{route('payment.index')}}">История платежей</a>
                                     <a class="dropdown-item" href="{{route('expense-report.index')}}">Акт сверки клиента</a>
                                     {{--                                    <a class="dropdown-item" href="{{route('incoming-payments.create')}}">Приход</a>--}}
 {{--                                    <a class="dropdown-item" href="{{route('outgoing-payments.create')}}">Расход</a>--}}

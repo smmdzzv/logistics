@@ -94,7 +94,7 @@ Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
 
 Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController')->parameters(['outgoing-payments' => 'payment']);
 
-Route::resource('payments', 'Till\Payments\PaymentsController', ['only' => ['index', 'show']])->parameters(['payments' => 'payment']);
+//Route::resource('payments', 'Till\Payments\PaymentsController', ['only' => ['index', 'show']])->parameters(['payments' => 'payment']);
 
 //StoredItems
 Route::get('/stored', 'StoredItemsController@index')->name('stored.index');

@@ -6,6 +6,7 @@
             <tr>
                 <td>Платеж от <strong><span v-luxon="{ value: '{{$payment->updated_at}}' }"/></strong></td>
                 <td>Кассир <strong>{{$payment->cashier->name}}</strong></td>
+                <td>Склад</td>
             </tr>
             <tr>
                 <td>
@@ -48,17 +49,22 @@
             <tr>
                 <td colspan="3"> Сумма прописью: <span class="number-as-string"></span></td>
             </tr>
-            @if($payment->orderPaymentItems && $payment->orderPaymentItems->count() > 0)
-                <tr>
-                    <td>Количество оплаченных мест: <strong>{{$payment->orderPaymentItems->count()}}</strong></td>
-                    <td rowspan="3" class="bg-primary">Суппер</td>
-                </tr>
-            @endif
             <tr>
-                <td> Подпись менеджера ________________________
+                <td>
+                    @if($payment->orderPaymentItems && $payment->orderPaymentItems->count() > 0)
+                        Количество оплаченных мест: <strong>{{$payment->orderPaymentItems->count()}}</strong>
+                    @endif
+                </td>
+                <td></td>
+                <td rowspan="3">
+                    <qr-code value="{{route('payment.show',$payment->id )}}" :options="{ width: 120 }"></qr-code>
+                </td>
             </tr>
             <tr>
-                <td> Подпись клиента ________________________
+                <td colspan="2"> Подпись менеджера ________________________
+            </tr>
+            <tr>
+                <td colspan="2"> Подпись клиента ________________________
             </tr>
         </table>
     </div>
