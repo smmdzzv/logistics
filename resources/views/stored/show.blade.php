@@ -13,7 +13,7 @@
                     <p>Количество мест: <b>{{$storedItem->info->placeCount}}</b>
                         | Стоимость: <b>{{$storedItem->info->billingInfo->pricePerItem}} USD</b></p>
                     <p>Наименование: <b>{{$storedItem->info->item->name}}</b></p>
-                    <p>Тариф: <b>{{$storedItem->info->item->tariff->name}}</b></p>
+                    <p>Тариф: <b>{{$storedItem->info->tariff->name}}</b></p>
                     <p>Таможенный код: <b>{{$storedItem->info->customsCode->code}}</b></p>
                 </div>
                 <h4>Габариты</h4>
