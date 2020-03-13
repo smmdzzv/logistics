@@ -179,12 +179,13 @@ class PaymentRequestWriter extends RequestWriter
         $this->payment->second_paid_currency_id = $this->request->get('secondPaidCurrency');
         $this->payment->exchange_rate_id = $this->request->get('exchangeRate');
         $this->payment->comment = $this->request->get('comment');
+        $this->payment->fillExtras();
         $this->payment->save();
     }
 
     protected function createPayment()
     {
-        $this->payment = Payment::create([
+        $this->payment = new Payment([
             'branch_id' => auth()->user()->branch->id,
             'cashier_id' => auth()->user()->id,
             'status' => $this->request->get('status'),
@@ -206,6 +207,9 @@ class PaymentRequestWriter extends RequestWriter
             'exchange_rate_id' => $this->request->get('exchangeRate'),
             'comment' => $this->request->get('comment'),
         ]);
+
+        $this->payment->fillExtras();
+        $this->payment->save();
     }
 
     protected function updatePayerBalance()
