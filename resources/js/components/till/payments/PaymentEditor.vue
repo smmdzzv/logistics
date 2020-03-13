@@ -1,8 +1,11 @@
 <template>
     <div class="container">
         <div class="alert alert-info" v-if="payerAccounts">
-            <span>{{payment.payer.name}}  <span v-for="account in payerAccounts">
-                {{account.balance}} {{account.currency.isoName}} | </span>
+            <span>{{payment.payer.name}}
+                <span v-if="payment.payer.code">{{payment.payer.code}}</span>
+                <span v-for="account in payerAccounts">
+                {{account.balance}} {{account.currency.isoName}} |
+                </span>
             </span>
         </div>
         <div class="card">
