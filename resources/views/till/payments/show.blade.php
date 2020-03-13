@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container col-12 no-print" style="">
+    <div class="container col-12 no-print" id="paymentInfo">
         <div class="card">
             <div class="card-header">
                 <div class="row">
@@ -142,9 +142,14 @@
     });
 
     function printContent() {
+        $('#paymentInfo').addClass('no-print');
+        $('footer').addClass('no-print');
         $('#cheques').removeClass('d-none');
         window.print();
         $('#cheques').addClass('d-none');
+        $('#paymentInfo').removeClass('no-print');
+        $('footer').removeClass('no-print');
+
     }
 </script>
 
