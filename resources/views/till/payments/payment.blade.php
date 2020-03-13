@@ -4,7 +4,9 @@
     </div>
 @endif
 <div class="jumbotron">
+    <p>Номер чека: <b>{{$payment->number}}</b></p>
     <p>Требуемая сумма: <b>{{$payment->billAmount}} {{$payment->billCurrency->isoName}}</b></p>
+    <p>Требуемая сумма в сомони: <b>{{$payment->billAmountInTjs}} TJS</b></p>
     <p>Оплаченная сумма:
         <b>{{$payment->paidAmountInBillCurrency}} {{$payment->billCurrency->isoName}}</b>
         @if($payment->paidAmountInSecondCurrency > 0 && $payment->secondPaidCurrency)
@@ -35,6 +37,10 @@
     @endif
 
     <p>Статья: <b>{{$payment->paymentItem->title}}</b></p>
+    @if($payment->payer_type === 'user')
+        <p>Долг: <b>{{$payment->clientDebt}} USD</b></p>
+        <p>Остаток мест: <b>{{$payment->placesLeft}}</b></p>
+    @endif
     <p>Комментарий: <b>{{$payment->comment}}</b></p>
     @if($payment->preparedBy)
         <p>Заявку подготовил: <b>{{$payment->preparedBy->name}}</b></p>
