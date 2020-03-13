@@ -1,5 +1,5 @@
 <div class="bg-white">
-    <table style="width:100%" cellpadding="10">
+    <table style="width:100%">
         <tr>
             <td>Платеж от <strong><span v-luxon="{ value: '{{$payment->updated_at}}' }"/></strong></td>
             <td>Кассир <strong>{{$payment->cashier->name}}</strong></td>
@@ -61,7 +61,7 @@
             </td>
             <td></td>
             <td rowspan="3">
-                <qr-code value="{{route('payment.show',$payment->id )}}" :options="{ width: 40, tag: 'img' }"></qr-code>
+                <qr-code value="{{route('payment.show',$payment->id )}}" :options="{ width: 30, tag: 'img' }"></qr-code>
             </td>
         </tr>
         <tr>

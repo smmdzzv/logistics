@@ -84,7 +84,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <p>1 ед. конвертируемая валюта равна __ целевой валюте.</p>
+                            <p>1 единица конвертируемой валюты равна __ ед. целевой валюты.</p>
                             <div class="form-group row mb-0">
                                 <div class="col-md-12 text-md-center">
                                     <button type="submit" class="btn btn-primary">
