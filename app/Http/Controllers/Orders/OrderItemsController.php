@@ -67,7 +67,7 @@ class OrderItemsController extends Controller
         }
 
         $dollar = Currency::where('isoName', 'USD')->first()->id;
-        $payment = Payment::create([
+        $payment = new Payment([
             'branch_id' => auth()->user()->branch->id,
             'cashier_id' => auth()->user()->id,
             'status' => 'pending',
@@ -92,6 +92,9 @@ class OrderItemsController extends Controller
             'exchange_rate_id' => null,
             'comment' => 'Пополнение баланса пользователя для оплаты заказа',
         ]);
+
+        $payment->fillExtras();
+        $payment->saveOrFail();
 
         $orderPayment = OrderPayment::create([
             'order_id' => $order->id,

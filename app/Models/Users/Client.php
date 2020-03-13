@@ -76,6 +76,11 @@ class Client extends RoleUser
         ];
     }
 
+    /**
+     * @param string $dateFrom
+     * @param string|null $dateTo
+     * @return ClientExpenseDto expenses stat
+     */
     public function getExpensesReport(string $dateFrom, ?string $dateTo)
     {
         $expensesDto = new ClientExpenseDto();
@@ -113,7 +118,7 @@ class Client extends RoleUser
         });
 
         $expensesDto->prepareReport($dateFrom);
-        return $expensesDto->toJson();
+        return $expensesDto;//TODO call toJson in controller
     }
 
     public function orderPayments()

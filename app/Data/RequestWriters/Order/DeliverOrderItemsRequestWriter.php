@@ -97,7 +97,7 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
         if (abs($overallDebt) > $trusted->maxDebt)
             abort(400,
                 "Суммарный долг доверенного клиента превыщает максимально допустимый.
-                 Текущая задолженность " . abs($overallDebt) . " USD. 
+                 Текущая задолженность " . abs($overallDebt) . " USD.
                  Из них стоимость заказа " . $paymentSum . " USD"
             );
 
@@ -108,7 +108,7 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
     {
         $dollar = Currency::where('isoName', 'USD')->first()->id;
 
-        $this->payment = Payment::create([
+        $this->payment = new Payment([
             'branch_id' => auth()->user()->branch->id,
             'cashier_id' => auth()->user()->id,
             'status' => 'completed',
@@ -133,6 +133,9 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
             'exchange_rate_id' => null,
             'comment' => 'Списание денег с баланса в счет оплаты заказа',
         ]);
+
+        $this->payment->fillExtras();
+        $this->payment->saveOrFail();
 
         $this->clientAccount->balance -= $paymentSum;
         $this->clientAccount->save();

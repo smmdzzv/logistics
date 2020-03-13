@@ -7,12 +7,11 @@ use App\Models\Branch;
 use App\Models\Currency;
 use App\Models\Order;
 use App\Models\Order\OrderPayment;
-use App\Models\StoredItems\StoredItem;
-use App\Models\Users\Cashier;
-use App\User;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Users\Client;
+use App\User; 
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  * @property string branch_id
@@ -39,6 +38,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property User|Branch payee
  * @property Account payerAccountInBillCurrency
  * @property Account payeeAccountInBillCurrency
+ * @property string payer_type
+ * @property string payee_type
+ * @property float billAmountInTjs
+ * @property string exchange_rate_to_tjs
+ * @property integer placesLeft
+ * @property double clientDebt
+ * @property integer number
  */
 class Payment extends BaseModel
 {
@@ -149,7 +155,8 @@ class Payment extends BaseModel
         return $this->belongsTo(Currency::class);
     }
 
-    public function secondPaidCurrency(){
+    public function secondPaidCurrency()
+    {
         return $this->belongsTo(Currency::class);
     }
 
@@ -163,11 +170,13 @@ class Payment extends BaseModel
         return $this->belongsTo(ExchangeRate::class);
     }
 
-    public function relatedPayment(){
+    public function relatedPayment()
+    {
         return $this->belongsTo(Payment::class);
     }
 
-    public function relatedPayments(){
+    public function relatedPayments()
+    {
         return $this->hasMany(Payment::class, 'related_payment_id');
     }
 
@@ -184,5 +193,35 @@ class Payment extends BaseModel
     public function orderPaymentItems()
     {
         return $this->hasManyThrough(Order\OrderPaymentItem::class, OrderPayment::class);
+    }
+
+    public function fillExtras()
+    {
+        $dateFrom = Carbon::now()->toDateString();
+        $dateTo = Carbon::now()->addDay()->toDateString();
+        $lastPayment = Payment::select('number')
+                ->where('branch_id', $this->branch_id)
+                ->where('created_at', '>=', $dateFrom)
+                ->where('created_at', '<', $dateTo)
+                ->latest()
+                ->first();
+
+        $this->number = $lastPayment ? $lastPayment->number + 1 : 1;
+
+        $exchangeRate = ExchangeRate::where('from_currency_id', $this->bill_currency_id)
+            ->where('to_currency_id', Currency::where('isoName', 'TJS')->firstOrFail()->id)
+            ->firstOrFail();
+
+        $this->billAmountInTjs = round($this->billAmount / $exchangeRate->coefficient, 2);
+        $this->exchange_rate_to_tjs = $exchangeRate->id;
+
+        if ($this->payer_type === 'user') {
+            $client = Client::findOrFail($this->payer->id);
+
+            $stat = $client->getExpensesReport(Carbon::now()->addDay(), null);
+
+            $this->placesLeft = $stat->placesCountAtStart;
+            $this->clientDebt = $stat->debtAtStart;
+        }
     }
 }
