@@ -24,6 +24,6 @@ class ClientExpenseReportsController extends Controller
     {
         $client = Client::findOrFail(request()->get('client'));
 
-        return $client->getExpensesReport(request()->get('dateFrom'), request()->get('dateTo'));
+        return $client->getExpensesReport(request()->get('dateFrom'), request()->get('dateTo'))->toJson();
     }
 }

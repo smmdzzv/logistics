@@ -37,11 +37,11 @@ class CreatePaymentsTable extends Migration
             $table->char('exchange_rate_id', 26)->index()->nullable();
             $table->string('comment')->nullable();
 
-            $table->decimal('billAmountInTjs', 10, 2);
-            $table->char('exchange_rate_to_tjs', 26);
+            $table->decimal('billAmountInTjs', 10, 2)->nullable();
+            $table->char('exchange_rate_to_tjs', 26)->nullable();
             $table->decimal('clientDebt', 10, 2)->nullable();
             $table->integer('placesLeft')->nullable();
-            $table->integer('number');
+            $table->integer('number')->nullable();
 
             $table->softDeletes();
             $table->timestamps();

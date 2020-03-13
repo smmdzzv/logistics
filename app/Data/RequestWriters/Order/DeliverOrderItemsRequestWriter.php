@@ -131,10 +131,13 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
             'bill_currency_id' => $dollar,
             'second_paid_currency_id' => null,
             'exchange_rate_id' => null,
+
             'comment' => 'Списание денег с баланса в счет оплаты заказа',
         ]);
 
         $this->payment->fillExtras();
+        $this->payment->clientDebt -= $this->payment->billAmount;
+        $this->payment->placesLeft -= $unpaidStoredItems->count();
         $this->payment->saveOrFail();
 
         $this->clientAccount->balance -= $paymentSum;

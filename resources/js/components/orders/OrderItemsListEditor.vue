@@ -176,7 +176,7 @@
 
                 try {
                     const response = await axios.post(action, data);
-                    window.location = `/payments/${response.data}`;
+                    window.location = `/payment/${response.data}`;
                 } catch (e) {
                     if (e.response&& e.response.status === 400 || e.response.status === 422) {
                         this.errorMessage = e.response.data.message;

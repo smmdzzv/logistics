@@ -8,7 +8,7 @@ use App\Models\Currency;
 use App\Models\Order;
 use App\Models\Order\OrderPayment;
 use App\Models\Users\Client;
-use App\User; 
+use App\User;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
@@ -200,20 +200,23 @@ class Payment extends BaseModel
         $dateFrom = Carbon::now()->toDateString();
         $dateTo = Carbon::now()->addDay()->toDateString();
         $lastPayment = Payment::select('number')
-                ->where('branch_id', $this->branch_id)
-                ->where('created_at', '>=', $dateFrom)
-                ->where('created_at', '<', $dateTo)
-                ->latest()
-                ->first();
+            ->where('branch_id', $this->branch_id)
+            ->where('created_at', '>=', $dateFrom)
+            ->where('created_at', '<', $dateTo)
+            ->latest()
+            ->first();
 
         $this->number = $lastPayment ? $lastPayment->number + 1 : 1;
+        $somoni = Currency::where('isoName', 'TJS')->firstOrFail();
 
-        $exchangeRate = ExchangeRate::where('from_currency_id', $this->bill_currency_id)
-            ->where('to_currency_id', Currency::where('isoName', 'TJS')->firstOrFail()->id)
-            ->firstOrFail();
+        if ($this->billCurrency->id !== $somoni->id) {
+            $exchangeRate = ExchangeRate::where('from_currency_id', $this->bill_currency_id)
+                ->where('to_currency_id', $somoni->id)
+                ->firstOrFail();
 
-        $this->billAmountInTjs = round($this->billAmount / $exchangeRate->coefficient, 2);
-        $this->exchange_rate_to_tjs = $exchangeRate->id;
+            $this->billAmountInTjs = round($this->billAmount * $exchangeRate->coefficient, 2);
+            $this->exchange_rate_to_tjs = $exchangeRate->id;
+        }
 
         if ($this->payer_type === 'user') {
             $client = Client::findOrFail($this->payer->id);
