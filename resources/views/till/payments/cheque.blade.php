@@ -1,7 +1,9 @@
 <div class="bg-white">
     <table style="width:100%">
         <tr>
-            <td>Платеж от <strong><span v-luxon="{ value: '{{$payment->updated_at}}' }"/></strong></td>
+            <td>№<strong>{{$payment->number}}</strong> Платеж от <strong>
+                    <span
+                        v-luxon="{ value: '{{$payment->updated_at}}' }"/></strong></td>
             <td>Кассир <strong>{{$payment->cashier->name}}</strong></td>
             <td>{{$title}}</td>
         </tr>
@@ -24,11 +26,17 @@
                     @endif
                 @endif
             </td>
+
+            <td> Статья: <strong>{{$payment->paymentItem->title}}</strong></td>
         </tr>
         <tr>
             <td>
-                Сумма к олплате <strong>{{$payment->billAmount}} {{$payment->billCurrency->isoName}}</strong>
+                К олплате <strong>{{$payment->billAmount}} {{$payment->billCurrency->isoName}}</strong>
+                (<span class="number-as-string"
+                       style="font-style: italic;text-decoration: underline;"></span>)
             </td>
+
+            <td> В сомони: {{$payment->billAmountInTjs}} TJS</td>
             <td>
                 Оплачено <strong>{{$payment->paidAmountInBillCurrency}} {{$payment->billCurrency->isoName}}</strong>
 
@@ -36,32 +44,29 @@
                     +
                     <strong>{{$payment->paidAmountInSecondCurrency}} {{$payment->secondPaidCurrency->isoName}}</strong>
                 @endif
-            </td>
-            <td>
                 @if($payment->exchangeRate)
-                    Курс конвертации: <strong>{{$payment->exchangeRate->coefficient}}</strong>
+                    Курс: <strong>{{$payment->exchangeRate->coefficient}}</strong>
                 @endif
             </td>
         </tr>
-        <tr>
-            <td> Сумма прописью: <span class="number-as-string"
-                                       style="font-style: italic;text-decoration: underline;"></span></td>
-            <td> Статья: <strong>{{$payment->paymentItem->title}}</strong></td>
-        </tr>
         @if($payment->comment)
             <tr>
-                <td>Пояснение: {{$payment->comment}}</td>
+                <td colspan="3">Пояснение: {{$payment->comment}}</td>
             </tr>
         @endif
         <tr>
             <td>
                 @if($payment->orderPaymentItems && $payment->orderPaymentItems->count() > 0)
-                    Количество оплаченных мест: <strong>{{$payment->orderPaymentItems->count()}}</strong>
+                    Оплаченные места: <strong>{{$payment->orderPaymentItems->count()}}</strong>
                 @endif
             </td>
+            @if($payment->payer_type === 'user')
+                <td>Остаток: <b>{{$payment->placesLeft}}</b></td>
+                <td>Долг: <b>{{$payment->clientDebt}}</b></td>
+            @endif
             <td></td>
             <td rowspan="3">
-                <qr-code value="{{route('payment.show',$payment->id )}}" :options="{ width: 30, tag: 'img' }"></qr-code>
+                <qr-code value="{{route('payment.show',$payment->id )}}" :options="{ scale:2 }"></qr-code>
             </td>
         </tr>
         <tr>
