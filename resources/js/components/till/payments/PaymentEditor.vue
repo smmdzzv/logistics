@@ -203,7 +203,7 @@
                                        title="Валюта в которой принимаются деньги у клиента. Валюта оплаты также определяет счет списания."
                                        v-model="payment.secondPaidCurrency"
                                        :class="{'is-invalid':errors.secondPaidCurrency}">
-                            <option :value="null" disabled>-- Выберите валюту --</option>
+                            <option :value="null">-- Выберите валюту --</option>
                             <option v-for="currency in currencies" :value="currency"
                                     :disabled="payment.billCurrency && currency.id === payment.billCurrency.id">
                                 {{currency.name.charAt(0).toUpperCase() + currency.name.slice(1)}}
