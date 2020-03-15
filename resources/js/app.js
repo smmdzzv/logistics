@@ -48,6 +48,7 @@ Vue.component('TrustedUserEditor', require('./components/users/trusted-users/Tru
 Vue.component('StoredTable', require('./components/stored/StoredTable.vue').default);
 Vue.component('SortableStoredTable', require('./components/stored/SortableStoredTable.vue').default);
 Vue.component('StoredItemInfoTable', require('./components/stored-item-info/StoredItemInfoTable.vue').default);
+Vue.component('FilterableStoredItemInfoTable', require('./components/stored-item-info/FilterableStoredItemInfoTable.vue').default);
 
 Vue.component('OrdersTable', require('./components/orders/OrdersTable.vue').default);
 Vue.component('OrderEditor', require('./components/orders/OrderEditor.vue').default);
