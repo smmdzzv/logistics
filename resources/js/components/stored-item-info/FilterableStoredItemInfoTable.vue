@@ -11,11 +11,6 @@
                     <input id="shop" type="text" v-model.lazy="shop" class="form-control form-control-sm">
                 </div>
                 <div class="form-group col-md-2">
-                    <label for="employeeCode">Код сотрудника</label>
-                    <input id="employeeCode" type="text" v-model.lazy="employeeCode"
-                           class="form-control form-control-sm">
-                </div>
-                <div class="form-group col-md-2">
                     <label for="minCubage">Мин кубатура</label>
                     <input id="minCubage" type="number" v-model.lazy="minCubage" class="form-control form-control-sm">
                 </div>
@@ -59,15 +54,24 @@
                     <label for="trip">Рейс</label>
                     <select id="trip" v-model.lazy="trip" class="form-control form-control-sm">
                         <option :value="null">--Любые--</option>
-                        <option value="accepted">С рейсом</option>
-                        <option value="completed">Без рейса</option>
+                        <option value="hasTrip">С рейсом</option>
+                        <option value="doesntHaveTrip">Без рейса</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label>Наименования</label>
+                    <select class="form-control form-control-sm" id="item" v-model="item">
+                        <option :value="null">--Все склады--</option>
+                        <option :key="item.id" :value="item.id" v-for="item in items">
+                            {{item.name}}
+                        </option>
                     </select>
                 </div>
                 <div class="form-group col-md-2">
                     <label>Филиалы</label>
                     <select class="form-control form-control-sm" id="branch" v-model="branch">
-                        <option :value="null">--Все склады--</option>
-                        <option :key="branch.id" :value="branch" v-for="branch in branches">
+                        <option :value="null">--Все товары--</option>
+                        <option :key="branch.id" :value="branch.id" v-for="branch in branches">
                             {{branch.name}}
                         </option>
                     </select>
@@ -77,7 +81,7 @@
                 <button class="btn btn-primary mx-auto" @click="fetchData">Загрузить</button>
             </div>
         </div>
-        <StoredItemInfoTable :columnsToHide="columnsToHide" :url="actionUrl" ref="storedItemInfosTable"/>
+        <StoredItemInfoTable :columnsToHide="columnsToHide" :prepareUrl="prepareUrl" ref="storedItemInfosTable"/>
     </div>
 </template>
 
@@ -89,6 +93,9 @@
                 default: () => []
             },
             branches: {
+                required: true
+            },
+            items: {
                 required: true
             }
         },
@@ -108,40 +115,45 @@
                 status: null,
                 trip: null,
                 branch: null,
+                item: null,
                 actionUrl: 'stored-item-info/available/filtered?'
             }
         },
         methods: {
             fetchData() {
-                this.prepareUrl();
+                this.$refs.storedItemInfosTable.items = [];
                 this.$refs.storedItemInfosTable.getItems();
             },
             prepareUrl() {
-                this.actionUrl = '/stored-item-info/available/filtered?';
+                let actionUrl = '/stored-item-info/available/filtered?';
                 if (this.clientCode)
-                    this.actionUrl += `client=${this.clientCode}&`;
-                if (this.employeeCode)
-                    this.actionUrl += `employee=${this.employeeCode}&`;
+                    actionUrl += `client=${this.clientCode}&`;
                 if (this.minCubage)
-                    this.actionUrl += `minCubage=${this.minCubage}&`;
+                    actionUrl += `minCubage=${this.minCubage}&`;
                 if (this.maxCubage)
-                    this.actionUrl += `maxCubage=${this.maxCubage}&`;
+                    actionUrl += `maxCubage=${this.maxCubage}&`;
                 if (this.minWeight)
-                    this.actionUrl += `minWeight=${this.minWeight}&`;
+                    actionUrl += `minWeight=${this.minWeight}&`;
                 if (this.maxWeight)
-                    this.actionUrl += `maxWeight=${this.maxWeight}&`;
+                    actionUrl += `maxWeight=${this.maxWeight}&`;
                 if (this.minPrice)
-                    this.actionUrl += `minPrice=${this.minPrice}&`;
+                    actionUrl += `minPrice=${this.minPrice}&`;
                 if (this.maxPrice)
-                    this.actionUrl += `maxPrice=${this.maxPrice}&`;
+                    actionUrl += `maxPrice=${this.maxPrice}&`;
                 if (this.dateFrom)
-                    this.actionUrl += `dateFrom=${this.dateFrom}&`;
+                    actionUrl += `dateFrom=${this.dateFrom}&`;
                 if (this.dateTo)
-                    this.actionUrl += `dateTo=${this.dateTo}&`;
+                    actionUrl += `dateTo=${this.dateTo}&`;
                 if (this.status)
-                    this.actionUrl += `status=${this.status}&`;
+                    actionUrl += `status=${this.status}&`;
                 if (this.branch)
-                    this.actionUrl += `status=${this.branch}&`;
+                    actionUrl += `branch=${this.branch}&`;
+                if (this.trip)
+                    actionUrl += `trip=${this.trip}&`;
+                if (this.item)
+                    actionUrl += `item=${this.item}&`;
+
+                return actionUrl;
             }
         },
         components: {

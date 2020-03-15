@@ -3,17 +3,16 @@
 
 namespace App\Data\Filters;
 
-
-
+ 
 use Illuminate\Database\Eloquent\Builder;
 
 abstract class Filter
 {
-    protected $filters;
+    protected array $filters;
 
-    protected $query;
+    protected Builder $query;
 
-    public function __construct($filters, $query)
+    public function __construct(array $filters, Builder $query)
     {
         $this->filters = $filters;
         $this->query = $query;
@@ -23,4 +22,12 @@ abstract class Filter
      * @return Builder $query
      */
     abstract function filter();
+
+    protected function applyOwnerScope($columnName, $ownerId)
+    {
+        if (!auth()->user()->hasAnyRole(['admin', 'manager']))
+            $this->query->where($columnName, auth()->user()->id);
+        elseif ($ownerId)
+            $this->query->where($columnName, $ownerId);
+    }
 }

@@ -51,7 +51,7 @@
                                     <a class="dropdown-item" href="{{ route('orders.create') }}">Оформить заказ</a>
                                     <a class="dropdown-item" href="{{route('orders.index')}}">Список заказов</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{route('stored.index')}}">Принятые товары</a>
+                                    <a class="dropdown-item" href="{{route('stored-item-infos.index')}}">Принятые товары</a>
                                     @if(Auth::user()->hasRole('admin'))
                                         <a class="dropdown-item" href="{{route('order-items.edit')}}">Выдать товары</a>
                                         <div class="dropdown-divider"></div>

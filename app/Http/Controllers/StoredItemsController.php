@@ -16,14 +16,14 @@ class StoredItemsController extends Controller
         $this->middleware("roles.allow:cashier,storekeeper,manager,admin");
     }
 
-    public function index()
-    {
-        if (auth()->user()->hasRole('admin'))
-            $branches = Branch::all();
-        else
-            $branches = new Collection([auth()->user()->branch]);
-        return view('stored.index', compact('branches'));
-    }
+//    public function index()
+//    {
+//        if (auth()->user()->hasRole('admin'))
+//            $branches = Branch::all();
+//        else
+//            $branches = new Collection([auth()->user()->branch]);
+//        return view('stored.index', compact('branches'));
+//    }
 
     public function all()
     {

@@ -97,7 +97,7 @@ Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController')
 //Route::resource('payments', 'Till\Payments\PaymentsController', ['only' => ['index', 'show']])->parameters(['payments' => 'payment']);
 
 //StoredItems
-Route::get('/stored', 'StoredItemsController@index')->name('stored.index');
+//Route::get('/stored', 'StoredItemsController@index')->name('stored.index');
 Route::get('/stored/all', 'StoredItemsController@all')->name('stored.all');
 Route::get('/stored/{storedItem}', 'StoredItemsController@show')->name('stored.show');
 Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch');
@@ -105,6 +105,7 @@ Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch');
 
 //StoredItemInfo
 Route::get('/stored-item-info/available/filtered', 'StoredItemInfo\StoredItemInfoController@availableStoredItemInfos');
+Route::get('/stored-item-info', 'StoredItemInfo\StoredItemInfoController@index')->name('stored-item-infos.index');
 Route::get('/stored-item-info/filtered', 'StoredItemInfo\StoredItemInfoController@storedItemInfos');
 
 //Shops

@@ -102,11 +102,11 @@
             },
             prepareUrl: {
                 type: Function,
-                default: (page, vm) => {
+                default: (vm) => {
                     let action = vm.url;
                     if (vm.selectedBranch)
                         action = `${vm.url}branch=${vm.selectedBranch.id}&`;
-                    return action += 'paginate=40&page=' + page;
+                    return action;
                 }
             },
             flowable: false
@@ -264,9 +264,9 @@
             getItems(page = 1) {
                 this.isBusy = true;
 
-                let action = this.prepareUrl(page, this);
+                let action = this.prepareUrl(this);
 
-                axios.get(action)
+                axios.get(action + 'paginate=40&page=' + page)
                     .then(response => {
                         this.pagination = response.data;
 
