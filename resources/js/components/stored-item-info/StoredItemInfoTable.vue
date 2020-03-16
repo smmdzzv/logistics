@@ -13,6 +13,7 @@
             :striped="striped"
             :tableBusy="false"
             :customCells="customCells"
+            :setRowClass="setRowClass"
             excelFileName="Список доступных товаров"
             excelSheetName="Лист 1"
             :primaryKey="'primaryKey'"
@@ -236,6 +237,10 @@
                 if (item.type === 'dummy')
                     return item.totalPrice;
                 return item.totalPrice = Math.round(item.billingInfo.pricePerItem * item.groupedStoredItemsCount * 100) / 100;
+            },
+            setRowClass(item, type) {
+                if (item && item.primaryKey === 'dummyTotalStatItem')
+                    return 'table-success';
             },
             //Converts provided storedItem to StoredItemInfos
             convertStoredItemsToInfos(storedItems) {

@@ -81,7 +81,9 @@
                 <button class="btn btn-primary mx-auto" @click="fetchData">Загрузить</button>
             </div>
         </div>
-        <StoredItemInfoTable :columnsToHide="columnsToHide" flowable :prepareUrl="prepareUrl"
+        <StoredItemInfoTable :columnsToHide="columnsToHide"
+                             flowable
+                             :prepareUrl="prepareUrl"
                              ref="storedItemInfosTable"/>
     </div>
 </template>
@@ -189,7 +191,7 @@
                     actionUrl += `item=${this.item}&`;
 
                 return actionUrl;
-            }
+            },
         },
         components: {
             'StoredItemInfoTable': require('./StoredItemInfoTable').default
