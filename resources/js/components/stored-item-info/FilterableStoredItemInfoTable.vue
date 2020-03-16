@@ -119,7 +119,7 @@
                 trip: null,
                 branch: null,
                 item: null,
-                actionUrl: 'stored-item-info/available/filtered?'
+                actionUrl: 'stored-item-info/filtered?'
             }
         },
         methods: {
@@ -162,7 +162,7 @@
                 this.$refs.storedItemInfosTable.items.unshift(dummyTotalStatItem)
             },
             prepareUrl() {
-                let actionUrl = '/stored-item-info/available/filtered?';
+                let actionUrl = '/stored-item-info/filtered?';
                 if (this.clientCode)
                     actionUrl += `client=${this.clientCode}&`;
                 if (this.minCubage)
