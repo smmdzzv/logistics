@@ -76,6 +76,18 @@
                         </option>
                     </select>
                 </div>
+                <div class="form-group col-md-4">
+                    <label/>
+                    <b-input-group>
+                        <b-input-group-prepend is-text>
+                            <b-form-checkbox switch class="mr-n2"
+                                             v-model="groupByBranch"
+                                             name="groupByBranch">
+                            </b-form-checkbox>
+                        </b-input-group-prepend>
+                        <b-form-input disabled value="Группировать по складу"></b-form-input>
+                    </b-input-group>
+                </div>
             </div>
             <div class="row">
                 <button class="btn btn-primary mx-auto" @click="fetchData">Загрузить</button>
@@ -83,6 +95,7 @@
         </div>
         <StoredItemInfoTable :columnsToHide="columnsToHide"
                              flowable
+                             :groupByBranch="groupByBranch"
                              :prepareUrl="prepareUrl"
                              ref="storedItemInfosTable"/>
     </div>
@@ -119,6 +132,7 @@
                 trip: null,
                 branch: null,
                 item: null,
+                groupByBranch: true,
                 actionUrl: 'stored-item-info/filtered?'
             }
         },

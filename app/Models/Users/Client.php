@@ -119,7 +119,7 @@ class Client extends RoleUser
         });
 
         $expensesDto->prepareReport($dateFrom);
-        return $expensesDto;//TODO call toJson in controller
+        return $expensesDto;
     }
 
     public function getStoredItemInfosStat($dateTo, Builder $query)

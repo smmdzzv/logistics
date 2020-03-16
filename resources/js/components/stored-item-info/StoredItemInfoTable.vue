@@ -93,6 +93,10 @@
             branches: {
                 type: Array
             },
+            groupByBranch:{
+                type:Boolean,
+                default:true
+            },
             url: {
                 type: String,
                 default: 'stored-item-info/filtered?'
@@ -273,7 +277,8 @@
 
                 return infos;
             },
-            prepareStoredItemInfos(infos, countStoredItems = false) {
+            //Groups stored item infos by storage
+            groupStoredItemInfosByBranch(infos, countStoredItems = false) {
                 let storedItemInfos = [];
                 let index = 0;
 
@@ -305,7 +310,7 @@
             setItems() {
                 if (this.providedStoredItems) {
                     let storedItemInfos = this.convertStoredItemsToInfos(this.providedStoredItems);
-                    let storedItems = this.prepareStoredItemInfos(storedItemInfos, true);
+                    let storedItems = this.groupStoredItemInfosByBranch(storedItemInfos, true);
                     for (let item of storedItems) {
                         this.items.push(item);
                     }
@@ -322,7 +327,7 @@
                     .then(response => {
                         this.pagination = response.data;
 
-                        let storedItemInfos = this.prepareStoredItemInfos(response.data.data);
+                        let storedItemInfos = this.groupStoredItemInfosByBranch(response.data.data);
                         let items = storedItemInfos.filter(item => {
                             let existingInfo = this.findInItems(item);
                             if (existingInfo) {
