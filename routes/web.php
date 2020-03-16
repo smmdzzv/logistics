@@ -104,8 +104,9 @@ Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch');
 //Route::post('/stored/trip/{trip}', 'StoredItemsController@associateToTrip');
 
 //StoredItemInfo
-Route::get('/stored-item-info/available/filtered', 'StoredItemInfo\StoredItemInfoController@availableStoredItemInfos');
+//Route::get('/stored-item-info/available/filtered', 'StoredItemInfo\StoredItemInfoController@availableStoredItemInfos');
 Route::get('/stored-item-info', 'StoredItemInfo\StoredItemInfoController@index')->name('stored-item-infos.index');
+Route::get('/stored-item-info/statistics', 'StoredItemInfo\StoredItemInfoController@getClientStat');
 Route::get('/stored-item-info/filtered', 'StoredItemInfo\StoredItemInfoController@storedItemInfos');
 
 //Shops

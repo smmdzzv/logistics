@@ -5,10 +5,11 @@ namespace App\Models\Till;
 
 
 use App\Models\Order;
+use App\Models\SerializableModel;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-class ClientExpenseDto
+class ClientExpenseDto extends SerializableModel
 {
     public Collection $orderPayments;
 
@@ -20,10 +21,10 @@ class ClientExpenseDto
 
     public int $placesCountAtStart = 0;
 
-    public function toJson()
-    {
-        return json_encode($this->toArray(), 0);
-    }
+//    public function toJson()
+//    {
+//        return json_encode($this->toArray(), 0);
+//    }
 
     public function toArray()
     {

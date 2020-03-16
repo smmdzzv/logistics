@@ -128,8 +128,15 @@
                 this.$refs.storedItemInfosTable.getItems()
                     .then(_ => {
                         this.calculateTotalStat();
+
+                        if (this.clientCode && this.dateFrom)
+                            this.fetchClientStat();
                     });
 
+            },
+            fetchClientStat() {
+                let action = this.prepareUrl(null, `/stored-item-info/statistics?`);
+                axios.get(action).then(r => console.log(r))
             },
             calculateTotalStat() {
                 let dummyTotalStatItem = {
@@ -161,8 +168,8 @@
 
                 this.$refs.storedItemInfosTable.items.unshift(dummyTotalStatItem)
             },
-            prepareUrl() {
-                let actionUrl = '/stored-item-info/filtered?';
+            prepareUrl(vm, url = null) {
+                let actionUrl = url ? url : '/stored-item-info/filtered?';
                 if (this.clientCode)
                     actionUrl += `client=${this.clientCode}&`;
                 if (this.minCubage)
