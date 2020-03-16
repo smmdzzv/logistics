@@ -81,7 +81,8 @@
                 <button class="btn btn-primary mx-auto" @click="fetchData">Загрузить</button>
             </div>
         </div>
-        <StoredItemInfoTable :columnsToHide="columnsToHide" :prepareUrl="prepareUrl" ref="storedItemInfosTable"/>
+        <StoredItemInfoTable :columnsToHide="columnsToHide" flowable :prepareUrl="prepareUrl"
+                             ref="storedItemInfosTable"/>
     </div>
 </template>
 
@@ -122,7 +123,41 @@
         methods: {
             fetchData() {
                 this.$refs.storedItemInfosTable.items = [];
-                this.$refs.storedItemInfosTable.getItems();
+                this.$refs.storedItemInfosTable.getItems()
+                    .then(_ => {
+                        this.calculateTotalStat();
+                    });
+
+            },
+            calculateTotalStat() {
+                let dummyTotalStatItem = {
+                    primaryKey: "dummyTotalStatItem",
+                    groupedStoredItemsCount: 0,
+                    type: 'dummy',
+                    totalCubage: 0,
+                    totalWeight: 0,
+                    weightPerCube: 0,
+                    totalPrice: 0
+                };
+
+                for (let i = 0; i < this.$refs.storedItemInfosTable.items.length; i++) {
+                    dummyTotalStatItem.groupedStoredItemsCount += this.$refs.storedItemInfosTable.items[i].storedItems.length;
+                    dummyTotalStatItem.totalCubage += this.$refs.storedItemInfosTable.items[i].totalCubage;
+                    dummyTotalStatItem.totalWeight += this.$refs.storedItemInfosTable.items[i].totalWeight;
+                    dummyTotalStatItem.totalPrice +=
+                        this.$refs.storedItemInfosTable.items[i].billingInfo.pricePerItem
+                        * this.$refs.storedItemInfosTable.items[i].groupedStoredItemsCount;
+                    dummyTotalStatItem.weightPerCube += this.$refs.storedItemInfosTable.items[i].weightPerCube;
+                }
+
+                dummyTotalStatItem.totalCubage = Math.round(dummyTotalStatItem.totalCubage * 1000) / 1000;
+                dummyTotalStatItem.totalWeight = Math.round(dummyTotalStatItem.totalWeight * 1000) / 1000;
+                dummyTotalStatItem.weightPerCube = Math.round(dummyTotalStatItem.weightPerCube / this.$refs.storedItemInfosTable.items.length * 1000) / 1000;
+
+                this.$refs.storedItemInfosTable.items
+                    = this.$refs.storedItemInfosTable.items.filter((info) => info.primaryKey !== 'dummyTotalStatItem');
+
+                this.$refs.storedItemInfosTable.items.unshift(dummyTotalStatItem)
             },
             prepareUrl() {
                 let actionUrl = '/stored-item-info/available/filtered?';

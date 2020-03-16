@@ -35,6 +35,7 @@
                     </template>
                 </div>
             </template>
+
             <template slot="cubage" slot-scope="{item}">
                 <span>{{getCubage(item)}}</span>
             </template>
@@ -47,6 +48,10 @@
                 <span>{{getTotalWeight(item)}}</span>
             </template>
 
+            <template slot="weightPerCube" slot-scope="{item}">
+                <span>{{getWeightPerCube(item)}}</span>
+            </template>
+
             <template slot="selectedCount" slot-scope="{item}">
                 <input class="form-control" type="text" maxlength="3" style="width:6em" v-model="item.selectedCount"
                        @change="updateSelectedStoredItems">
@@ -54,6 +59,10 @@
 
             <template slot="groupedStoredItemsCount" slot-scope="{item}">
                 <span>{{getItemsLength(item)}}</span>
+            </template>
+
+            <template slot="totalPrice" slot-scope="{item}">
+                <span>{{getTotalPrice(item)}}</span>
             </template>
         </table-card>
 
@@ -117,8 +126,12 @@
                 pagination: null,
                 isBusy: false,
                 items: [],
-                customCells: ['cubage', 'totalCubage', 'totalWeight', 'selectedCount', 'groupedStoredItemsCount'],
+                customCells: ['cubage', 'totalCubage', 'totalWeight', 'selectedCount', 'groupedStoredItemsCount', 'created_at', 'weightPerCube', 'totalPrice'],
                 fields: {
+                    'created_at': {
+                        label: 'Дaта',
+                        sortable: true
+                    },
                     'owner.code': {
                         label: 'Владелец',
                         sortable: true
@@ -166,6 +179,14 @@
                         label: 'Общ. Вес',
                         sortable: true
                     },
+                    weightPerCube: {
+                        label: 'Кг в 1 кубе',
+                        sortable: true
+                    },
+                    'totalPrice': {
+                        label: 'Сумма',
+                        sortable: true
+                    },
                     'groupedStoredItemsStorage.name': {
                         label: 'Склад',
                         sortable: true
@@ -186,17 +207,35 @@
                 this.fields = newFields;
             },
             getCubage(item) {
-                return item.cubage = Math.round(item.length * item.width * item.height * 100) / 100
+                if (item.type === 'dummy')
+                    return item.cubage;
+                return item.cubage = Math.round(item.length * item.width * item.height * 1000) / 1000
             },
             getTotalCubage(item) {
+                if (item.type === 'dummy')
+                    return item.totalCubage;
                 return item.totalCubage = Math.round(item.cubage * item.groupedStoredItemsCount * 100) / 100
             },
             getTotalWeight(item) {
+                if (item.type === 'dummy')
+                    return item.totalWeight;
                 return item.totalWeight = Math.round(item.weight * item.groupedStoredItemsCount * 100) / 100
             },
+            getWeightPerCube(item) {
+                if (item.type === 'dummy')
+                    return item.weightPerCube;
+                return item.weightPerCube = Math.round(item.totalWeight / item.totalCubage * 100) / 100
+            },
             getItemsLength(item) {
+                if (item.type === 'dummy')
+                    return item.groupedStoredItemsCount;
                 this.$set(item, 'groupedStoredItemsCount', item.storedItems.length);
                 return item.groupedStoredItemsCount;
+            },
+            getTotalPrice(item) {
+                if (item.type === 'dummy')
+                    return item.totalPrice;
+                return item.totalPrice = Math.round(item.billingInfo.pricePerItem * item.groupedStoredItemsCount * 100) / 100;
             },
             //Converts provided storedItem to StoredItemInfos
             convertStoredItemsToInfos(storedItems) {
@@ -261,12 +300,12 @@
 
                 this.updateSelectedStoredItems();
             },
-            getItems(page = 1) {
+            async getItems(page = 1) {
                 this.isBusy = true;
 
                 let action = this.prepareUrl(this);
 
-                axios.get(action + 'paginate=40&page=' + page)
+                return axios.get(action + 'paginate=50&page=' + page)
                     .then(response => {
                         this.pagination = response.data;
 
@@ -295,7 +334,7 @@
                         }
                         this.$nextTick(() => {
                             this.isBusy = false;
-                        })
+                        });
                     });
             },
             // Checks if item in all items array
