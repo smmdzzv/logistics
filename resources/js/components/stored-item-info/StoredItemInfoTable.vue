@@ -133,7 +133,7 @@
                         label: 'Дaта',
                         sortable: true
                     },
-                    'tariff.name':{
+                    'tariff.name': {
                         label: 'Тариф',
                         sortable: true
                     },
@@ -240,7 +240,8 @@
             getTotalPrice(item) {
                 if (item.type === 'dummy')
                     return item.totalPrice;
-                return item.totalPrice = Math.round(item.billingInfo.pricePerItem * item.groupedStoredItemsCount * 100) / 100;
+                if (item.billingInfo)
+                    return item.totalPrice = Math.round(item.billingInfo.pricePerItem * item.groupedStoredItemsCount * 100) / 100;
             },
             setRowClass(item, type) {
                 if (item && item.primaryKey === 'dummyTotalStatItem')

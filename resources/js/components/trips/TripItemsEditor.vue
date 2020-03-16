@@ -13,6 +13,7 @@
                                 @branchSelected="onBranchSelected"
                                 :providedStoredItems="storedItems"
                                 :branches="branches"
+                                :columns-to-hide="['created_at', 'totalPrice']"
                                 prevent-item-loading
                                 flowable>
         </stored-item-info-table>
