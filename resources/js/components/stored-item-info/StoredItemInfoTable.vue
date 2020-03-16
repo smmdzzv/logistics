@@ -93,9 +93,9 @@
             branches: {
                 type: Array
             },
-            groupByBranch:{
-                type:Boolean,
-                default:true
+            groupByBranch: {
+                type: Boolean,
+                default: true
             },
             url: {
                 type: String,
@@ -327,21 +327,29 @@
                     .then(response => {
                         this.pagination = response.data;
 
-                        let storedItemInfos = this.groupStoredItemInfosByBranch(response.data.data);
-                        let items = storedItemInfos.filter(item => {
-                            let existingInfo = this.findInItems(item);
-                            if (existingInfo) {
-                                let newStoredItems = item.storedItems.filter((stored) => {
-                                    return !existingInfo.storedItems.find((item) => {
-                                        return item.id === stored.id;
+                        let items = [];
+
+                        if (this.groupByBranch) {
+                            let storedItemInfos = this.groupStoredItemInfosByBranch(response.data.data);
+                            items = storedItemInfos.filter(item => {
+                                let existingInfo = this.findInItems(item);
+                                if (existingInfo) {
+                                    let newStoredItems = item.storedItems.filter((stored) => {
+                                        return !existingInfo.storedItems.find((item) => {
+                                            return item.id === stored.id;
+                                        });
                                     });
-                                });
 
-                                existingInfo.storedItems = [...existingInfo.storedItems, ...newStoredItems];
-                            }
+                                    existingInfo.storedItems = [...existingInfo.storedItems, ...newStoredItems];
+                                }
 
-                            return !existingInfo;
-                        });
+                                return !existingInfo;
+                            });
+                        }
+                        else{
+                            items = response.data.data;
+                        }
+
 
                         if (this.flowable)
                             items.forEach(item => {
