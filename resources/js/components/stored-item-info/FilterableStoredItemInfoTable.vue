@@ -136,7 +136,16 @@
             },
             fetchClientStat() {
                 let action = this.prepareUrl(null, `/stored-item-info/statistics?`);
-                axios.get(action).then(r => console.log(r))
+                axios.get(action).then(res => {
+                    let dummyOldStatItem = res.data;
+                    dummyOldStatItem.type = 'dummy';
+                    dummyOldStatItem.primaryKey = 'dummyOldStatItem';
+                    dummyOldStatItem.weightPerCube = dummyOldStatItem.averageWeightPerCube;
+                    this.$refs.storedItemInfosTable.items
+                        = this.$refs.storedItemInfosTable.items.filter((info) => info.primaryKey !== 'dummyOldStatItem');
+                    console.log(dummyOldStatItem);
+                    this.$refs.storedItemInfosTable.items.unshift(dummyOldStatItem)
+                })
             },
             calculateTotalStat() {
                 let dummyTotalStatItem = {
@@ -161,7 +170,11 @@
 
                 dummyTotalStatItem.totalCubage = Math.round(dummyTotalStatItem.totalCubage * 1000) / 1000;
                 dummyTotalStatItem.totalWeight = Math.round(dummyTotalStatItem.totalWeight * 1000) / 1000;
-                dummyTotalStatItem.weightPerCube = Math.round(dummyTotalStatItem.weightPerCube / this.$refs.storedItemInfosTable.items.length * 1000) / 1000;
+                if (this.$refs.storedItemInfosTable.items.length > 0)
+                    dummyTotalStatItem.weightPerCube
+                        = Math.round(dummyTotalStatItem.weightPerCube / this.$refs.storedItemInfosTable.items.length * 1000) / 1000;
+                else
+                    dummyTotalStatItem.weightPerCube = null;
 
                 this.$refs.storedItemInfosTable.items
                     = this.$refs.storedItemInfosTable.items.filter((info) => info.primaryKey !== 'dummyTotalStatItem');

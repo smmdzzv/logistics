@@ -229,7 +229,8 @@
             getWeightPerCube(item) {
                 if (item.type === 'dummy')
                     return item.weightPerCube;
-                return item.weightPerCube = Math.round(item.totalWeight / item.totalCubage * 100) / 100
+                if (item.totalCubage > 0)
+                    return item.weightPerCube = Math.round(item.totalWeight / item.totalCubage * 100) / 100
             },
             getItemsLength(item) {
                 if (item.type === 'dummy')
@@ -246,6 +247,8 @@
             setRowClass(item, type) {
                 if (item && item.primaryKey === 'dummyTotalStatItem')
                     return 'table-success';
+                if (item && item.primaryKey === 'dummyOldStatItem')
+                    return 'table-warning';
             },
             //Converts provided storedItem to StoredItemInfos
             convertStoredItemsToInfos(storedItems) {

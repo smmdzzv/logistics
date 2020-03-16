@@ -129,12 +129,14 @@ class Client extends RoleUser
         $stat = new StoredItemInfoTotalStat();
 
         foreach ($infos as $info) {
-            $stat->totalCubage += $info->width * $info->length * $info->height;
-            $stat->totalWeight += $info->weight;
+            $storedItemsCount = $info->storedItems->count();
+            $stat->totalCubage += $info->width * $info->length * $info->height * $storedItemsCount;
+            $stat->totalWeight += $info->weight * $storedItemsCount;
             $stat->totalPlacesCount += $info->storedItems->count();
-            $stat->totalPrice += $info->billingInfo->pricePerItem * $stat->totalPlacesCount;
+            $stat->totalPrice += $info->billingInfo->pricePerItem * $storedItemsCount;
             $stat->weightPerCubeSum += $info->weight / ($info->width * $info->length * $info->height);
         }
+
         if ($infos->count() > 0)
             $stat->averageWeightPerCube = $stat->weightPerCubeSum / $infos->count();
 
