@@ -96,6 +96,7 @@
         <StoredItemInfoTable :columnsToHide="columnsToHide"
                              flowable
                              :groupByBranch="groupByBranch"
+                             :excelSheetName="excelSheetName"
                              :prepareUrl="prepareUrl"
                              ref="storedItemInfosTable"/>
     </div>
@@ -226,6 +227,14 @@
 
                 return actionUrl;
             },
+        },
+        computed: {
+            excelSheetName() {
+                let name = "Лист 1";
+                if (this.clientCode)
+                    name = this.clientCode;
+                return name;
+            }
         },
         components: {
             'StoredItemInfoTable': require('./StoredItemInfoTable').default

@@ -14,8 +14,8 @@
             :tableBusy="false"
             :customCells="customCells"
             :setRowClass="setRowClass"
-            excelFileName="Список доступных товаров"
-            excelSheetName="Лист 1"
+            excelFileName="Список товаров"
+            :excelSheetName="excelSheetName"
             :primaryKey="'primaryKey'"
             responsive>
             <template slot="header">
