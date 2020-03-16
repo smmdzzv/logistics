@@ -133,6 +133,10 @@
                         label: 'Дaта',
                         sortable: true
                     },
+                    'tariff.name':{
+                        label: 'Тариф',
+                        sortable: true
+                    },
                     'owner.code': {
                         label: 'Владелец',
                         sortable: true

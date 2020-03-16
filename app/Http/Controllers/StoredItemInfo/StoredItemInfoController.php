@@ -45,7 +45,7 @@ class StoredItemInfoController extends BaseController
                 });
             }, 'storedItems.storageHistory.storage.branch', 'owner', 'item'])->latest();
         else
-            $query = StoredItemInfo::with('owner', 'item', 'storedItems.storageHistory.storage.branch')->latest();
+            $query = StoredItemInfo::with('owner', 'tariff', 'item', 'storedItems.storageHistory.storage.branch')->latest();
 
 
         $filter = new StoredItemInfoFilter(request()->all(), $query);
@@ -53,6 +53,7 @@ class StoredItemInfoController extends BaseController
 
         return $query->paginate($this->pagination());
     }
+
     //TODO remove this
     public function availableStoredItemInfos()
     {
@@ -72,7 +73,7 @@ class StoredItemInfoController extends BaseController
 //                $query->available();
 //            }, 'storedItems.storageHistory.storage.branch'])->latest();
 
-        $query = StoredItemInfo::with('owner', 'item', 'billingInfo', 'storedItems.storageHistory.storage.branch')->whereHas('storedItems');
+        $query = StoredItemInfo::with('owner', 'item', 'tariff', 'billingInfo', 'storedItems.storageHistory.storage.branch')->whereHas('storedItems');
         $filter = new StoredItemInfoFilter(request()->all(), $query);
         $query = $filter->filter();
 
