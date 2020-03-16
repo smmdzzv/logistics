@@ -57,6 +57,7 @@
                                         :providedSelectedStoredItems="storedItems"
                                         :selectedItems="storedItems"
                                         @onItemsSelected="onItemsSelected"
+                                        url="/stored-item-info/filtered?trip=doesntHaveTrip&"
                                         flowable>
 
                 </stored-item-info-table>
