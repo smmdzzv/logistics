@@ -52,7 +52,11 @@
                     </select>
                 </div>
             </div>
+            <div class="row">
+                <button class="btn btn-primary mx-auto" @click="fetchFilteredData">Загрузить</button>
+            </div>
         </div>
+
         <table-card
             :customCells="customCells"
             :excelSheetName="selectedBranch ? selectedBranch.name : 'Все филиалы'"
@@ -295,6 +299,13 @@
                     return 'table-success';
                 if (item && item.id === 'dummyStatItemPreviousData')
                     return 'table-warning';
+            },
+            fetchFilteredData() {
+                this.orders = [];
+                this.getOrders();
+                if (this.clientCode && this.dateFrom) {
+                    this.getClientStat();
+                }
             }
         },
         computed: {
@@ -303,56 +314,56 @@
             }
         },
         watch: {
-            selectedBranch: function () {
-                this.orders = [];
-                this.getOrders();
-            },
-            clientCode: function () {
-                this.orders = [];
-                this.getOrders();
-                this.getClientStat();
-            },
-            employeeCode: function () {
-                this.orders = [];
-                this.getOrders()
-            },
-            minCubage: function () {
-                this.orders = [];
-                this.getOrders()
-            },
-            maxCubage: function () {
-                this.orders = [];
-                this.getOrders()
-            },
-            minWeight: function () {
-                this.orders = [];
-                this.getOrders()
-            },
-            maxWeight: function () {
-                this.orders = [];
-                this.getOrders()
-            },
-            minPrice: function () {
-                this.orders = [];
-                this.getOrders()
-            },
-            maxPrice: function () {
-                this.orders = [];
-                this.getOrders()
-            },
-            dateFrom: function () {
-                this.orders = [];
-                this.getOrders();
-                this.getClientStat();
-            },
-            dateTo: function () {
-                this.orders = [];
-                this.getOrders()
-            },
-            status: function () {
-                this.orders = [];
-                this.getOrders()
-            }
+            // selectedBranch: function () {
+            //     this.orders = [];
+            //     this.getOrders();
+            // },
+            // clientCode: function () {
+            //     this.orders = [];
+            //     this.getOrders();
+            //     this.getClientStat();
+            // },
+            // employeeCode: function () {
+            //     this.orders = [];
+            //     this.getOrders()
+            // },
+            // minCubage: function () {
+            //     this.orders = [];
+            //     this.getOrders()
+            // },
+            // maxCubage: function () {
+            //     this.orders = [];
+            //     this.getOrders()
+            // },
+            // minWeight: function () {
+            //     this.orders = [];
+            //     this.getOrders()
+            // },
+            // maxWeight: function () {
+            //     this.orders = [];
+            //     this.getOrders()
+            // },
+            // minPrice: function () {
+            //     this.orders = [];
+            //     this.getOrders()
+            // },
+            // maxPrice: function () {
+            //     this.orders = [];
+            //     this.getOrders()
+            // },
+            // dateFrom: function () {
+            //     this.orders = [];
+            //     this.getOrders();
+            //     this.getClientStat();
+            // },
+            // dateTo: function () {
+            //     this.orders = [];
+            //     this.getOrders()
+            // },
+            // status: function () {
+            //     this.orders = [];
+            //     this.getOrders()
+            // }
         },
         data() {
             return {
