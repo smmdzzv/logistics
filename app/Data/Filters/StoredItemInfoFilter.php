@@ -73,6 +73,11 @@ class StoredItemInfoFilter extends Filter
                     $query->where('branch_id', $branch->id)->where('deleted_at', null);
                 });
             }
+
+            if (isset($this->filters['status']) && $this->filters['status'] === 'completed') {
+                $query->onlyTrashed();
+            } elseif (!isset($this->filters['status']))
+                $query->withTrashed();
         }]);
     }
 
