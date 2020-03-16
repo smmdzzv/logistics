@@ -347,7 +347,7 @@
                             });
                         }
                         else{
-                            items = response.data.data;
+                            items = response.data.data.filter(item => item.storedItems.length > 0);
                         }
 
 
