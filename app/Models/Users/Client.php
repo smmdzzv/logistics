@@ -134,7 +134,7 @@ class Client extends RoleUser
             $stat->totalWeight += $info->weight * $storedItemsCount;
             $stat->totalPlacesCount += $info->storedItems->count();
             $stat->totalPrice += $info->billingInfo->pricePerItem * $storedItemsCount;
-            $stat->weightPerCubeSum += $info->weight / ($info->width * $info->length * $info->height);
+            $stat->weightPerCubeSum += round($info->weight / ($info->width * $info->length * $info->height), 2);
         }
 
         if ($infos->count() > 0)
