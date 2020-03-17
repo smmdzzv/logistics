@@ -122,6 +122,9 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <button class="btn btn-primary mx-auto" @click="getFilteredItems">Загрузить</button>
+            </div>
         </template>
 
         <template slot="billAmount" slot-scope="{item}">
@@ -227,7 +230,7 @@
                 selectedBranchPayee: null,
                 selectedCashier: null,
                 selectedPaidCurrency: null,
-                selectedStatus:null,
+                selectedStatus: null,
                 dateFrom: null,
                 dateTo: null,
                 minPaidAmount: null,
@@ -265,7 +268,7 @@
                         label: 'Кассир',
                         sortable: true
                     },
-                    status:{
+                    status: {
                         label: 'Статус',
                         sortable: true
                     },
@@ -311,17 +314,17 @@
             },
             payerSelected(user) {
                 this.selectedUserPayer = user;
-                this.getFilteredItems()
+                // this.getFilteredItems()
             },
             payeeSelected(user) {
                 this.selectedUserPayee = user;
-                this.getFilteredItems()
+                // this.getFilteredItems()
             },
             cashierSelected(cashier) {
                 this.selectedCashier = cashier;
-                this.getFilteredItems()
+                // this.getFilteredItems()
             },
-            getFilteredItems(){
+            getFilteredItems() {
                 this.items = [];
                 this.getItems()
             },
@@ -356,41 +359,41 @@
                     );
             },
         },
-        watch: {
-            selectedBranch() {
-                this.getFilteredItems();
-            },
-            selectedBranchPayee(){
-                this.getFilteredItems();
-            },
-            selectedBranchPayer(){
-                this.getFilteredItems();
-            },
-            selectedType() {
-                this.getFilteredItems();
-            },
-            selectedPaymentItem() {
-                this.getFilteredItems();
-            },
-            selectedPaidCurrency() {
-                this.getFilteredItems();
-            },
-            dateFrom() {
-                this.getFilteredItems();
-            },
-            dateTo() {
-                this.getFilteredItems();
-            },
-            minPaidAmount() {
-                this.getFilteredItems();
-            },
-            maxPaidAmount() {
-                this.getFilteredItems();
-            },
-            selectedStatus(){
-                this.getFilteredItems()
-            }
-        },
+        // watch: {
+        //     selectedBranch() {
+        //         this.getFilteredItems();
+        //     },
+        //     selectedBranchPayee() {
+        //         this.getFilteredItems();
+        //     },
+        //     selectedBranchPayer() {
+        //         this.getFilteredItems();
+        //     },
+        //     selectedType() {
+        //         this.getFilteredItems();
+        //     },
+        //     selectedPaymentItem() {
+        //         this.getFilteredItems();
+        //     },
+        //     selectedPaidCurrency() {
+        //         this.getFilteredItems();
+        //     },
+        //     dateFrom() {
+        //         this.getFilteredItems();
+        //     },
+        //     dateTo() {
+        //         this.getFilteredItems();
+        //     },
+        //     minPaidAmount() {
+        //         this.getFilteredItems();
+        //     },
+        //     maxPaidAmount() {
+        //         this.getFilteredItems();
+        //     },
+        //     selectedStatus() {
+        //         this.getFilteredItems()
+        //     }
+        // },
         components: {
             'MainPaginator':
             require('../../common/MainPaginator.vue').default,
