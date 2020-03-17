@@ -429,7 +429,8 @@
                     };
 
                     const response = await axios.post('/payment', data);
-                    window.location.href = '/payment/' + response.data;
+                    // window.location.href = '/payment/' + response.data;
+                    window.location.href = '/payment';
                 } catch (e) {console.log(e);
                     if (e.response && e.response.status === 422) {
                         this.errors.id = e.response.data.errors.id;
