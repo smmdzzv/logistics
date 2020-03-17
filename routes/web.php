@@ -89,8 +89,8 @@ Route::get('/payments/filtered', 'Till\Payments\PaymentsController@filtered');
 Route::post('/payment', 'Till\Payments\PaymentsController@storeOrUpdate');
 Route::resource('payment', 'Till\Payments\PaymentsController', ['except' => ['destroy', 'store', 'update']]);
 
-Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
-    ['except' => ['destroy']])->parameters(['incoming-payments' => 'payment']);
+//Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
+//    ['except' => ['destroy']])->parameters(['incoming-payments' => 'payment']);
 
 Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController')->parameters(['outgoing-payments' => 'payment']);
 

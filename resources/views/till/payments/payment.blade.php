@@ -1,10 +1,16 @@
 @if($showProfileLink)
     <div class="row pr-4">
-        <p class="ml-auto "></p><a href="/payments/{{$payment->id}}">Перейти к платежу</a></p>
+        <p class="ml-auto "><a href="/payment/{{$payment->id}}">Перейти к платежу</a></p>
     </div>
 @endif
 <div class="jumbotron">
-    <p>Номер чека: <b>{{$payment->number}}</b></p>
+    <div class="row">
+        <p class="col-md-4">Номер чека: <b>{{$payment->number}}</b></p>
+        @if($payment->status !== 'completed')
+            <a class="btn btn-link ml-auto" href="{{route('payment.edit', $payment->id)}}">Редактировать платеж</a>
+        @endif
+    </div>
+
     <p>Требуемая сумма: <b>{{$payment->billAmount}} {{$payment->billCurrency->isoName}}</b></p>
     <p>Требуемая сумма в сомони: <b>{{$payment->billAmountInTjs}} TJS</b></p>
     <p>Оплаченная сумма:

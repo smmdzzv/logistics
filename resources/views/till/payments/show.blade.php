@@ -14,7 +14,10 @@
                         от <span v-luxon="{ value: '{{$payment->updated_at}}' }"/>
                     </div>
                     <div class="ml-auto mr-3">
-                        <button class="btn btn-outline-primary" onclick="printContent()">
+                        <a class="btn btn-secondary" href="{{route('payment.index')}}">Перейти к списку платежей</a>
+                    </div>
+                    <div class="mr-3">
+                        <button class="btn btn-primary" onclick="printContent()">
                             Распечатать чек
                         </button>
                     </div>
