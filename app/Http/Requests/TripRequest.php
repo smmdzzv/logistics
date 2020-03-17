@@ -36,7 +36,7 @@ class TripRequest extends FormRequest
             'departure_branch_id' => 'required|string',
             'departureDate' => 'required|date',
             'carId' => 'required|exists:cars,id',
-//            'hasTrailer' => 'required|boolean',
+            'hasTrailer' => 'required|boolean',
 //            'emptyToDestination' => 'required|boolean',
 //            'emptyFromDestination' => 'required|boolean',
             'routeLengthToDestination' => 'required|integer|min:0',

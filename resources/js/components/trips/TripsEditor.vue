@@ -168,21 +168,21 @@
                                 </div>
                             </div>
 
-<!--                            <div class="form-group row" v-if="data.car.trailerNumber">-->
-<!--                                <label class="col-md-4 col-form-label text-md-right">Наличие прицепа</label>-->
-<!--                                <div class="col-md-6">-->
-<!--                                    <b-input-group v-b-tooltip.hover-->
-<!--                                                   title="Учитывается при расчете грузоподъемности и кубатуры машины">-->
-<!--                                        <b-input-group-prepend is-text>-->
-<!--                                            <b-form-checkbox switch class="mr-n2" v-model="data.hasTrailer"-->
-<!--                                                             name="hasTrailer">-->
-<!--                                                <span class="sr-only">Switch for following text input</span>-->
-<!--                                            </b-form-checkbox>-->
-<!--                                        </b-input-group-prepend>-->
-<!--                                        <b-form-input disabled value="С прицепом"></b-form-input>-->
-<!--                                    </b-input-group>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <div class="form-group row" v-if="data.car.trailerNumber">
+                                <label class="col-md-4 col-form-label text-md-right">Наличие прицепа</label>
+                                <div class="col-md-6">
+                                    <b-input-group v-b-tooltip.hover
+                                                   title="Учитывается при расчете грузоподъемности и кубатуры машины">
+                                        <b-input-group-prepend is-text>
+                                            <b-form-checkbox switch class="mr-n2" v-model="data.hasTrailer"
+                                                             name="hasTrailer">
+                                                <span class="sr-only">Switch for following text input</span>
+                                            </b-form-checkbox>
+                                        </b-input-group-prepend>
+                                        <b-form-input disabled value="С прицепом"></b-form-input>
+                                    </b-input-group>
+                                </div>
+                            </div>
                             <hr>
                             <div class="form-group row">
                                 <label class="col-md-4 col-form-label text-md-right" for="routeLengthToDestination">Длина
@@ -631,7 +631,7 @@
                         this.errors.driver = e.response.data.errors.driverId;
                         this.errors.departureDate = e.response.data.errors.departureDate;
                         this.errors.returnDate = e.response.data.errors.returnDate;
-                        // this.errors.hasTrailer = e.response.data.errors.hasTrailer;
+                        this.errors.hasTrailer = e.response.data.errors.hasTrailer;
                         this.errors.departureBranch = e.response.data.errors.departure_branch_id;
                         this.errors.destinationBranch = e.response.data.errors.destination_branch_id;
                         // this.errors.emptyToDestination = e.response.data.errors.emptyToDestination;
