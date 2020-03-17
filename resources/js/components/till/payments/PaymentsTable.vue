@@ -19,10 +19,6 @@
         responsive>
         <template #header>
             <div class="form-row align-items-baseline">
-                <!--                <div class="col-12 col-md-2 mb-3 mb-md-0">-->
-                <!--                    <div class=" mr-auto">История платежей</div>-->
-                <!--                </div>-->
-
                 <div class="form-row form-group col-12 align-items-baseline">
                     <div class="col-12 mb-3 mb-md-0 col-md-2">
                         <label>Плательщик (Клиент)</label>
@@ -128,15 +124,6 @@
             </div>
         </template>
 
-        <!--        <template slot="client.name" slot-scope="{item}">-->
-        <!--            <a :href="'/profile/' + item.payer.id" v-if="item.payer">-->
-        <!--                {{item.payer.name}}-->
-        <!--            </a>-->
-        <!--            <a :href="'/profile/' + item.recipient.id" v-if="item.recipient">-->
-        <!--                {{item.recipient.name}}-->
-        <!--            </a>-->
-        <!--        </template>-->
-
         <template slot="billAmount" slot-scope="{item}">
             <span>{{item.billAmount}} {{item.billCurrency.isoName}}</span>
         </template>
@@ -162,6 +149,16 @@
             <a v-if="item.status === 'pending'" class="btn" :href="'/payment/' + item.id + '/edit'">
                 <img class="icon-btn-sm" src="/svg/edit.svg">
             </a>
+        </template>
+
+        <template slot="payer.name" slot-scope="{item}">
+            <span v-if="item.payer_type === 'branch'">{{item.payer.name}}</span>
+            <span v-else>{{item.payer.code}}</span>
+        </template>
+
+        <template slot="payee.name" slot-scope="{item}">
+            <span v-if="item.payee_type === 'branch'">{{item.payee.name}}</span>
+            <span v-else>{{item.payee.code}}</span>
         </template>
 
         <template #footer>
@@ -220,7 +217,7 @@
                 },
                 items: [],
                 isBusy: false,
-                customCells: ['show', 'billAmount', 'paidAmount', 'status'],
+                customCells: ['show', 'billAmount', 'paidAmount', 'status', 'payer.name', 'payee.name'],
                 selectedBranch: null,
                 selectedType: null,
                 selectedPaymentItem: null,
