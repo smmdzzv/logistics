@@ -232,6 +232,8 @@
                 this.selectedItems = this.items.filter(function (item) {
                         return ids.includes(item.id);
                     });
+
+                this.calculateTotalPayment();
             }
         }
     }
