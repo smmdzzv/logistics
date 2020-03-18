@@ -155,13 +155,17 @@
         </template>
 
         <template slot="payer.name" slot-scope="{item}">
-            <span v-if="item.payer_type === 'branch'">{{item.payer.name}}</span>
-            <span v-else>{{item.payer.code}}</span>
+            <template v-if="item.payer">
+                <span v-if="item.payer_type === 'branch'">{{item.payer.name}}</span>
+                <span v-else>{{item.payer.code}}</span>
+            </template>
         </template>
 
         <template slot="payee.name" slot-scope="{item}">
-            <span v-if="item.payee_type === 'branch'">{{item.payee.name}}</span>
-            <span v-else>{{item.payee.code}}</span>
+            <template v-if="item.payee">
+                <span v-if="item.payee_type === 'branch'">{{item.payee.name}}</span>
+                <span v-else>{{item.payee.code}}</span>
+            </template>
         </template>
 
         <template #footer>
