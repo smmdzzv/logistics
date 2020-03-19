@@ -60,7 +60,7 @@
                         </search-user-dropdown>
                         <b-form-select v-else :disabled="disable" v-model="payment.payer"
                                        :class="{'is-invalid':errors.payer}">
-                            <option :value="null" disabled>-- Выберите филиал --</option>
+                            <option :value="null">-- Выберите филиал --</option>
                             <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
                         </b-form-select>
                         <span class="invalid-feedback" role="alert" v-if="errors.payer">
@@ -89,7 +89,7 @@
                                               :selected="onPayeeSelected"></search-user-dropdown>
                         <b-form-select v-else :disabled="disable" v-model="payment.payee"
                                        :class="{'is-invalid':errors.payee}">
-                            <option :value="null" disabled>-- Выберите филиал --</option>
+                            <option :value="null">-- Выберите филиал --</option>
                             <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
                         </b-form-select>
                         <b-form-invalid-feedback :state="errors.payee"><strong
@@ -414,9 +414,9 @@
                     let data = {
                         id: this.payment.id,
                         status: this.payment.status,
-                        payer: this.payment.payer.id,
+                        payer: this.payment.payer ? this.payment.payer.id : null,
                         payer_type: this.payment.payer_type = this.isPayerIndividual ? 'user' : 'branch',
-                        payee: this.payment.payee.id,
+                        payee: this.payment.payee ? this.payment.payee.id : null,
                         payee_type: this.payment.payer_type = this.isPayeeIndividual ? 'user' : 'branch',
                         paymentItem: this.payment.paymentItem.id,
                         billAmount: this.payment.billAmount,
@@ -431,7 +431,8 @@
                     const response = await axios.post('/payment', data);
                     // window.location.href = '/payment/' + response.data;
                     window.location.href = '/payment';
-                } catch (e) {console.log(e);
+                } catch (e) {
+                    console.log(e);
                     if (e.response && e.response.status === 422) {
                         this.errors.id = e.response.data.errors.id;
                         this.errors.status = e.response.data.errors.status;

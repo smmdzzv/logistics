@@ -37,7 +37,7 @@ class PaymentRequest extends FormRequest
             'status' => ['required', Rule::in(['pending', 'completed'])],
             'payer' => 'required',
             'payer_type' => ['required', Rule::in(['user', 'branch'])],
-            'payee' => 'required',
+            'payee' => 'nullable|string',
             'payee_type' => ['required', Rule::in(['user', 'branch'])],
             'paymentItem' => 'required|exists:payment_items,id',
             'billAmount' => 'required|numeric|min:1',
@@ -60,9 +60,11 @@ class PaymentRequest extends FormRequest
                 return $validator->errors()->add('payer', 'Указанный плательщик не найден. ');
 
             $payeeId = $this->request->get('payee');
-            $this->payee = $this->request->get('payee_type') === 'branch' ? $this->getBranch($payeeId) : $this->getClient($payeeId);
-            if (!$this->payee)
-                return $validator->errors()->add('payee', 'Указанный получатель не найден. ');
+            if ($payeeId){
+                $this->payee = $this->request->get('payee_type') === 'branch' ? $this->getBranch($payeeId) : $this->getClient($payeeId);
+                if (!$this->payee)
+                    return $validator->errors()->add('payee', 'Указанный получатель не найден. ');
+            }
 
             if ($this->payer instanceof User && $this->payee instanceof User)
                 return $validator->errors()->add('payer', 'Перевод денег между клиентами запрещен. ');
