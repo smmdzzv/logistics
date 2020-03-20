@@ -134,6 +134,7 @@ class TripStoredItemsController extends Controller
             $trip->departureAt = Carbon::now();
         if ($status === 'finished') {
             $trip->returnedAt = Carbon::now();
+            $trip->totalFuelConsumption = request()->input('consumption');
             $trip->car->fuelAmount -= request()->input('consumption');
             $trip->car->saveOrFail();
         }

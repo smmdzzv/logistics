@@ -44,6 +44,7 @@ class CreateTripsTable extends Migration
             $table->double('tripCoast')->default(0);
             $table->double('otherExpanses')->default(0);
             $table->double('fine')->default(0);
+            $table->double('totalFuelConsumption')->default(0);
             $table->timestamps();
         });
     }

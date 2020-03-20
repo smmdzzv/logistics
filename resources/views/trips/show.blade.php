@@ -84,7 +84,12 @@
                                    type='number'
                                    name="consumption"
                                    step="0.01"
-                                   value="{{$calculatedConsumptionTo + $calculatedConsumptionFrom}}">
+                                   @if($trip->status !== 'finished')
+                                   value="{{$trip->totalFuelConsumption > 0 ? $trip->totalFuelConsumption : $calculatedConsumptionTo + $calculatedConsumptionFrom}}"
+                                   @else
+                                   disabled
+                                   value="{{$trip->totalFuelConsumption}}"
+                                @endif>
                         </div>
 
                         <input type="hidden" name="status"

@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @property mixed routeLengthWithCargoTo
  * @property mixed cargoWeightTo
  * @property mixed trailerCargoWeightTo
+ * @property array|string|null totalFuelConsumption
  */
 class Trip extends BaseModel
 {
