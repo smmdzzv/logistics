@@ -4,7 +4,9 @@
     </div>
 @endif
 <div class="jumbotron">
-    @if($payment->orderPaymentItems && $payment->orderPaymentItems->count() > 0)
+    @if($payment->orderPaymentItems
+            && $payment->orderPaymentItems->count() > 0
+            && $payment->paymentItem->title === 'Пополнение баланса')
         <div class="row">
             <a class="ml-3 mb-3 btn btn-dark" href="/orders/items/edit?payment={{$payment->id}}">Выдать товары</a>
         </div>
