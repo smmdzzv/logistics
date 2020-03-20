@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @property mixed cargoWeightTo
  * @property mixed trailerCargoWeightTo
  * @property array|string|null totalFuelConsumption
+ * @property integer mileageAfter
  */
 class Trip extends BaseModel
 {
@@ -37,7 +38,8 @@ class Trip extends BaseModel
     protected $casts = [
         'hasTrailer' => 'boolean',
         'emptyToDestination' => 'boolean',
-        'emptyFromDestination' => 'boolean'
+        'emptyFromDestination' => 'boolean',
+        'mileageAfter' => 'integer'
     ];
 
     public function driver()

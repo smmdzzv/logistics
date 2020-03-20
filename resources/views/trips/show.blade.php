@@ -91,6 +91,20 @@
                                    value="{{$trip->totalFuelConsumption}}"
                                 @endif>
                         </div>
+                        @php $distance = $trip->mileageAfter - $trip->mileageBefore @endphp
+                        <div class="form-group">
+                            <label>Пробег машины в конце рейса</label>
+                            <input class="form-control @if($distance > 0) is-valid @else is-invalid @endif"
+                                   type='number'
+                                   name="mileageAfter"
+                                   step="1"
+                                   @if($trip->status === 'finished')
+                                   disabled
+                                   @endif
+                                   value="{{$trip->mileageAfter}}">
+                        </div>
+                        <p>Фактический километраж: {{$trip->mileageAfter}} - {{ $trip->mileageBefore }}= {{$distance}}
+                            км</p>
 
                         <input type="hidden" name="status"
                                @switch($trip->status)

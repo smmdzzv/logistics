@@ -89,6 +89,7 @@ class TripsController extends Controller
             $trip->departureAt = Carbon::now();
         if ($status === 'finished') {
             $trip->returnedAt = Carbon::now();
+            $trip->mileageAfter = request()->input('mileageAfter');
             $trip->totalFuelConsumption = request()->input('consumption');
             $trip->car->fuelAmount -= request()->input('consumption');
             $trip->car->saveOrFail();
