@@ -61,7 +61,7 @@ class OrderItemsController extends Controller
                 $paymentSum -= $trusted->maxDebt;
             }
         }
-
+        $paymentSum = round($paymentSum, 2);
         if ($paymentSum <= 0) {
             return abort(400, 'На балансе клиента достаточно денег для оплаты выбранных товаров');
         }
