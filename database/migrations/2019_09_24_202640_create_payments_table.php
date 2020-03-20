@@ -43,6 +43,8 @@ class CreatePaymentsTable extends Migration
             $table->integer('placesLeft')->nullable();
             $table->integer('number')->nullable();
 
+            $table->decimal('discount', 10, 2)->nullable();
+
             $table->softDeletes();
             $table->timestamps();
         });
