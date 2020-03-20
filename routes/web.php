@@ -57,12 +57,12 @@ Route::get('user/{user}/orders', 'OrdersController@filteredByUser');
 
 //Trips
 Route::get('/trips/all', 'Trips\TripsController@all');
+Route::post('/trip/{trip}/status', 'Trips\TripsController@changeStatus')->name('trip.status');
 Route::resource('trips', 'Trips\TripsController',
     ['except' => ['destroy']]);
 
 Route::get('/trip/{trip}/stored-items/edit', 'Trips\TripStoredItemsController@edit')->name('trip.edit-items');
 Route::get('/trip/{trip}/stored-items/generate', 'Trips\TripStoredItemsController@generate')->name('trip.generate-items-list');
-Route::post('/trip/{trip}/status', 'Trips\TripStoredItemsController@changeStatus')->name('trip.status');
 Route::get('/trip/stored-items/available', 'Trips\TripStoredItemsController@availableItems');
 Route::get('/trip/{branch}/stored-items/available', 'Trips\TripStoredItemsController@availableItemsAtBranch');
 Route::post('/trip/{trip}/stored-items', 'Trips\TripStoredItemsController@associateToTrip');

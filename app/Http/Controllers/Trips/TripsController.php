@@ -7,6 +7,7 @@ use App\Http\Requests\TripRequest;
 use App\Models\Branch;
 use App\Models\Car;
 use App\Models\Trip;
+use Carbon\Carbon;
 
 class TripsController extends Controller
 {
@@ -78,5 +79,25 @@ class TripsController extends Controller
     public function storedItems(Trip $trip)
     {
         return $trip->storedItems;
+    }
+
+    public function changeStatus(Trip $trip)
+    {
+        $status = request()->input('status');
+
+        if ($status === 'active')
+            $trip->departureAt = Carbon::now();
+        if ($status === 'finished') {
+            $trip->returnedAt = Carbon::now();
+            $trip->totalFuelConsumption = request()->input('consumption');
+            $trip->car->fuelAmount -= request()->input('consumption');
+            $trip->car->saveOrFail();
+        }
+
+        $trip->status = $status;
+
+        $trip->save();
+
+        return redirect(route('trips.show', $trip));
     }
 }

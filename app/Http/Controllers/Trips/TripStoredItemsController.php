@@ -126,26 +126,6 @@ class TripStoredItemsController extends Controller
         return view('trips.change-items-trip', compact('trip', 'trips'));
     }
 
-    public function changeStatus(Trip $trip)
-    {
-        $status = request()->input('status');
-
-        if ($status === 'active')
-            $trip->departureAt = Carbon::now();
-        if ($status === 'finished') {
-            $trip->returnedAt = Carbon::now();
-            $trip->totalFuelConsumption = request()->input('consumption');
-            $trip->car->fuelAmount -= request()->input('consumption');
-            $trip->car->saveOrFail();
-        }
-
-        $trip->status = $status;
-
-        $trip->save();
-
-        return redirect(route('trips.show', $trip));
-    }
-
     public function generate(Trip $trip)
     {
         $trip->load('storedItems');
