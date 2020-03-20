@@ -203,6 +203,17 @@
                     this.$bvModal.show('payment-error');
                 }
                 hideBusySpinner();
+            },
+            calculateSelectedItems() {
+                let ids = this.selectedOrderPayment.paidItems.map(function (paidItem) {
+                    return paidItem.storedItem.id;
+                });
+
+                this.selectedItems = this.items.filter(function (item) {
+                    return ids.includes(item.id);
+                });
+
+                this.calculateTotalPayment();
             }
         },
         watch: {
@@ -244,6 +255,8 @@
                         !this.orderPayments.find(payment => payment.id === item.id)
                     );
                     this.orderPayments.push(...orderPayments);
+
+                    this.calculateSelectedItems();
                 } catch (e) {
                     this.$root.showErrorMsg(
                         "Ошибка загрузки",
@@ -254,15 +267,16 @@
                 hideBusySpinner();
             },
             selectedOrderPayment() {
-                let ids = this.selectedOrderPayment.paidItems.map(function (paidItem) {
-                    return paidItem.storedItem.id;
-                });
-
-                this.selectedItems = this.items.filter(function (item) {
-                    return ids.includes(item.id);
-                });
-
-                this.calculateTotalPayment();
+                this.calculateSelectedItems();
+                // let ids = this.selectedOrderPayment.paidItems.map(function (paidItem) {
+                //     return paidItem.storedItem.id;
+                // });
+                //
+                // this.selectedItems = this.items.filter(function (item) {
+                //     return ids.includes(item.id);
+                // });
+                //
+                // this.calculateTotalPayment();
             }
         }
     }
