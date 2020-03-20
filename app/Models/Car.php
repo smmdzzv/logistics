@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property double height
  * @property double length
  * @property string number
+ * @property double fuelAmount
  */
 class Car extends BaseModel
 {

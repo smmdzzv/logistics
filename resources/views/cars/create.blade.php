@@ -126,6 +126,22 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <label for="fuelAmount" class="col-md-4 col-form-label text-md-right">Остаток топлива</label>
+                                <div class="col-md-6">
+                                    <input id="fuelAmount" placeholder="в литрах" type="text"
+                                           class="form-control @error('fuelAmount') is-invalid @enderror"
+                                           name="fuelAmount" value="{{ old('fuelAmount') }}" required
+                                           autocomplete="fuelAmount" autofocus>
+
+                                    @error('fuelAmount')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <hr>
                             <div class="row text-center pt-2 pb-4">
                                 <h5 class="col-12">Прицеп</h5>

@@ -202,6 +202,7 @@ class CarsTableSeeder extends Seeder
             $car->maxCubage = $carData[7];
             $car->trailerMaxWeight = '8000';
             $car->trailerMaxCubage = '50';
+            $car->fuelAmount = 0;
             $car->save();
         }
     }

@@ -31,6 +31,7 @@ class CarRequest extends FormRequest
             'width' => 'numeric',
             'maxCubage' => 'required|numeric',
             'maxWeight' => 'required|numeric',
+            'fuelAmount' => 'required|numeric',
             'serial' => 'nullable|string|max:40',
             'trailerNumber' => 'nullable|string|max:20',
             'trailerMaxCubage' => 'required_with:trailerNumber|nullable|numeric',
