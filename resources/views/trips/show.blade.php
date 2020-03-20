@@ -56,12 +56,12 @@
                     </p>
                     <p>Длина обратного пути: <span
                             class="font-weight-bold">{{$trip->routeLengthFromDestination}} км</span></p>
-                    <p>Планируемый расход топлива: <span class="font-weight-bold">
-                            {{$calculatedConsumptionTo + $calculatedConsumptionFrom}}
-                            (до {{$calculatedConsumptionTo}}, от {{$calculatedConsumptionFrom}}) л</span>
+                    <p>Дата отправления: <span class="font-weight-bold"
+                                               v-luxon="{ value: '{{$trip->departureDate}}',  clientFormat: 'dd-MM-yyyy'}"></span>
                     </p>
-                    <p>Дата отправления: <span class="font-weight-bold" v-luxon="{ value: '{{$trip->departureDate}}',  clientFormat: 'dd-MM-yyyy'}"></span></p>
-                    <p>Дата возвращения: <span class="font-weight-bold" v-luxon="{ value: '{{$trip->returnDate}}',  clientFormat: 'dd-MM-yyyy'}"></span></p>
+                    <p>Дата возвращения: <span class="font-weight-bold"
+                                               v-luxon="{ value: '{{$trip->returnDate}}',  clientFormat: 'dd-MM-yyyy'}"></span>
+                    </p>
                     @if($trip->departureAt)
                         <p>Факт. дата отправления: <span class="font-weight-bold"
                                                          v-luxon="{ value: '{{$trip->departureAt}}' }"/></p>
@@ -71,8 +71,22 @@
                                                          v-luxon="{ value: '{{$trip->returnedAt}}' }"></span></p>
                     @endif
 
+                    <p>Планируемый расход топлива: <span class="font-weight-bold">
+                            {{$calculatedConsumptionTo + $calculatedConsumptionFrom}}
+                            (до {{$calculatedConsumptionTo}}, от {{$calculatedConsumptionFrom}}) л</span>
+                    </p>
+
                     <form method="post" action="{{route('trip.status', $trip)}}">
                         @csrf
+                        <div class="form-group">
+                            <label>Фактический расход топлива:</label>
+                            <input class="form-control is-valid"
+                                   type='number'
+                                   name="consumption"
+                                   step="0.01"
+                                   value="{{$calculatedConsumptionTo + $calculatedConsumptionFrom}}">
+                        </div>
+
                         <input type="hidden" name="status"
                                @switch($trip->status)
                                @case('created')
@@ -109,3 +123,13 @@
         </div>
     </div>
 @endsection
+
+<script>
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     $('#endTrip').click(function (event) {
+    //         event.preventDefault();
+    //         alert(2);
+    //     })
+    // });
+
+</script>
