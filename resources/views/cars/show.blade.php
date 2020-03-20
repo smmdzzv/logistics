@@ -24,6 +24,7 @@
                                 <h5 class="col-12 mb-4">Машина</h5>
                             </div>
                             <p>Серийный номер: {{$car->serial}}</p>
+                            <p>Остаток топлива: {{$car->fuelAmount}} л</p>
                             <p>Длина: {{$car->length}} | Ширина: {{$car->width}} | Высота: {{$car->height}} </p>
                             <p>Грузоподъемность: {{$car->maxWeight}} кг | Кубатура: {{$car->maxCubage}} м<sup>3</sup>
                             </p>
