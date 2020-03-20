@@ -4,6 +4,11 @@
     </div>
 @endif
 <div class="jumbotron">
+    @if($payment->orderPaymentItems && $payment->orderPaymentItems->count() > 0)
+        <div class="row">
+            <a class="ml-3 mb-3 btn btn-dark" href="/orders/items/edit?payment={{$payment->id}}">Выдать товары</a>
+        </div>
+    @endif
     <div class="row">
         <p class="col-md-4">Номер чека: <b>{{$payment->number}}</b></p>
         @if($payment->status !== 'completed')

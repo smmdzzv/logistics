@@ -24,10 +24,6 @@
                 </div>
             </div>
             <div class="card-body">
-                <div>
-                    <a href="http://127.0.0.1:8000/orders/items/edit?payment={{$payment->id}}">Выдача товаров</a>
-                </div>
-
                 <h4>Общая информация</h4>
                 @component('till/payments/payment', ['payment' => $payment, 'showProfileLink' => false])@endcomponent
 

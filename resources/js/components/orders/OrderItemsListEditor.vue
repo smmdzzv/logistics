@@ -207,7 +207,7 @@
             calculateSelectedItems() {
                 if (!this.selectedOrderPayment)
                     return;
-                
+
                 let ids = this.selectedOrderPayment.paidItems.map(function (paidItem) {
                     return paidItem.storedItem.id;
                 });
