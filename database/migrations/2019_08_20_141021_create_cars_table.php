@@ -21,6 +21,7 @@ class CreateCarsTable extends Migration
             $table->double('width', 10)->nullable();
             $table->double('maxCubage', 10);
             $table->double('maxWeight', 10);
+            $table->double('fuelAmount')->default(0);
             $table->string('serial', 40)->unique()->nullable();
             $table->string('trailerNumber', 20)->unique()->nullable();
             $table->double('trailerMaxCubage', 10)->nullable();

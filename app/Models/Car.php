@@ -27,6 +27,7 @@ class Car extends BaseModel
         'width' => 'double',
         'trailerMaxCubage' => 'double',
         'trailerMaxWeight' => 'double',
+        'fuelAmount' => 'double'
     ];
 
     public function toChinaConsumption()
