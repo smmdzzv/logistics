@@ -7,7 +7,9 @@
                 <div class="card shadow">
                     <div class="card-header">Выдать товары клиенту</div>
                     <div class="card-body">
-                        <order-items-list-editor hover selectable></order-items-list-editor>
+                        <order-items-list-editor hover selectable
+                                                 @if($orderPayment) :order-payment="{{$orderPayment}}" @endif
+                        ></order-items-list-editor>
                     </div>
                 </div>
             </div>

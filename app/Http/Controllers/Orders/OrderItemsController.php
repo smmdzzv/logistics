@@ -26,7 +26,12 @@ class OrderItemsController extends Controller
 
     public function edit()
     {
-        return view('orders.edit-items-list');
+        $orderPayment = request()->get('payment') ?
+            OrderPayment::with('order.owner', 'paidItems.storedItem')
+                ->where('payment_id', request()->get('payment'))
+                ->first() : null;
+
+        return view('orders.edit-items-list', compact('orderPayment'));
     }
 
     public function deliver(Order $order, Request $request)
@@ -134,6 +139,6 @@ class OrderItemsController extends Controller
             return count($storedItems) != 0;
         });
 
-        return $payments;
+        return $payments->values()->all();
     }
 }

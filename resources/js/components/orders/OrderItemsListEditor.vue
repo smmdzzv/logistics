@@ -3,10 +3,11 @@
         <div class="col-12 mb-3">
             <label class="col-12">Клиент</label>
             <search-user-dropdown
-                    :selected="clientSelected"
-                    autofocus
-                    placeholder="Введите ФИО или код клиента"
-                    url="/concrete/client/filter?userInfo=">
+                :preselectedUser="client"
+                :selected="clientSelected"
+                autofocus
+                placeholder="Введите ФИО или код клиента"
+                url="/concrete/client/filter?userInfo=">
             </search-user-dropdown>
         </div>
 
@@ -35,38 +36,38 @@
             <input class="form-control" v-model="paymentSum" disabled>
         </div>
 
-<!--        <div class="col-12 mb-3">-->
-<!--            <button class="btn btn-primary" @click="detailedView = !detailedView">Переключить вид</button>-->
-<!--        </div>-->
+        <!--        <div class="col-12 mb-3">-->
+        <!--            <button class="btn btn-primary" @click="detailedView = !detailedView">Переключить вид</button>-->
+        <!--        </div>-->
 
         <div class="col-12 pb-4" v-show="!detailedView">
             <stored-item-info-table
-                    :borderless="borderless"
-                    :responsive="responsive"
-                    :providedStoredItems="items"
-                    :providedSelectedStoredItems="selectedItems"
-                    :striped="striped"
-                    prevent-item-loading
-                    @onItemsSelected="onItemsSelected"
-                    ref="storedItemsTable"
-                    title="Список товаров">
+                :borderless="borderless"
+                :responsive="responsive"
+                :providedStoredItems="items"
+                :providedSelectedStoredItems="selectedItems"
+                :striped="striped"
+                prevent-item-loading
+                @onItemsSelected="onItemsSelected"
+                ref="storedItemsTable"
+                title="Список товаров">
             </stored-item-info-table>
         </div>
 
         <div class="col-12 pb-4" v-if="detailedView">
             <stored-items-table-card
-                    :borderless="borderless"
-                    :fixed="fixed"
-                    :hover="hover"
-                    :responsive="responsive"
-                    :select-mode="selectMode"
-                    :selectable="selectable"
-                    :sticky-header="tableHeight"
-                    :storedItems="items"
-                    :striped="striped"
-                    @itemsSelected="onItemsSelected"
-                    ref="storedItemsTable"
-                    title="Список товаров">
+                :borderless="borderless"
+                :fixed="fixed"
+                :hover="hover"
+                :responsive="responsive"
+                :select-mode="selectMode"
+                :selectable="selectable"
+                :sticky-header="tableHeight"
+                :storedItems="items"
+                :striped="striped"
+                @itemsSelected="onItemsSelected"
+                ref="storedItemsTable"
+                title="Список товаров">
             </stored-items-table-card>
         </div>
 
@@ -97,6 +98,7 @@
 
 <script>
     import TableCardProps from '../common/TableCardProps.vue'
+    import {hideBusySpinner, showBusySpinner} from "../../tools";
 
     export default {
         name: "OrderItemsListEditor",
@@ -104,6 +106,21 @@
         components: {
             'SearchUserDropdown': require('../users/SearchUserDropdown.vue').default,
             'StoredItemsTableCard': require('../stored/StoredItemsTableCard').default
+        },
+        mounted() {
+            if (this.orderPayment) {
+                this.client = this.orderPayment.order.owner;
+                this.orders.push(this.orderPayment.order);
+                this.selectedOrder = this.orderPayment.order;
+                this.orderPayments.push(this.orderPayment);
+                this.selectedOrderPayment = this.orderPayment;
+            }
+        },
+        props: {
+            orderPayment: {
+                type: Object,
+                default: null
+            }
         },
         data() {
             return {
@@ -117,7 +134,7 @@
                 errorMessage: null,
                 isDebtRequested: false,
                 paymentSum: 0,
-                detailedView:false
+                detailedView: false
             }
         },
         methods: {
@@ -132,10 +149,10 @@
                 this.paymentSum = Math.round(this.selectedItems.reduce((sum, nextItem) => sum + nextItem.info.billingInfo.pricePerItem, 0) * 100) / 100;
             },
             async createPendingPayment() {
-                if(this.selectedItems.length === 0)
+                if (this.selectedItems.length === 0)
                     return;
 
-                tShowSpinner();
+                showBusySpinner();
                 this.$bvModal.hide('payment-error');
 
                 let data = {
@@ -151,18 +168,18 @@
                     const response = await axios.post(action, data);
                     window.location = `/payment/${response.data}`;
                 } catch (e) {
-                    if (e.response&& e.response.status === 400 || e.response.status === 422) {
+                    if (e.response && e.response.status === 400 || e.response.status === 422) {
                         this.errorMessage = e.response.data.message;
                         this.$bvModal.show('payment-error');
                     }
                 }
-                tHideSpinner();
+                hideBusySpinner();
             },
             async submit() {
-                if(this.selectedItems.length === 0)
+                if (this.selectedItems.length === 0)
                     return;
 
-                tShowSpinner();
+                showBusySpinner();
                 this.$bvModal.hide('payment-error');
 
                 let data = {
@@ -178,60 +195,72 @@
                     const response = await axios.post(action, data);
                     window.location = `/payment/${response.data}`;
                 } catch (e) {
-                    if (e.response&& e.response.status === 400 || e.response.status === 422) {
+                    if (e.response && e.response.status === 400 || e.response.status === 422) {
                         this.errorMessage = e.response.data.message;
                     } else {
                         this.errorMessage = "Не удалось оформить выдачу товаров. Повтороите попытку после перезагрузки страницы"
                     }
                     this.$bvModal.show('payment-error');
                 }
-                tHideSpinner();
+                hideBusySpinner();
             }
         },
         watch: {
             async client() {
                 if (!this.client)
                     return;
-                tShowSpinner();
+                showBusySpinner();
                 try {
-                    const response = await getActiveOrders(this.client.id);
-                    this.orders = response.data
+                    let action = '/orders/' + this.client.id + '/active';
+                    const response = await axios.get(action);
+                    let orders = response.data.filter(item =>
+                        !this.orders.find(order => order.id === item.id)
+                    );
+
+                    this.orders.push(...orders)
                 } catch (e) {
                     this.$root.showErrorMsg(
                         "Ошибка загрузки",
                         "Не удалось получить список активных заказов"
-                    )
+                    );
+
+                    console.log(e)
                 }
-                tHideSpinner();
+                hideBusySpinner();
             },
             async selectedOrder() {
                 if (!this.selectedOrder)
                     return;
-                tShowSpinner();
+                showBusySpinner();
                 try {
-                    const itemsResponse = await getUnpaidOrderItems(this.selectedOrder.id);
+                    const itemsResponse = await axios.get(`/order/${this.selectedOrder.id}/unpaid-items`);
                     this.items = itemsResponse.data.map(function (item) {
                         item.info.owner = this.client;
                         return item;
                     }, this);
-                    const paymentsResponse = await getOrderPayments(this.selectedOrder.id);
-                    this.orderPayments = paymentsResponse.data;
+
+                    const paymentsResponse = await axios.get(`/order/${this.selectedOrder.id}/payments`);
+                    let orderPayments = paymentsResponse.data.filter(item =>
+                        !this.orderPayments.find(payment => payment.id === item.id)
+                    );
+                    this.orderPayments.push(...orderPayments);
                 } catch (e) {
                     this.$root.showErrorMsg(
                         "Ошибка загрузки",
                         "Не удалось получить список товаров"
-                    )
+                    );
+                    console.log(e)
                 }
-                tHideSpinner();
+                hideBusySpinner();
             },
             selectedOrderPayment() {
                 let ids = this.selectedOrderPayment.paidItems.map(function (paidItem) {
-                        return paidItem.storedItem.id;
-                    });
+                    return paidItem.storedItem.id;
+                });
 
                 this.selectedItems = this.items.filter(function (item) {
-                        return ids.includes(item.id);
-                    });
+                    return ids.includes(item.id);
+                });
 
                 this.calculateTotalPayment();
             }
