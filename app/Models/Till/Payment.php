@@ -206,7 +206,8 @@ class Payment extends BaseModel
             ->latest()
             ->first();
 
-        $this->number = $lastPayment ? $lastPayment->number + 1 : 1;
+        if (!$this->number)
+            $this->number = $lastPayment ? $lastPayment->number + 1 : 1;
         $somoni = Currency::where('isoName', 'TJS')->firstOrFail();
 
         if ($this->billCurrency->id !== $somoni->id) {
