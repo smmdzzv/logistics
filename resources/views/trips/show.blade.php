@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row p-4 justify-content-center" xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+    <div class="row p-4 justify-content-center">
         <div class="col-sm-10 col-md-8 col-lg-4 mb-4">
             <div class="card shadow">
                 <div class="card-header">
@@ -56,7 +56,9 @@
                     </p>
                     <p>Длина обратного пути: <span
                             class="font-weight-bold">{{$trip->routeLengthFromDestination}} км</span></p>
-                    <p>Планируемый расход топлива: <span class="font-weight-bold">{{$calculatedConsumptionTo + $calculatedConsumptionFrom}} (до {{$calculatedConsumptionTo}}, от {{$calculatedConsumptionFrom}}) л</span>
+                    <p>Планируемый расход топлива: <span class="font-weight-bold">
+                            {{$calculatedConsumptionTo + $calculatedConsumptionFrom}}
+                            (до {{$calculatedConsumptionTo}}, от {{$calculatedConsumptionFrom}}) л</span>
                     </p>
                     <p>Дата отправления: <span class="font-weight-bold" v-luxon="{ value: '{{$trip->departureDate}}',  clientFormat: 'dd-MM-yyyy'}"></span></p>
                     <p>Дата возвращения: <span class="font-weight-bold" v-luxon="{ value: '{{$trip->returnDate}}',  clientFormat: 'dd-MM-yyyy'}"></span></p>

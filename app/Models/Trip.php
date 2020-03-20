@@ -18,10 +18,16 @@ use Illuminate\Database\Eloquent\Collection;
  * @property Collection<StoredItem> storedItems
  * @property FuelConsumption toConsumption
  * @property FuelConsumption fromConsumption
- * @property boolean emptyToDestination
- * @property mixed emptyFromDestination
+ * // * @property boolean emptyToDestination
+ * // * @property mixed emptyFromDestination
  * @property int routeLengthToDestination
  * @property int routeLengthFromDestination
+ * @property mixed routeLengthWithCargoFrom
+ * @property mixed cargoWeightFrom
+ * @property mixed trailerCargoWeightFrom
+ * @property mixed routeLengthWithCargoTo
+ * @property mixed cargoWeightTo
+ * @property mixed trailerCargoWeightTo
  */
 class Trip extends BaseModel
 {
@@ -82,34 +88,57 @@ class Trip extends BaseModel
         return $this->belongsTo(Branch::class, 'departure_branch_id');
     }
 
-    public function toConsumption(){
+    public function toConsumption()
+    {
         return $this->belongsTo(FuelConsumption::class);
     }
 
-    public function fromConsumption(){
+    public function fromConsumption()
+    {
         return $this->belongsTo(FuelConsumption::class);
     }
 
-    public function getCalculatedConsumptionTo(){
-        return $this->calculateConsumption($this->toConsumption, $this->emptyToDestination, $this->routeLengthToDestination);
+    public function getCalculatedConsumptionTo()
+    {
+        return $this->calculateConsumption(
+            $this->toConsumption,
+            $this->routeLengthToDestination,
+            $this->routeLengthWithCargoTo,
+            $this->cargoWeightTo,
+            $this->trailerCargoWeightTo
+        );
     }
 
-    public function getCalculatedConsumptionFrom(){
-        return $this->calculateConsumption($this->fromConsumption, $this->emptyFromDestination, $this->routeLengthFromDestination);
+    public function getCalculatedConsumptionFrom()
+    {
+        return $this->calculateConsumption(
+            $this->toConsumption,
+            $this->routeLengthFromDestination,
+            $this->routeLengthWithCargoFrom,
+            $this->cargoWeightFrom,
+            $this->trailerCargoWeightFrom
+        );
     }
 
     /**
      * Return calculated fuel consumption
      * @param FuelConsumption $fuelConsumption
-     * @param boolean $isEmpty
-     * @param $distance
+     * @param $fullDistance
+     * @param $loadedDistance
+     * @param $carItemsWeight
+     * @param $trailerItemsWeight
      * @return float
      */
-    public function calculateConsumption(FuelConsumption $fuelConsumption, $isEmpty, $distance){
-        $consumption = $this->hasTrailer? $fuelConsumption->forLoadedTrailer : $fuelConsumption->forLoaded;
-        if($isEmpty)
-            $consumption = $this->hasTrailer? $fuelConsumption->forEmptyTrailer : $fuelConsumption->forEmpty;
+    public function calculateConsumption(FuelConsumption $fuelConsumption, $fullDistance,
+                                         $loadedDistance, $carItemsWeight, $trailerItemsWeight)
+    {
+        $consumption = $fuelConsumption->forEmpty * ($fullDistance - $loadedDistance)
+            + $fuelConsumption->forLoaded * $carItemsWeight / 1000 * $loadedDistance;
 
-        return round($distance * $consumption, 2);
+        if ($this->hasTrailer)
+            $consumption += $fuelConsumption->forEmptyTrailer * ($fullDistance - $loadedDistance)
+                + $fuelConsumption->forLoadedTrailer * $trailerItemsWeight / 1000 * $loadedDistance;
+
+        return round($consumption, 2);
     }
 }
