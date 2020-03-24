@@ -18,9 +18,11 @@ class CreateStoredItemTripHistoriesTable extends Migration
             $table->char('stored_item_id', 26);
             $table->char('trip_id', 26)->index();
             $table->char('registered_by_id', 26);
-            $table->char('deleted_by_id', 26)->nullable();
+//            $table->char('deleted_by_id', 26)->nullable();
             $table->char('loaded_by_id', 26)->nullable();
             $table->dateTime('loaded_at')->nullable();
+
+            $table->userStamp();
             $table->softDeletes();
             $table->timestamps();
         });

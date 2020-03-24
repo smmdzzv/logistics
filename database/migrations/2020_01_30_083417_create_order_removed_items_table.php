@@ -17,6 +17,8 @@ class CreateOrderRemovedItemsTable extends Migration
             $table->char('id', 26)->primary();
             $table->char('order_id', 26)->index();
             $table->char('stored_item_info_id', 26)->index();
+
+            $table->userStamp();
             $table->timestamps();
         });
     }

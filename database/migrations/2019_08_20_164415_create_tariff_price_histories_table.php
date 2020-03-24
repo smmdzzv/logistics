@@ -29,6 +29,7 @@ class CreateTariffPriceHistoriesTable extends Migration
             $table->double('maxWeight');
             $table->double('maxCubage');
             $table->double('totalMoney');
+            $table->userStamp();
             $table->timestamps();
         });
     }

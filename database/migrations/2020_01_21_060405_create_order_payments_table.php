@@ -17,6 +17,8 @@ class CreateOrderPaymentsTable extends Migration
             $table->char('id', 26)->primary();
             $table->char('order_id', 26)->index();
             $table->char('payment_id', 26)->index();
+
+            $table->userStamp();
             $table->softDeletes();
             $table->timestamps();
         });

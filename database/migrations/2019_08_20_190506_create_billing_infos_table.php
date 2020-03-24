@@ -17,7 +17,7 @@ class CreateBillingInfosTable extends Migration
             $table->char('id', 26)->primary();;
             $table->char('tariff_price_history_id', 26)->index();
             $table->char('stored_item_info_id', 26)->index();
-            $table->char('deleted_by_id', 26)->index()->nullable();
+//            $table->char('deleted_by_id', 26)->index()->nullable();
 //            $table->integer('placesCount');
             $table->decimal('totalCubage');
             $table->decimal('totalWeight');
@@ -27,6 +27,7 @@ class CreateBillingInfosTable extends Migration
             $table->decimal('discountPerCube', 10, 2);
             $table->decimal('totalDiscount', 10, 2);
             $table->decimal('count');
+            $table->userStamp();
             $table->softDeletes();
             $table->timestamps();
         });

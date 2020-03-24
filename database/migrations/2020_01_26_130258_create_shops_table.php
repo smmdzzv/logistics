@@ -16,7 +16,9 @@ class CreateShopsTable extends Migration
         Schema::create('shops', function (Blueprint $table) {
             $table->char('id', 26)->primary();
             $table->string('name', 255);
-            $table->bigInteger('code')->index();
+            $table->char('code', 50)->index();
+
+            $table->userStamp();
             $table->timestamps();
         });
     }

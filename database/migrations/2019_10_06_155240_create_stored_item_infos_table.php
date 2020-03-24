@@ -17,7 +17,7 @@ class CreateStoredItemInfosTable extends Migration
             $table->char('id',26)->primary();
             $table->char('item_id',26)->index();
             $table->char('ownerId',26)->index();
-            $table->char('deleted_by_id',26)->index()->nullable();
+//            $table->char('deleted_by_id',26)->index()->nullable();
             $table->char('branch_id',26)->index();
             $table->char('order_id',26)->index();
             $table->char('shop',50)->nullable();
@@ -29,6 +29,8 @@ class CreateStoredItemInfosTable extends Migration
             $table->double('width');
             $table->double('length');
 //            $table->double('placeCount');
+
+            $table->userStamp();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -23,6 +23,7 @@ class CreateItemsTable extends Migration
             $table->boolean('onlyAgreedPrice')->default(false);
             $table->boolean('applyDiscount')->default(false);
             $table->boolean('calculateByNormAndWeight')->default(false);
+            $table->userStamp();
             $table->timestamps();
         });
     }

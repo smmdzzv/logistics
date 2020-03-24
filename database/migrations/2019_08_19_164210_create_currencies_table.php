@@ -19,6 +19,7 @@ class CreateCurrenciesTable extends Migration
             $table->string('shortName', 5)->unique();
             $table->string('isoName', 3)->unique();
             $table->char('country_id', 26);
+            $table->userStamp();
             $table->timestamps();
         });
     }

@@ -18,6 +18,7 @@ class CreateStoragesTable extends Migration
             $table->char('branch_id',26)->index();
             $table->string('name',255);
 
+            $table->userStamp();
             $table->timestamps();
         });
     }

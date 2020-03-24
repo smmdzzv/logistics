@@ -21,6 +21,7 @@ class CreateFuelConsumptionsTable extends Migration
             $table->double('forLoaded');
             $table->double('forEmptyTrailer');
             $table->double('forLoadedTrailer');
+            $table->userStamp();
             $table->timestamps();
         });
     }

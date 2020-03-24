@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\StoredItems\StoredItemInfo;
 use App\Observers\StoredItems\StoredItemInfoObserver;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,5 +27,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         StoredItemInfo::observe(StoredItemInfoObserver::class);
+
+        Blueprint::macro('userStamp', function () {
+            $this->char('created_by_id', 26)->index()->nullable();
+            $this->char('updated_by_id', 26)->index()->nullable();
+            $this->char('deleted_by_id', 26)->index()->nullable();
+        });
     }
 }

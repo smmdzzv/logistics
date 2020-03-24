@@ -27,6 +27,7 @@ class CreateCarsTable extends Migration
             $table->double('trailerMaxCubage', 10)->nullable();
             $table->double('trailerMaxWeight', 10)->nullable();
             $table->timestamps();
+            $table->userStamp();
 
             $table->index('number');
         });

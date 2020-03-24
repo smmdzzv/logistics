@@ -20,6 +20,7 @@ class CreateAccountsTable extends Migration
             $table->char('currency_id',26);
             $table->decimal('balance', 10, 2);
             $table->string('description', 255);
+            $table->userStamp();
             $table->timestamps();
         });
     }

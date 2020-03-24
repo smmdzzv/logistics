@@ -19,6 +19,8 @@ class CreateTrustedUsersTable extends Migration
             $table->date('from');
             $table->date('to');
             $table->decimal('maxDebt', 10, 2);
+
+            $table->userStamp();
             $table->timestamps();
             $table->softDeletes();
         });

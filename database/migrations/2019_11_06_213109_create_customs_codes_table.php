@@ -24,6 +24,8 @@ class CreateCustomsCodesTable extends Migration
             $table->double('vat');
             $table->double('totalRate');
             $table->boolean('isCalculatedByPiece');
+
+            $table->userStamp();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -45,6 +45,7 @@ class CreatePaymentsTable extends Migration
 
             $table->decimal('discount', 10, 2)->nullable();
 
+            $table->userStamp();
             $table->softDeletes();
             $table->timestamps();
         });

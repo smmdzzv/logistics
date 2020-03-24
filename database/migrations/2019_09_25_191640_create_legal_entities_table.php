@@ -17,6 +17,8 @@ class CreateLegalEntitiesTable extends Migration
             $table->char('id', 26)->primary();
             $table->string('type',255);
             $table->string('name', 255);
+
+            $table->userStamp();
             $table->timestamps();
         });
     }

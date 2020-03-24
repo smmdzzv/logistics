@@ -18,6 +18,8 @@ class CreateLostItemsTable extends Migration
             $table->char('stored_item_id',26)->index();
             $table->decimal('discount', 10,2);
             $table->integer('placeCount');
+
+            $table->userStamp();
             $table->timestamps();
         });
     }

@@ -25,6 +25,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('totalCubage', 10, 2);
             $table->decimal('totalPrice', 10, 2);
             $table->decimal('totalDiscount', 10, 2);
+            $table->userStamp();
             $table->timestamps();
         });
     }

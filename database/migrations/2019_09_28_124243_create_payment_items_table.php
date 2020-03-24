@@ -18,6 +18,8 @@ class CreatePaymentItemsTable extends Migration
             $table->string('title', 255)->unique();
 //            $table->char('type', 20);
             $table->string('description', 500)->nullable();
+
+            $table->userStamp();
             $table->timestamps();
         });
     }

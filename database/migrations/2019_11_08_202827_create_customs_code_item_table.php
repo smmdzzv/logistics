@@ -18,6 +18,7 @@ class CreateCustomsCodeItemTable extends Migration
             $table->char('customs_code_id', 26)->index();
             $table->char('item_id', 26);
 
+            $table->userStamp();
             $table->timestamps();
         });
     }

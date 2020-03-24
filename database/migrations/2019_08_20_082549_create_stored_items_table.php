@@ -17,8 +17,9 @@ class CreateStoredItemsTable extends Migration
             $table->char('id',26)->primary();
             $table->char('stored_item_info_id',26)->index();
             $table->char('code', 20)->unique();
-            $table->char('deleted_by_id', 26)->nullable();
+//            $table->char('deleted_by_id', 26)->nullable();
             $table->softDeletes();
+            $table->userStamp();
             $table->timestamps();
         });
     }

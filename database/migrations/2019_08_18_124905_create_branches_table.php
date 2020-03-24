@@ -19,7 +19,8 @@ class CreateBranchesTable extends Migration
             $table->char('country', 26);
             $table->string('name')->unique();
             $table->softDeletes();
-            $table->char('deleted_by_id', 26)->nullable();
+//            $table->char('deleted_by_id', 26)->nullable();
+            $table->userStamp();
             $table->timestamps();
         });
     }
