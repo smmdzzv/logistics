@@ -19,6 +19,7 @@ class Employee extends RoleUser
             'worker',
             'cashier',
             'driver',
+            'storekeeper',
             'director',
             'manager'
         ];

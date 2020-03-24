@@ -29,7 +29,7 @@ class OrdersController extends BaseController
         $adminOnly = ['edit', 'update', 'destroy'];
 
         $this->middleware('roles.allow:admin')->only($adminOnly);
-        $this->middleware('roles.allow:manager')->except($adminOnly);
+        $this->middleware('roles.allow:manager,storekeeper')->except($adminOnly);
     }
 
     public function index()

@@ -3,7 +3,7 @@
 
 namespace App\Data\Filters;
 
- 
+
 use Illuminate\Database\Eloquent\Builder;
 
 abstract class Filter
@@ -25,7 +25,7 @@ abstract class Filter
 
     protected function applyOwnerScope($columnName, $ownerId)
     {
-        if (!auth()->user()->hasAnyRole(['admin', 'manager']))
+        if (!auth()->user()->hasAnyRole(['admin', 'manager', 'storekeeper']))
             $this->query->where($columnName, auth()->user()->id);
         elseif ($ownerId)
             $this->query->where($columnName, $ownerId);

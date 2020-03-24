@@ -16,7 +16,8 @@ class PaymentsController extends BaseController
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('roles.allow:cashier,manager');
+        $this->middleware('roles.allow:cashier,manager')->except(['show']);
+        $this->middleware('roles.deny:client,driver')->only(['show']);
     }
 
     public function index()

@@ -41,19 +41,22 @@
                 <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav ml-4 mr-auto">
                         {{--Orders--}}
-                        @if(Auth::user()->hasAnyRole(['admin', 'manager']))
+                        @if(Auth::user()->hasAnyRole(['admin', 'manager', 'storekeeper']))
                             <li class="nav-item dropdown">
                                 <a id="ordersMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     Заказы <span class="caret"></span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="ordersMenuDropdown">
-                                    <a class="dropdown-item" href="{{ route('orders.create') }}">Оформить заказ</a>
+                                    @if(Auth::user()->hasAnyRole(['admin', 'manager']))
+                                        <a class="dropdown-item" href="{{ route('orders.create') }}">Оформить заказ</a>
+                                    @endif
                                     <a class="dropdown-item" href="{{route('orders.index')}}">Список заказов</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{route('stored-item-infos.index')}}">Принятые товары</a>
+                                    <a class="dropdown-item" href="{{route('stored-item-infos.index')}}">Принятые
+                                        товары</a>
+                                    <a class="dropdown-item" href="{{route('order-items.edit')}}">Выдать товары</a>
                                     @if(Auth::user()->hasRole('admin'))
-                                        <a class="dropdown-item" href="{{route('order-items.edit')}}">Выдать товары</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{{route('lost-items.index')}}">Потерянные
                                             товары</a>
@@ -91,12 +94,13 @@
                                     <h6 class="dropdown-header">Платежи</h6>
                                     <a class="dropdown-item" href="{{route('payment.create')}}">Провести платеж</a>
                                     <a class="dropdown-item" href="{{route('payment.index')}}">История платежей</a>
-                                    <a class="dropdown-item" href="{{route('expense-report.index')}}">Акт сверки клиента</a>
+                                    <a class="dropdown-item" href="{{route('expense-report.index')}}">Акт сверки
+                                        клиента</a>
                                     {{--                                    <a class="dropdown-item" href="{{route('incoming-payments.create')}}">Приход</a>--}}
-{{--                                    <a class="dropdown-item" href="{{route('outgoing-payments.create')}}">Расход</a>--}}
-{{--                                    <div class="dropdown-divider"></div>--}}
-{{--                                    <a class="dropdown-item" href="{{route('pending-payments.index')}}">Заявки</a>--}}
-{{--                                    <div class="dropdown-divider"></div>--}}
+                                    {{--                                    <a class="dropdown-item" href="{{route('outgoing-payments.create')}}">Расход</a>--}}
+                                    {{--                                    <div class="dropdown-divider"></div>--}}
+                                    {{--                                    <a class="dropdown-item" href="{{route('pending-payments.index')}}">Заявки</a>--}}
+                                    {{--                                    <div class="dropdown-divider"></div>--}}
                                     <a class="dropdown-item" href="{{route('branches.accounts.index')}}">Счета
                                         Дуоб</a>
                                     @if(Auth::user()->hasRole('admin'))
@@ -113,7 +117,8 @@
                                         <a class="dropdown-item" href="{{route('currencies.index')}}">Список валют</a>
                                     @endif
                                     @if(Auth::user()->hasAnyRole(['admin', 'cashier']))
-                                    <a class="dropdown-item" href="{{route('money-exchanges.create')}}">Курсы валют</a>
+                                        <a class="dropdown-item" href="{{route('money-exchanges.create')}}">Курсы
+                                            валют</a>
                                     @endif
                                 </div>
                             </li>
@@ -219,13 +224,13 @@
         @yield('content')
     </main>
     <b-modal
-            no-close-on-esc
-            no-close-on-backdrop
-            hide-footer
-            hide-header
-            centered
-            content-class="bg-transparent border-0"
-            id="busyModal">
+        no-close-on-esc
+        no-close-on-backdrop
+        hide-footer
+        hide-header
+        centered
+        content-class="bg-transparent border-0"
+        id="busyModal">
         <div class="d-block text-center">
             <b-spinner variant="light" label="Busy" style="width: 6rem; height: 6rem"/>
         </div>
@@ -234,7 +239,8 @@
 </body>
 <footer class="container">
     <div class="row">
-        <a class="link mx-auto my-4  text-secondary text-decoration-none" href="https://ajoibot.tj/">2019 -{{ date('Y') }}  © Разработано Аджоибот</a>
+        <a class="link mx-auto my-4  text-secondary text-decoration-none" href="https://ajoibot.tj/">2019
+            -{{ date('Y') }} © Разработано Аджоибот</a>
     </div>
 </footer>
 </html>
