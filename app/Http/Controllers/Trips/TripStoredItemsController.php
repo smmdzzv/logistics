@@ -14,7 +14,6 @@ use App\Models\Branch;
 use App\Models\Branches\Storage;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Trip;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -42,7 +41,7 @@ class TripStoredItemsController extends Controller
 
     public function editLoaded(Trip $trip)
     {
-        $trip->load('unloadedItems.info.item', 'unloadedItems.info.owner', 'unloadedItems.storageHistory.storage', 'car');
+        $trip->load('unloadedItems.info.item', 'unloadedItems.info.tariff', 'unloadedItems.info.owner', 'unloadedItems.storageHistory.storage', 'car');
         return view('trips.load-items', compact('trip'));
     }
 
@@ -68,7 +67,7 @@ class TripStoredItemsController extends Controller
 
     public function editUnloaded(Trip $trip)
     {
-        $trip->load('loadedItems.info.item', 'loadedItems.info.owner', 'loadedItems.storageHistory.storage', 'car');
+        $trip->load('loadedItems.info.item', 'loadedItems.info.tariff', 'loadedItems.info.owner', 'loadedItems.storageHistory.storage', 'car');
         $branches = new Collection([$trip->departureBranch, $trip->destinationBranch]);
         if (!auth()->user()->hasRole('admin'))
             $branches = new Collection([$branches->first(function ($branch) {
@@ -93,7 +92,7 @@ class TripStoredItemsController extends Controller
 
     public function edit(Trip $trip)
     {
-        $trip->load('storedItems.info.item', 'storedItems.info.owner', 'storedItems.storageHistory.storage', 'car');
+        $trip->load('storedItems.info.item', 'storedItems.info.tariff', 'storedItems.info.owner', 'storedItems.storageHistory.storage', 'car');
         $branches = new Collection();
         if (auth()->user()->hasRole('admin'))
             $branches = Branch::all();
@@ -122,7 +121,7 @@ class TripStoredItemsController extends Controller
         $trips = $trips->reject(function ($item) use ($trip) {
             return $trip->id === $item->id;
         });
-        $trip->load('loadedItems.info.item', 'loadedItems.info.owner', 'loadedItems.storageHistory.storage');
+        $trip->load('loadedItems.info.item', 'loadedItems.info.tariff', 'loadedItems.info.owner', 'loadedItems.storageHistory.storage');
         return view('trips.change-items-trip', compact('trip', 'trips'));
     }
 
@@ -147,7 +146,7 @@ class TripStoredItemsController extends Controller
 
         $generatedItemsList = $generatedItemsList->merge($trip->storedItems);
 
-        $generatedItemsList->loadMissing('info.owner', 'info.item', 'storageHistory.storage');
+        $generatedItemsList->loadMissing('info.owner', 'info.item', 'info.tariff', 'storageHistory.storage');
 
         return $generatedItemsList;
     }
@@ -155,15 +154,15 @@ class TripStoredItemsController extends Controller
     public function availableItems()
     {
         $paginate = request()->input('paginate') ?? 10;
-        return StoredItem::available()->with('info.owner', 'info.item', 'storageHistory.storage')->paginate($paginate);
+        return StoredItem::available()->with('info.owner', 'info.item', 'info.tariff', 'storageHistory.storage')->paginate($paginate);
     }
 
     public function availableItemsAtBranch(Branch $branch)
     {
         $paginate = request()->input('paginate') ?? 10;
-        return StoredItem::with('info.owner', 'info.item', 'storageHistory.storage')->available()->whereHas('storage', function (Builder $query) use ($branch) {
+        return StoredItem::with('info.owner', 'info.item', 'info.tariff', 'storageHistory.storage')->available()->whereHas('storage', function (Builder $query) use ($branch) {
             $query->where('branch_id', $branch->id)->where('deleted_at', null);
         })->paginate($paginate);
-//        return $branch->stores()->first()->storedItems()->available()->with('info.owner', 'info.item', 'storageHistory.storage')->paginate($paginate);
+//        return $branch->stores()->first()->storedItems()->available()->with('info.owner', 'info.item', 'info.tariff', storageHistory.storage')->paginate($paginate);
     }
 }
