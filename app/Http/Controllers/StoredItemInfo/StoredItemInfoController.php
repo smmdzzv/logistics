@@ -33,19 +33,71 @@ class StoredItemInfoController extends BaseController
 
     private function prepareQuery()
     {
-        $query = StoredItemInfo::with('owner', 'item', 'tariff', 'billingInfo', 'storedItems.storageHistory.storage.branch')->whereHas('storedItems');
+        $query = StoredItemInfo::with(
+            'owner:id,code',
+            'item:id,name',
+            'tariff:id,name',
+            'billingInfo',
+            'storedItems',
+            'storedItems.storageHistory.storage'
+        )
+            ->whereHas('storedItems');
+
         $filter = new StoredItemInfoFilter(request()->all(), $query);
         return $filter->filter();
     }
 
-    //TODO refactor
+    //TODO count relations and group on server side if needed
     public function storedItemInfos()
     {
-//        $query = StoredItemInfo::with('owner', 'item', 'tariff', 'billingInfo', 'storedItems.storageHistory.storage.branch')->whereHas('storedItems');
-//        $filter = new StoredItemInfoFilter(request()->all(), $query);
-//        $query = $filter->filter();
         $query = $this->prepareQuery();
-        return $query->paginate($this->pagination());
+        $paginator = $query->paginate($this->pagination());
+        $paginator->getCollection()->transform(function ($value) {
+            foreach ($value->storedItems as $storedItem) {
+
+                //TODO refactor -> create methods in BaseModel
+                unset($storedItem->updated_at);
+                unset($storedItem->deleted_at);
+                unset($storedItem->created_by_id);
+                unset($storedItem->updated_by_id);
+                unset($storedItem->deleted_by_id);
+
+                if ($storedItem->storageHistory)
+                {
+                    unset($storedItem->storageHistory->updated_at);
+                    unset($storedItem->storageHistory->deleted_at);
+                    unset($storedItem->storageHistory->created_by_id);
+                    unset($storedItem->storageHistory->updated_by_id);
+                    unset($storedItem->storageHistory->deleted_by_id);
+                    unset($storedItem->storageHistory->storage->branch);
+
+                    unset($storedItem->storageHistory->storage->updated_at);
+                    unset($storedItem->storageHistory->storage->deleted_at);
+                    unset($storedItem->storageHistory->storage->created_by_id);
+                    unset($storedItem->storageHistory->storage->updated_by_id);
+                    unset($storedItem->storageHistory->storage->deleted_by_id);
+                    unset($storedItem->storageHistory->storage->branch_id);
+                }
+
+                unset($storedItem->stored_item_info_id);
+                unset($storedItem->updated_at);
+                unset($storedItem->deleted_at);
+                unset($storedItem->created_by_id);
+                unset($storedItem->updated_by_id);
+                unset($storedItem->deleted_by_id);
+            };
+
+            return $value;
+        });
+
+        return $paginator;
+    }
+
+    private function hideAttr(array $keys, $model)
+    {
+        foreach ($keys as $key) {
+            unset($model[$key]);
+        }
     }
 
     public function getClientStat()
@@ -56,15 +108,4 @@ class StoredItemInfoController extends BaseController
         $query = $this->prepareQuery();
         return $client->getStoredItemInfosStat($dateTo, $query)->toJson();
     }
-
-//    TODO remove this
-//    public function availableStoredItemInfos()
-//    {
-//
-//        $query = StoredItemInfo::with('owner', 'item', 'tariff', 'billingInfo', 'storedItems.storageHistory.storage.branch')->whereHas('storedItems');
-//        $filter = new StoredItemInfoFilter(request()->all(), $query);
-//        $query = $filter->filter();
-//
-//        return $query->paginate($this->pagination());
-//    }
 }

@@ -18,6 +18,14 @@ class StorageHistory extends BaseModel
 
     protected $guarded = [];
 
+    protected $hidden = [
+        'stored_item_id',
+        'registeredById',
+        'deletedById',
+        'storage_id',
+        'created_at'
+    ];
+
     public function storage()
     {
         return $this->belongsTo(Storage::class);
