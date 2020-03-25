@@ -174,7 +174,7 @@
                         sortable: true
                     },
                     'groupedStoredItemsCount': {
-                        label: 'Остаток',
+                        label: 'Количество',
                         sortable: true
                     },
                     'selectedCount': {
