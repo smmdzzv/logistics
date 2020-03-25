@@ -323,7 +323,7 @@
 
                 let action = this.prepareUrl(this);
 
-                return axios.get(action + 'paginate=50&page=' + page)
+                return axios.get(action + 'paginate=10&page=' + page)
                     .then(response => {
                         this.pagination = response.data;
 
