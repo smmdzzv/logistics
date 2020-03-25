@@ -53,8 +53,7 @@ class StoredItemInfoController extends BaseController
         $query = $this->prepareQuery();
         $paginator = $query->paginate($this->pagination());
         $paginator->getCollection()->transform(function ($value) {
-            foreach ($value->storedItems as $storedItem) {
-
+            foreach ($value->storedItems as $storedItem) { 
                 //TODO refactor -> create methods in BaseModel
                 unset($storedItem->updated_at);
                 unset($storedItem->deleted_at);
@@ -64,6 +63,11 @@ class StoredItemInfoController extends BaseController
 
                 if ($storedItem->storageHistory)
                 {
+                    unset($storedItem->storageHistory->stored_item_id);
+                    unset($storedItem->storageHistory->registeredById);
+                    unset($storedItem->storageHistory->deletedById);
+                    unset($storedItem->storageHistory->storage_id);
+                    unset($storedItem->storageHistory->created_at);
                     unset($storedItem->storageHistory->updated_at);
                     unset($storedItem->storageHistory->deleted_at);
                     unset($storedItem->storageHistory->created_by_id);
