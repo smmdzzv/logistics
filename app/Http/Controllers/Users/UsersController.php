@@ -94,7 +94,7 @@ class UsersController extends Controller
 
         //Create account
         $account = new Account();
-        $account->currencyId = Currency::where('isoName', 'USD')->first()->id;
+        $account->currency_id = Currency::where('isoName', 'USD')->first()->id;
         $account->balance = 0;
         $account->description = 'Долларовый счет пользователя ' . $user->name;
 
