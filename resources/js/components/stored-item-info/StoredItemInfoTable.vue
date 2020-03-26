@@ -78,6 +78,7 @@
 <script>
     import ExcelDataPreparatory from '../common/ExcelDataPreparatory.vue'
     import TableCardProps from '../common/TableCardProps.vue'
+    import {hideBusySpinner, showBusySpinner} from "../../tools";
 
     export default {
         name: "StoredItemInfoTable",
@@ -320,6 +321,7 @@
             },
             async getItems(page = 1) {
                 this.isBusy = true;
+                showBusySpinner()
 
                 let action = this.prepareUrl(this);
 
@@ -361,7 +363,9 @@
                         this.$nextTick(() => {
                             this.isBusy = false;
                         });
-                    });
+                    })
+                    .catch(e => console.log(e))
+                    .then(_ => hideBusySpinner());
             },
             // Checks if item in all items array
             findInItems(item) {
