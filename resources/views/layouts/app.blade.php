@@ -139,19 +139,21 @@
                             </li>
                         @endif
                     <!--Trips-->
-                        @if(Auth::user()->hasAnyRole(['admin', 'manager']))
+                        @if(Auth::user()->hasAnyRole(['admin', 'manager', 'storekeeper']))
                             <li class="nav-item dropdown">
                                 <a id="tripsMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     Рейсы <span class="caret"></span>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="tripsMenuDropdown">
-                                    <a class="dropdown-item" href="{{route('trips.create')}}">Создать рейс</a>
                                     <a class="dropdown-item" href="{{route('trips.index')}}">Список рейсов</a>
-                                    <div class="dropdown-divider"></div>
-                                    <h6 class="dropdown-header">Машины</h6>
-                                    <a class="dropdown-item" href="{{route('cars.create')}}">Добавить машину</a>
-                                    <a class="dropdown-item" href="{{route('cars.index')}}">Список машин</a>
+                                    @if(Auth::user()->hasAnyRole(['admin', 'manager']))
+                                        <a class="dropdown-item" href="{{route('trips.create')}}">Создать рейс</a>
+                                        <div class="dropdown-divider"></div>
+                                        <h6 class="dropdown-header">Машины</h6>
+                                        <a class="dropdown-item" href="{{route('cars.create')}}">Добавить машину</a>
+                                        <a class="dropdown-item" href="{{route('cars.index')}}">Список машин</a>
+                                    @endif
                                 </div>
                             </li>
                         @endif

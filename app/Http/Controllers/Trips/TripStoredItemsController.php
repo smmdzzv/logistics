@@ -24,7 +24,7 @@ class TripStoredItemsController extends Controller
         $this->middleware('auth');
         $adminOnly = ['editLoaded', 'updateLoaded', 'editUnloaded', 'updateUnloaded', 'exchangeItems', 'changeItemsTrip'];
         $this->middleware('roles.deny:client,cashier,driver')->except($adminOnly);
-        $this->middleware('roles.allow:manager,admin')->only($adminOnly);
+        $this->middleware('roles.allow:manager,admin,storekeeper')->only($adminOnly);
     }
 
     public function associateToTrip(Trip $trip)
