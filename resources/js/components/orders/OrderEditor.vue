@@ -95,7 +95,7 @@
                     return;
                 }
 
-                if (this.storedItems.length > 0) {
+                if (this.storedItems.length > 0 || this.order && this.order.id) {
                     // this.$bvModal.show('busyModal');
                     tShowSpinner();
                     try {

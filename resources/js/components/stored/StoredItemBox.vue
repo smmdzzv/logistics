@@ -1,16 +1,16 @@
 <template>
     <div>
         <form @submit.prevent id="addItemForm">
-            <div class="container">
-                <div class="row">
-                    <div class="form-group col-md-4">
+            <div class="container-fluid">
+                <b-form-row>
+                    <div class="form-group col-md-3 col-lg-2">
                         <label class="col-form-label text-md-right" for="shop">Магазин</label>
-                        <input class="form-control"
+                        <input class="form-control form-control-sm"
                                id="shop"
                                name="shop"
                                placeholder="код или название магазина"
                                required v-model="storedItem.shop">
-                        <!--                        <select class="form-control custom-select"-->
+                        <!--                        <select class="form-control form-control-sm custom-select"-->
                         <!--                                id="shop"-->
                         <!--                                required v-model="storedItem.shop">-->
                         <!--                            <option :value="null" disabled>&#45;&#45; Выберите магазин &#45;&#45;</option>-->
@@ -18,13 +18,14 @@
                         <!--                        </select>-->
                     </div>
 
-                    <div class="form-group col-md-5">
+                    <div class="form-group col-md-3 col-lg-2">
                         <label class="col-form-label text-md-right" for="item">Наименование товара</label>
                         <suggestions-input :onItemSearchInputChange="onItemSearchInputChange"
                                            :onSelected="onItemSelected"
                                            :initQuery="itemInitQuery"
                                            displayPropertyName="name"
                                            id="item"
+                                           sm
                                            keyPropertyName="id"
                                            placeholder="Введите название товара"
                                            ref="suggestionInput"
@@ -39,142 +40,9 @@
                             variant="danger"/>
                     </div>
 
-
-                    <div class="form-group col-md-3">
-                        <label class="col-form-label text-md-right" for="weight">Вес</label>
-                        <input @blur="$v.storedItem.weight.$touch()"
-                               class="form-control"
-                               id="weight"
-                               type="number"
-                               step="0.01"
-                               name="weight"
-                               placeholder="в кг"
-                               required
-                               autofocus
-                               v-model.number="storedItem.weight">
-                        <b-popover
-                            :show.sync="$v.storedItem.weight.$error"
-                            content="Введите вес в килограммах"
-                            placement="bottom"
-                            target="weight"
-                            triggers="null"
-                            variant="danger"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <label class="col-form-label text-md-right" for="width">Ширина</label>
-                        <input @blur="$v.storedItem.width.$touch()"
-                               class="form-control"
-                               id="width"
-                               type="number"
-                               step="0.01"
-                               name="width"
-                               placeholder="в метрах"
-                               required
-                               v-model.number="storedItem.width">
-                        <b-popover
-                            :show.sync="$v.storedItem.width.$error"
-                            content="Введите ширину в метрах"
-                            placement="bottom"
-                            target="width"
-                            triggers="null"
-                            variant="danger"/>
-                    </div>
-
-                    <div class="form-group col-md-3">
-                        <label class="col-form-label text-md-right" for="height">Высота</label>
-                        <input @blur="$v.storedItem.height.$touch()"
-                               class="form-control"
-                               id="height"
-                               type="number"
-                               step="0.01"
-                               name="height"
-                               placeholder="в метрах"
-                               required v-model.number="storedItem.height">
-                        <b-popover
-                            :show.sync="$v.storedItem.height.$error"
-                            content="Введите высоту в метрах"
-                            placement="bottom"
-                            target="height"
-                            triggers="null"
-                            variant="danger"/>
-                    </div>
-
-                    <div class="form-group col-md-3">
-                        <label class="col-form-label text-md-right" for="length">Длина</label>
-                        <input @blur="$v.storedItem.length.$touch()"
-                               class="form-control"
-                               id="length"
-                               type="number"
-                               step="0.01"
-                               name="length"
-                               placeholder="в метрах"
-                               required v-model.number="storedItem.length">
-                        <b-popover
-                            :show.sync="$v.storedItem.length.$error"
-                            content="Введите длину в метрах"
-                            placement="bottom"
-                            target="length"
-                            triggers="null"
-                            variant="danger"/>
-                    </div>
-
-                    <div class="form-group col-md-3">
-                        <label class="col-form-label text-md-right" for="count">Кол-во мест</label>
-                        <input @blur="$v.storedItem.count.$touch()"
-                               :disabled="storedItem.id"
-                               class="form-control"
-                               id="count"
-                               maxlength="4"
-                               name="count"
-                               placeholder="в ед. товара"
-                               required v-model.number="storedItem.count">
-                        <b-popover
-                            :show.sync="$v.storedItem.count.$error"
-                            content="Определите количество товаров"
-                            placement="bottom"
-                            target="count"
-                            triggers="null"
-                            variant="danger"/>
-                    </div>
-                </div>
-
-                <div class="row">
-
-
-                    <!--                    <div class="form-group col-md-4" id="tariff-wrapper">-->
-                    <!--                        <label class="col-form-label text-md-right" for="tariff">Тариф</label>-->
-                    <!--                        <input class="form-control" type="text" id="tariff" :value="tariff.name" disabled>-->
-                    <!--                        <b-tooltip target="tariff-wrapper" triggers="hover">-->
-                    <!--                            Определенно в свойствах наименования-->
-                    <!--                        </b-tooltip>-->
-                    <!--                    </div>-->
-
-                    <div class="form-group col-md-4">
-                        <label class="col-form-label text-md-right" for="tariff">Тариф</label>
-                        <select class="form-control custom-select"
-                                name="tariff"
-                                id="tariff"
-                                required v-model="storedItem.tariff">
-                            <option value="null" disabled>-- Выберите тариф --</option>
-                            <option :value="tariff"
-                                    v-for="tariff in tariffs"
-                            >{{tariff.name}}
-                            </option>
-                        </select>
-                        <b-popover
-                            :show.sync="$v.storedItem.tariff.$error"
-                            content="Выберите тариф из списка"
-                            placement="bottom"
-                            target="tariff"
-                            triggers="null"
-                            variant="danger"/>
-                    </div>
-
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3 col-lg-2">
                         <label class="col-form-label text-md-right" for="customs-code">Таможенный код</label>
-                        <select class="form-control custom-select"
+                        <select class="form-control form-control-sm"
                                 id="customs-code"
                                 v-model="storedItem.customsCode"
                                 required>
@@ -193,11 +61,144 @@
                             variant="danger"/>
                     </div>
 
-                    <div class="form-group col-md-4">
-                        <label class="col-form-label text-md-right" for="branch">Филиал</label>
-                        <input class="form-control" disabled id="branch" name="branch" v-model="branch.name">
+                    <div class="form-group col-md-3 col-lg-2">
+                        <label class="col-form-label text-md-right" for="weight">Вес</label>
+                        <input @blur="$v.storedItem.weight.$touch()"
+                               class="form-control form-control-sm"
+                               id="weight"
+                               type="number"
+                               step="0.01"
+                               name="weight"
+                               placeholder="в кг"
+                               required
+                               autofocus
+                               v-model.number="storedItem.weight">
+                        <b-popover
+                            :show.sync="$v.storedItem.weight.$error"
+                            content="Введите вес в килограммах"
+                            placement="bottom"
+                            target="weight"
+                            triggers="null"
+                            variant="danger"/>
                     </div>
-                </div>
+
+                    <div class="form-group col-md-3 col-lg-2">
+                        <label class="col-form-label text-md-right" for="width">Ширина</label>
+                        <input @blur="$v.storedItem.width.$touch()"
+                               class="form-control form-control-sm"
+                               id="width"
+                               type="number"
+                               step="0.01"
+                               name="width"
+                               placeholder="в метрах"
+                               required
+                               v-model.number="storedItem.width">
+                        <b-popover
+                            :show.sync="$v.storedItem.width.$error"
+                            content="Введите ширину в метрах"
+                            placement="bottom"
+                            target="width"
+                            triggers="null"
+                            variant="danger"/>
+                    </div>
+
+                    <div class="form-group col-md-3 col-lg-2">
+                        <label class="col-form-label text-md-right" for="height">Высота</label>
+                        <input @blur="$v.storedItem.height.$touch()"
+                               class="form-control form-control-sm"
+                               id="height"
+                               type="number"
+                               step="0.01"
+                               name="height"
+                               placeholder="в метрах"
+                               required v-model.number="storedItem.height">
+                        <b-popover
+                            :show.sync="$v.storedItem.height.$error"
+                            content="Введите высоту в метрах"
+                            placement="bottom"
+                            target="height"
+                            triggers="null"
+                            variant="danger"/>
+                    </div>
+
+                    <div class="form-group col-md-3 col-lg-2">
+                        <label class="col-form-label text-md-right" for="length">Длина</label>
+                        <input @blur="$v.storedItem.length.$touch()"
+                               class="form-control form-control-sm"
+                               id="length"
+                               type="number"
+                               step="0.01"
+                               name="length"
+                               placeholder="в метрах"
+                               required v-model.number="storedItem.length">
+                        <b-popover
+                            :show.sync="$v.storedItem.length.$error"
+                            content="Введите длину в метрах"
+                            placement="bottom"
+                            target="length"
+                            triggers="null"
+                            variant="danger"/>
+                    </div>
+
+                    <div class="form-group col-md-3 col-lg-2">
+                        <label class="col-form-label text-md-right" for="count">Кол-во мест</label>
+                        <input @blur="$v.storedItem.count.$touch()"
+                               :disabled="storedItem.id"
+                               class="form-control form-control-sm"
+                               id="count"
+                               maxlength="4"
+                               name="count"
+                               placeholder="в ед. товара"
+                               required v-model.number="storedItem.count">
+                        <b-popover
+                            :show.sync="$v.storedItem.count.$error"
+                            content="Определите количество товаров"
+                            placement="bottom"
+                            target="count"
+                            triggers="null"
+                            variant="danger"/>
+                    </div>
+
+                    <div class="form-group col-md-3 col-lg-2">
+                        <label class="col-form-label text-md-right" for="tariff">Тариф</label>
+                        <select class="form-control form-control-sm"
+                                name="tariff"
+                                id="tariff"
+                                required v-model="storedItem.tariff">
+                            <option value="null" disabled>-- Выберите тариф --</option>
+                            <option :value="tariff"
+                                    v-for="tariff in tariffs"
+                            >{{tariff.name}}
+                            </option>
+                        </select>
+                        <b-popover
+                            :show.sync="$v.storedItem.tariff.$error"
+                            content="Выберите тариф из списка"
+                            placement="bottom"
+                            target="tariff"
+                            triggers="null"
+                            variant="danger"/>
+                    </div>
+
+                    <div class="form-group col-md-3 col-lg-2">
+                        <label class="col-form-label text-md-right" for="branch">Филиал</label>
+                        <input class="form-control form-control-sm" disabled id="branch" name="branch" v-model="branch.name">
+                    </div>
+                </b-form-row>
+
+<!--                <div class="row">-->
+
+
+                    <!--                    <div class="form-group col-md-4" id="tariff-wrapper">-->
+                    <!--                        <label class="col-form-label text-md-right" for="tariff">Тариф</label>-->
+                    <!--                        <input class="form-control form-control-sm" type="text" id="tariff" :value="tariff.name" disabled>-->
+                    <!--                        <b-tooltip target="tariff-wrapper" triggers="hover">-->
+                    <!--                            Определенно в свойствах наименования-->
+                    <!--                        </b-tooltip>-->
+                    <!--                    </div>-->
+
+
+<!--                </div>-->
 
                 <div class="col-12 text-center pt-2">
                     <button @click="onAdded" class="btn btn-primary">Добавить</button>

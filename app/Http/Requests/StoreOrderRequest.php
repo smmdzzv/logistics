@@ -16,9 +16,8 @@ class StoreOrderRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = ['storedItemInfos' => 'required|array'];
-
         $rules['orderId'] = 'nullable|exists:orders,id';
+        $rules = ['storedItemInfos' => 'required_if:orderId,!==,null'];
 //        $rules['clientId'] = 'nullable|string';
         $rules['clientCode'] = 'nullable|string';
         $rules['clientName'] = 'nullable|string';

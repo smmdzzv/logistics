@@ -11,7 +11,7 @@
                type="text"
                v-bind:placeholder="placeholder"
                v-model="query"
-               :class="{'is-invalid': isInvalid}"
+               :class="{'is-invalid': isInvalid, 'form-control-sm': sm}"
                v-on:blur="hideDropdown"
                v-on:focus="showDropdown"
                v-on:input="onInputChanged">
@@ -57,6 +57,9 @@
             initQuery: {
                 type: String,
                 required: false
+            },
+            sm:{
+                type:Boolean
             }
         },
         //TODO v-model binding
