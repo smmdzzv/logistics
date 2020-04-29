@@ -1,9 +1,9 @@
 <template>
     <div id="order">
         <div class="row justify-content-center px-3">
-            <div class="form-group col-12">
+            <div class="form-group col-3">
                 <label class="col-form-label text-md-right" for="user">Клиент</label>
-                <input class="form-control" id="user" placeholder="Введите код клиента" v-model.lazy="clientCode"
+                <input class="form-control form-control-sm" id="user" placeholder="Введите код клиента" v-model.lazy="clientCode"
                        autofocus>
                 <!--                <search-user-dropdown :selected="onUserSelected"-->
                 <!--                                      :preselectedUser="client"-->
@@ -22,33 +22,34 @@
                     triggers="null"
                     variant="danger"/>
             </div>
+
+            <template v-if="!client">
+                <div class="form-group col-3">
+                    <label class="col-form-label text-md-right" for="clientName">ФИО</label>
+                    <input class="form-control form-control-sm client-input-form" id="clientName" placeholder="Необязательно"
+                           v-model="clientName">
+                </div>
+                <div class="form-group col-3">
+                    <label class="col-form-label text-md-right" for="clientPhone">Телефон</label>
+                    <input class="form-control form-control-sm client-input-form" id="clientPhone" placeholder="Необязательно"
+                           v-model="clientPhone">
+                </div>
+                <div class="form-group col-3">
+                    <label class="col-form-label text-md-right" for="clientEmail">E-mail</label>
+                    <input class="form-control form-control-sm client-input-form" id="clientEmail" placeholder="Необязательно"
+                           v-model="clientEmail">
+                </div>
+            </template>
         </div>
-        <div class="row px-3" v-if="!client">
-            <div class="form-group col-4">
-                <label class="col-form-label text-md-right" for="clientName">ФИО</label>
-                <input class="form-control client-input-form" id="clientName" placeholder="Необязательно"
-                       v-model="clientName">
-            </div>
-            <div class="form-group col-4">
-                <label class="col-form-label text-md-right" for="clientPhone">Телефон</label>
-                <input class="form-control client-input-form" id="clientPhone" placeholder="Необязательно"
-                       v-model="clientPhone">
-            </div>
-            <div class="form-group col-4">
-                <label class="col-form-label text-md-right" for="clientEmail">E-mail</label>
-                <input class="form-control client-input-form" id="clientEmail" placeholder="Необязательно"
-                       v-model="clientEmail">
-            </div>
-        </div>
+
         <hr>
         <order-items-box :tariffs="tariffs"
                          :order="order"
                          :user="user"
                          v-on:onStoredItemsChange="onStoredItemsChange"/>
 
-
         <div class="row">
-            <div class="col-md-12 text-right pt-4" v-if="storedItems.length > 0">
+            <div class="col-md-12 text-right pt-4" v-if="storedItems.length > 0 || order && order.id">
                 <button @click.stop.prevent.capture="submitData()" class="btn btn-primary col-12">Оформить заказ
                 </button>
             </div>
