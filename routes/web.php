@@ -127,9 +127,7 @@ Route::resource('tariffs', 'TariffsController', [
 //Tariff price histories
 Route::get('/tariff-price-histories/all', "TariffPriceHistoriesController@all");
 Route::post('/tariff-price-history/{history}/orders/update-price', "Orders\OrderPriceController@updateByTariffPriceHistory")->name('update-price.tariff-price-history');
-Route::resource('tariff-price-histories', 'TariffPriceHistoriesController', [
-    'except' => ['destroy']
-])->parameters(['tariff-price-histories' => 'history']);
+Route::resource('tariff-price-histories', 'TariffPriceHistoriesController')->parameters(['tariff-price-histories' => 'history']);
 //Route::get('/tariff-price-histories/{tariff}', "TariffPriceHistoriesController@lastByTariff");
 
 //Cars

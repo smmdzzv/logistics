@@ -32,6 +32,9 @@
                 <b-tooltip :target="'e' + item.id" triggers="hover">
                     Редактировать тарифный план
                 </b-tooltip>
+                <a :id="'d' + item.id" @click="deletePrice(item)" href="#">
+                    <img class="icon-btn-sm" src="/svg/delete.svg" alt="">
+                </a>
             </template>
 
             <template #footer>
@@ -60,8 +63,9 @@
             </div>
             <div v-else>
                 <ol>
-                    <li  v-for="order in updatedOrders" :key="order.id">
-                        <a :href="'/orders/' + order.id">Заказ от {{order.created_at.split(' ')[0]}} | Цена: {{order.totalPrice}} $</a>
+                    <li v-for="order in updatedOrders" :key="order.id">
+                        <a :href="'/orders/' + order.id">Заказ от {{order.created_at.split(' ')[0]}} | Цена:
+                            {{order.totalPrice}} $</a>
                     </li>
                 </ol>
 
@@ -160,6 +164,45 @@
         methods: {
             getEditUrl(item) {
                 return '/tariff-price-histories/' + item.id + '/edit';
+            },
+            deletePrice(item) {
+                this.$bvModal.msgBoxOk('Вы действительно хотите удалить расценку тарифа '
+                    + item.tariff.name + ' от ' + item.created_at + '?')
+                    .then(confirm => {
+                        if (confirm) {
+                            tShowSpinner();
+                            axios.delete('/tariff-price-histories/' + item.id)
+                                .then(_ => {
+                                    this.$bvToast.toast('Расценка тарифа '
+                                        + item.tariff.name + ' от ' + item.created_at
+                                        + ' удалена', {
+                                        title: 'Успешно удалено',
+                                        autoHideDelay: 5000,
+                                        appendToast: true,
+                                        variant: 'success'
+                                    });
+
+                                    this.items = this.items.filter(i => i.id !== item.id)
+                                })
+                                .catch(e => {
+                                    let message = 'Не удалось удалить расценку';
+
+                                    if (e.response.status === 422)
+                                        message = e.response.data.message
+
+                                    this.$bvToast.toast(message, {
+                                        title: 'Ошибка удаления',
+                                        autoHideDelay: 5000,
+                                        appendToast: true,
+                                        variant: 'danger'
+                                    });
+                                })
+                                .then(_ => this.$nextTick(_ => tHideSpinner()))
+                        }
+                    })
+                    .catch(err => {
+                        // An error occurred
+                    })
             },
             async updateOrdersPrices(history) {
                 tShowSpinner();

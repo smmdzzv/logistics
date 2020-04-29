@@ -53,9 +53,19 @@ class TariffPriceHistoriesController extends Controller
         return view('tariff-price-histories.edit', compact('history', 'tariffs'));
     }
 
-    public function update(TariffPriceHistoryRequest $request){
+    public function update(TariffPriceHistoryRequest $request)
+    {
         TariffPriceHistory::find($request->get('id'))->update($request->all());
         return redirect()->route('tariff-price-histories.index');
+    }
+
+    public function destroy(TariffPriceHistory $history)
+    {
+        if ($history->billingInfos->count() > 0)
+            abort(422, 'Невозможно удалить расценки, использованные для расчета заказов');
+
+        $history->delete();
+        return;
     }
 }
 
