@@ -12,6 +12,7 @@ abstract class RequestWriter
     protected $request;
 
     /**
+     * @deprecated
      * Holds input data
      *
      * @var stdClass|array
@@ -19,6 +20,7 @@ abstract class RequestWriter
     protected $input;
 
     /**
+     *@deprecated
      *Object that holds intermediate data required for saving models (mostly relations)
      *
      * @var stdClass
@@ -26,6 +28,7 @@ abstract class RequestWriter
     protected $data;
 
     /**
+     * @deprecated
      * Object that holds data that was saved by RequestWriter
      *
      * @var stdClass
