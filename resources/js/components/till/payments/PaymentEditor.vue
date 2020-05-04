@@ -81,7 +81,7 @@
                         <b-input-group-prepend is-text>Получатель</b-input-group-prepend>
                         <search-user-dropdown v-if="isPayeeIndividual"
                                               v-model="payment.payee"
-                                              :preselectedUser="payment.payer"
+                                              :preselectedUser="payment.payee"
                                               :isInvalid="errors.payee"
                                               :errorMessages="errors.payee"
                                               :class="{'is-invalid':errors.payee}"
