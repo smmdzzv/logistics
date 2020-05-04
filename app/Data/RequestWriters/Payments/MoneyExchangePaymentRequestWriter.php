@@ -31,7 +31,7 @@ class MoneyExchangePaymentRequestWriter extends PaymentRequestWriter
     private function createOutgoingPayment()
     {
         $this->outgoingAccount = $this->payee->accounts()
-            ->where('currency_id', $this->request->get('billCurrency'))
+            ->where('currency_id', $this->request['billCurrency'])
             ->firstOrFail();
 
         $this->outgoingPayment = Payment::create([
@@ -42,16 +42,16 @@ class MoneyExchangePaymentRequestWriter extends PaymentRequestWriter
             'payer_id' => $this->payee->id,
             'payer_account_in_bill_currency_id' => $this->outgoingAccount->id,
             'payer_account_in_second_currency_id' => null,
-            'payer_type' => $this->request->get('payee_type'),
-            'payee_id' => $this->request->get('payer'),
+            'payer_type' => $this->request['payee_type'],
+            'payee_id' => $this->request['payer'],
             'payee_account_in_bill_currency_id' => null,
             'payee_account_in_second_currency_id' => null,
-            'payee_type' => $this->request->get('payer_type'),
-            'payment_item_id' => $this->request->get('paymentItem'),
-            'billAmount' => $this->request->get('billAmount'),
-            'paidAmountInBillCurrency' => $this->request->get('billAmount'),
+            'payee_type' => $this->request['payer_type'],
+            'payment_item_id' => $this->request['paymentItem'],
+            'billAmount' => $this->request['billAmount'],
+            'paidAmountInBillCurrency' => $this->request['billAmount'],
             'paidAmountInSecondCurrency' => 0,
-            'bill_currency_id' => $this->request->get('billCurrency'),
+            'bill_currency_id' => $this->request['billCurrency'],
             'second_paid_currency_id' => null,
             'related_payment_id' => $this->payment->id,
             'exchange_rate_id' => null,
@@ -61,7 +61,7 @@ class MoneyExchangePaymentRequestWriter extends PaymentRequestWriter
 
     private function updateBranchBalance()
     {
-        $this->outgoingAccount->balance -= $this->request->get('billAmount');
+        $this->outgoingAccount->balance -= $this->request['billAmount'];
         $this->outgoingAccount->save();
     }
 }

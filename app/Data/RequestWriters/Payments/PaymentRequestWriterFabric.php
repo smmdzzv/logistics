@@ -4,20 +4,19 @@
 namespace App\Data\RequestWriters\Payments;
 
 
-use App\Http\Requests\Till\PaymentRequest;
 use App\Models\Till\PaymentItem;
 
-class PaymentRequestWriterCreator
+class PaymentRequestWriterFabric
 {
     private PaymentItem $paymentItem;
 
     private PaymentRequestWriter $writer;
 
-    private PaymentRequest $request;
+    private array $request;
 
-    public function __construct(PaymentRequest $request)
+    public function __construct(array $request)
     {
-        $this->paymentItem = PaymentItem::find($request->get('paymentItem'));
+        $this->paymentItem = PaymentItem::find($request['paymentItem']);
         $this->request = $request;
     }
 

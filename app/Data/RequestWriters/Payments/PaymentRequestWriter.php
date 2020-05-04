@@ -31,9 +31,9 @@ class PaymentRequestWriter extends RequestWriter
 
     /**
      * PaymentRequestWriter constructor.
-     * @param PaymentRequest $request
+     * @param $request
      */
-    public function __construct(PaymentRequest $request)
+    public function __construct(array $request)
     {
         parent::__construct(null, $request);
     }
@@ -43,8 +43,8 @@ class PaymentRequestWriter extends RequestWriter
      */
     function write()
     {
-        if ($this->request->get('id')) {
-            $this->payment = Payment::findOrFail($this->request->get('id'));
+        if (isset($this->request['id'])) {
+            $this->payment = Payment::findOrFail($this->request['id']);
 
             if ($this->payment->status === 'completed')
                 abort(403, 'Платеж уже проведен');
@@ -89,42 +89,47 @@ class PaymentRequestWriter extends RequestWriter
 
     protected function getPaymentSubjects()
     {
-        $this->payer = $this->getSubject($this->request->get('payer_type'), $this->request->get('payer'));
-        $this->payee = $this->getSubject($this->request->get('payee_type'), $this->request->get('payee'));
+        $this->payer = $this->getSubject($this->request['payer_type'], $this->request['payer']);
+        $this->payee = $this->getSubject($this->request['payee_type'], $this->request['payee']);
     }
 
 //    protected function getAccounts()
 //    {
-//        $this->payerAccountInBillCurrency = $this->getSubjectAccount($this->payer, $this->request->get('billCurrency'));
-//        $this->payeeAccountInBillCurrency = $this->getSubjectAccount($this->payee, $this->request->get('billCurrency'));
+//        $this->payerAccountInBillCurrency = $this->getSubjectAccount($this->payer, $this->request['billCurrency'));
+//        $this->payeeAccountInBillCurrency = $this->getSubjectAccount($this->payee, $this->request['billCurrency'));
 //
-//        if ($this->request->get('paidAmountInSecondCurrency') > 0) {
-//            $this->payerAccountInSecondCurrency = $this->getSubjectAccount($this->payer, $this->request->get('secondPaidCurrency'));
-//            $this->payeeAccountInSecondCurrency = $this->getSubjectAccount($this->payee, $this->request->get('secondPaidCurrency'));
+//        if ($this->request['paidAmountInSecondCurrency') > 0) {
+//            $this->payerAccountInSecondCurrency = $this->getSubjectAccount($this->payer, $this->request['secondPaidCurrency'));
+//            $this->payeeAccountInSecondCurrency = $this->getSubjectAccount($this->payee, $this->request['secondPaidCurrency'));
 //        }
 //    }
 
     protected function getPayerAccounts()
     {
-        $this->getAccounts($this->payer, $this->payerAccountInBillCurrency, $this->payerAccountInSecondCurrency);
+        $this->getAccounts($this->payer,
+            $this->payerAccountInBillCurrency,
+            $this->payerAccountInSecondCurrency);
     }
 
     protected function getPayeeAccounts()
     {
-        $this->getAccounts($this->payee, $this->payeeAccountInBillCurrency, $this->payeeAccountInSecondCurrency);
+        $this->getAccounts($this->payee,
+            $this->payeeAccountInBillCurrency,
+            $this->payeeAccountInSecondCurrency);
     }
 
     protected function getAccounts($owner, &$accountInBillCurrency, &$accountInSecondCurrency)
     {
-        $accountInBillCurrency = $this->getSubjectAccount($owner, $this->request->get('billCurrency'));
-        if ($this->request->get('paidAmountInSecondCurrency') > 0)
-            $accountInSecondCurrency = $this->getSubjectAccount($owner, $this->request->get('secondPaidCurrency'));
+        $accountInBillCurrency = $this->getSubjectAccount($owner, $this->request['billCurrency']);
+        if (isset($this->request['paidAmountInSecondCurrency']) && $this->request['paidAmountInSecondCurrency'] > 0)
+            $accountInSecondCurrency = $this->getSubjectAccount($owner, $this->request['secondPaidCurrency']);
     }
 
     protected function checkPayerBalance()
     {
         if ($this->payerAccountInBillCurrency) {
-            $amount = isset($this->payment) ? $this->payment->paidAmountInBillCurrency : $this->request->get('paidAmountInBillCurrency');
+            $amount = isset($this->payment) ? $this->payment->paidAmountInBillCurrency
+                : $this->request['paidAmountInBillCurrency'];
             if ($this->payerAccountInBillCurrency->balance - $amount < 0)
                 abort(422,
                     'Недостаточно средств на балансе плательщика '
@@ -133,7 +138,8 @@ class PaymentRequestWriter extends RequestWriter
         }
 
         if ($this->payerAccountInSecondCurrency) {
-            $amount = isset($this->payment) ? $this->payment->paidAmountInSecondCurrency : $this->request->get('paidAmountInSecondCurrency');
+            $amount = isset($this->payment) ? $this->payment->paidAmountInSecondCurrency
+                : $this->request['paidAmountInSecondCurrency'];
             if ($this->payerAccountInSecondCurrency->balance - $amount < 0)
                 abort(422,
                     'Недостаточно средств на балансе плательщика '
@@ -169,16 +175,17 @@ class PaymentRequestWriter extends RequestWriter
         return $account;
     }
 
-    protected function updatePayment(){
-        $this->payment->status = $this->request->get('status');
+    protected function updatePayment()
+    {
+        $this->payment->status = $this->request['status'];
         $this->payment->cashier_id = auth()->user()->id;
         $this->payment->branch_id = auth()->user()->branch->id;
-        $this->payment->billAmount = $this->request->get('billAmount');
-        $this->payment->paidAmountInBillCurrency = $this->request->get('paidAmountInBillCurrency');
-        $this->payment->paidAmountInSecondCurrency = $this->request->get('paidAmountInSecondCurrency');
-        $this->payment->second_paid_currency_id = $this->request->get('secondPaidCurrency');
-        $this->payment->exchange_rate_id = $this->request->get('exchangeRate');
-        $this->payment->comment = $this->request->get('comment');
+        $this->payment->billAmount = $this->request['billAmount'];
+        $this->payment->paidAmountInBillCurrency = $this->request['paidAmountInBillCurrency'];
+        $this->payment->paidAmountInSecondCurrency = $this->request['paidAmountInSecondCurrency'];
+        $this->payment->second_paid_currency_id = $this->request['secondPaidCurrency'];
+        $this->payment->exchange_rate_id = $this->request['exchangeRate'];
+        $this->payment->comment = $this->request['comment'];
         $this->payment->fillExtras();
         $this->payment->save();
     }
@@ -188,24 +195,30 @@ class PaymentRequestWriter extends RequestWriter
         $this->payment = new Payment([
             'branch_id' => auth()->user()->branch->id,
             'cashier_id' => auth()->user()->id,
-            'status' => $this->request->get('status'),
-            'prepared_by_id' => $this->request->get('status') === 'pending' ? auth()->user()->id : null,
-            'payer_id' => $this->request->get('payer'),
-            'payer_account_in_bill_currency_id' => $this->payerAccountInBillCurrency === null ? null : $this->payerAccountInBillCurrency->id,
-            'payer_account_in_second_currency_id' => $this->payerAccountInSecondCurrency === null ? null : $this->payerAccountInSecondCurrency->id,
-            'payer_type' => $this->request->get('payer_type'),
-            'payee_id' => $this->request->get('payee'),
-            'payee_account_in_bill_currency_id' => $this->payeeAccountInBillCurrency === null ? null : $this->payeeAccountInBillCurrency->id,
-            'payee_account_in_second_currency_id' => $this->payeeAccountInSecondCurrency === null ? null : $this->payeeAccountInSecondCurrency->id,
-            'payee_type' => $this->request->get('payee_type'),
-            'payment_item_id' => $this->request->get('paymentItem'),
-            'billAmount' => $this->request->get('billAmount'),
-            'paidAmountInBillCurrency' => $this->request->get('paidAmountInBillCurrency'),
-            'paidAmountInSecondCurrency' => $this->request->get('paidAmountInSecondCurrency'),
-            'bill_currency_id' => $this->request->get('billCurrency'),
-            'second_paid_currency_id' => $this->request->get('secondPaidCurrency'),
-            'exchange_rate_id' => $this->request->get('exchangeRate'),
-            'comment' => $this->request->get('comment'),
+            'status' => $this->request['status'],
+            'prepared_by_id' => $this->request['status'] === 'pending' ? auth()->user()->id : null,
+            'payer_id' => $this->request['payer'],
+            'payer_account_in_bill_currency_id' =>
+                $this->payerAccountInBillCurrency === null ? null : $this->payerAccountInBillCurrency->id,
+            'payer_account_in_second_currency_id' =>
+                $this->payerAccountInSecondCurrency === null ? null : $this->payerAccountInSecondCurrency->id,
+            'payer_type' => $this->request['payer_type'],
+            'payee_id' => $this->request['payee'],
+            'payee_account_in_bill_currency_id' =>
+                $this->payeeAccountInBillCurrency === null ? null : $this->payeeAccountInBillCurrency->id,
+            'payee_account_in_second_currency_id' =>
+                $this->payeeAccountInSecondCurrency === null ? null : $this->payeeAccountInSecondCurrency->id,
+            'payee_type' => $this->request['payee_type'],
+            'payment_item_id' => $this->request['paymentItem'],
+            'billAmount' => $this->request['billAmount'],
+            'paidAmountInBillCurrency' => $this->request['paidAmountInBillCurrency'],
+            'paidAmountInSecondCurrency' =>
+                isset($this->request['paidAmountInSecondCurrency']) ? $this->request['paidAmountInSecondCurrency'] : 0,
+            'bill_currency_id' => $this->request['billCurrency'],
+            'second_paid_currency_id' =>
+                isset($this->request['secondPaidCurrency']) ? $this->request['secondPaidCurrency'] : null,
+            'exchange_rate_id' => isset($this->request['exchangeRate']) ? $this->request['exchangeRate'] : null,
+            'comment' => $this->request['comment'],
         ]);
 
         $this->payment->fillExtras();

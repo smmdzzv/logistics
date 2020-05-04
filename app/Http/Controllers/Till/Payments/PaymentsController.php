@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Till\Payments;
 
 use App\Data\Filters\PaymentFilter;
-use App\Data\RequestWriters\Payments\PaymentRequestWriterCreator;
+use App\Data\RequestWriters\Payments\PaymentRequestWriterFabric;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Till\PaymentRequest;
 use App\Models\Branch;
@@ -48,8 +48,8 @@ class PaymentsController extends BaseController
 
     public function storeOrUpdate(PaymentRequest $request)
     {
-        $creator = new PaymentRequestWriterCreator($request);
-        $writer = $creator->getWriter();
+        $fabric = new PaymentRequestWriterFabric($request->all());
+        $writer = $fabric->getWriter();
         $payment = $writer->write();
         return $payment->id;
     }
