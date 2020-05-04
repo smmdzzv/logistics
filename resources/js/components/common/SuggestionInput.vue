@@ -2,7 +2,6 @@
     <div class="dropdown">
         <input
                @keyup="onKeyUp"
-               autocomplete="query"
                autofocus
                class="form-control col-md-12"
                data-toggle="dropdown"
