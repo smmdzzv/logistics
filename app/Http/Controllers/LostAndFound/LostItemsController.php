@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\LostAndFound;
 
 use App\Models\Currency;
-use App\Models\LostAndFound\LostItem;
+use App\Models\LostAndFound\LostStoredItem;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Till\Payment;
 use App\Http\Controllers\Controller;
@@ -29,7 +29,7 @@ class LostItemsController extends Controller
 
     public function index()
     {
-        $lostItems = LostItem::with('storedItem')->latest()->paginate(10);
+        $lostItems = LostStoredItem::with('storedItem')->latest()->paginate(10);
         return view('lost-and-found.lost-items.index', compact('lostItems'));
     }
 
@@ -44,7 +44,7 @@ class LostItemsController extends Controller
 
         $storedItem = StoredItem::where('code', request('storedItemCode'))->firstOrFail();
 
-        $item = LostItem::create(array_merge($data, ['stored_item_id' => $storedItem->id]));
+        $item = LostStoredItem::create(array_merge($data, ['stored_item_id' => $storedItem->id]));
 
         $accountTo = $storedItem->info->owner->accounts()
             ->whereHas('currency', function (Builder $query) {

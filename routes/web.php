@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -169,7 +171,9 @@ Route::get('/items/all/eager', 'ItemsController@allEager');
 Route::resource('items', 'ItemsController', ['only' => ['index', 'create', 'store']])->parameters(['items' => 'item']);
 
 //Lost and found
-Route::resource('lost-items', 'LostAndFound\LostItemsController')->parameters(['lost-items' => 'item']);
+//Route::resource('lost-items', 'LostAndFound\LostItemsController')->parameters(['lost-items' => 'item']);
+
+Route::post('/lost-stored-items', 'StoredItems\LostStoredItemsController@store');
 
 Route::get('/search/user/{userInfo}', 'SearchController@findUsersByInfo');
 

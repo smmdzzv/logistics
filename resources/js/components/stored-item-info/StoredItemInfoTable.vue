@@ -65,6 +65,15 @@
             <template slot="totalPrice" slot-scope="{item}">
                 <span>{{getTotalPrice(item)}}</span>
             </template>
+
+            <template slot="edit" slot-scope="{item}">
+                <a :id="item.id" href="#" @click.prevent="onLostItemSelected(item)">
+                    <img class="icon-btn-sm" src="/svg/lost.svg" alt="">
+                </a>
+                <b-tooltip :target="item.id" triggers="hover">
+                    Отметить товар утерянным
+                </b-tooltip>
+            </template>
         </table-card>
 
         <div class="card-footer" v-if="pagination && pagination.last_page > 1">
@@ -72,6 +81,48 @@
                             :onPageChange="getItems"
                             :pagination="pagination"/>
         </div>
+
+        <b-modal
+            @hidden="resetModal"
+            @ok.prevent="submitLostStoredItems"
+            centered
+            ok-title="Сохранить"
+            cancel-title="Отменить"
+            id="compensationModal"
+            ref="compensationModal"
+            title="Оформление утерянных товаров"
+        >
+            <b-form-group
+                :state="compensationModalState"
+                invalid-feedback="Необходимо указать количество потерянных мест"
+                label="Количество мест"
+                label-for="lostStoredItemsCount"
+            >
+                <b-form-input
+                    id="lostStoredItemsCount"
+                    required
+                    min="0"
+                    type="number"
+                    v-model="lostStoredItemsCount"
+                ></b-form-input>
+            </b-form-group>
+
+            <b-form-group
+                :state="compensationModalState"
+                invalid-feedback="Необходимо ввести  компенсацию за товары"
+                label="Полная компенсация в долларах"
+                label-for="compensation"
+            >
+                <b-form-input
+                    id="compensation"
+                    required
+                    step="0.01"
+                    min="0"
+                    type="number"
+                    v-model="compensation"
+                ></b-form-input>
+            </b-form-group>
+        </b-modal>
     </div>
 </template>
 
@@ -132,7 +183,15 @@
                 pagination: null,
                 isBusy: false,
                 items: [],
-                customCells: ['cubage', 'totalCubage', 'totalWeight', 'selectedCount', 'groupedStoredItemsCount', 'created_at', 'weightPerCube', 'totalPrice'],
+                customCells: ['cubage',
+                    'totalCubage',
+                    'totalWeight',
+                    'selectedCount',
+                    'groupedStoredItemsCount',
+                    'created_at',
+                    'weightPerCube',
+                    'totalPrice',
+                    'edit'],
                 fields: {
                     'created_at': {
                         label: 'Дaта',
@@ -200,8 +259,15 @@
                     'groupedStoredItemsStorage.name': {
                         label: 'Склад',
                         sortable: true
+                    },
+                    'edit': {
+                        label: ''
                     }
-                }
+                },
+
+                compensation: 0,
+                lostItem: null,
+                lostStoredItemsCount: 0
             }
         },
         methods: {
@@ -347,8 +413,7 @@
 
                                 return !existingInfo;
                             });
-                        }
-                        else{
+                        } else {
                             items = response.data.data.filter(item => item.storedItems.length > 0);
                         }
 
@@ -393,6 +458,41 @@
                 });
                 if (fireEvent)
                     this.$emit('onItemsSelected', selectedItems);
+            },
+
+            //Lost items handle
+            onLostItemSelected(item) {
+                this.lostItem = item;
+                this.$bvModal.show('compensationModal');
+            },
+            resetModal() {
+                this.compensation = 0;
+                this.lostItem = null;
+                this.lostStoredItemsCount = 0;
+            },
+            submitLostStoredItems() {
+
+                let data = {
+                    storedItems: this.lostItem.storedItems.splice(0, this.lostStoredItemsCount).map(s => s.id),
+                    compensation: this.compensation
+                };
+
+                axios.post('/lost-stored-items', data)
+                    .then(response => {
+                    })
+                    .catch(e => {
+                        if (e.response && e.response.status === 422) {
+                            this.$root.showErrorMsg('Ошибка сохранения',
+                                e.response.data.message)
+                        } else {
+                            this.$root.showErrorMsg('Ошибка сохранения',
+                                'Повторите попытку после перезагрузки страницы')
+                        }
+                    })
+                    .then(_ => {
+                            this.$bvModal.hide('compensationModal');
+                        }
+                    );
             }
         },
 
@@ -423,6 +523,11 @@
                 }, this);
 
                 this.updateSelectedStoredItems(false);
+            }
+        },
+        computed: {
+            compensationModalState() {
+                return Boolean(this.compensation && this.lostStoredItemsCount > 0);
             }
         },
         components: {
