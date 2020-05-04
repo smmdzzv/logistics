@@ -114,8 +114,8 @@
                                 clientEmail: this.clientEmail
                             });
                         }
-
-                        window.location.href = '/orders/create';
+                        // tHideSpinner()
+                        window.location.href = '/orders';
                     } catch (e) {
                         tHideSpinner();
                         this.$root.showErrorMsg(

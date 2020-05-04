@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @property double totalCount
  * @property Collection<StoredItem> storedItems
  * @property Collection<StoredItemInfo> storedItemInfos
+ * @property string status
  */
 class Order extends BaseModel
 {

@@ -33,6 +33,8 @@ class UpdateOrderRequestWriter extends OrderRequestWriter
 
         $this->updateOrderStatistics();
 
+        $this->updateOrderStatus();
+
         return $this->order;
     }
 
@@ -78,9 +80,10 @@ class UpdateOrderRequestWriter extends OrderRequestWriter
         });
     }
 
-    private function updateExistingStoredItemInfos(){
+    private function updateExistingStoredItemInfos()
+    {
         $updatedStoredItemInfos = array();
-        foreach ($this->existingStoredItemInfos as $info){
+        foreach ($this->existingStoredItemInfos as $info) {
             $storedItemInfo = $this->order->storedItemInfos->firstWhere('id', $info->id);
 //                            $attr =$info->attributesToArray();
             $storedItemInfo->fill($info->attributesToArray());
@@ -101,5 +104,13 @@ class UpdateOrderRequestWriter extends OrderRequestWriter
         }
 
         $this->existingStoredItemInfos = $updatedStoredItemInfos;
+    }
+
+    private function updateOrderStatus()
+    {
+        $this->order->load('storedItemInfos');
+        if ($this->order->storedItemInfos->count() === 0) {
+            $this->order->delete();
+        }
     }
 }

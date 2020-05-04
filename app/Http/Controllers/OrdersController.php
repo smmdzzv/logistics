@@ -82,7 +82,7 @@ class OrdersController extends BaseController
     public function edit(Order $order)
     {
         if ($order->status == 'completed')
-            return abort(403, 'Доступ запрещен');
+            return abort(403, 'Редактирование завершенных заказов запрещено');
 
         $order->load([
             'storedItemInfos',

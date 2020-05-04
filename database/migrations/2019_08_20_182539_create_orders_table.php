@@ -27,6 +27,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('totalDiscount', 10, 2);
             $table->userStamp();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
