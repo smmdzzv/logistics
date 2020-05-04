@@ -50,7 +50,9 @@
 
         <div class="row">
             <div class="col-md-12 text-right pt-4" v-if="storedItems.length > 0 || order && order.id">
-                <button @click.stop.prevent.capture="submitData()" class="btn btn-primary col-12">Оформить заказ
+                <button @click.stop.prevent.capture="submitData()" class="btn btn-primary col-12">
+                    <span v-if="order && order.id">Обновить заказ</span>
+                    <span v-else>Оформить заказ</span>
                 </button>
             </div>
         </div>
