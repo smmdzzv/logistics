@@ -6,7 +6,7 @@
                     <div class="col-sm-6 col-md-4">{{title}}</div>
                     <div class="col-sm-6 col-md-8 text-sm-right pt-2" v-if="roles.length > 0">
                         <select class="form-control col-sm-6 col-md-4 d-inline-flex " v-model="selectedRole">
-                            <option value="null">Все роли</option>
+                            <option :value="null">Все роли</option>
                             <option :value="role" v-for="role in roles">{{role.title}}</option>
                         </select>
                     </div>

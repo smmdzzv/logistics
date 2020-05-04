@@ -50,6 +50,9 @@ class ConcreteUsersRoutesController extends Controller
             case 'admin':
                 $this->controller = new AdminsController();
                 break;
+            case 'storekeeper':
+                $this->controller = new StorekeepersController();
+                break;
             default:
                 abort(404, "Роль не найдена");
         }

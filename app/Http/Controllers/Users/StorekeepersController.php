@@ -4,13 +4,12 @@
 namespace App\Http\Controllers\Users;
 
 
-use App\Models\Users\Worker;
-
+use App\Models\Users\Storekeeper;
 class StorekeepersController extends AbstractRoleUsersController
 {
     public function __construct()
     {
-        $this->entityClass = Worker::class;
+        $this->entityClass = Storekeeper::class;
     }
 
     public function index()

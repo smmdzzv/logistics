@@ -14,7 +14,10 @@ abstract class AbstractRoleUsersController extends Controller
     public function all()
     {
         $paginate = request()->paginate ?? 10;
-        return $this->entityClass::with('roles')->paginate($paginate);
+        return $this->entityClass::with('roles')
+            ->roleConstraint()
+            ->whereNotIn('code', ['1010010','1010011'])
+            ->paginate($paginate);
     }
 
     public function user($id)
