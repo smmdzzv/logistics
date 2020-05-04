@@ -89,7 +89,7 @@ class OrdersController extends BaseController
             'storedItemInfos.customsCode',
             'storedItemInfos.owner',
             'storedItemInfos.billingInfo.tariffPricing',
-            'storedItemInfos.item',
+            'storedItemInfos.item.codes',
             'storedItemInfos.tariff',
             'storedItemInfos.storedItems',
             'orderRemovedItems.storedItemInfo.item',
