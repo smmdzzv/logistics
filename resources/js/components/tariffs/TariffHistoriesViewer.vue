@@ -167,7 +167,7 @@
             },
             deletePrice(item) {
                 this.$bvModal.msgBoxOk('Вы действительно хотите удалить расценку тарифа '
-                    + item.tariff.name + ' от ' + item.created_at + '?')
+                    + item.tariff?.name + ' от ' + item.created_at + '?')
                     .then(confirm => {
                         if (confirm) {
                             tShowSpinner();
