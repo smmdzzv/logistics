@@ -479,6 +479,7 @@
 
                 axios.post('/lost-stored-items', data)
                     .then(response => {
+                        window.location.href = `payment/${response.data}/edit`;
                     })
                     .catch(e => {
                         if (e.response && e.response.status === 422) {
