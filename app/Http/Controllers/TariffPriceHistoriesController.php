@@ -22,6 +22,7 @@ class TariffPriceHistoriesController extends Controller
     {
         $paginate = request()->paginate ?? 10;
         return TariffPriceHistory::with('tariff')
+            ->whereHas('tariff')
             ->orderBy('created_at', 'desc')
             ->paginate($paginate);
     }
