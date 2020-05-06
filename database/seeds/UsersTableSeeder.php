@@ -69,6 +69,17 @@ class UsersTableSeeder extends Seeder
 
         $user->roles()->attach($roleAdmin);
 
+        $user = User::create([
+            'name' => 'Курбонов Сорбон',
+            'branch_id' => $branchId,
+            'phone' => '557001025',
+            'password' => Hash::make('123456'),
+            'email' => 'test72@test.com',
+            'code' => '0172'
+        ]);
+
+        $user->roles()->attach($roleAdmin);
+
         $driversData = [
             [
                 "Рахимов Мухаммаджон Бобиевич",
