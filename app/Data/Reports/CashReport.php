@@ -16,21 +16,32 @@ class CashReport extends SerializableModel
         $query->chunk(200, function ($payments) {
             foreach ($payments as $payment) {
 
-                $billAmount = isset($this->cashArray[$payment->bill_currency_id]) ? $this->cashArray[$payment->bill_currency_id] : 0;
-                $secondAmount = isset($this->cashArray[$payment->second_paid_currency_id]) ? $this->cashArray[$payment->second_paid_currency_id] : 0;
-
                 if ($payment->payee_type === 'branch') {
-                    $this->cashArray[$payment->bill_currency_id] = $billAmount + $payment->paidAmountInBillCurrency;
+                    $this->cashArray[$payment->bill_currency_id] =
+                        $this->getBillAmount($payment) + $payment->paidAmountInBillCurrency;
                     if ($payment->second_paid_currency_id && $payment->paidAmountInSecondCurrency)
-                        $this->cashArray[$payment->second_paid_currency_id] = $secondAmount + $payment->paidAmountInSecondCurrency;
+                        $this->cashArray[$payment->second_paid_currency_id] =
+                            $this->secondAmount($payment) + $payment->paidAmountInSecondCurrency;
                 }
                 if ($payment->payer_type === 'branch') {
-                    $this->cashArray[$payment->bill_currency_id] = $billAmount - $payment->paidAmountInBillCurrency;
+                    $this->cashArray[$payment->bill_currency_id] =
+                        $this->getBillAmount($payment) - $payment->paidAmountInBillCurrency;
                     if ($payment->second_paid_currency_id && $payment->paidAmountInSecondCurrency)
-                        $this->cashArray[$payment->second_paid_currency_id] = $secondAmount - $payment->paidAmountInSecondCurrency;
+                        $this->cashArray[$payment->second_paid_currency_id] =
+                            $this->secondAmount($payment) - $payment->paidAmountInSecondCurrency;
                 }
             }
         });
+    }
+
+    private function getBillAmount($payment)
+    {
+        return isset($this->cashArray[$payment->bill_currency_id]) ? $this->cashArray[$payment->bill_currency_id] : 0;
+    }
+
+    private function secondAmount($payment)
+    {
+        isset($this->cashArray[$payment->second_paid_currency_id]) ? $this->cashArray[$payment->second_paid_currency_id] : 0;
     }
 
     public function convertToISONameKey()
