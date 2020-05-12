@@ -111,8 +111,8 @@
                     </div>
                 </div>
 
-                <div class="form-row form-group col-12">
-                    <div class="col-12 mb-3 mb-md-0 col-md-2">
+                <b-row align-v="end" class="col-12">
+                    <div class="col-12 mb-3  col-md-3">
                         <label>Статус</label>
                         <b-select v-model="selectedStatus">
                             <option :value="null">Все операции</option>
@@ -120,10 +120,27 @@
                             <option value="completed">Проведенные</option>
                         </b-select>
                     </div>
-                </div>
+                    <div class="col-12 mb-3 col-md-6">
+                        <b-input-group>
+                            <b-input-group-prepend is-text>
+                                <b-form-checkbox switch class="mr-n2" v-model="calculateCash">
+                                </b-form-checkbox>
+                            </b-input-group-prepend>
+                            <b-form-input disabled value="Расчитать остаток средств"></b-form-input>
+                        </b-input-group>
+                    </div>
+                </b-row>
             </div>
             <div class="row">
                 <button class="btn btn-primary mx-auto" @click="getFilteredItems">Загрузить</button>
+            </div>
+            <div class="row col-12">
+                <div v-if="calculateCash && cashReport" class="alert alert-primary w-100 mt-3">
+                    <span>USD {{cashReport.USD?cashReport.USD:0}}</span>
+                    <span>| TJS {{cashReport.TJS?cashReport.TJS:0}}</span>
+                    <span>| RUB {{cashReport.RUB?cashReport.RUB:0}}</span>
+                    <span>| CHY {{cashReport.CHY?cashReport.CHY:0}}</span>
+                </div>
             </div>
         </template>
 
@@ -239,6 +256,8 @@
                 dateTo: null,
                 minPaidAmount: null,
                 maxPaidAmount: null,
+                calculateCash: false,
+                cashReport: null,
                 fields: {
                     created_at: {
                         label: 'Дата',
@@ -283,7 +302,7 @@
             }
         },
         methods: {
-            prepareUrl() {
+            prepareUrl(page) {
                 let action = '/payments/filtered?';
 
                 if (this.selectedBranch)
@@ -314,6 +333,8 @@
                     action += 'maxPaidAmount=' + this.maxPaidAmount + '&';
                 if (this.selectedStatus)
                     action += 'selectedStatus=' + this.selectedStatus + '&';
+                let calcCash = page > 1 ? false : this.calculateCash;
+                action += 'calculateCash=' + calcCash + '&';
                 return action;
             },
             payerSelected(user) {
@@ -338,19 +359,30 @@
 
                 this.isBusy = true;
 
-                let action = this.prepareUrl() + 'paginate=20&page=' + page;
+                let action = this.prepareUrl(page) + 'paginate=20&page=' + page;
 
                 axios.get(action)
                     .then(response => {
                         this.pagination = response.data;
-                        if (this.flowable)
-                            response.data.data.forEach(item => {
-                                this.items.push(item);
-                            });
+                        if (this.flowable) {
+                            for (let [key, value] of Object.entries(response.data.data)) {
+                                console.log(key, value)
+                                if (key !== 'cashReport')
+                                    this.items.push(value);
+                            }
+
+                            if (page === 1) {
+                                this.cashReport = response.data.data.cashReport;
+                            }
+                        }
+                            // response.data.data.forEach(item => {
+                            //     this.items.push(item);
+                        // });
                         else
                             this.items = response.data.data;
                     })
-                    .catch(error => {
+                    .catch(e => {
+                        console.log(e)
                         this.$root.showErrorMsg(
                             "Ошибка загрузки",
                             'Не удалось загрузить платежи. Обновите страницу'

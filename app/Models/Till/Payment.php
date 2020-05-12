@@ -21,11 +21,9 @@ use Illuminate\Support\Carbon;
  * @property string payer_id
  * @property string payer_account_in_bill_currency_id
  * @property string payer_account_in_second_currency_id
- * @property string payerType
  * @property string payee_id
  * @property string payee_account_in_bill_currency_id
  * @property string payee_account_in_second_currency_id
- * @property string payeeType
  * @property string payment_item_id
  * @property double billAmount
  * @property double paidAmountInBillCurrency

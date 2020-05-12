@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Till\Payments;
 
 use App\Data\Filters\PaymentFilter;
+use App\Data\Reports\CashReport;
 use App\Data\RequestWriters\Payments\PaymentRequestWriterFabric;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Till\PaymentRequest;
@@ -89,6 +90,16 @@ class PaymentsController extends BaseController
         $filter = new PaymentFilter(request()->all(), $query);
         $query = $filter->filter();
 
-        return $query->paginate($this->pagination());
+        $report = null;
+
+        if (request()->get('calculateCash') === 'true') {
+            $report = new CashReport();
+            $report->formReport($query);
+            $report->convertToISONameKey();
+        }
+
+        $paginator = $query->paginate($this->pagination());
+        $paginator['cashReport'] = $report ? $report->toArray():null;
+        return $paginator;
     }
 }
