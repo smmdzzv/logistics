@@ -16,28 +16,29 @@ class PaymentFilter extends Filter
         if (!auth()->user()->hasRole('admin'))
             $this->query->where('payer_id', auth()->user()->branch->id)
                 ->orWhere('payee_id', auth()->user()->branch->id);
+        else {
+            if (isset($filters['userPayer']))
+                $this->query->where('payer_id', $filters['userPayer']);
+
+            if (isset($filters['userPayee']))
+                $this->query->where('payee_id', $filters['userPayee']);
+
+            if (isset($filters['branchPayer']))
+                $this->query->orWhere('payer_id', $filters['branchPayer']);
+
+            if (isset($filters['branchPayee']))
+                $this->query->orWhere('payee_id', $filters['branchPayee']);
+        }
 
         if (isset($filters['item']))
             $this->query->whereHas('paymentItem', function (Builder $query) use ($filters) {
                 $query->where('id', $filters['item']);
             });
 
-        if (isset($filters['branch']))
-            $this->query->whereHas('branch', function (Builder $query) use ($filters) {
-                $query->where('id', $filters['branch']);
-            });
-
-        if (isset($filters['userPayer']))
-            $this->query->where('payer_id', $filters['userPayer']);
-
-        if (isset($filters['userPayee']))
-            $this->query->where('payee_id', $filters['userPayee']);
-
-        if (isset($filters['branchPayer']))
-            $this->query->orWhere('payer_id', $filters['branchPayer']);
-
-        if (isset($filters['branchPayee']))
-            $this->query->orWhere('payee_id', $filters['branchPayee']);
+//        if (isset($filters['branch']))
+//            $this->query->whereHas('branch', function (Builder $query) use ($filters) {
+//                $query->where('id', $filters['branch']);
+//            });
 
         if (isset($filters['from']))
             $this->query->where('created_at', '>', Carbon::createFromDate($filters['from']));
