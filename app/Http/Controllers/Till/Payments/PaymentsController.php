@@ -92,14 +92,15 @@ class PaymentsController extends BaseController
 
         $report = null;
 
-        if (request()->get('calculateCash') === 'true') {
-            $report = new CashReport();
-            $report->formReport($query);
+        if (request()->get('calculateCash') === 'true'
+            && request()->get('branchPayer')) {
+            $report = new CashReport($query, request()->get('branchPayer'));
+            $report->formReport();
             $report->convertToISONameKey();
         }
 
         $paginator = $query->paginate($this->pagination());
-        $paginator['cashReport'] = $report ? $report->toArray():null;
+        $paginator['cashReport'] = $report ? $report->toArray() : null;
         return $paginator;
     }
 }
