@@ -12,7 +12,7 @@ class BranchesAccountsController extends BaseController
     {
         $this->middleware('auth');
 
-        $this->middleware('roles.allow:admin, cashier, manager');
+        $this->middleware('roles.allow:admin,cashier,manager');
 
         $this->middleware('user.branch');
     }
