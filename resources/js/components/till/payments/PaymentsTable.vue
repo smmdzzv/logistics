@@ -12,6 +12,7 @@
         :striped="striped"
         :isBusy="isBusy"
         :customCells="customCells"
+        :setRowClass="rowClass"
         class="shadow"
         excelFileName="История платежей"
         excelSheetName="Все платежи"
@@ -437,6 +438,11 @@
                     .finally(_ => {
                         tHideSpinner();
                     })
+            },
+            rowClass(item) {
+                if (item.deleted_at)
+                    return 'table-danger'
+
             }
         },
         // watch: {
