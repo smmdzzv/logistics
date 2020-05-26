@@ -20,7 +20,8 @@ class PaymentsController extends BaseController
     public function __construct(PaymentService $paymentService)
     {
         $this->middleware('auth');
-        $this->middleware('roles.allow:cashier,manager')->except(['show']);
+        $this->middleware('roles.allow:cashier,manager')->except(['show', 'destroy']);
+        $this->middleware('roles.allow:admin')->only(['destroy']);
         $this->middleware('roles.deny:client,driver')->only(['show']);
 
         $this->paymentService = $paymentService;
