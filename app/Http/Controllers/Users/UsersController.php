@@ -152,4 +152,8 @@ class UsersController extends Controller
         return array_values($users->all());
     }
 
+    public function destroy(User $user){
+        $user->delete();
+        return;
+    }
 }

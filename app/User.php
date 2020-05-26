@@ -2,10 +2,12 @@
 
 namespace App;
 
+use App\Data\Userstamps\Userstamps;
 use App\Models\Branch;
 use App\Models\Role;
 use App\Models\Till\Account;
 use App\Models\Till\Payment;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Rorecek\Ulid\HasUlid;
@@ -15,7 +17,7 @@ use Rorecek\Ulid\HasUlid;
  */
 class User extends Authenticatable
 {
-    use HasUlid;
+    use HasUlid, SoftDeletes, Userstamps;
 
     /**
      * Indicates if the IDs are auto-incrementing.

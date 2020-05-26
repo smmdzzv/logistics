@@ -40,6 +40,10 @@
                 <template slot="profile" slot-scope="data">
                     <a :href="getProfileUrl(data.item)" class="btn btn-primary">Профиль</a>
                 </template>
+
+                <template slot="delete" slot-scope="data">
+                    <button @click="deleteUser(data.item)" class="btn btn-danger">Удалить</button>
+                </template>
             </b-table>
 
             <div class="card-footer">
@@ -76,6 +80,33 @@
             },
             getProfileUrl(item) {
                 return `/profile/${item.id}`;
+            },
+            deleteUser(item) {
+                this.$bvModal.msgBoxConfirm('Удалить пользователя ' + item.code + ' ?', {
+                    title: 'Подтверждение удаления',
+                    size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'danger',
+                    headerClass: 'p-2 border-bottom-0',
+                    footerClass: 'p-2 border-top-0',
+                    centered: true,
+                    okTitle: 'Да',
+                    cancelTitle: 'Отмена'
+                })
+                    .then(confirm => {
+                        if (confirm)
+                        {
+                            tShowSpinner();
+                            axios.delete('/users/' + item.id)
+                                .then(_ => this.users = this.users.filter(u => u.id !== item.id));
+                        }
+                    })
+                    .catch(err => {
+                        // An error occurred
+                    })
+                    .finally(_ => {
+                        tHideSpinner();
+                    })
             },
             async getUsers(page = 1) {
                 this.isBusy = true;
@@ -145,6 +176,9 @@
                     },
                     id: {
                         label: 'Редактировать'
+                    },
+                    'delete': {
+                        label: 'Удалить'
                     }
                 }
             }
