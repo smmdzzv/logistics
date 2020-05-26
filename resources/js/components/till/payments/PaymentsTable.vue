@@ -176,10 +176,10 @@
             <a class="btn" :href="'/payment/' + item.id">
                 <img class="icon-btn-sm" src="/svg/file.svg">
             </a>
-            <a v-if="item.status === 'pending'" class="btn" :href="'/payment/' + item.id + '/edit'">
+            <a v-if="item.status === 'pending' && !Boolean(item.deleted_at)" class="btn" :href="'/payment/' + item.id + '/edit'">
                 <img class="icon-btn-sm" src="/svg/edit.svg">
             </a>
-            <a class="btn text-danger" href="#" @click.prevent="deletePayment(item)">
+            <a v-if="!Boolean(item.deleted_at)" class="btn text-danger" href="#" @click.prevent="deletePayment(item)">
                 <img class="icon-btn-sm" src="/svg/delete.svg">
             </a>
         </template>
@@ -429,7 +429,11 @@
                         if (confirm) {
                             tShowSpinner();
                             axios.delete('/payment/' + item.id)
-                                .then(_ => this.items = this.items.filter(p => p.id !== item.id));
+                                .then(_ => {
+                                    this.items = [];
+                                    this.getItems(
+                                        this.pagination.current_page ? this.pagination.current_page : 1)
+                                });
                         }
                     })
                     .catch(err => {
@@ -440,7 +444,7 @@
                     })
             },
             rowClass(item) {
-                if (item.deleted_at)
+                if (item && item.deleted_at)
                     return 'table-danger'
 
             }
