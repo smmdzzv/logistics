@@ -29,6 +29,10 @@
             </div>
             <div class="card-body">
                 <h4>Общая информация</h4>
+                @if($payment->deleted_at)
+                    <h4>Удален сотрудником {{$payment->destroyer->code}} <span
+                            v-luxon="{ value: '{{$payment->deleted_at}}'}"/></h4>
+                @endif
                 @component('till/payments/payment', ['payment' => $payment, 'showProfileLink' => false])@endcomponent
 
                 @if($payment->relatedPayment || count($payment->relatedPayments) >0)

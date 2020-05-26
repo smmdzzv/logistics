@@ -75,12 +75,13 @@ class PaymentsController extends BaseController
     {
         $payment = Payment::withTrashed()
             ->with(
-            'orderPaymentItems.storedItem.info.billingInfo',
-            'orderPaymentItems.storedItem.info.item',
-            'exchangeRate.fromCurrency',
-            'exchangeRate.toCurrency',
-            'relatedPayment',
-            'relatedPayments')
+                'destroyer',
+                'orderPaymentItems.storedItem.info.billingInfo',
+                'orderPaymentItems.storedItem.info.item',
+                'exchangeRate.fromCurrency',
+                'exchangeRate.toCurrency',
+                'relatedPayment',
+                'relatedPayments')
             ->find($payment);
         return view('till.payments.show', compact('payment'));
     }
