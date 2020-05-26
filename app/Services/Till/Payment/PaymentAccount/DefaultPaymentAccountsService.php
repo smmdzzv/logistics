@@ -7,9 +7,9 @@ use App\Models\Branch;
 use App\Models\Till\Payment;
 class DefaultPaymentAccountsService implements PaymentAccountService
 {
-    private PaymentAccountsDto $paymentAccountsDto;
+    protected PaymentAccountsDto $paymentAccountsDto;
 
-    private Payment $payment;
+    protected Payment $payment;
 
     public function __construct($payment)
     {
@@ -24,21 +24,21 @@ class DefaultPaymentAccountsService implements PaymentAccountService
         return $this->paymentAccountsDto;
     }
 
-    private function getPayerAccounts()
+    protected function getPayerAccounts()
     {
         $this->getSubjectAccounts($this->payment->payer,
             $this->paymentAccountsDto->payerAccountInBillCurrency,
             $this->paymentAccountsDto->payerAccountInSecondCurrency);
     }
 
-    private function getPayeeAccounts()
+    protected function getPayeeAccounts()
     {
         $this->getSubjectAccounts($this->payment->payee,
             $this->paymentAccountsDto->payeeAccountInBillCurrency,
             $this->paymentAccountsDto->payeeAccountInSecondCurrency);
     }
 
-    private function getSubjectAccounts($owner, &$accountInBillCurrency, &$accountInSecondCurrency)
+    protected function getSubjectAccounts($owner, &$accountInBillCurrency, &$accountInSecondCurrency)
     {
         $accountInBillCurrency = $this->getSubjectAccount($owner, $this->payment->billCurrency->id);
         if ($this->payment->secondPaidCurrency && $this->payment->paidAmountInSecondCurrency > 0){

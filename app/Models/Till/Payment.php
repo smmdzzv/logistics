@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Order\OrderPayment;
 use App\Models\Users\Client;
 use App\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
@@ -47,6 +48,7 @@ use Illuminate\Support\Carbon;
  * @property PaymentItem paymentItem
  * @property Currency billCurrency
  * @property Currency|null secondPaidCurrency
+ * @property Collection relatedPayments
  */
 class Payment extends BaseModel
 {

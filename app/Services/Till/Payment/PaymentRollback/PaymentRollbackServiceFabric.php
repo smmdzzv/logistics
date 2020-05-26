@@ -5,7 +5,10 @@ namespace App\Services\Till\Payment\PaymentRollback;
 use App\Data\Dto\Payment\PaymentAccountsDto;
 use App\Models\Till\Payment;
 use App\Services\Till\Account\AccountService;
+use App\Services\Till\Payment\PaymentAccount\BalanceReplenishmentPaymentAccountsService;
 use App\Services\Till\Payment\PaymentAccount\DefaultPaymentAccountsService;
+use App\Services\Till\Payment\PaymentAccount\TransferBetweenBranchAccountsService;
+
 class PaymentRollbackServiceFabric
 {
 
@@ -22,15 +25,24 @@ class PaymentRollbackServiceFabric
     public function getWriter()
     {
         switch ($this->payment->paymentItem->title) {
-//            case 'Пополнение баланса':
-//                $this->writer = new BalanceReplenishmentPaymentRequestWriter($this->request);
-//                break;
-//            case 'Перевод между счетами филиала':
-//                $this->writer = new TransferBetweenBranchAccountsRequestWriter($this->request);
-//                break;
-//            case 'Обмен валют':
-//                $this->writer = new MoneyExchangePaymentRequestWriter($this->request);
-//                break;
+            case 'Пополнение баланса':
+                return new BalanceReplenishmentPaymentRollback(
+                    $this->payment,
+                    $this->getPaymentAccountsDto(),
+                    $this->accountService
+                );
+            case 'Перевод между счетами филиала':
+                return new TransferBetweenBranchAccountsPaymentRollback(
+                    $this->payment,
+                    $this->getPaymentAccountsDto(),
+                    $this->accountService
+                );
+            case 'Обмен валют':
+                return new MoneyExchangePaymentRollback(
+                    $this->payment,
+                    $this->getPaymentAccountsDto(),
+                    $this->accountService
+                );
             default:
                 return new DefaultPaymentRollback(
                     $this->payment,
@@ -45,12 +57,12 @@ class PaymentRollbackServiceFabric
         $service = null;
 
         switch ($this->payment->paymentItem->title) {
-//            case 'Пополнение баланса':
-//                $this->writer = new BalanceReplenishmentPaymentRequestWriter($this->request);
-//                break;
-//            case 'Перевод между счетами филиала':
-//                $this->writer = new TransferBetweenBranchAccountsRequestWriter($this->request);
-//                break;
+            case 'Пополнение баланса':
+                $service = new BalanceReplenishmentPaymentAccountsService($this->payment);
+                break;
+            case 'Перевод между счетами филиала':
+                $service = new TransferBetweenBranchAccountsService($this->payment);
+                break;
 //            case 'Обмен валют':
 //                $this->writer = new MoneyExchangePaymentRequestWriter($this->request);
 //                break;

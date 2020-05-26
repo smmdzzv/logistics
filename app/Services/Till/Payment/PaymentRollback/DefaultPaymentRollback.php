@@ -25,12 +25,12 @@ class DefaultPaymentRollback
     {
         if ($this->payment->status === 'completed') {
             $this->withdrawMoneyFromPayeeAccounts();
-            $this->transferMoneyToPayerAccounts();
+            $this->putMoneyToPayerAccounts();
         }
         $this->payment->delete();
     }
 
-    private function withdrawMoneyFromPayeeAccounts()
+    protected function withdrawMoneyFromPayeeAccounts()
     {
         if ($this->paymentAccounts->payeeAccountInBillCurrency) {
             $this->accountService->withdrawMoney(
@@ -47,7 +47,7 @@ class DefaultPaymentRollback
         }
     }
 
-    private function transferMoneyToPayerAccounts()
+    protected function putMoneyToPayerAccounts()
     {
         if ($this->paymentAccounts->payerAccountInBillCurrency) {
             $this->accountService->putMoney(
