@@ -2,7 +2,11 @@
 
 @section('content')
     <div class="container col-12 no-print" id="paymentInfo">
-        <div class="card">
+        <div @if($payment->deleted_at)
+             class="card bg-danger"
+             @else
+             class="card"
+            @endif>
             <div class="card-header">
                 <div class="row">
                     <div class="ml-3">

@@ -71,15 +71,17 @@ class PaymentsController extends BaseController
         return view('till.payments.edit', compact('branches', 'currencies', 'paymentItems', 'payment'));
     }
 
-    public function show(Payment $payment)
+    public function show($payment)
     {
-        $payment->load(
+        $payment = Payment::withTrashed()
+            ->with(
             'orderPaymentItems.storedItem.info.billingInfo',
             'orderPaymentItems.storedItem.info.item',
             'exchangeRate.fromCurrency',
             'exchangeRate.toCurrency',
             'relatedPayment',
-            'relatedPayments');
+            'relatedPayments')
+            ->find($payment);
         return view('till.payments.show', compact('payment'));
     }
 
