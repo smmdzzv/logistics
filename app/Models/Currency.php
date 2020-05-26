@@ -10,6 +10,7 @@ use App\Models\Till\ExchangeRate;
  * @property string name
  * @property string isoName
  * @property string country_id
+ * @property string id
  */
 class Currency extends BaseModel
 {

@@ -11,14 +11,19 @@ use App\Models\Branch;
 use App\Models\Currency;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
+use App\Services\Till\Payment\PaymentService;
 
 class PaymentsController extends BaseController
 {
-    public function __construct()
+    private PaymentService $paymentService;
+
+    public function __construct(PaymentService $paymentService)
     {
         $this->middleware('auth');
         $this->middleware('roles.allow:cashier,manager')->except(['show']);
         $this->middleware('roles.deny:client,driver')->only(['show']);
+
+        $this->paymentService = $paymentService;
     }
 
     public function index()
@@ -102,5 +107,10 @@ class PaymentsController extends BaseController
         $paginator = $query->paginate($this->pagination());
         $paginator['cashReport'] = $report ? $report->toArray() : null;
         return $paginator;
+    }
+
+    public function destroy(Payment $payment)
+    {
+        $this->paymentService->destroy($payment);
     }
 }

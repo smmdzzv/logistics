@@ -169,6 +169,9 @@
             <a v-if="item.status === 'pending'" class="btn" :href="'/payment/' + item.id + '/edit'">
                 <img class="icon-btn-sm" src="/svg/edit.svg">
             </a>
+            <a class="btn text-danger" href="#" @click.prevent="deletePayment(item)">
+                <img class="icon-btn-sm" src="/svg/delete.svg">
+            </a>
         </template>
 
         <template slot="payer.name" slot-scope="{item}">
@@ -394,6 +397,35 @@
                         })
                     );
             },
+            deletePayment(item) {
+                this.$bvModal.msgBoxConfirm(
+                    'Удалить платеж от ' + item.created_at +
+                    ' за номером ' + item.number + ' ?',
+                    {
+                        title: 'Подтверждение удаления',
+                        size: 'sm',
+                        buttonSize: 'sm',
+                        okVariant: 'danger',
+                        headerClass: 'p-2 border-bottom-0',
+                        footerClass: 'p-2 border-top-0',
+                        centered: true,
+                        okTitle: 'Да',
+                        cancelTitle: 'Отмена'
+                    })
+                    .then(confirm => {
+                        if (confirm) {
+                            tShowSpinner();
+                            axios.delete('/payment/' + item.id)
+                                .then(_ => this.items = this.items.filter(p => p.id !== item.id));
+                        }
+                    })
+                    .catch(err => {
+                        // An error occurred
+                    })
+                    .finally(_ => {
+                        tHideSpinner();
+                    })
+            }
         },
         // watch: {
         //     selectedBranch() {

@@ -44,6 +44,9 @@ use Illuminate\Support\Carbon;
  * @property double clientDebt
  * @property integer number
  * @property float second_paid_currency_id
+ * @property PaymentItem paymentItem
+ * @property Currency billCurrency
+ * @property Currency|null secondPaidCurrency
  */
 class Payment extends BaseModel
 {

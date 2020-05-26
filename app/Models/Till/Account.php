@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 
 /**
  * @property string id
+ * @property float balance
  */
 class Account extends BaseModel
 {
