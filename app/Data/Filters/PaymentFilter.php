@@ -40,6 +40,9 @@ class PaymentFilter extends Filter
 //                $query->where('id', $filters['branch']);
 //            });
 
+        if (isset($filters['withTrashed']))
+            $this->query->withTrashed();
+
         if (isset($filters['from']))
             $this->query->where('created_at', '>', Carbon::createFromDate($filters['from']));
 

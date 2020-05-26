@@ -120,6 +120,15 @@
                             <option value="completed">Проведенные</option>
                         </b-select>
                     </div>
+                    <div class="col-12 col-md-3 mb-3">
+                        <b-input-group>
+                            <b-input-group-prepend is-text>
+                                <b-form-checkbox switch class="mr-n2" v-model="withTrashed">
+                                </b-form-checkbox>
+                            </b-input-group-prepend>
+                            <b-form-input disabled value="Показать удаленные"></b-form-input>
+                        </b-input-group>
+                    </div>
                     <div class="col-12 mb-3 col-md-6">
                         <b-input-group>
                             <b-input-group-prepend is-text>
@@ -260,6 +269,7 @@
                 minPaidAmount: null,
                 maxPaidAmount: null,
                 calculateCash: false,
+                withTrashed: false,
                 cashReport: null,
                 fields: {
                     created_at: {
@@ -336,6 +346,8 @@
                     action += 'maxPaidAmount=' + this.maxPaidAmount + '&';
                 if (this.selectedStatus)
                     action += 'selectedStatus=' + this.selectedStatus + '&';
+                if (this.withTrashed)
+                    action += 'withTrashed=true&';
                 let calcCash = page > 1 ? false : this.calculateCash;
                 action += 'calculateCash=' + calcCash + '&';
                 return action;
