@@ -1,16 +1,16 @@
 <template>
-    <div class="container border-bottom" style="margin-bottom:25px; padding-bottom:8px">
-        <div class="container">
-            <p>{{`Тип: ${storedItemInfo.item.name}`}}</p>
-            <p>{{`Код: ${storedItem.code}`}}</p>
-            <p>{{`ШхВхД: ${storedItemInfo.width}x${storedItemInfo.height}x${storedItemInfo.length}`}}
-            | {{`Вес: ${storedItemInfo.weight} кг`}} </p>
-            <p>{{`Принят: ${storedItem.created_at}`}} </p>
-            <p>{{`Владелец: ${storedItemInfo.owner.code}`}} </p>
+    <div>
+        <div>
+            <span>{{storedItemInfo.item.name}}</span>e e e e e e e e e e e e e e ee e e e e
+            <span>{{storedItem.code}}</span>
+            <span>{{`ШхВхД: ${storedItemInfo.width}x${storedItemInfo.height}x${storedItemInfo.length}`}}
+            | {{`Вес: ${storedItemInfo.weight} кг`}} </span>
+<!--            <span>{{`Принят: ${storedItem.created_at}`}} </span>-->
+            <span>{{`Владелец: ${storedItemInfo.owner.code}`}} </span>
         </div>
 
         <div>
-            <barcode :options='{displayValue:false, height:50, width:2.1}' :value="storedItem.code" tag="svg"></barcode>
+            <barcode :options='{displayValue:false, height:40, width:1.5}' :value="storedItem.code" tag="svg"></barcode>
         </div>
     </div>
 </template>

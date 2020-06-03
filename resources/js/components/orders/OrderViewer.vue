@@ -40,12 +40,12 @@
             <template slot="FOOT[count]">
                 <span> </span>
             </template>
-<!--            <template slot="FOOT[placeCount]">-->
-<!--                <span> </span>-->
-<!--            </template>-->
-<!--            <template slot="FOOT[pricePerPlaceCount]">-->
-<!--                <span> </span>-->
-<!--            </template>-->
+            <!--            <template slot="FOOT[placeCount]">-->
+            <!--                <span> </span>-->
+            <!--            </template>-->
+            <!--            <template slot="FOOT[pricePerPlaceCount]">-->
+            <!--                <span> </span>-->
+            <!--            </template>-->
             <template slot="FOOT[billingInfo.totalWeight]">
                 <span>{{order.totalWeight}}</span>
             </template>
@@ -88,15 +88,15 @@
                 <img @click="showShortInfo(data)" class="icon-btn-sm" src="/svg/barcode.svg">
             </template>
 
-<!--            <template slot="HEAD[pricePerPlaceCount]">-->
-<!--                <span id="pricePerPlaceCountTitle">Цена</span>-->
-<!--                <b-tooltip target="pricePerPlaceCountTitle" triggers="hover">-->
-<!--                    Цена в расчете на единицу места-->
-<!--                </b-tooltip>-->
-<!--            </template>-->
-<!--            <template slot="pricePerPlaceCount" slot-scope="data">-->
-<!--                <span>{{pricePerCountPlace(data)}}</span>-->
-<!--            </template>-->
+            <!--            <template slot="HEAD[pricePerPlaceCount]">-->
+            <!--                <span id="pricePerPlaceCountTitle">Цена</span>-->
+            <!--                <b-tooltip target="pricePerPlaceCountTitle" triggers="hover">-->
+            <!--                    Цена в расчете на единицу места-->
+            <!--                </b-tooltip>-->
+            <!--            </template>-->
+            <!--            <template slot="pricePerPlaceCount" slot-scope="data">-->
+            <!--                <span>{{pricePerCountPlace(data)}}</span>-->
+            <!--            </template>-->
         </b-table>
 
         <b-modal @hidden="onModalHidden()"
@@ -107,7 +107,8 @@
             </template>
             <vue-easy-print :tableShow="true" ref="easyPrint">
                 <template v-for="item in itemsToShow">
-                    <stored-item-short-info :key="stored.id"
+                    <stored-item-short-info class="bar-card"
+                                            :key="stored.id"
                                             :storedItem="stored"
                                             :storedItemInfo="item"
                                             v-for="stored in item.storedItems"/>
@@ -237,5 +238,10 @@
 </script>
 
 <style scoped>
+    .bar-card {
+        width: 6cm;
+        height: 4cm;
+        overflow: none;
+    }
 
 </style>
