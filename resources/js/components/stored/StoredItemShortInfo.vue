@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <span>{{storedItemInfo.item.name}}</span>e e e e e e e e e e e e e e ee e e e e
+            <span>{{storedItemInfo.item.name}}</span>
             <span>{{storedItem.code}}</span>
             <span>{{`ШхВхД: ${storedItemInfo.width}x${storedItemInfo.height}x${storedItemInfo.length}`}}
             | {{`Вес: ${storedItemInfo.weight} кг`}} </span>
