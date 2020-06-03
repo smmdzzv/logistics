@@ -241,7 +241,29 @@
     .bar-card {
         width: 6cm;
         height: 4cm;
-        overflow: none;
+        /*overflow: hidden;*/
     }
 
+    @page {
+        size: 6cm 4cm;
+        margin: 0;
+    }
+
+    @media print {
+        body {
+            margin: 0;
+            padding: 0;
+            font-weight: bold;
+        }
+        .bar-card {
+            margin: 0;
+            border: initial;
+            border-radius: initial;
+            width: 6cm;
+            height: 4cm;
+            box-shadow: initial;
+            background: initial;
+            page-break-after: always;
+        }
+    }
 </style>
