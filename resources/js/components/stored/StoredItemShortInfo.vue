@@ -1,11 +1,11 @@
 <template>
     <div>
-        <div>
+        <div style="font-weight: 600">
+            <span>{{storedItem.created_at | luxon:format('dd-MM-yyyy')}}</span>
             <span>{{storedItemInfo.item.name}}</span>
             <span>{{storedItem.code}}</span>
             <span>{{`ШхВхД: ${storedItemInfo.width}x${storedItemInfo.height}x${storedItemInfo.length}`}}
             | {{`Вес: ${storedItemInfo.weight} кг`}} </span>
-<!--            <span>{{`Принят: ${storedItem.created_at}`}} </span>-->
             <span>{{`Владелец: ${storedItemInfo.owner.code}`}} </span>
         </div>
 
