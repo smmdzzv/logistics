@@ -1,15 +1,14 @@
 <template>
     <div>
-        <div style="font-weight: 600">
-            <span>{{storedItem.created_at | luxon:format('dd-MM-yyyy')}}</span>
-            <span>{{storedItemInfo.item.name}}</span>
-            <span>{{storedItem.code}}</span>
-            <span>{{`ШхВхД: ${storedItemInfo.width}x${storedItemInfo.height}x${storedItemInfo.length}`}}
-            | {{`Вес: ${storedItemInfo.weight} кг`}} </span>
-            <span>{{`Владелец: ${storedItemInfo.owner.code}`}} </span>
+        <div>
+            <span>Дата: {{storedItem.created_at | luxon:format('dd-MM-yyyy')}}</span><br>
+            <span>Товар: {{storedItemInfo.item.name}}</span><br>
+            <span>{{`Вес: ${storedItemInfo.weight} кг`}} | {{`ШхВхД: ${storedItemInfo.width}x${storedItemInfo.height}x${storedItemInfo.length}`}}</span><br>
+            <span>{{`Владелец: ${storedItemInfo.owner.code}`}} </span><br>
+            <span>ID: {{storedItem.code}}</span><br>
         </div>
 
-        <div>
+        <div style="margin-left: -8px">
             <barcode :options='{displayValue:false, height:40, width:1.5}' :value="storedItem.code" tag="svg"></barcode>
         </div>
     </div>

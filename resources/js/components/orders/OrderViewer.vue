@@ -238,14 +238,41 @@
 </script>
 
 <style scoped>
-    .bar-card {
-        width: 6cm;
-        height: 4cm;
-        /*overflow: hidden;*/
-    }
+    /*.bar-card {*/
+    /*    width: 6cm;*/
+    /*    height: 4cm;*/
+    /*    !*overflow: hidden;*!*/
+    /*}*/
 
+    /*@page {*/
+    /*    size: 6cm 4cm;*/
+    /*    margin: 0;*/
+    /*}*/
+
+    /*@media print {*/
+    /*    body {*/
+    /*        margin: 0;*/
+    /*        padding: 0;*/
+    /*        font-weight: bold;*/
+    /*    }*/
+    /*    .bar-card {*/
+    /*        margin: 0;*/
+    /*        border: initial;*/
+    /*        border-radius: initial;*/
+    /*        width: 6cm;*/
+    /*        height: 4cm;*/
+    /*        box-shadow: initial;*/
+    /*        background: initial;*/
+    /*        page-break-after: always;*/
+    /*    }*/
+    /*}*/
+
+    .bar-card {
+        font-family: Arial;
+        font-size: 12px;
+    }
     @page {
-        size: 6cm 4cm;
+        size: USER;
         margin: 0;
     }
 
@@ -254,16 +281,21 @@
             margin: 0;
             padding: 0;
             font-weight: bold;
+            font-family: Arial !important;
+            font-size: 12px;
         }
         .bar-card {
             margin: 0;
+            padding: 15px 0 0 15px;
             border: initial;
             border-radius: initial;
-            width: 6cm;
-            height: 4cm;
+            width: initial;
+            min-height: initial;
             box-shadow: initial;
             background: initial;
             page-break-after: always;
+            font-family: Arial !important;
+            font-size: 12px;
         }
     }
 </style>
