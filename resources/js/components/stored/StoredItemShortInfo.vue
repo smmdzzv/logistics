@@ -1,11 +1,11 @@
 <template>
     <div>
         <div>
-            <span>Дата: {{storedItem.created_at | luxon:format('dd-MM-yyyy')}}</span><br>
-            <span>Товар: {{storedItemInfo.item.name}}</span><br>
-            <span>{{`Вес: ${storedItemInfo.weight} кг`}} | {{`ШхВхД: ${storedItemInfo.width}x${storedItemInfo.height}x${storedItemInfo.length}`}}</span><br>
-            <span>{{`Владелец: ${storedItemInfo.owner.code}`}} </span><br>
-            <span>ID: {{storedItem.code}}</span><br>
+            Дата: {{storedItem.created_at | luxon:format('dd-MM-yyyy')}}<br>
+            Товар: {{storedItemInfo.item.name}}<br>
+            {{`Вес: ${storedItemInfo.weight} кг`}} | {{`ШхВхД: ${storedItemInfo.width}x${storedItemInfo.height}x${storedItemInfo.length}`}}<br>
+            {{`Владелец: ${storedItemInfo.owner.code}`}} <br>
+            ID: {{storedItem.code}}<br>
         </div>
 
         <div style="margin-left: -8px">
@@ -31,5 +31,18 @@
 </script>
 
 <style scoped>
+    /*@page {*/
+    /*    size: USER;*/
+    /*    margin: 0;*/
+    /*}*/
 
+    /*@media print {*/
+    /*    body {*/
+    /*        margin: 0;*/
+    /*        padding: 0;*/
+    /*        font-weight: bold;*/
+    /*        font-family: Arial !important;*/
+    /*        font-size: 12px;*/
+    /*    }*/
+    /*}*/
 </style>

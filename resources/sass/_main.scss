@@ -71,3 +71,31 @@ $accent-color: #3490dc;
 }
 
 /*==========================================*/
+
+@page {
+    size: USER;
+    margin: 0;
+}
+
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+        font-weight: bold;
+        font-family: Arial !important;
+        font-size: 12px;
+    }
+    .bar-card {
+        margin: 0;
+        padding: 15px 0 0 15px;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+        font-family: Arial !important;
+        font-size: 12px;
+    }
+}
