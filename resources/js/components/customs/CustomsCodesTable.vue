@@ -26,9 +26,14 @@
         </template>
 
         <template slot="edit" slot-scope="{item}">
-            <a  :href="'/customs-code/' + item.id + '/edit'">
-                <img class="icon-btn-sm" src="/svg/edit.svg">
-            </a>
+            <div class="d-flex">
+                <a class="mr-2" :href="'/customs-code/' + item.id + '/edit'">
+                    <img class="icon-btn-sm" src="/svg/edit.svg">
+                </a>
+                <a href="#" @click.prevent="deleteCode(item)">
+                    <img class="icon-btn-sm" src="/svg/delete.svg">
+                </a>
+            </div>
         </template>
 
         <template #header>
@@ -44,6 +49,7 @@
 
 <script>
     import TableCardProps from '../common/TableCardProps.vue'
+    import {hideBusySpinner, showBusySpinner} from "../../tools";
 
     export default {
         name: "CustomsCodesTable",
@@ -95,6 +101,54 @@
                     }
                 }
             }
+        },
+        methods: {
+            deleteCode(item){
+                this.$bvModal.msgBoxConfirm('Вы действительно хотите удалить таможенный код '
+                    + item.name + ' - ' + item.code + '?',{
+                    centered:true,
+                    cancelTitle: 'Отмена',
+                    okTitle: 'Удалить',
+                    okVariant: 'danger'
+                })
+                    .then(confirm => {
+                        if (confirm) {
+                            showBusySpinner();
+                            axios.post('/customs-code/' + item.id,{
+                                _method:'delete'
+                            })
+                                .then(_ => {
+                                    this.$bvToast.toast('Таможенный код '
+                                        + item.name + ' - ' + item.code
+                                        + ' удален', {
+                                        title: 'Успешно удалено',
+                                        autoHideDelay: 5000,
+                                        appendToast: true,
+                                        variant: 'success'
+                                    });
+
+                                    this.items = this.items.filter(i => i.id !== item.id)
+                                })
+                                .catch(e => {
+                                    let message = 'Не удалось удалить таможенный код';
+
+                                    if (e.response.status === 422)
+                                        message = e.response.data.message
+
+                                    this.$bvToast.toast(message, {
+                                        title: 'Ошибка удаления',
+                                        autoHideDelay: 5000,
+                                        appendToast: true,
+                                        variant: 'danger'
+                                    });
+                                })
+                                .then(_ => this.$nextTick(_ => hideBusySpinner()))
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            },
         },
         components: {
             'TableCard': require('../common/TableCard.vue').default
