@@ -77,6 +77,8 @@
 </template>
 
 <script>
+    import {hideBusySpinner, showBusySpinner} from "../../tools";
+
     export default {
         name: "TariffHistoriesViewer",
         mounted() {
@@ -166,11 +168,16 @@
                 return '/tariff-price-histories/' + item.id + '/edit';
             },
             deletePrice(item) {
-                this.$bvModal.msgBoxOk('Вы действительно хотите удалить расценку тарифа '
-                    + item.tariff.name + ' от ' + item.created_at + '?')
+                this.$bvModal.msgBoxConfirm('Вы действительно хотите удалить расценку тарифа '
+                    + item.tariff.name + ' от ' + item.created_at + '?', {
+                    okTitle: 'Удалить',
+                    okVariant: 'danger',
+                    cancelTitle: 'Отмена',
+                    centered: true
+                })
                     .then(confirm => {
                         if (confirm) {
-                            tShowSpinner();
+                            showBusySpinner();
                             axios.delete('/tariff-price-histories/' + item.id)
                                 .then(_ => {
                                     this.$bvToast.toast('Расценка тарифа '
@@ -197,7 +204,7 @@
                                         variant: 'danger'
                                     });
                                 })
-                                .then(_ => this.$nextTick(_ => tHideSpinner()))
+                                .then(_ => this.$nextTick(_ => hideBusySpinner()))
                         }
                     })
                     .catch(err => {

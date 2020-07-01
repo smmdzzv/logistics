@@ -1,4 +1,8 @@
 <?php
+/**
+ *
+ * @author Sultonazar Mamadazizov <sultonazar.mamadazizov@mail.ru>
+ */
 
 namespace App\Http\Requests;
 
@@ -36,7 +40,28 @@ class TariffPriceHistoryRequest extends FormRequest
             'maxWeightPerCube' => 'required|numeric',
             'maxCubage' => 'required|numeric',
             'tariff_id' => 'required|exists:tariffs,id',
-            'created_at' => 'required|date'
+            'created_at' => 'required|date',
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $this->request->replace([
+                'id' => $this->request->get('id'),
+                'tariff_id' => $this->request->get('tariff_id'),
+                'created_at' =>$this->request->get('created_at'),
+                'lowerLimit' => floatval($this->request->get('lowerLimit')),
+                'mediumLimit' => floatval($this->request->get('mediumLimit')),
+                'upperLimit' => floatval($this->request->get('upperLimit')),
+                'pricePerCube' => floatval($this->request->get('pricePerCube')),
+                'discountForLowerLimit' => floatval($this->request->get('discountForLowerLimit')),
+                'discountForMediumLimit' => floatval($this->request->get('discountForMediumLimit')),
+                'pricePerExtraKg' => floatval($this->request->get('pricePerExtraKg')),
+                'agreedPricePerKg' => floatval($this->request->get('agreedPricePerKg')),
+                'maxWeightPerCube' => floatval($this->request->get('maxWeightPerCube')),
+                'maxCubage' => floatval($this->request->get('maxCubage')),
+            ]);
+        });
     }
 }

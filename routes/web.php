@@ -120,16 +120,16 @@ Route::post('/settings/branch', 'AppSettingsController@storeBranch');
 Route::post('/settings/position', 'AppSettingsController@storePosition');
 
 //Tariffs
-Route::get('tariff/{tariff}/pricing', 'TariffsController@pricing');
-Route::resource('tariffs', 'TariffsController', [
+Route::get('tariff/{tariff}/pricing', 'Tariffs\TariffsController@pricing');
+Route::resource('tariffs', 'Tariffs\TariffsController', [
     'only' => ['index', 'store', 'destroy']
 ])->parameters(['tariffs' => 'tariff']);
 
 
 //Tariff price histories
-Route::get('/tariff-price-histories/all', "TariffPriceHistoriesController@all");
+Route::get('/tariff-price-histories/all', "Tariffs\TariffPriceHistoriesController@all");
 Route::post('/tariff-price-history/{history}/orders/update-price', "Orders\OrderPriceController@updateByTariffPriceHistory")->name('update-price.tariff-price-history');
-Route::resource('tariff-price-histories', 'TariffPriceHistoriesController')->parameters(['tariff-price-histories' => 'history']);
+Route::resource('tariff-price-histories', 'Tariffs\TariffPriceHistoriesController')->parameters(['tariff-price-histories' => 'history']);
 //Route::get('/tariff-price-histories/{tariff}', "TariffPriceHistoriesController@lastByTariff");
 
 //Cars

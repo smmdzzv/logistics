@@ -1,4 +1,8 @@
 <?php
+/**
+ *
+ * @author Sultonazar Mamadazizov <sultonazar.mamadazizov@mail.ru>
+ */
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -31,6 +35,7 @@ class CreateTariffPriceHistoriesTable extends Migration
             $table->double('totalMoney');
             $table->userStamp();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

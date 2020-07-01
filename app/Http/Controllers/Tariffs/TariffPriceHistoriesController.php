@@ -1,16 +1,27 @@
 <?php
+/**
+ *
+ * @author Sultonazar Mamadazizov <sultonazar.mamadazizov@mail.ru>
+ */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Tariffs;
 
+use App\Data\Dto\Tariff\TariffPriceHistoryDto;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\TariffPriceHistoryRequest;
 use App\Models\Tariff;
 use App\Models\TariffPriceHistory;
+use App\Services\Tariff\TariffPriceHistoryService;
 
 class TariffPriceHistoriesController extends Controller
 {
-    public function __construct()
+    private TariffPriceHistoryService $service;
+
+    public function __construct(TariffPriceHistoryService $service)
     {
         $this->middleware('auth');
+
+        $this->service = $service;
 
         $except = ['all', 'index', 'lastByTariff'];
 
@@ -43,7 +54,7 @@ class TariffPriceHistoriesController extends Controller
     {
         $data = $request->all();
         $data['branch_id'] = auth()->user()->branch->id;
-        TariffPriceHistory::create($data);
+        $this->service->store(new TariffPriceHistoryDto($data));
         return redirect()->route('tariff-price-histories.index');
     }
 
@@ -54,18 +65,15 @@ class TariffPriceHistoriesController extends Controller
         return view('tariff-price-histories.edit', compact('history', 'tariffs'));
     }
 
-    public function update(TariffPriceHistoryRequest $request)
+    public function update(TariffPriceHistory $history, TariffPriceHistoryRequest $request)
     {
-        TariffPriceHistory::find($request->get('id'))->update($request->all());
+        $this->service->update($history, new TariffPriceHistoryDto($request->all()));
         return redirect()->route('tariff-price-histories.index');
     }
 
     public function destroy(TariffPriceHistory $history)
     {
-        if ($history->billingInfos->count() > 0)
-            abort(422, 'Невозможно удалить расценки, использованные для расчета заказов');
-
-        $history->delete();
+        $this->service->destroy($history);
         return;
     }
 }

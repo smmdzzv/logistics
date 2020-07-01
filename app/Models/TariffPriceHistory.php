@@ -1,9 +1,15 @@
 <?php
 
+/**
+ *
+ * @author Sultonazar Mamadazizov <sultonazar.mamadazizov@mail.ru>
+ */
+
 namespace App\Models;
 
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property double lowerLimit
@@ -22,6 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TariffPriceHistory extends BaseModel
 {
+    use SoftDeletes;
+
     protected $guarded = [];
 
     protected $casts = [
@@ -39,15 +47,18 @@ class TariffPriceHistory extends BaseModel
         'created_at' => 'datetime:Y-m-d'
     ];
 
-    public function branch(){
+    public function branch()
+    {
         return $this->belongsTo(Branch::class);
     }
 
-    public function billingInfos(){
+    public function billingInfos()
+    {
         return $this->hasMany(BillingInfo::class);
     }
 
-    public function tariff(){
+    public function tariff()
+    {
         return $this->belongsTo(Tariff::class);
     }
 }
