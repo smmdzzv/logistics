@@ -11,7 +11,7 @@
         :sticky-header="tableHeight"
         :striped="striped"
         :tableBusy="false"
-        :customCells = cells
+        :customCells=cells
         excelFileName="Список таможенных кодов"
         excelSheetName="Лист 1"
         primaryKey="id"
@@ -21,8 +21,14 @@
             <span v-if="item.isCalculatedByPiece">
                 ✓
             </span>
-            <span v-else> 
+            <span v-else>
             </span>
+        </template>
+
+        <template slot="edit" slot-scope="{item}">
+            <a  :href="'/customs-code/' + item.id + '/edit'">
+                <img class="icon-btn-sm" src="/svg/edit.svg">
+            </a>
         </template>
 
         <template #header>
@@ -42,47 +48,50 @@
     export default {
         name: "CustomsCodesTable",
         mixins: [TableCardProps],
-        props:{
-            customCodes:{
-                type:Array,
+        props: {
+            customCodes: {
+                type: Array,
                 requested: true
             }
         },
-        mounted(){
+        mounted() {
             this.items = this.customCodes;
         },
-        data(){
-            return{
-                cells:['isCalculatedByPiece'],
+        data() {
+            return {
+                cells: ['isCalculatedByPiece', 'edit'],
                 items: [],
-                fields:{
-                    name:{
-                        label:'Наименование',
-                        sortable:true
+                fields: {
+                    name: {
+                        label: 'Наименование',
+                        sortable: true
                     },
-                    code:{
-                        label:'Код',
-                        sortable:true
+                    code: {
+                        label: 'Код',
+                        sortable: true
                     },
-                    price:{
-                        label:'Цена',
-                        sortable:true
+                    price: {
+                        label: 'Цена',
+                        sortable: true
                     },
-                    interestRate:{
-                        label:'Базовая ставка, %',
-                        sortable:true
+                    interestRate: {
+                        label: 'Базовая ставка, %',
+                        sortable: true
                     },
-                    vat:{
-                        label:'НДС, %',
-                        sortable:true
+                    vat: {
+                        label: 'НДС, %',
+                        sortable: true
                     },
-                    totalRate:{
-                        label:'Итоговая ставка, %',
-                        sortable:true
+                    totalRate: {
+                        label: 'Итоговая ставка, %',
+                        sortable: true
                     },
-                    isCalculatedByPiece:{
-                        label:'Расчет по шт.',
-                        sortable:true
+                    isCalculatedByPiece: {
+                        label: 'Расчет по шт.',
+                        sortable: true
+                    },
+                    edit: {
+                        label: ''
                     }
                 }
             }

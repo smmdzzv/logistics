@@ -1767,10 +1767,13 @@ class CustomsCodesTableSeeder extends Seeder
         ];
 
         foreach ($codes as $code){
-            CustomsCode::create([
+            $customCode = CustomsCode::create([
                 'name' => $code[0],
                 'description' => $code[1],
-                'code' => $code[2],
+                'code' => $code[2]
+            ]);
+
+            $customCode->taxes()->create([
                 'price' => $code[3],
                 'interestRate' => $code[4],
                 'vat' => $code[5],

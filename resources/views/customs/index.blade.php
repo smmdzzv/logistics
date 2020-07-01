@@ -17,7 +17,7 @@
                             </a>
                         </div>
                         <div>
-                            <customs-codes-table :custom-codes="{{$codes}}"></customs-codes-table>
+                            <customs-codes-table striped :custom-codes="{{$codes}}"></customs-codes-table>
                         </div>
                     </div>
                 </div>

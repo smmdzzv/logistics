@@ -5,13 +5,13 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">Добавить таможеный код</div>
+                    <div class="card-header">Редактировать таможеный код</div>
 
                     <div class="card-body">
 
-                        <form method="POST" action="{{ route('customs-code.store') }}">
+                        <form method="POST" action="{{ route('customs-code.update', $code->id) }}">
                             @csrf
-                            @method('post')
+                            @method('put')
 
                             <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label text-md-right">Наименование</label>
@@ -19,7 +19,8 @@
                                 <div class="col-md-6">
                                     <input id="name" type="text"
                                            class="form-control @error('name') is-invalid @enderror" name="name"
-                                           value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                           value="{{ old('name') ?? $code->name}}" required autocomplete="name"
+                                           autofocus>
 
                                     @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -35,7 +36,7 @@
                                 <div class="col-md-6">
                                     <input id="code" type="text"
                                            class="form-control @error('code') is-invalid @enderror"
-                                           name="code" value="{{ old('code') }}"
+                                           name="code" value="{{ old('code') ?? $code->code}}"
                                            autocomplete="code" required>
 
                                     @error('code')
@@ -53,11 +54,9 @@
                                     <b-tooltip target="price" triggers="hover">
                                         Цена определяется таможенной службой
                                     </b-tooltip>
-                                    <input id="price"
-                                           type="number"
-                                           step="0.01"
+                                    <input id="price" type="number" step="0.01"
                                            class="form-control @error('price') is-invalid @enderror"
-                                           name="price" value="{{ old('price') }}"
+                                           name="price" value="{{ old('price') ?? $code->price }}"
                                            placeholder="за тонну или штуку товара"
                                            autocomplete="price" required>
 
@@ -76,7 +75,7 @@
                                 <div class="col-md-6">
                                     <input id="interestRate" type="number" step="0.01"
                                            class="form-control @error('interestRate') is-invalid @enderror"
-                                           name="interestRate" value="{{ old('interestRate') }}"
+                                           name="interestRate" value="{{ old('interestRate')  ?? $code->interestRate}}"
                                            autocomplete="interestRate" required>
 
                                     @error('interestRate')
@@ -93,7 +92,7 @@
                                 <div class="col-md-6">
                                     <input id="vat" type="number" step="0.01"
                                            class="form-control @error('vat') is-invalid @enderror"
-                                           name="vat" value="{{ old('vat') }}"
+                                           name="vat" value="{{ old('vat')  ?? $code->vat }}"
                                            autocomplete="vat" required>
 
                                     @error('vat')
@@ -111,7 +110,7 @@
                                 <div class="col-md-6">
                                     <input id="totalRate" type="number" step="0.01"
                                            class="form-control @error('totalRate') is-invalid @enderror"
-                                           name="totalRate" value="{{ old('totalRate') }}"
+                                           name="totalRate" value="{{ old('totalRate')  ?? $code->totalRate}}"
                                            autocomplete="totalRate" required>
 
                                     @error('totalRate')
@@ -132,7 +131,7 @@
                                            class="form-control @error('isCalculatedByPiece') is-invalid @enderror"
                                            name="isCalculatedByPiece"
                                            value="1"
-                                           @if(old('isCalculatedByPiece') && old('isCalculatedByPiece') === 'on')
+                                           @if(old('isCalculatedByPiece') && old('isCalculatedByPiece') === 'on' || $code->isCalculatedByPiece)
                                            checked
                                         @endif
                                     >
@@ -157,7 +156,7 @@
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
-                                        Добавить
+                                        Сохранить
                                     </button>
                                 </div>
                             </div>

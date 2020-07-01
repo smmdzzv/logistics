@@ -19,11 +19,6 @@ class CreateCustomsCodesTable extends Migration
             $table->char('description', 255)->nullable();
             $table->char('internationalName', 255)->nullable();
             $table->char('code', 20)->unique();
-            $table->double('price');
-            $table->double('interestRate');
-            $table->double('vat');
-            $table->double('totalRate');
-            $table->boolean('isCalculatedByPiece');
 
             $table->userStamp();
             $table->softDeletes();

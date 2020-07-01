@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers\Customs;
 
+use App\Data\Dto\Customs\CustomsCodeDto;
+use App\Data\Dto\Customs\CustomsCodeTaxDto;
 use App\Http\Controllers\Controller;
 use App\Models\Customs\CustomsCode;
+use App\Services\Customs\CustomsCodeAndTaxService;
 use Illuminate\Http\Request;
 
 class CustomsCodeController extends Controller
 {
-    public function __construct()
+    private CustomsCodeAndTaxService $service;
+
+    public function __construct(CustomsCodeAndTaxService $service)
     {
         $this->middleware('auth');
         $this->middleware('roles.allow:admin');
+        $this->service = $service;
     }
 
-    private function rules(){
+    private function rules(): array
+    {
         return [
             'name' => 'required|string|max:255',
             'shortName' => 'nullable|string|max:255',
@@ -28,18 +35,46 @@ class CustomsCodeController extends Controller
         ];
     }
 
-        public function index(){
-            $codes = CustomsCode::all();
-            return view('customs.index', compact('codes'));
-        }
+    private function getValidatedData($request): array
+    {
+        $data = $request->validate($this->rules());
 
-        public function create(){
-            return view('customs.create');
-        }
+        $data['price'] = floatval($data['price']);
+        $data['interestRate'] = floatval($data['interestRate']);
+        $data['totalRate'] = floatval($data['totalRate']);
+        $data['vat'] = floatval($data['vat']);
+        $data['isCalculatedByPiece'] = boolval($data['isCalculatedByPiece']);
 
-        public function store(Request $request){
-            $data = $request->validate($this->rules());
-            CustomsCode::create($data);
-            return redirect(route('customs-code.index'));
-        }
+        return $data;
+    }
+
+    public function index()
+    {
+        $codes = CustomsCode::all();
+        return view('customs.index', compact('codes'));
+    }
+
+    public function create()
+    {
+        return view('customs.create');
+    }
+
+    public function store(Request $request)
+    {
+        $data = $this->getValidatedData($request);
+        $this->service->store(new CustomsCodeDto($data), new CustomsCodeTaxDto($data));
+        return redirect(route('customs-code.index'));
+    }
+
+    public function edit(CustomsCode $code)
+    {
+        return view('customs.edit', compact('code'));
+    }
+
+    public function update(CustomsCode $code, Request $request)
+    {
+        $data = $this->getValidatedData($request);
+        $this->service->update($code, new CustomsCodeDto($data), new CustomsCodeTaxDto($data));
+        return redirect(route('customs-code.index'));
+    }
 }
