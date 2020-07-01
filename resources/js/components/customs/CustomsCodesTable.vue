@@ -18,7 +18,7 @@
         responsive>
 
         <template slot="isCalculatedByPiece" slot-scope="{item}">
-            <span v-if="item.isCalculatedByPiece">
+            <span v-if="item.tax.isCalculatedByPiece">
                 ✓
             </span>
             <span v-else>
@@ -70,19 +70,19 @@
                         label: 'Код',
                         sortable: true
                     },
-                    price: {
+                    'tax.price': {
                         label: 'Цена',
                         sortable: true
                     },
-                    interestRate: {
+                    'tax.interestRate': {
                         label: 'Базовая ставка, %',
                         sortable: true
                     },
-                    vat: {
+                    'tax.vat': {
                         label: 'НДС, %',
                         sortable: true
                     },
-                    totalRate: {
+                    'tax.totalRate': {
                         label: 'Итоговая ставка, %',
                         sortable: true
                     },

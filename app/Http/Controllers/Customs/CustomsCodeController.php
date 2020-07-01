@@ -1,4 +1,8 @@
 <?php
+/**
+ *
+ * @author Sultonazar Mamadazizov <sultonazar.mamadazizov@mail.ru>
+ */
 
 namespace App\Http\Controllers\Customs;
 
@@ -18,6 +22,36 @@ class CustomsCodeController extends Controller
         $this->middleware('auth');
         $this->middleware('roles.allow:admin');
         $this->service = $service;
+    }
+
+    public function index()
+    {
+        $codes = CustomsCode::with('tax')->get();
+        return view('customs.index', compact('codes'));
+    }
+
+    public function create()
+    {
+        return view('customs.create');
+    }
+
+    public function store(Request $request)
+    {
+        $data = $this->getValidatedData($request);
+        $this->service->store(new CustomsCodeDto($data), new CustomsCodeTaxDto($data));
+        return redirect(route('customs-code.index'));
+    }
+
+    public function edit(CustomsCode $code)
+    {
+        return view('customs.edit', compact('code'));
+    }
+
+    public function update(CustomsCode $code, Request $request)
+    {
+        $data = $this->getValidatedData($request);
+        $this->service->update($code, new CustomsCodeDto($data), new CustomsCodeTaxDto($data));
+        return redirect(route('customs-code.index'));
     }
 
     private function rules(): array
@@ -46,35 +80,5 @@ class CustomsCodeController extends Controller
         $data['isCalculatedByPiece'] = boolval($data['isCalculatedByPiece']);
 
         return $data;
-    }
-
-    public function index()
-    {
-        $codes = CustomsCode::all();
-        return view('customs.index', compact('codes'));
-    }
-
-    public function create()
-    {
-        return view('customs.create');
-    }
-
-    public function store(Request $request)
-    {
-        $data = $this->getValidatedData($request);
-        $this->service->store(new CustomsCodeDto($data), new CustomsCodeTaxDto($data));
-        return redirect(route('customs-code.index'));
-    }
-
-    public function edit(CustomsCode $code)
-    {
-        return view('customs.edit', compact('code'));
-    }
-
-    public function update(CustomsCode $code, Request $request)
-    {
-        $data = $this->getValidatedData($request);
-        $this->service->update($code, new CustomsCodeDto($data), new CustomsCodeTaxDto($data));
-        return redirect(route('customs-code.index'));
     }
 }

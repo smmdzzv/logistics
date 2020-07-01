@@ -56,7 +56,7 @@
                                     </b-tooltip>
                                     <input id="price" type="number" step="0.01"
                                            class="form-control @error('price') is-invalid @enderror"
-                                           name="price" value="{{ old('price') ?? $code->price }}"
+                                           name="price" value="{{ old('price') ?? $code->tax->price }}"
                                            placeholder="за тонну или штуку товара"
                                            autocomplete="price" required>
 
@@ -75,7 +75,7 @@
                                 <div class="col-md-6">
                                     <input id="interestRate" type="number" step="0.01"
                                            class="form-control @error('interestRate') is-invalid @enderror"
-                                           name="interestRate" value="{{ old('interestRate')  ?? $code->interestRate}}"
+                                           name="interestRate" value="{{ old('interestRate')  ?? $code->tax->interestRate}}"
                                            autocomplete="interestRate" required>
 
                                     @error('interestRate')
@@ -92,7 +92,7 @@
                                 <div class="col-md-6">
                                     <input id="vat" type="number" step="0.01"
                                            class="form-control @error('vat') is-invalid @enderror"
-                                           name="vat" value="{{ old('vat')  ?? $code->vat }}"
+                                           name="vat" value="{{ old('vat')  ?? $code->tax->vat }}"
                                            autocomplete="vat" required>
 
                                     @error('vat')
@@ -110,7 +110,7 @@
                                 <div class="col-md-6">
                                     <input id="totalRate" type="number" step="0.01"
                                            class="form-control @error('totalRate') is-invalid @enderror"
-                                           name="totalRate" value="{{ old('totalRate')  ?? $code->totalRate}}"
+                                           name="totalRate" value="{{ old('totalRate')  ?? $code->tax->totalRate}}"
                                            autocomplete="totalRate" required>
 
                                     @error('totalRate')
@@ -131,7 +131,7 @@
                                            class="form-control @error('isCalculatedByPiece') is-invalid @enderror"
                                            name="isCalculatedByPiece"
                                            value="1"
-                                           @if(old('isCalculatedByPiece') && old('isCalculatedByPiece') === 'on' || $code->isCalculatedByPiece)
+                                           @if(old('isCalculatedByPiece') && old('isCalculatedByPiece') === 'on' || $code->tax->isCalculatedByPiece)
                                            checked
                                         @endif
                                     >

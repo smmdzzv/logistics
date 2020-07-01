@@ -1,4 +1,8 @@
 <?php
+/**
+ *
+ * @author Sultonazar Mamadazizov <sultonazar.mamadazizov@mail.ru> on 01.07.2020
+ */
 
 namespace App\Models\Customs;
 

@@ -1,4 +1,8 @@
 <?php
+/**
+ *
+ * @author Sultonazar Mamadazizov <sultonazar.mamadazizov@mail.ru>
+ */
 
 use App\Models\Customs\CustomsCode;
 use Illuminate\Database\Seeder;
