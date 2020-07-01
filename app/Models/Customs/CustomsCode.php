@@ -7,9 +7,12 @@
 namespace App\Models\Customs;
 
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CustomsCode extends BaseModel
 {
+    use SoftDeletes;
+
     protected $guarded = [];
 
     public function taxes()

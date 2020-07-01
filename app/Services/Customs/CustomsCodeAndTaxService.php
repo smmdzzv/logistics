@@ -36,4 +36,14 @@ class CustomsCodeAndTaxService
         $code->taxes()->create($taxDto->toArray());
         return $code;
     }
+
+    public function destroy(CustomsCode $code)
+    {
+        try {
+            $code->delete();
+        } catch (\Exception $e) {
+        }
+
+        return;
+    }
 }

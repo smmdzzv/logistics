@@ -54,6 +54,12 @@ class CustomsCodeController extends Controller
         return redirect(route('customs-code.index'));
     }
 
+    public function destroy(CustomsCode $code)
+    {
+        $this->service->destroy($code);
+        return redirect(route('customs-code.index'));
+    }
+
     private function rules(): array
     {
         return [

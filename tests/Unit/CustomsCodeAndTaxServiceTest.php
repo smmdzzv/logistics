@@ -80,4 +80,17 @@ class CustomsCodeAndTaxServiceTest extends TestCase
         $this->assertCount(2, CustomsCodeTax::all());
         $this->assertEquals($updatedCode->id, CustomsCodeTax::first()->code->id);
     }
+
+    public function test_soft_delete()
+    {
+        $service = new CustomsCodeAndTaxService(new CustomsCodeService(), new CustomsCodeTaxService());
+
+        $code = $this->create_code_and_tax();
+
+        $service->destroy($code);
+
+        $this->assertCount(0, CustomsCode::all());
+        $this->assertCount(1, CustomsCode::withTrashed()->get());
+        $this->assertCount(1, CustomsCodeTax::all());
+    }
 }
