@@ -362,7 +362,7 @@ class TariffPriceHistoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        $branchId = Branch::first()->id;
+//        $branchId = Branch::first()->id;
 //        $this->tariffs = Tariff::all();
 
 //        $newPrice = new TariffPriceHistory();
@@ -398,7 +398,7 @@ class TariffPriceHistoriesTableSeeder extends Seeder
                     'maxWeight' => $tariffData[11],
                     'maxCubage' => $tariffData[12],
                     'totalMoney' => $tariffData[13],
-                    'branch_id' => $branchId,
+//                    'branch_id' => $branchId,
                     'tariff_id' => $tariff->id
                 ]);
             }

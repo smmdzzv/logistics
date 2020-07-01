@@ -38,7 +38,9 @@ class TariffPriceHistoryRequest extends FormRequest
             'pricePerExtraKg' => 'required|numeric',
             'agreedPricePerKg' => 'required|numeric',
             'maxWeightPerCube' => 'required|numeric',
+            'maxWeight' => 'required|numeric',
             'maxCubage' => 'required|numeric',
+            'totalMoney' => 'required|numeric',
             'tariff_id' => 'required|exists:tariffs,id',
             'created_at' => 'required|date',
         ];
@@ -60,7 +62,9 @@ class TariffPriceHistoryRequest extends FormRequest
                 'pricePerExtraKg' => floatval($this->request->get('pricePerExtraKg')),
                 'agreedPricePerKg' => floatval($this->request->get('agreedPricePerKg')),
                 'maxWeightPerCube' => floatval($this->request->get('maxWeightPerCube')),
+                'maxWeight' => floatval($this->request->get('maxWeight')),
                 'maxCubage' => floatval($this->request->get('maxCubage')),
+                'totalMoney' => floatval($this->request->get('totalMoney')),
             ]);
         });
     }

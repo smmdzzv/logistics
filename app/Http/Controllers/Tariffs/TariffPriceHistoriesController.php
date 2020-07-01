@@ -52,9 +52,9 @@ class TariffPriceHistoriesController extends Controller
 
     public function store(TariffPriceHistoryRequest $request)
     {
-        $data = $request->all();
-        $data['branch_id'] = auth()->user()->branch->id;
-        $this->service->store(new TariffPriceHistoryDto($data));
+//        $data = $request->all();
+//        $data['branch_id'] = auth()->user()->branch->id;
+        $this->service->store(new TariffPriceHistoryDto($request->all()));
         return redirect()->route('tariff-price-histories.index');
     }
 

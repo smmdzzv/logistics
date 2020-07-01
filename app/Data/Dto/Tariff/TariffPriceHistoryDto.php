@@ -30,7 +30,11 @@ class TariffPriceHistoryDto extends FlexibleDataTransferObject
 
     public float $maxWeightPerCube;
 
+    public float $maxWeight;
+
     public float $maxCubage;
+
+    public float $totalMoney;
 
     public string $tariff_id;
 
