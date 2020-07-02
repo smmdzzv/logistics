@@ -17,7 +17,7 @@ class CreateItemsTable extends Migration
             $table->char('id', 26)->primary();
 //            $table->char('tariffId', 26);
 //            $table->char('branch_id', 26)->index();
-            $table->string('name', 255)->unique();
+            $table->string('name', 255);
             $table->char('unit', 10)->nullable();
             $table->boolean('onlyCustomPrice')->default(false);
             $table->boolean('onlyAgreedPrice')->default(false);
@@ -25,6 +25,7 @@ class CreateItemsTable extends Migration
             $table->boolean('calculateByNormAndWeight')->default(false);
             $table->userStamp();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

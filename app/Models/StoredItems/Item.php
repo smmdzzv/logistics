@@ -1,4 +1,8 @@
 <?php
+/**
+ *
+ * @author Sultonazar Mamadazizov <sultonazar.mamadazizov@mail.ru>
+ */
 
 namespace App\Models\StoredItems;
 
@@ -6,6 +10,7 @@ use App\Models\BaseModel;
 use App\Models\Branch;
 use App\Models\Customs\CustomsCode;
 use App\Models\Tariff;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string name
@@ -13,12 +18,12 @@ use App\Models\Tariff;
  * @property bool onlyCustomPrice
  * @property bool onlyAgreedPrice
  * @property bool applyDiscount
- * @property string tariffId
- * @property Tariff tariff
  * @property bool calculateByNormAndWeight
  */
 class Item extends BaseModel
 {
+    use SoftDeletes;
+
     protected $guarded = [];
 
     protected $casts = [

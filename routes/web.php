@@ -168,7 +168,7 @@ Route::get('/exchange-money', 'Till\MoneyExchangesController@exchanger')->name('
 //Items
 Route::get('/items/all', 'ItemsController@all');
 Route::get('/items/all/eager', 'ItemsController@allEager');
-Route::resource('items', 'ItemsController', ['only' => ['index', 'create', 'store']])->parameters(['items' => 'item']);
+Route::resource('items', 'ItemsController')->parameters(['items' => 'item']);
 
 //Lost and found
 //Route::resource('lost-items', 'LostAndFound\LostItemsController')->parameters(['lost-items' => 'item']);
