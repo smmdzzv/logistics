@@ -157,8 +157,7 @@ Route::resource('currencies', 'Till\CurrenciesController',
     ['except' => ['destroy']])->parameters(['currencies' => 'currency']);
 
 //Money Exchange
-Route::resource('money-exchanges', 'Till\MoneyExchangesController',
-    ['only' => ['create', 'store']])->parameters(['money-exchanges' => 'exchange']);
+Route::resource('money-exchanges', 'Till\MoneyExchangesController')->parameters(['money-exchanges' => 'exchange']);
 
 Route::get('/exchange-history/rate/{from}/{to}', 'Till\MoneyExchangesController@exchangeRate');
 

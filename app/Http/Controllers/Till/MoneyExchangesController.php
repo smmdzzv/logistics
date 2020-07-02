@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Till;
 
-use App\Data\RequestWriters\Payments\ExchangeMoneyRequestWriter;
 use App\Http\Controllers\Controller;
 use App\Models\Currency;
 use App\Models\Till\ExchangeRate;
@@ -15,6 +14,7 @@ class MoneyExchangesController extends Controller
         $this->middleware('auth');
 
         $this->middleware('roles.deny:client');
+        $this->middleware('roles.allow:admin,cashier')->except('exchangeRate', 'index');
     }
 
     public function exchangeRate($from, $to)
@@ -23,6 +23,12 @@ class MoneyExchangesController extends Controller
             ->where('to_currency_id', $to)
             ->latest()
             ->firstOrFail();
+    }
+
+    public function index()
+    {
+        $rates = ExchangeRate::latest()->paginate(25);
+        return view('till.money-exchanges.index', compact('rates'));
     }
 
     public function create()
@@ -35,10 +41,10 @@ class MoneyExchangesController extends Controller
     {
         $data = $request->validate($this->rules());
         ExchangeRate::create($data);
-        return redirect(route('money-exchanges.create'));
+        return redirect(route('money-exchanges.index'));
     }
 
-    private function rules()
+    private function rules(): array
     {
         return [
             'from_currency_id' => 'required|exists:currencies,id',
@@ -46,23 +52,4 @@ class MoneyExchangesController extends Controller
             'coefficient' => 'required|numeric'
         ];
     }
-
-//    public function exchanger(){
-//        $currencies = Currency::all();
-//        return view('till.money-exchanges.exchanger', compact('currencies'));
-//    }
-
-//    public function exchange()
-//    {
-//        $data = new \stdClass();
-//        $data->from = \request('from');
-//        $data->to = \request('to');
-//        $data->amount = \request('amount');
-//        $data->comment = \request('comment');
-//        $data->cashier = auth()->user();
-//
-//        $writer = new ExchangeMoneyRequestWriter($data);
-//        $writer->write();
-//        return;
-//    }
 }

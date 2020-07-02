@@ -57,9 +57,9 @@
                                         товары</a>
                                     <a class="dropdown-item" href="{{route('order-items.edit')}}">Выдать товары</a>
                                     @if(Auth::user()->hasRole('admin'))
-{{--                                        <div class="dropdown-divider"></div>--}}
-{{--                                        <a class="dropdown-item" href="{{route('lost-items.index')}}">Потерянные--}}
-{{--                                            товары</a>--}}
+                                        {{--                                        <div class="dropdown-divider"></div>--}}
+                                        {{--                                        <a class="dropdown-item" href="{{route('lost-items.index')}}">Потерянные--}}
+                                        {{--                                            товары</a>--}}
 
 
                                         <div class="dropdown-divider"></div>
@@ -117,8 +117,12 @@
                                         <a class="dropdown-item" href="{{route('currencies.index')}}">Список валют</a>
                                     @endif
                                     @if(Auth::user()->hasAnyRole(['admin', 'cashier']))
-                                        <a class="dropdown-item" href="{{route('money-exchanges.create')}}">Курсы
+                                        <div class="dropdown-divider"></div>
+                                        <h6 class="dropdown-header">Курс валют</h6>
+                                        <a class="dropdown-item" href="{{route('money-exchanges.create')}}">Добавть курс
                                             валют</a>
+                                        <a class="dropdown-item" href="{{route('money-exchanges.index')}}">История
+                                            курсов валют</a>
                                     @endif
                                 </div>
                             </li>
