@@ -46,6 +46,7 @@ class PaymentRequest extends FormRequest
             'paidAmountInSecondCurrency' => 'nullable|numeric|min:0',
             'secondPaidCurrency' => 'nullable|exists:currencies,id',
             'exchangeRate' => 'nullable|string',
+            'customExchangeRate' => 'nullable|string',
             'comment' => 'nullable|string',
         ];
     }
@@ -60,7 +61,7 @@ class PaymentRequest extends FormRequest
                 return $validator->errors()->add('payer', 'Указанный плательщик не найден. ');
 
             $payeeId = $this->request->get('payee');
-            if ($payeeId){
+            if ($payeeId) {
                 $this->payee = $this->request->get('payee_type') === 'branch' ? $this->getBranch($payeeId) : $this->getClient($payeeId);
                 if (!$this->payee)
                     return $validator->errors()->add('payee', 'Указанный получатель не найден. ');
@@ -95,11 +96,12 @@ class PaymentRequest extends FormRequest
 
             //Check payment amount
             if ($this->request->get('secondPaidCurrency') && $this->request->get('paidAmountInSecondCurrency') > 0) {
-                if (!$exchangeRate)
+                if (!$exchangeRate && !$this->request->get('customExchangeRate'))
                     return $validator->errors()->add('secondPaidCurrency', 'Для указанной валюты Необходима конвертация. ');
 
 //                $amount = round($this->request->get('billAmount') * $exchangeRate->coefficient, 2);
-                $amount = round($this->request->get('paidAmountInBillCurrency') + $this->request->get('paidAmountInSecondCurrency') * $exchangeRate->coefficient, 2);
+                $rate = $exchangeRate->coefficient ?? $this->request->get('customExchangeRate');
+                $amount = round($this->request->get('paidAmountInBillCurrency') + $this->request->get('paidAmountInSecondCurrency') * $rate, 2);
 
                 if ($this->request->get('billAmount') - $amount != 0)
                     return $validator->errors()->add('paidAmountInBillCurrency',
