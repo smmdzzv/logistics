@@ -21,13 +21,14 @@ class MoneyExchangesController extends Controller
     {
         return ExchangeRate::where('from_currency_id', $from)
             ->where('to_currency_id', $to)
+            ->dailyRate()
             ->latest()
             ->firstOrFail();
     }
 
     public function index()
     {
-        $rates = ExchangeRate::latest()->paginate(25);
+        $rates = ExchangeRate::latest()->dailyRate()->paginate(25);
         return view('till.money-exchanges.index', compact('rates'));
     }
 

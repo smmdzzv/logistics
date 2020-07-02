@@ -11,11 +11,18 @@ class ExchangeRate extends BaseModel
 
     protected $with = ['fromCurrency', 'toCurrency'];
 
-    public function fromCurrency(){
+    public function fromCurrency()
+    {
         return $this->belongsTo(Currency::class);
     }
 
-    public function toCurrency(){
+    public function toCurrency()
+    {
         return $this->belongsTo(Currency::class);
+    }
+
+    public function scopeDailyRate($query)
+    {
+        return $query->where('is_custom_rate', false);
     }
 }
