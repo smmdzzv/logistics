@@ -14,12 +14,6 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <!--                    <div class="col-md-6 form-group">-->
-                    <!--                        <label for="type">Тип операции</label>-->
-                    <!--                        <b-form-select id="type" class="form-control">-->
-                    <!--                            <option :value="null" disabled>&#45;&#45; Выберите тип операции &#45;&#45;</option>-->
-                    <!--                        </b-form-select>-->
-                    <!--                    </div>-->
                     <div class="col-md-12 form-group">
                         <label for="status">Статус</label>
                         <b-form-select id="status"
@@ -164,7 +158,7 @@
                         </b-form-invalid-feedback>
                     </div>
 
-                    <div class="col-md-3 form-group">
+                    <div class="col-md-2 form-group">
                         <label for="paymentCurrency">Валюта оплаты</label>
                         <b-form-select id="paymentCurrency"
                                        class="dummy"
@@ -180,23 +174,41 @@
                         </b-form-select>
                     </div>
 
-                    <div class="col-md-3 form-group">
+                    <div class="col-md-2">
+                        <label for="exchangeRate">Обменный курс</label>
+                        <b-form-input type="number" v-model="payment.exchangeRate.coefficient">
+
+                        </b-form-input>
+                    </div>
+
+                    <div class="col-md-2 form-group">
                         <label for="paidAmountInSecondCurrency">Сумма</label>
-                        <b-input-group>
-                            <template v-slot:prepend>
-                                <b-input-group-text>
-                                    <strong v-if="payment.exchangeRate">{{payment.exchangeRate.coefficient}}</strong>
-                                </b-input-group-text>
-                            </template>
-                            <input id="paidAmountInSecondCurrency"
-                                   v-model.lazy="payment.paidAmountInSecondCurrency"
-                                   :class="{'is-invalid':errors.paidAmountInSecondCurrency}"
-                                   class="form-control"
-                                   type="number">
+
+                        <b-form-input id="paidAmountInSecondCurrency"
+                                      v-model.lazy="payment.paidAmountInSecondCurrency"
+                                      :class="{'is-invalid':errors.paidAmountInSecondCurrency}"
+                                      class="form-control"
+                                      type="number">
                             <b-form-invalid-feedback :state="errors.paidAmountInSecondCurrency"><strong
                                 v-for="message in errors.paidAmountInSecondCurrency">{{message}}</strong>
                             </b-form-invalid-feedback>
-                        </b-input-group>
+                        </b-form-input>
+
+                        <!--                        <b-input-group>-->
+                        <!--                            <template v-slot:prepend>-->
+                        <!--                                <b-input-group-text>-->
+                        <!--                                    <strong v-if="payment.exchangeRate">{{payment.exchangeRate.coefficient}}</strong>-->
+                        <!--                                </b-input-group-text>-->
+                        <!--                            </template>-->
+                        <!--                            <input id="paidAmountInSecondCurrency"-->
+                        <!--                                   v-model.lazy="payment.paidAmountInSecondCurrency"-->
+                        <!--                                   :class="{'is-invalid':errors.paidAmountInSecondCurrency}"-->
+                        <!--                                   class="form-control"-->
+                        <!--                                   type="number">-->
+                        <!--                            <b-form-invalid-feedback :state="errors.paidAmountInSecondCurrency"><strong-->
+                        <!--                                v-for="message in errors.paidAmountInSecondCurrency">{{message}}</strong>-->
+                        <!--                            </b-form-invalid-feedback>-->
+                        <!--                        </b-input-group>-->
                     </div>
 
                     <div class="col-md-3 form-group">
@@ -241,6 +253,8 @@
 </template>
 
 <script>
+    import {hideBusySpinner, showBusySpinner} from "../../../tools";
+
     export default {
         name: "PaymentEditor",
         mounted() {
@@ -286,12 +300,16 @@
                     paymentItem: null,
                     billAmount: 0,
                     billCurrency: null,
-                    exchangeRate: null,
+                    exchangeRate: {
+                        coefficient: null
+                    },
                     paidAmountInBillCurrency: 0,
                     paidAmountInSecondCurrency: 0,
                     secondPaidCurrency: null,
                     comment: null
                 },
+                //originally fetched exchange rate
+                exchangeRate: null,
                 payerAccounts: null,
                 pausePayerWatcher: false,
                 errors: {
@@ -331,6 +349,9 @@
             'payment.exchangeRate'() {
                 this.calculatePaidInBillCurrencyAmount();
             },
+            'payment.exchangeRate.coefficient'() {
+                this.calculatePaidInBillCurrencyAmount();
+            },
             isPayerIndividual() {
                 if (!this.pausePayerWatcher)
                     this.payment.payer = null;
@@ -351,25 +372,42 @@
         methods: {
             calculatePaidInSecondCurrencyAmount() {
                 if (this.payment.secondPaidCurrency && this.payment.exchangeRate)
-                    this.payment.paidAmountInSecondCurrency = Math.round((this.payment.billAmount - this.payment.paidAmountInBillCurrency) / this.payment.exchangeRate.coefficient * 100) / 100;
+                    this.payment.paidAmountInSecondCurrency =
+                        Math.round((this.payment.billAmount - this.payment.paidAmountInBillCurrency)
+                            / this.payment.exchangeRate.coefficient * 100) / 100;
                 else {
                     this.payment.paidAmountInBillCurrency = this.payment.billAmount;
                     this.payment.paidAmountInSecondCurrency = 0;
                 }
             },
             calculatePaidInBillCurrencyAmount() {
-                if (this.payment.secondPaidCurrency && this.payment.exchangeRate && this.payment.paidAmountInSecondCurrency > 0)
-                    this.payment.paidAmountInBillCurrency = Math.round((this.payment.billAmount - this.payment.paidAmountInSecondCurrency * this.payment.exchangeRate.coefficient) * 100) / 100;
-                else
+                if (this.payment.secondPaidCurrency
+                    && this.payment.exchangeRate
+                    && this.payment.paidAmountInSecondCurrency > 0) {
+                    let amount =
+                        Math.round(
+                            (this.payment.billAmount - this.payment.paidAmountInSecondCurrency * this.payment.exchangeRate.coefficient
+                            ) * 100
+                        ) / 100;
+
+                    this.payment.paidAmountInBillCurrency = amount < 0 ? 0 : amount
+                } else
                     this.payment.paidAmountInBillCurrency = this.payment.billAmount;
             },
             checkIfNeededConverting() {
-                let needConverting = this.payment.billCurrency && this.payment.secondPaidCurrency && this.payment.billCurrency.id !== this.payment.secondPaidCurrency.id;
+                let needConverting = this.payment.billCurrency
+                    && this.payment.secondPaidCurrency
+                    && this.payment.billCurrency.id !== this.payment.secondPaidCurrency.id;
 
                 if (needConverting)
-                    this.getExchangeRate();
-                else
-                    this.payment.exchangeRate = null;
+                    this.fetchExchangeRate();
+                else {
+                    this.payment.exchangeRate = {
+                        coefficient: null
+                    };
+                    this.exchangeRate = null;
+                }
+
             },
             onPayerSelected(user) {
                 this.payment.payer = user
@@ -378,21 +416,23 @@
             onPayeeSelected(user) {
                 this.payment.payee = user
             },
-            async getExchangeRate() {
-                tShowSpinner();
+            async fetchExchangeRate() {
+                showBusySpinner();
                 let action = `exchange-history/rate/${this.payment.secondPaidCurrency.id}/${this.payment.billCurrency.id}`;
                 try {
                     const result = await axios.get(action);
-                    this.payment.exchangeRate = result.data;
+                    this.exchangeRate = result.data;
+                    this.payment.exchangeRate = Object.assign({}, result.data);
                 } catch (e) {
                     this.$root.showErrorMsg('Ошибка загрузки',
                         'Не удалось загрузить курс валют. Убедитесь, что курс для данной валюты создан.')
                     this.payment.exchangeRate = {coefficient: null};
+                    this.exchangeRate = null;
                 }
 
                 this.$nextTick(
                     () => {
-                        tHideSpinner();
+                        hideBusySpinner();
                     }
                 )
             },
@@ -425,10 +465,17 @@
                         paidAmountInSecondCurrency: this.payment.paidAmountInSecondCurrency,
                         secondPaidCurrency: this.payment.secondPaidCurrency ? this.payment.secondPaidCurrency.id : null,
                         comment: this.payment.comment,
-                        exchangeRate: this.payment.exchangeRate === null ? null : this.payment.exchangeRate.id
+                        exchangeRate: null,
+                        customExchangeRate: null
                     };
 
-                    const response = await axios.post('/payment', data);
+                    if (this.payment.exchangeRate.id)
+                        if (this.exchangeRate.coefficient === this.payment.exchangeRate.coefficient)
+                            data.exchangeRate = this.payment.exchangeRate.id;
+                        else
+                            data.customExchangeRate = this.payment.exchangeRate.coefficient;
+
+                    await axios.post('/payment', data);
                     // window.location.href = '/payment/' + response.data;
                     window.location.href = '/payment';
                 } catch (e) {
@@ -460,7 +507,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>
