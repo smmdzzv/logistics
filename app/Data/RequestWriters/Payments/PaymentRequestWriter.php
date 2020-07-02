@@ -6,6 +6,7 @@ use App\Data\RequestWriters\RequestWriter;
 use App\Http\Requests\Till\PaymentRequest;
 use App\Models\Branch;
 use App\Models\Till\Account;
+use App\Models\Till\ExchangeRate;
 use App\Models\Till\Payment;
 use App\User;
 
@@ -43,6 +44,8 @@ class PaymentRequestWriter extends RequestWriter
      */
     function write()
     {
+        $this->createCustomExchangeRate();
+
         if (isset($this->request['id'])) {
             $this->payment = Payment::findOrFail($this->request['id']);
 
@@ -76,6 +79,20 @@ class PaymentRequestWriter extends RequestWriter
         }
 
         return $this->payment;
+    }
+
+    private function createCustomExchangeRate()
+    {
+        if ($this->request['customExchangeRate']) {
+            $customRate = ExchangeRate::create([
+                'from_currency_id' => $this->request['secondPaidCurrency'],
+                'to_currency_id' => $this->request['billCurrency'],
+                'coefficient' => $this->request['customExchangeRate'],
+                'is_custom_rate' => true
+            ]);
+
+            $this->request['exchangeRate'] = $customRate->id;
+        }
     }
 
     protected function setSubjects()

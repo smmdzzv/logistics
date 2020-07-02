@@ -14,10 +14,11 @@ class CreateExchangeRatesTable extends Migration
     public function up()
     {
         Schema::create('exchange_rates', function (Blueprint $table) {
-            $table->char('id',26)->primary();
-            $table->char('from_currency_id',26)->index();
-            $table->char('to_currency_id',26)->index();
+            $table->char('id', 26)->primary();
+            $table->char('from_currency_id', 26)->index();
+            $table->char('to_currency_id', 26)->index();
             $table->decimal('coefficient', 10, 3);
+            $table->boolean('is_custom_rate')->default(false);
 
             $table->userStamp();
             $table->timestamps();
