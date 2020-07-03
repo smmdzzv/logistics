@@ -12,6 +12,9 @@ use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property string status
+ */
 class StoredItem extends BaseModel
 {
     use SoftDeletes;
@@ -23,49 +26,58 @@ class StoredItem extends BaseModel
      * @return mixed
      * TODO explanation
      */
-    public function scopeAvailable($query){
+    public function scopeAvailable($query)
+    {
         return $query->whereDoesntHave('tripHistory');
     }
 
-    public function scopeStorage($query, $id){
+    public function scopeStorage($query, $id)
+    {
         return $query->whereHas('storageHistory', function (Builder $query) use ($id) {
             $query->where('storage_id', $id);
         });
     }
 
-    public function scopeUnpaid($query){
+    public function scopeUnpaid($query)
+    {
         return $query->whereDoesntHave('orderPaymentItems', function (Builder $query) {
-            $query->whereHas('orderPayment', function (Builder $query){
-                $query->whereHas('payment', function (Builder $query){
-                    $query->where('status', 'completed')->whereHas('paymentItem', function (Builder $query){
-                        $query->where('title', '=','Списание с баланса');
+            $query->whereHas('orderPayment', function (Builder $query) {
+                $query->whereHas('payment', function (Builder $query) {
+                    $query->where('status', 'completed')->whereHas('paymentItem', function (Builder $query) {
+                        $query->where('title', '=', 'Списание с баланса');
                     });
                 });
             });
         });
     }
 
-    public function orderPaymentItems(){
+    public function orderPaymentItems()
+    {
         return $this->hasMany(OrderPaymentItem::class);
     }
 
-    public function info(){
+    public function info()
+    {
         return $this->belongsTo(StoredItemInfo::class, 'stored_item_info_id');
     }
 
-    public function storageHistories(){
+    public function storageHistories()
+    {
         return $this->hasMany(StorageHistory::class);
     }
 
-    public function storageHistory(){
+    public function storageHistory()
+    {
         return $this->hasOne(StorageHistory::class)->latest();
     }
 
-    public function storage(){
+    public function storage()
+    {
         return $this->stores()->latest()->limit(1);
     }
 
-    public function stores(){
+    public function stores()
+    {
         return $this->belongsToMany(
             Storage::class,
             'storage_histories',
@@ -87,15 +99,44 @@ class StoredItem extends BaseModel
             ->withTimestamps();
     }
 
-    public function tripHistories(){
+    public function tripHistories()
+    {
         return $this->hasMany(StoredItemTripHistory::class)->withTrashed();
     }
 
-    public function tripHistory(){
+    public function tripHistory()
+    {
         return $this->hasOne(StoredItemTripHistory::class)->latest();
     }
 
-    public function deletedBy(){
-        return $this->belongsTo(User::class);
+//    public function deletedBy(){
+//        return $this->belongsTo(User::class);
+//    }
+
+
+    //Statuses
+    public function setAcceptedStatus()
+    {
+        $this->status = 'accepted';
+    }
+
+    public function setTransitStatus()
+    {
+        $this->status = 'transit';
+    }
+
+    public function setDeliveredStatus()
+    {
+        $this->status = 'delivered';
+    }
+
+    public function setDeletedStatus()
+    {
+        $this->status = 'deleted';
+    }
+
+    public function setLostStatus()
+    {
+        $this->status = 'lost';
     }
 }
