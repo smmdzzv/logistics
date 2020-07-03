@@ -24,10 +24,10 @@ class CreateStoredItemInfosTable extends Migration
             $table->char('customs_code_id',26)->index();
             $table->char('tariff_id',26)->index();
             $table->integer('count');
-            $table->double('weight');
-            $table->double('height');
-            $table->double('width');
-            $table->double('length');
+            $table->double('weight',3);
+            $table->double('height',2);
+            $table->double('width',3);
+            $table->double('length',3);
 //            $table->double('placeCount');
 
             $table->userStamp();

@@ -21,8 +21,8 @@ class CreateOrdersTable extends Migration
             $table->char('branchId', 26);
             $table->string('status')->default('accepted');
             $table->decimal('totalCount', 10, 2);
-            $table->decimal('totalWeight', 10, 2);
-            $table->decimal('totalCubage', 10, 2);
+            $table->decimal('totalWeight', 10, 3);
+            $table->decimal('totalCubage', 10, 3);
             $table->decimal('totalPrice', 10, 2);
             $table->decimal('totalDiscount', 10, 2);
             $table->userStamp();

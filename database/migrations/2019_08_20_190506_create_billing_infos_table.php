@@ -19,10 +19,10 @@ class CreateBillingInfosTable extends Migration
             $table->char('stored_item_info_id', 26)->index();
 //            $table->char('deleted_by_id', 26)->index()->nullable();
 //            $table->integer('placesCount');
-            $table->decimal('totalCubage');
-            $table->decimal('totalWeight');
-            $table->decimal('weightPerCube');
-            $table->decimal('pricePerItem');
+            $table->decimal('totalCubage', 3);
+            $table->decimal('totalWeight', 3);
+            $table->decimal('weightPerCube',3);
+            $table->decimal('pricePerItem',2);
             $table->decimal('totalPrice', 10, 2);
             $table->decimal('discountPerCube', 10, 2);
             $table->decimal('totalDiscount', 10, 2);
