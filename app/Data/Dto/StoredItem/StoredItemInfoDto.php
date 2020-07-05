@@ -36,7 +36,7 @@ class StoredItemInfoDto extends FlexibleDataTransferObject
 
     public string $tariff_id;
 
-    public string $tariff_price_history_id;
+//    public string $tariff_price_history_id;
 
     public string $customs_code_tax_id;
 }

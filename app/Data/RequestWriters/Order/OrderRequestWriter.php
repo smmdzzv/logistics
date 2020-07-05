@@ -4,10 +4,10 @@
 namespace App\Data\RequestWriters\Order;
 
 
-use App\Data\MassWriters\Order\BillingInfosWriter;
+use App\Data\MassWriters\Order\BillingInfosMassWriter;
 use App\Data\MassWriters\Order\StorageHistoriesWriter;
-use App\Data\MassWriters\Order\StoredItemInfosWriter;
-use App\Data\MassWriters\Order\StoredItemsWriter;
+use App\Data\MassWriters\StoredItem\StoredItemInfosMassWriter;
+use App\Data\MassWriters\StoredItem\StoredItemsMassWriter;
 use App\Data\RequestWriters\RequestWriter;
 use App\Models\Branch;
 use App\Models\Order;
@@ -17,7 +17,7 @@ use App\User;
 use Carbon\Carbon;
 use stdClass;
 
-
+/**@deprecated */
 class OrderRequestWriter extends RequestWriter
 {
 
@@ -88,7 +88,7 @@ class OrderRequestWriter extends RequestWriter
         }
 
         if (count($this->storedItemInfos) > 0) {
-            $infosWriter = new StoredItemInfosWriter($this->storedItemInfos);
+            $infosWriter = new StoredItemInfosMassWriter($this->storedItemInfos);
             $this->storedItemInfos = $infosWriter->write();
         }
     }
@@ -100,6 +100,7 @@ class OrderRequestWriter extends RequestWriter
     protected function createStoredItems()
     {
         foreach ($this->storedItemInfos as $info) {
+            /** @var StoredItemInfo $info */
             $items = $info->getStoredItems();
             foreach ($items as $item) {
                 $item->code = $this->generateCode();
@@ -108,7 +109,7 @@ class OrderRequestWriter extends RequestWriter
         }
 
         if (count($this->storedItems) > 0) {
-            $storedWriter = new StoredItemsWriter($this->storedItems);
+            $storedWriter = new StoredItemsMassWriter($this->storedItems);
             $this->storedItems = $storedWriter->write();
         }
     }
@@ -183,7 +184,7 @@ class OrderRequestWriter extends RequestWriter
         }
 
         if (count($this->billingInfos) > 0) {
-            $billingsWriter = new BillingInfosWriter($this->billingInfos);
+            $billingsWriter = new BillingInfosMassWriter($this->billingInfos);
             $this->billingInfos = $billingsWriter->write();
         }
     }

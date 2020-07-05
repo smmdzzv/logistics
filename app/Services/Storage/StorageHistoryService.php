@@ -18,9 +18,11 @@ class StorageHistoryService
     public function massStore(Collection $storedItems, Storage $storage): Collection
     {
         return $storedItems->map(function (StoredItem $item) use ($storage) {
+            $item->storageHistory()->delete();
             return new StorageHistory([
                 'stored_item_id' => $item->id,
-                'storage_id' => $storage->id
+                'storage_id' => $storage->id,
+                'created_by_id' => auth()->id()
             ]);
         })->pipe(function (Collection $histories) {
             $historyWriters = new StorageHistoriesWriter($histories->all());

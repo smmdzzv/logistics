@@ -16,7 +16,9 @@ class BillingInfoService
     public function massStore(Collection $storedItemInfos, array $customPrices): Collection
     {
         return $storedItemInfos->map(function (StoredItemInfo $info, $key) use ($customPrices) {
-            return $info->getBillingInfo($customPrices[$key]);
+            $billing = $info->getBillingInfo($customPrices[$key]);
+            $billing->created_by_id = auth()->id();
+            return $billing;
         })->pipe(function (Collection $billingInfos) {
             $massWriter = new BillingInfosMassWriter($billingInfos->all());
             return collect($massWriter->write());

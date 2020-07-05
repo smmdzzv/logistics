@@ -6,7 +6,7 @@ namespace App\Data\RequestWriters;
 
 use PhpParser\Node\Expr\Cast\Object_;
 use stdClass;
-
+/**@deprecated*/
 abstract class RequestWriter
 {
     protected $request;

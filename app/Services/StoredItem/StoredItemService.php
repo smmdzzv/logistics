@@ -12,6 +12,7 @@ use App\Data\MassWriters\StoredItem\StoredItemsMassWriter;
 use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Users\Client;
+use App\StoredItems\StorageHistory;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -25,12 +26,13 @@ class StoredItemService
         $this->codes = new Collection();
     }
 
-    public function massStoreFromInfo(StoredItemInfo $info, $status = 'stored'): Collection
+    public function massStoreFromInfo(StoredItemInfo $info, $quantity = null, $status = 'stored'): Collection
     {
-        return collect([])->pad($info->count, null)->map(function ($i) use ($info, $status) {
+        return collect([])->pad($quantity ?? $info->count, null)->map(function ($i) use ($info, $status) {
             return new StoredItem([
                 'stored_item_info_id' => $info->id,
-                'status' => $status
+                'status' => $status,
+                'created_by_id' => auth()->id()
             ]);
         })->each(function ($item) use ($info) {
             $item->code = $this->generateCode($info->owner);
@@ -38,6 +40,25 @@ class StoredItemService
             $storedWriter = new StoredItemsMassWriter($itemsCollection->all());
             return collect($storedWriter->write());
         });
+    }
+
+    public function massUpdateFromInfo(StoredItemInfo $info)
+    {
+        $diff = $info->storedItems()->count() - $info->count;
+        if ($diff > 0) {
+            $items = $info->storedItems()
+                ->with('storageHistory')
+                ->limit($diff)
+                ->get()
+                ->each(function (StoredItem $item) {
+                    $item->storageHistory->delete();
+                    $item->delete();
+                });
+        } else {
+            $this->massStoreFromInfo($info, abs($diff));
+        }
+
+        return $info->storedItems;
     }
 
     /**

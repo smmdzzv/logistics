@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property string status
  * @property string id
+ * @property StorageHistory storageHistory
  */
 class StoredItem extends BaseModel
 {
@@ -131,10 +132,10 @@ class StoredItem extends BaseModel
         $this->status = 'delivered';
     }
 
-    public function setDeletedStatus()
-    {
-        $this->status = 'deleted';
-    }
+//    public function setDeletedStatus()
+//    {
+//        $this->status = 'deleted';
+//    }
 
     public function setLostStatus()
     {

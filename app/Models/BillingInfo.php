@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string tariff_price_history_id
  * @property double count
  * @property TariffPriceHistory tariffPricing
+ * @property string created_by_id
  */
 class BillingInfo extends BaseModel
 {

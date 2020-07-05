@@ -31,7 +31,7 @@ class OrderRequest extends FormRequest
             'storedItemInfos.*.count' => 'required|numeric',
             'storedItemInfos.*.customPrice' => 'nullable|numeric',
             'storedItemInfos.*.item_id' => 'required|exists:items,id',
-            'storedItemInfos.*.tariff_price_history_id' => 'required|exists:tariff_price_histories,id',
+//            'storedItemInfos.*.tariff_price_history_id' => 'required|exists:tariff_price_histories,id',
             'storedItemInfos.*.tariff_id' => 'required|exists:tariffs,id',
             'storedItemInfos.*.branch_id' => 'required|exists:branches,id',
             'storedItemInfos.*.customs_code_tax_id' => 'required|exists:customs_code_taxes,id',

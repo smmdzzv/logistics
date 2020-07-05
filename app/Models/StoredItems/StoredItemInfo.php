@@ -12,6 +12,7 @@ use App\Models\TariffPriceHistory;
 use App\Models\Users\Client;
 use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 /**
  * @property double weight
@@ -27,6 +28,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Tariff tariff
  * @property string id
  * @property Client owner
+ * @property Collection storedItems
  */
 class StoredItemInfo extends BaseModel
 {

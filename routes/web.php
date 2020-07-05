@@ -34,9 +34,12 @@ Route::resource('trusted-user', 'Users\TrustedUserController');
 Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 
 //Order
-//Route::get('/orders/all', 'OrdersController@all')->name('order.all');
-Route::get('/orders/filtered', 'OrdersController@filtered')->name('order.filtered');
-Route::get('/orders/{client}/active', 'OrdersController@activeOrders')->name('client.orders.active');
+//Route::get('/orders/all', 'Orders\OrdersController@all')->name('order.all');
+Route::get('/orders/filtered', 'Orders\OrdersController@filtered')->name('order.filtered');
+Route::get('/orders/{client}/active', 'Orders\OrdersController@activeOrders')->name('client.orders.active');
+Route::resource('orders', 'Orders\OrdersController')->parameters(['orders' => 'order']);
+Route::get('branch/{branch}/orders', 'Orders\OrdersController@filteredByBranch');
+Route::get('user/{user}/orders', 'Orders\OrdersController@filteredByUser');
 
 Route::post('/order/{order}/update-price', 'Orders\OrderPriceController@update')->name('order-price.update');
 
@@ -50,12 +53,6 @@ Route::post('/deliver/{order}/items/pending-payment', 'Orders\OrderItemsControll
 Route::get('/orders/{client}/unpaid', 'Orders\ClientOrdersController@unpaid');
 Route::get('/orders/{client}/debt', 'Orders\ClientOrdersController@totalDebt');
 Route::get('/orders/{clientCode}/statistics', 'Orders\ClientOrdersController@getStatistics');
-
-Route::resource('orders', 'OrdersController', ['except' => ['delete']]);
-
-Route::get('branch/{branch}/orders', 'OrdersController@filteredByBranch');
-Route::get('user/{user}/orders', 'OrdersController@filteredByUser');
-
 
 //Trips
 Route::get('/trips/all', 'Trips\TripsController@all');

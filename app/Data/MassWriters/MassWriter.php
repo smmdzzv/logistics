@@ -10,7 +10,7 @@ use Rorecek\Ulid\Ulid;
 abstract class MassWriter
 {
     protected $entities;
-    protected $data;
+    protected array $data;
     protected $entityClass;
     private $ulidGenerator;
 
@@ -18,6 +18,7 @@ abstract class MassWriter
     {
         $this->ulidGenerator = new Ulid();
         $this->entities = $entities;
+        $this->data = [];
         $this->prepare();
     }
 
@@ -38,6 +39,8 @@ abstract class MassWriter
      */
     public function write()
     {
+        if (count($this->data) === 0)
+            return [];
         $this->entityClass::insert($this->data);
         return $this->entities;
     }

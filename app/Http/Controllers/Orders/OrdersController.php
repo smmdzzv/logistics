@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Orders;
 
 use App\Common\PasswordGenerator;
+use App\Data\Dto\Order\OrderDto;
 use App\Data\Filters\OrderFilter;
-use App\Data\RequestWriters\Order\OrderRequestWriter;
-use App\Data\RequestWriters\Order\UpdateOrderRequestWriter;
+use App\Http\Controllers\BaseController;
 use App\Models\Branch;
-use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\OrderRequest;
 use App\Models\Currency;
 use App\Models\Order;
 use App\Models\Role;
@@ -15,13 +15,18 @@ use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Tariff;
 use App\Models\Till\Account;
 use App\Models\Users\Client;
+use App\Services\Order\OrderService;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 
 class OrdersController extends BaseController
 {
-    public function __construct()
+    private OrderService $service;
+
+    public function __construct(OrderService $service)
     {
+        $this->service = $service;
+
         $this->middleware('auth');
 
         $this->middleware('user.branch');
@@ -63,21 +68,29 @@ class OrdersController extends BaseController
         return view('orders.create', compact('user', 'tariffs'));
     }
 
-    public function store(StoreOrderRequest $request)
+    public function store(OrderRequest $request)
     {
-        $storedItemInfos = $this->getStoredItemInfos();
-        $customPrices = $this->getCustomPricesArray();
+        $orderDto = new OrderDto($this->getData($request));
 
-        $orderWriter = new OrderRequestWriter(
-            $this->findOrCreateClient($request->input('clientCode')),
-            Branch::findOrFail(auth()->user()->branch->id),
-            auth()->user(),
-            $storedItemInfos,
-            $customPrices
-        );
-
-        return $orderWriter->write();
+        return $this->service->store($orderDto);
     }
+
+
+//    public function store(StoreOrderRequest $request)
+//    {
+//        $storedItemInfos = $this->getStoredItemInfos();
+//        $customPrices = $this->getCustomPricesArray();
+//
+//        $orderWriter = new OrderRequestWriter(
+//            $this->findOrCreateClient($request->input('clientCode')),
+//            Branch::findOrFail(auth()->user()->branch->id),
+//            auth()->user(),
+//            $storedItemInfos,
+//            $customPrices
+//        );
+//
+//        return $orderWriter->write();
+//    }
 
     public function edit(Order $order)
     {
@@ -104,35 +117,44 @@ class OrdersController extends BaseController
         return view('orders.edit', compact('order', 'user', 'tariffs'));
     }
 
-    public function update(Order $order, StoreOrderRequest $request)
+    public function update($order, OrderRequest $request)
     {
-        $storedItemInfos = $this->getStoredItemInfos();
-        $customPrices = $this->getCustomPricesArray();
+        $order = Order::find($order);
 
-        $orderWriter = new UpdateOrderRequestWriter(
-            $this->findOrCreateClient($request->input('clientCode')),
-            Branch::findOrFail(auth()->user()->branch->id),
-            auth()->user(),
-            $storedItemInfos,
-            $customPrices,
-            $order
-        );
+        $orderDto = new OrderDto($this->getData($request));
 
-        return $orderWriter->write();
+        return $this->service->update($order, $orderDto);
     }
 
-    private function getCustomPricesArray()
-    {
-        $customPrices = array();
-        $index = 0;
+//    public function update(Order $order, OrderRequest $request)
+//    {
+//        $storedItemInfos = $this->getStoredItemInfos();
+//        $customPrices = $this->getCustomPricesArray();
+//
+//        $orderWriter = new UpdateOrderRequestWriter(
+//            $this->findOrCreateClient($request->input('clientCode')),
+//            Branch::findOrFail(auth()->user()->branch->id),
+//            auth()->user(),
+//            $storedItemInfos,
+//            $customPrices,
+//            $order
+//        );
+//
+//        return $orderWriter->write();
+//    }
 
-        foreach (request()->input('storedItemInfos') as $itemData) {
-            $customPrices[$index] = isset($itemData['customPrice']) ? $itemData['customPrice'] : null;
-            $index++;
-        }
-
-        return $customPrices;
-    }
+//    private function getCustomPricesArray()
+//    {
+//        $customPrices = array();
+//        $index = 0;
+//
+//        foreach (request()->input('storedItemInfos') as $itemData) {
+//            $customPrices[$index] = isset($itemData['customPrice']) ? $itemData['customPrice'] : null;
+//            $index++;
+//        }
+//
+//        return $customPrices;
+//    }
 
 //    public function all()
 //    {
@@ -166,17 +188,30 @@ class OrdersController extends BaseController
         } else abort(404, 'Пользователь не найден');
     }
 
+    private function getData(OrderRequest $request): array
+    {
+        $data = collect($request->all());
+        $owner_id = $this->findOrCreateClient($request->get('clientCode'))->id;
+        $data['owner_id'] = $owner_id;
+        $data['storedItemInfos'] = collect($data['storedItemInfos'])
+            ->map(function ($storedItemInfo) use ($request, $owner_id) {
+                $storedItemInfo['owner_id'] = $owner_id;
+                $storedItemInfo['branch_id'] = $request->get('branch_id');
+                return $storedItemInfo;
+            })->all();
+        return $data->all();
+    }
+
     private function getTariffs()
     {
         return auth()->user()->hasRole('admin') ? Tariff::all() : Tariff::where('branch_id', auth()->user()->branch->id)->get();
-
     }
 
     /**
      * @param String $code
      * @return User
      */
-    private function findOrCreateClient(String $code)
+    private function findOrCreateClient(string $code): User
     {
         $client = User::where('code', $code)->first();
         if (!$client) {
@@ -198,7 +233,6 @@ class OrdersController extends BaseController
 
             $client->accounts()->save($account);
         }
-
 
         return $client;
     }

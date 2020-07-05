@@ -18,7 +18,9 @@ class StoredItemInfoService
     {
         return $infosData->map(function ($dto) {
             /** @var StoredItemInfoDto $dto */
-            return new StoredItemInfo($dto->toArray());
+            return new StoredItemInfo(
+                array_merge($dto->toArray(), ['created_by_id' => auth()->id()])
+            );
         })->pipe(function (Collection $storedItemInfos) {
             $infosMassWriter = new StoredItemInfosMassWriter($storedItemInfos->all());
             return collect($infosMassWriter->write());
