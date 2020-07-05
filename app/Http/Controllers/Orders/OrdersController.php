@@ -54,6 +54,7 @@ class OrdersController extends BaseController
             'storedItemInfos.item',
             'storedItemInfos.tariff',
             'storedItemInfos.storedItems',
+            'storedItemInfos.branch',
             'orderRemovedItems.storedItemInfo.item',
             'orderRemovedItems.storedItemInfo.deletedBy',
             'owner'
@@ -105,6 +106,7 @@ class OrdersController extends BaseController
             'storedItemInfos.billingInfo.tariffPricing',
             'storedItemInfos.item.codes',
             'storedItemInfos.tariff',
+            'storedItemInfos.branch',
             'storedItemInfos.storedItems',
             'orderRemovedItems.storedItemInfo.item',
             'owner'

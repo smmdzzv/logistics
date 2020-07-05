@@ -22,6 +22,7 @@ class CreateStoredItemInfosTable extends Migration
             $table->char('order_id',26)->index();
             $table->char('shop',50)->nullable();
             $table->char('customs_code_tax_id',26)->index();
+            $table->char('customs_code_id',26)->index();
             $table->char('tariff_id',26)->index();
 //            $table->char('tariff_price_history_id',26)->index();
             $table->integer('count');

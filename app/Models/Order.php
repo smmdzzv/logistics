@@ -52,7 +52,7 @@ class Order extends BaseModel
 
     public function owner()
     {
-        return $this->belongsTo(User::class, 'ownerId');
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
     public function registeredBy()
