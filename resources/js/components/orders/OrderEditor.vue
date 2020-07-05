@@ -3,16 +3,9 @@
         <div class="row justify-content-center px-3">
             <div class="form-group col-3">
                 <label class="col-form-label text-md-right" for="user">Клиент</label>
-                <input class="form-control form-control-sm" id="user" placeholder="Введите код клиента" v-model.lazy="clientCode"
+                <input class="form-control form-control-sm" id="user" placeholder="Введите код клиента"
+                       v-model.lazy="clientCode"
                        autofocus>
-                <!--                <search-user-dropdown :selected="onUserSelected"-->
-                <!--                                      :preselectedUser="client"-->
-                <!--                                      class="col-12"-->
-                <!--                                      id="user"-->
-                <!--                                      ref="clientDropdown"-->
-                <!--                                      placeholder="Введите ФИО или код клиента"-->
-                <!--                                      url="/concrete/client/filter?userInfo="-->
-                <!--                                      autofocus/>-->
 
                 <b-popover
                     :show.sync="clientError"
@@ -26,17 +19,20 @@
             <template v-if="!client">
                 <div class="form-group col-3">
                     <label class="col-form-label text-md-right" for="clientName">ФИО</label>
-                    <input class="form-control form-control-sm client-input-form" id="clientName" placeholder="Необязательно"
+                    <input class="form-control form-control-sm client-input-form" id="clientName"
+                           placeholder="Необязательно"
                            v-model="clientName">
                 </div>
                 <div class="form-group col-3">
                     <label class="col-form-label text-md-right" for="clientPhone">Телефон</label>
-                    <input class="form-control form-control-sm client-input-form" id="clientPhone" placeholder="Необязательно"
+                    <input class="form-control form-control-sm client-input-form" id="clientPhone"
+                           placeholder="Необязательно"
                            v-model="clientPhone">
                 </div>
                 <div class="form-group col-3">
                     <label class="col-form-label text-md-right" for="clientEmail">E-mail</label>
-                    <input class="form-control form-control-sm client-input-form" id="clientEmail" placeholder="Необязательно"
+                    <input class="form-control form-control-sm client-input-form" id="clientEmail"
+                           placeholder="Необязательно"
                            v-model="clientEmail">
                 </div>
             </template>
@@ -61,13 +57,13 @@
 </template>
 
 <script>
+    import {hideBusySpinner, showBusySpinner} from "../../tools";
+
     export default {
         name: "OrderEditor",
         mounted() {
             if (this.order) {
                 this.clientCode = this.order.owner.code;
-                // this.$refs.clientDropdown.userInfo = this.clientCode;
-                // this.$refs.clientDropdown.selectedUserDisplayInfo = this.clientCode;
             }
         },
         props: {
@@ -87,10 +83,6 @@
             }
         },
         methods: {
-            // onUserSelected(user) {
-            //     this.client = user;
-            //     this.clientCode = this.client ? this.client.code : this.$refs.clientDropdown.userInfo;
-            // },
             async submitData() {
                 if (!this.clientCode) {
                     this.clientError = true;
@@ -99,17 +91,29 @@
 
                 if (this.storedItems.length > 0 || this.order && this.order.id) {
                     // this.$bvModal.show('busyModal');
-                    tShowSpinner();
+                    showBusySpinner();
+                    let storedItemInfos = this.storedItems.map(i => {
+                        i.branch_id = i.branch.id;
+                        i.item_id = i.item.id;
+                        i.tariff_id = i.tariff.id;
+                        i.customs_code_id = i.customsCode.id;
+                        return i;
+                    });
+                    let customPrices = this.storedItems.map(i => i.customPrice ? i.customPrice : null)
                     try {
                         let response = null;
                         if (this.order) {
                             response = await axios.patch('/orders/' + this.order.id, {
-                                storedItemInfos: this.storedItems,
+                                branch_id: storedItemInfos[0].branch_id,
+                                storedItemInfos: storedItemInfos,
+                                customPrices: customPrices,
                                 clientCode: this.clientCode
                             });
                         } else {
                             response = await axios.post('/orders', {
-                                storedItemInfos: this.storedItems,
+                                branch_id: storedItemInfos[0].branch_id,
+                                storedItemInfos: storedItemInfos,
+                                customPrices: customPrices,
                                 clientCode: this.clientCode,
                                 clientName: this.clientName,
                                 clientPhone: this.clientPhone,
@@ -119,7 +123,7 @@
                         // tHideSpinner()
                         window.location.href = '/orders';
                     } catch (e) {
-                        tHideSpinner();
+                        hideBusySpinner();
                         this.$root.showErrorMsg(
                             'Ошибка сохранения',
                             'Не удалось сохранить заказ. Попробуйте принять заказ позже'
@@ -127,9 +131,6 @@
                         console.log(e);
                     }
                 }
-
-                // this.$bvModal.hide('busyModal');
-
             },
             onStoredItemsChange(items) {
                 if (items)

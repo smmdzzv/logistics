@@ -10,12 +10,6 @@
                                name="shop"
                                placeholder="код или название магазина"
                                required v-model="storedItem.shop">
-                        <!--                        <select class="form-control form-control-sm custom-select"-->
-                        <!--                                id="shop"-->
-                        <!--                                required v-model="storedItem.shop">-->
-                        <!--                            <option :value="null" disabled>&#45;&#45; Выберите магазин &#45;&#45;</option>-->
-                        <!--                            <option :value="shop" v-for="shop in shops">{{shop.code}} {{shop.name}}</option>-->
-                        <!--                        </select>-->
                     </div>
 
                     <div class="form-group col-md-3 col-lg-2">
@@ -182,23 +176,10 @@
 
                     <div class="form-group col-md-3 col-lg-2">
                         <label class="col-form-label text-md-right" for="branch">Филиал</label>
-                        <input class="form-control form-control-sm" disabled id="branch" name="branch" v-model="branch.name">
+                        <input class="form-control form-control-sm" disabled id="branch" name="branch"
+                               v-model="branch.name">
                     </div>
                 </b-form-row>
-
-<!--                <div class="row">-->
-
-
-                    <!--                    <div class="form-group col-md-4" id="tariff-wrapper">-->
-                    <!--                        <label class="col-form-label text-md-right" for="tariff">Тариф</label>-->
-                    <!--                        <input class="form-control form-control-sm" type="text" id="tariff" :value="tariff.name" disabled>-->
-                    <!--                        <b-tooltip target="tariff-wrapper" triggers="hover">-->
-                    <!--                            Определенно в свойствах наименования-->
-                    <!--                        </b-tooltip>-->
-                    <!--                    </div>-->
-
-
-<!--                </div>-->
 
                 <div class="col-12 text-center pt-2">
                     <button @click="onAdded" class="btn btn-primary">Добавить</button>
@@ -239,6 +220,7 @@
 
 <script>
     import {required, maxLength, decimal, integer} from 'vuelidate/lib/validators';
+    import {hideBusySpinner, showBusySpinner} from "../../tools";
 
     export default {
         name: "StoredItemBox",
@@ -307,7 +289,7 @@
                     && this.storedItem.item.id === this.providedStoredItemInfo.item.id
                     && this.storedItem.tariff.id === this.providedStoredItemInfo.tariff.id)
                     return;
-                tShowSpinner();
+                showBusySpinner();
                 try {
                     let action = `tariff/${this.storedItem.tariff.id}/pricing`;
                     const response = await axios.get(action);
@@ -318,7 +300,7 @@
                         'Не удалось загрузить расценки для выбранного тарифа. Убедитесь, что расценки заданы в системе'
                     )
                 }
-                tHideSpinner();
+                hideBusySpinner();
             },
             onItemSearchInputChange(query) {
                 if (query === "")

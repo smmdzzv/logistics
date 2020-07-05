@@ -31,47 +31,11 @@ class OrderRequest extends FormRequest
             'storedItemInfos.*.count' => 'required|numeric',
             'storedItemInfos.*.customPrice' => 'nullable|numeric',
             'storedItemInfos.*.item_id' => 'required|exists:items,id',
-//            'storedItemInfos.*.tariff_price_history_id' => 'required|exists:tariff_price_histories,id',
             'storedItemInfos.*.tariff_id' => 'required|exists:tariffs,id',
             'storedItemInfos.*.branch_id' => 'required|exists:branches,id',
-            'storedItemInfos.*.customs_code_tax_id' => 'required|exists:customs_code_taxes,id',
+            'storedItemInfos.*.customs_code_id' => 'required|exists:customs_codes,id',
+            'customPrices' => 'required|array',
+            'customPrices.*' => 'nullable|numeric'
         ];
-
-
-//        $rules['orderId'] = 'nullable|exists:orders,id';
-//        $rules = ['storedItemInfos' => 'required_if:orderId,!==,null'];
-
-        //Client validation
-//        $rules['clientCode'] = 'nullable|string';
-//        $rules['clientName'] = 'nullable|string';
-//        $rules['clientPhone'] = 'nullable|string';
-//        $rules['clientEmail'] = 'nullable|string';
-
-        //stored item infos validation
-//        $rules['storedItemInfos.*.width'] = 'required|numeric';
-//        $rules['storedItemInfos.*.height'] = 'required|numeric';
-//        $rules['storedItemInfos.*.length'] = 'required|numeric';
-//        $rules['storedItemInfos.*.weight'] = 'required|numeric';
-//        $rules['storedItemInfos.*.count'] = 'required|numeric';
-//        $rules['storedItemInfos.*.customPrice'] = 'nullable|numeric';
-
-        //stored item infos relations validation
-//        $rules['storedItemInfos.*.item_id'] = 'required|exists:items,id';
-//        $rules['storedItemInfos.*.tariff_price_history_id'] = 'required|exists:tariff_price_histories,id';
-//        $rules['storedItemInfos.*.tariff_id'] = 'required|exists:tariffs,id';
-//        $rules['storedItemInfos.*.branch_id'] = 'required|exists:branches,id';
-//        $rules['storedItemInfos.*.customs_code_tax_id'] = 'required|exists:customs_code_taxes,id';
-
-//        return $rules;
     }
-
-    /**
-     *  Filters to be applied to the input.
-     *
-     * @return void
-     */
-//    public function filters()
-//    {
-//        return [];
-//    }
 }

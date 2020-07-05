@@ -55,7 +55,7 @@ class OrderControllerTest extends TestCase
                         'item_id' => $data['item']->id,
                         'tariff_id' => $data['tariff']->id,
                         'branch_id' => $data['branch']->id,
-                        'customs_code_tax_id' => $data['customsCodeTax']->id
+                        'customs_code_id' => $data['customsCode']->id
                     ]
                 ],
                 'customPrices' => [null]
@@ -130,7 +130,7 @@ class OrderControllerTest extends TestCase
                         'item_id' => $data['item']->id,
                         'tariff_id' => $data['tariff']->id,
                         'branch_id' => $data['branch']->id,
-                        'customs_code_tax_id' => $data['customsCodeTax']->id
+                        'customs_code_id' => $data['customsCode']->id
                     ],
                     1 => [
                         'width' => 0.3,
@@ -142,7 +142,7 @@ class OrderControllerTest extends TestCase
                         'item_id' => $data['item']->id,
                         'tariff_id' => $data['tariff']->id,
                         'branch_id' => $data['branch']->id,
-                        'customs_code_tax_id' => $data['customsCodeTax']->id
+                        'customs_code_id' => $data['customsCode']->id
                     ],
                 ],
                 'customPrices' => [null, null]
@@ -167,7 +167,7 @@ class OrderControllerTest extends TestCase
                     'item_id' => $data['item']->id,
                     'tariff_id' => $data['tariff']->id,
                     'branch_id' => $data['branch']->id,
-                    'customs_code_tax_id' => $data['customsCodeTax']->id
+                    'customs_code_id' => $data['customsCode']->id
                 ],
                 1 => [
                     'id' => $order->storedItemInfos[1]->id,
@@ -180,7 +180,7 @@ class OrderControllerTest extends TestCase
                     'item_id' => $data['item']->id,
                     'tariff_id' => $tariff->id,
                     'branch_id' => $data['branch']->id,
-                    'customs_code_tax_id' => $data['customsCodeTax']->id
+                    'customs_code_id' => $data['customsCode']->id
                 ]
             ],
             'customPrices' => [null, 92.5]

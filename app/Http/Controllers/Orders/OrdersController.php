@@ -9,6 +9,7 @@ use App\Http\Controllers\BaseController;
 use App\Models\Branch;
 use App\Http\Requests\OrderRequest;
 use App\Models\Currency;
+use App\Models\Customs\CustomsCode;
 use App\Models\Order;
 use App\Models\Role;
 use App\Models\StoredItems\StoredItemInfo;
@@ -190,13 +191,14 @@ class OrdersController extends BaseController
 
     private function getData(OrderRequest $request): array
     {
-        $data = collect($request->all());
+        $data = collect($request->validated());
         $owner_id = $this->findOrCreateClient($request->get('clientCode'))->id;
         $data['owner_id'] = $owner_id;
         $data['storedItemInfos'] = collect($data['storedItemInfos'])
             ->map(function ($storedItemInfo) use ($request, $owner_id) {
                 $storedItemInfo['owner_id'] = $owner_id;
                 $storedItemInfo['branch_id'] = $request->get('branch_id');
+                $storedItemInfo['customs_code_tax_id'] = CustomsCode::find($storedItemInfo['customs_code_id'])->tax->id;
                 return $storedItemInfo;
             })->all();
         return $data->all();
@@ -268,7 +270,7 @@ class OrdersController extends BaseController
         $branches = $this->getBranches()->map(function ($branch) {
             return $branch->id;
         });
-        $query = Order::whereIn('branchId', $branches)
+        $query = Order::whereIn('branch_id', $branches)
             ->with(['owner', 'registeredBy', 'storedItemInfos'])
             ->latest();
         $filter = new OrderFilter(request()->all(), $query);

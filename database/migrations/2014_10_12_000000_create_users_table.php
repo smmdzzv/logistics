@@ -18,8 +18,8 @@ class CreateUsersTable extends Migration
             $table->char('position_id', 26)->nullable();
             $table->char('branch_id', 26)->nullable();
             $table->string('name')->nullable();
-            $table->string('code')->unique()->nullable();
-            $table->string('email')->unique()->nullable();
+            $table->string('code')->unique()->index()->nullable();
+            $table->string('email')->unique()->index()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('timezone')->nullable();
