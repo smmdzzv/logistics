@@ -7,6 +7,9 @@ use App\Models\Branch;
 use App\Models\StoredItems\StoredItem;
 use App\StoredItems\StorageHistory;
 
+/**
+ * @property string id
+ */
 class Storage extends BaseModel
 {
     public function branch(){

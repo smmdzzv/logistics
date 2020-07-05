@@ -13,7 +13,8 @@ use Illuminate\Notifications\Notifiable;
 use Rorecek\Ulid\HasUlid;
 
 /**
- * @property String id
+ * @property string id
+ * @property string code
  */
 class User extends Authenticatable
 {

@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @property Collection<StoredItem> storedItems
  * @property Collection<StoredItemInfo> storedItemInfos
  * @property string status
+ * @property string id
  */
 class Order extends BaseModel
 {

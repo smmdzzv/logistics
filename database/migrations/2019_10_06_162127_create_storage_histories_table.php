@@ -17,8 +17,8 @@ class CreateStorageHistoriesTable extends Migration
             $table->char('id',26)->primary();
             $table->char('storage_id',26);
             $table->char('stored_item_id',26);
-            $table->char('registeredById', 26);
-            $table->char('deletedById', 26)->nullable();
+//            $table->char('registeredById', 26);
+//            $table->char('deletedById', 26)->nullable();
 
             $table->userStamp();
             $table->softDeletes();

@@ -8,6 +8,7 @@ use App\Models\Branch;
 use App\Models\Customs\CustomsCode;
 use App\Models\Order;
 use App\Models\Tariff;
+use App\Models\TariffPriceHistory;
 use App\Models\Users\Client;
 use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -24,6 +25,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property double count
  * @property BillingInfo billingInfo
  * @property Tariff tariff
+ * @property string id
+ * @property Client owner
  */
 class StoredItemInfo extends BaseModel
 {
@@ -47,7 +50,7 @@ class StoredItemInfo extends BaseModel
 
     public function owner()
     {
-        return $this->belongsTo(Client::class, 'ownerId', 'id', 'users');
+        return $this->belongsTo(Client::class, 'owner_id', 'id', 'users');
     }
 
     public function branch()
@@ -100,19 +103,12 @@ class StoredItemInfo extends BaseModel
      */
     public function getBillingInfo($customPrice = null)
     {
-//        $tariffPricing = $this->item->tariff->lastPriceHistory;
-
-//        $billingInfo = $this->billingInfo ?? new BillingInfo();
-//dd($this->billingInfo);
         if(!$this->billingInfo){
             $this->billingInfo = new BillingInfo();
             $tariffPricing = $this->tariff->lastPriceHistory;
             $this->billingInfo->tariffPricing()->associate($tariffPricing);
             $this->billingInfo->storedItemInfo()->associate($this);
         }
-
-//        $billingInfo->tariffPricing()->associate($tariffPricing);
-//        $billingInfo->storedItemInfo()->associate($this);
 
         $this->billingInfo->totalWeight = $this->weight * $this->count;
         $this->billingInfo->totalCubage = $this->width * $this->height * $this->length * $this->count;
@@ -133,6 +129,7 @@ class StoredItemInfo extends BaseModel
 
 
     /**
+     * @deprecated
      * @return array of StoredItem
      */
     public function getStoredItems()

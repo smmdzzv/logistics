@@ -1,13 +1,13 @@
 <?php
 
 
-namespace App\Data\MassWriters\Order;
+namespace App\Data\MassWriters\StoredItem;
 
 
 use App\Data\MassWriters\MassWriter;
 use App\Models\StoredItems\StoredItem;
 
-class StoredItemsWriter extends MassWriter
+class StoredItemsMassWriter extends MassWriter
 {
     public function __construct(array $entities)
     {

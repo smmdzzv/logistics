@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string status
+ * @property string id
  */
 class StoredItem extends BaseModel
 {
@@ -115,9 +116,9 @@ class StoredItem extends BaseModel
 
 
     //Statuses
-    public function setAcceptedStatus()
+    public function setStoredStatus()
     {
-        $this->status = 'accepted';
+        $this->status = 'stored';
     }
 
     public function setTransitStatus()

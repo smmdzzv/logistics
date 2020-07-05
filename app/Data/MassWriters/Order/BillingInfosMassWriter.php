@@ -7,7 +7,7 @@ namespace App\Data\MassWriters\Order;
 use App\Data\MassWriters\MassWriter;
 use App\Models\BillingInfo;
 
-class BillingInfosWriter extends MassWriter
+class BillingInfosMassWriter extends MassWriter
 {
     public function __construct(array $entities)
     {

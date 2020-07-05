@@ -24,7 +24,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property double maxCubage
  * @property double maxWeight
  * @property int tariff_id
- * @property int branch_id
  */
 class TariffPriceHistory extends BaseModel
 {

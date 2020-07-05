@@ -46,7 +46,8 @@ class BillingInfo extends BaseModel
      * Sets price for items with onlyCustomPrice flag
      * @param $customPrice
      */
-    public function setCustomPrice($customPrice){
+    public function setCustomPrice($customPrice)
+    {
         $this->totalPrice = $customPrice;
         $this->pricePerItem = $customPrice / $this->count;
         $this->totalDiscount = 0;
@@ -54,7 +55,6 @@ class BillingInfo extends BaseModel
 
     public function calculatePrice(StoredItemInfo $storedItemInfo)
     {
-
         if ($storedItemInfo->item->onlyAgreedPrice
             || $this->weightPerCube >= $this->tariffPricing->maxWeightPerCube
             && $storedItemInfo->item->calculateByNormAndWeight) {
@@ -62,7 +62,7 @@ class BillingInfo extends BaseModel
             $this->totalPrice = $this->tariffPricing->agreedPricePerKg * $this->totalWeight;
             $this->pricePerItem = $this->totalPrice / $this->count;
 
-            return  $this->roundData();
+            return $this->roundData();
 
         }
 
@@ -90,7 +90,7 @@ class BillingInfo extends BaseModel
 
         $this->totalDiscount = $this->discountPerCube * $storedItemInfo->count;
         $this->totalPrice = $pricePerCube * $this->totalCubage;
-        $this->pricePerItem  = $this->totalPrice / $this->count;
+        $this->pricePerItem = $this->totalPrice / $this->count;
 
         return $this->roundData();
     }
