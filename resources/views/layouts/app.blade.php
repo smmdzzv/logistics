@@ -55,7 +55,7 @@
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{route('stored-item-infos.index')}}">Принятые
                                         товары</a>
-                                    <a class="dropdown-item" href="{{route('order-items.edit')}}">Выдать товары</a>
+                                    <a class="dropdown-item" href="{{route('order-stored-items.index')}}">Выдать товары</a>
                                     @if(Auth::user()->hasRole('admin'))
                                         {{--                                        <div class="dropdown-divider"></div>--}}
                                         {{--                                        <a class="dropdown-item" href="{{route('lost-items.index')}}">Потерянные--}}

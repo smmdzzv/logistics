@@ -170,10 +170,10 @@ class OrdersController extends BaseController
 //            ->paginate($this->pagination());
 //    }
 
-    public function activeOrders(Client $client)
-    {
-        return $client->activeOrders;
-    }
+//    public function activeOrders(Client $client)
+//    {
+//        return $client->activeOrders;
+//    }
 
     public function filteredByBranch(Branch $branch)
     {

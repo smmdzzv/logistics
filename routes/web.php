@@ -34,21 +34,29 @@ Route::resource('trusted-user', 'Users\TrustedUserController');
 Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 
 //Order
-//Route::get('/orders/all', 'Orders\OrdersController@all')->name('order.all');
+Route::resource('order-stored-items', 'Orders\OrderItemsController')
+    ->parameters(['order-stored-items' => 'order']);
+
+Route::resource('order.unpaid-stored-items', 'Orders\OrderUnpaidStoredItemsController')
+    ->only('index');
+
+Route::resource('order.payments', 'Orders\OrderPaymentsController')
+    ->only('index');
+
+//Client Orders
+Route::resource('client.active-orders', 'Orders\ClientActiveOrdersController');
+
+Route::post('/deliver/{order}/items', 'Orders\OrderItemsController@deliver');
+Route::post('/deliver/{order}/items/pending-payment', 'Orders\OrderItemsController@storePaymentRequest');
+
 Route::get('/orders/filtered', 'Orders\OrdersController@filtered')->name('order.filtered');
-Route::get('/orders/{client}/active', 'Orders\OrdersController@activeOrders')->name('client.orders.active');
+//Route::get('/orders/{client}/active', 'Orders\OrdersController@activeOrders')->name('client.orders.active');
 Route::resource('orders', 'Orders\OrdersController')->parameters(['orders' => 'order']);
 Route::get('branch/{branch}/orders', 'Orders\OrdersController@filteredByBranch');
 Route::get('user/{user}/orders', 'Orders\OrdersController@filteredByUser');
 
 Route::post('/order/{order}/update-price', 'Orders\OrderPriceController@update')->name('order-price.update');
 
-Route::get('/orders/items/edit', 'Orders\OrderItemsController@edit')->name('order-items.edit');
-Route::get('/order/{order}/items', 'Orders\OrderItemsController@storedItems');
-Route::get('/order/{order}/unpaid-items', 'Orders\OrderItemsController@unpaidStoredItems');
-Route::get('/order/{order}/payments', 'Orders\OrderItemsController@orderPayments');
-Route::post('/deliver/{order}/items', 'Orders\OrderItemsController@deliver');
-Route::post('/deliver/{order}/items/pending-payment', 'Orders\OrderItemsController@storePaymentRequest');
 
 Route::get('/orders/{client}/unpaid', 'Orders\ClientOrdersController@unpaid');
 Route::get('/orders/{client}/debt', 'Orders\ClientOrdersController@totalDebt');

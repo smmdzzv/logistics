@@ -225,7 +225,7 @@
                     return;
                 showBusySpinner();
                 try {
-                    let action = '/orders/' + this.client.id + '/active';
+                    let action = '/client/' + this.client.id + '/active-orders';
                     const response = await axios.get(action);
                     let orders = response.data.filter(item =>
                         !this.orders.find(order => order.id === item.id)
@@ -247,7 +247,7 @@
                     return;
                 showBusySpinner();
                 try {
-                    const itemsResponse = await axios.get(`/order/${this.selectedOrder.id}/unpaid-items`);
+                    const itemsResponse = await axios.get(`/order/${this.selectedOrder.id}/unpaid-stored-items`);
                     this.items = itemsResponse.data.map(function (item) {
                         item.info.owner = this.client;
                         return item;

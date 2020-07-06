@@ -34,12 +34,14 @@ class Client extends RoleUser
 
     public function orders()
     {
-        return $this->hasMany(Order::class, 'ownerId');
+        return $this->hasMany(Order::class, 'owner_id');
     }
 
     public function activeOrders()
     {
-        return $this->orders()->where('status', '!=', "completed");
+        return $this->orders()
+            ->where('status', '!=', "completed")
+            ->orWhere('status', null);
     }
 
     public function getOrdersStatistics($dateFrom, $dateTo)
