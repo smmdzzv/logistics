@@ -137,7 +137,6 @@
                     <div class="form-group col-md-3 col-lg-2">
                         <label class="col-form-label text-md-right" for="count">Кол-во мест</label>
                         <input @blur="$v.storedItem.count.$touch()"
-                               :disabled="storedItem.id"
                                class="form-control form-control-sm"
                                id="count"
                                maxlength="4"
