@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 /**
  * @property string id
  * @property float balance
+ * @property string owner_id
  */
 class Account extends BaseModel
 {

@@ -6,6 +6,7 @@ use App\Models\Order\OrderPayment;
 use App\Models\Order\OrderRemovedItem;
 use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemInfo;
+use App\Models\Users\Client;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -20,9 +21,12 @@ use Illuminate\Database\Eloquent\Collection;
  * @property string status
  * @property string id
  * @property Collection orderPayments
+ * @property Client owner
  */
 class Order extends BaseModel
 {
+    public const STATUS_COMPLETED = 'completed';
+
     protected $casts = [
         'totalCubage' => 'double',
         'totalWeight' => 'double',
@@ -53,7 +57,7 @@ class Order extends BaseModel
 
     public function owner()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsTo(Client::class, 'owner_id');
     }
 
     public function registeredBy()
@@ -115,7 +119,7 @@ class Order extends BaseModel
 
     public function complete()
     {
-        $this->status = "completed";
+        $this->status = self::STATUS_COMPLETED;
         $this->save();
     }
 }

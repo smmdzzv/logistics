@@ -17,7 +17,7 @@ class OrderDto extends FlexibleDataTransferObject
 
     public string $branch_id;
 
-    public ?string $status;
+    public string $status = 'active';
 
     public float $totalCount = 0;
 

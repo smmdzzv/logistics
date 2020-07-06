@@ -34,8 +34,8 @@ Route::resource('trusted-user', 'Users\TrustedUserController');
 Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 
 //Order
-Route::resource('order-stored-items', 'Orders\OrderItemsController')
-    ->parameters(['order-stored-items' => 'order']);
+Route::resource('order.stored-items', 'Orders\OrderStoredItemsController')->only('index', 'show');
+Route::resource('order.delivered-stored-items', 'Orders\OrderDeliveredStoredItemsController');
 
 Route::resource('order.unpaid-stored-items', 'Orders\OrderUnpaidStoredItemsController')
     ->only('index');
@@ -46,8 +46,8 @@ Route::resource('order.payments', 'Orders\OrderPaymentsController')
 //Client Orders
 Route::resource('client.active-orders', 'Orders\ClientActiveOrdersController');
 
-Route::post('/deliver/{order}/items', 'Orders\OrderItemsController@deliver');
-Route::post('/deliver/{order}/items/pending-payment', 'Orders\OrderItemsController@storePaymentRequest');
+//Route::post('/deliver/{order}/items', 'Orders\OrderItemsController@deliver');
+//Route::post('/deliver/{order}/items/pending-payment', 'Orders\OrderItemsController@storePaymentRequest');
 
 Route::get('/orders/filtered', 'Orders\OrdersController@filtered')->name('order.filtered');
 //Route::get('/orders/{client}/active', 'Orders\OrdersController@activeOrders')->name('client.orders.active');

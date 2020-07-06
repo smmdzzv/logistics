@@ -14,9 +14,9 @@ use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
 use App\Models\Users\TrustedUser;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use OrderItemsDeliverRequest;
 
-class OrderItemsController extends Controller
+class OrderStoredItemsController extends Controller
 {
     public function __construct()
     {
@@ -24,7 +24,7 @@ class OrderItemsController extends Controller
         $this->middleware('roles.deny:client,driver,worker');
     }
 
-    public function edit()
+    public function index()
     {
         $orderPayment = request()->get('payment') ?
             OrderPayment::with('order.owner', 'paidItems.storedItem')
@@ -34,13 +34,17 @@ class OrderItemsController extends Controller
         return view('orders.edit-items-list', compact('orderPayment'));
     }
 
-    public function deliver(Order $order, Request $request)
-    {
-        $writer = new DeliverOrderItemsRequestWriter($request, $order);
-        $payment = $writer->write();
-        return $payment->id;
-    }
+//    public function deliver(Order $order, Request $request)
+//    {
+//        $writer = new DeliverOrderItemsRequestWriter($request, $order);
+//        $payment = $writer->write();
+//        return $payment->id;
+//    }
 
+//    public function update(Order $order, OrderItemsDeliverRequest $request)
+//    {
+//
+//    }
 
     public function storePaymentRequest(Order $order)
     {
@@ -116,29 +120,29 @@ class OrderItemsController extends Controller
         return $payment->id;
     }
 
-    public function storedItems(Order $order)
+    public function show(Order $order)
     {
         return $order->storedItems()->with('info', 'info.item', 'info.owner', 'storageHistory.storage')->get();
     }
 
-    public function unpaidStoredItems(Order $order)
-    {
-        return $order->storedItems()
-            ->with('info', 'info.item', 'info.billingInfo', 'info.owner', 'storageHistory.storage')
-            ->unpaid()->get();
-    }
+//    public function unpaidStoredItems(Order $order)
+//    {
+//        return $order->storedItems()
+//            ->with('info', 'info.item', 'info.billingInfo', 'info.owner', 'storageHistory.storage')
+//            ->unpaid()->get();
+//    }
 
-    public function orderPayments(Order $order)
-    {
-        $order->load('orderPayments.paidItems.storedItem');
-        $payments = $order->orderPayments->filter(function ($payment) {
-            $storedItems = $payment->paidItems->filter(function ($paidItem) {
-                return $paidItem->storedItem->deleted_at == null;
-            });
-
-            return count($storedItems) != 0;
-        });
-
-        return $payments->values()->all();
-    }
+//    public function orderPayments(Order $order)
+//    {
+//        $order->load('orderPayments.paidItems.storedItem');
+//        $payments = $order->orderPayments->filter(function ($payment) {
+//            $storedItems = $payment->paidItems->filter(function ($paidItem) {
+//                return $paidItem->storedItem->deleted_at == null;
+//            });
+//
+//            return count($storedItems) != 0;
+//        });
+//
+//        return $payments->values()->all();
+//    }
 }

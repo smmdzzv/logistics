@@ -73,6 +73,12 @@ class OrderService
         return $this->updateStat($order);
     }
 
+    public function updateStatus(Order $order)
+    {
+        if ($order->storedItems()->notDelivered()->count() === 0)
+            $order->complete();
+    }
+
     private function handleDeletedStoredItemInfos(Collection $existingInfos, Collection $infosDto)
     {
         $existingInfos->reject(function (StoredItemInfo $info) use ($infosDto) {
@@ -94,16 +100,11 @@ class OrderService
                 return $this->createStoredItemInfos($newInfos, $order, $orderDto);
             })
         );
-//        return $infosDto->reject(function (StoredItemInfoDto $dto) {
-//            return (boolean)$dto->id;
-//        })->pipe(function (Collection $newInfos) use ($order, $orderDto) {
-//            return $this->createStoredItemInfos($newInfos, $order, $orderDto);
-//        })->merge($this->updateExistingStoredItemInfos($order, $infosDto, $orderDto));
     }
 
     private function updateExistingStoredItemInfos(Order $order, Collection $infosDto, OrderDto $orderDto): Collection
     {
-        return $order->storedItemInfos->reject(function (StoredItemInfo $info){
+        return $order->storedItemInfos->reject(function (StoredItemInfo $info) {
             return (boolean)$info->deleted_at;
         })->each(function (StoredItemInfo $info) use ($infosDto) {
             $info->fill(

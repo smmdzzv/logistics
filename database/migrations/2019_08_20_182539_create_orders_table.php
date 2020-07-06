@@ -19,7 +19,7 @@ class CreateOrdersTable extends Migration
 //            $table->char('paymentId', 26)->nullable()->unique();
 //            $table->char('registeredById', 26);
             $table->char('branch_id', 26);
-            $table->string('status')->nullable();
+            $table->string('status')->default('active');
             $table->decimal('totalCount', 10, 2);
             $table->decimal('totalWeight', 10, 3);
             $table->decimal('totalCubage', 10, 3);

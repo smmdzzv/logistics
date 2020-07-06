@@ -49,6 +49,7 @@ use Illuminate\Support\Carbon;
  * @property Currency billCurrency
  * @property Currency|null secondPaidCurrency
  * @property Collection relatedPayments
+ * @property string id
  */
 class Payment extends BaseModel
 {

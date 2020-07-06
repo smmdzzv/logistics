@@ -23,6 +23,14 @@ class StoredItem extends BaseModel
 
     protected $guarded = [];
 
+    public const STATUS_STORED = 'stored';
+
+    public const STATUS_DELIVERED = 'delivered';
+
+    public const STATUS_TRANSIT = 'transit';
+
+    public const STATUS_LOST = 'lost';
+
     /**
      * @param $query
      * @return mixed
@@ -31,6 +39,10 @@ class StoredItem extends BaseModel
     public function scopeAvailable($query)
     {
         return $query->whereDoesntHave('tripHistory');
+    }
+
+    public function scopeNotDelivered($query){
+        return $query->where('status', '!=', self::STATUS_DELIVERED);
     }
 
     public function scopeStorage($query, $id)
@@ -119,17 +131,17 @@ class StoredItem extends BaseModel
     //Statuses
     public function setStoredStatus()
     {
-        $this->status = 'stored';
+        $this->status = self::STATUS_STORED;
     }
 
     public function setTransitStatus()
     {
-        $this->status = 'transit';
+        $this->status = self::STATUS_TRANSIT;
     }
 
     public function setDeliveredStatus()
     {
-        $this->status = 'delivered';
+        $this->status = self::STATUS_DELIVERED;
     }
 
 //    public function setDeletedStatus()
@@ -139,6 +151,6 @@ class StoredItem extends BaseModel
 
     public function setLostStatus()
     {
-        $this->status = 'lost';
+        $this->status = self::STATUS_LOST;
     }
 }

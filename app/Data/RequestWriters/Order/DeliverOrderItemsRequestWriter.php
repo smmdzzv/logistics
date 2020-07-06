@@ -18,6 +18,7 @@ use App\StoredItems\StorageHistory;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
+/**@deprecated*/
 class DeliverOrderItemsRequestWriter extends RequestWriter
 {
     private $storedItems;
@@ -131,7 +132,6 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
             'bill_currency_id' => $dollar,
             'second_paid_currency_id' => null,
             'exchange_rate_id' => null,
-
             'comment' => 'Списание денег с баланса в счет оплаты заказа',
         ]);
 

@@ -16,8 +16,8 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->char('id', 26)->primary();
             $table->char('branch_id', 26)->index();
-            $table->char('cashier_id', 26)->index();
-            $table->char('prepared_by_id', 26)->index()->nullable();
+//            $table->char('cashier_id', 26)->index();
+//            $table->char('prepared_by_id', 26)->index()->nullable();
             $table->char('status', 20);
             $table->char('payer_id', 26)->index()->nullable();
             $table->char('payer_account_in_bill_currency_id', 26)->index()->nullable();
