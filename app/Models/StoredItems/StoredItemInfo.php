@@ -29,6 +29,7 @@ use Illuminate\Support\Collection;
  * @property string id
  * @property Client owner
  * @property Collection storedItems
+ * @property string deleted_at
  */
 class StoredItemInfo extends BaseModel
 {

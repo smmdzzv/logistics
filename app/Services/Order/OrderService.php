@@ -87,16 +87,25 @@ class OrderService
 
     private function createOrUpdateStoredItemInfos(Collection $infosDto, Order $order, OrderDto $orderDto)
     {
-        return $infosDto->reject(function (StoredItemInfoDto $dto) {
-            return (boolean)$dto->id;
-        })->pipe(function (Collection $newInfos) use ($order, $orderDto) {
-            return $this->createStoredItemInfos($newInfos, $order, $orderDto);
-        })->merge($this->updateExistingStoredItemInfos($order, $infosDto, $orderDto));
+        return $this->updateExistingStoredItemInfos($order, $infosDto, $orderDto)->merge(
+            $infosDto->reject(function (StoredItemInfoDto $dto) {
+                return (boolean)$dto->id;
+            })->pipe(function (Collection $newInfos) use ($order, $orderDto) {
+                return $this->createStoredItemInfos($newInfos, $order, $orderDto);
+            })
+        );
+//        return $infosDto->reject(function (StoredItemInfoDto $dto) {
+//            return (boolean)$dto->id;
+//        })->pipe(function (Collection $newInfos) use ($order, $orderDto) {
+//            return $this->createStoredItemInfos($newInfos, $order, $orderDto);
+//        })->merge($this->updateExistingStoredItemInfos($order, $infosDto, $orderDto));
     }
 
     private function updateExistingStoredItemInfos(Order $order, Collection $infosDto, OrderDto $orderDto): Collection
     {
-        return $order->storedItemInfos->each(function (StoredItemInfo $info) use ($infosDto) {
+        return $order->storedItemInfos->reject(function (StoredItemInfo $info){
+            return (boolean)$info->deleted_at;
+        })->each(function (StoredItemInfo $info) use ($infosDto) {
             $info->fill(
                 $infosDto->firstWhere('id', $info->id)->all()
             )->save();

@@ -17,7 +17,6 @@ use App\Models\TariffPriceHistory;
 use App\StoredItems\StorageHistory;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
@@ -201,6 +200,67 @@ class OrderControllerTest extends TestCase
         $this->assertCount(25, StorageHistory::all());
 
         $this->assertCount(30, StorageHistory::onlyTrashed()->get());
+    }
+
+    public function test_order_delete_stored_item(){
+        $data = $this->prepareMockData();
+
+        $this->withoutMiddleware();
+
+        $storeResponse = $this->actingAs($data['employee'])
+            ->post('/orders', [
+                'clientCode' => $data['client']->code,
+                'branch_id' => $data['branch']->id,
+                'storedItemInfos' => [
+                    0 => [
+                        'width' => 0.25,
+                        'height' => 0.55,
+                        'length' => 0.65,
+                        'weight' => 3,
+                        'shop' => 'Test shop',
+                        'count' => 10,
+                        'item_id' => $data['item']->id,
+                        'tariff_id' => $data['tariff']->id,
+                        'branch_id' => $data['branch']->id,
+                        'customs_code_id' => $data['customsCode']->id
+                    ],
+                ],
+                'customPrices' => [null, null]
+            ]);
+
+        $storeResponse->assertStatus(201);
+
+        $order = Order::with('storedItemInfos')->first();
+
+        $putData = [
+            'clientCode' => $data['client']->code,
+            'branch_id' => $data['branch']->id,
+            'storedItemInfos' => [
+                0 => [
+                    'width' => 0.3,
+                    'height' => 0.75,
+                    'length' => 0.98,
+                    'weight' => 5,
+                    'shop' => 'Test shop 2',
+                    'count' => 10,
+                    'item_id' => $data['item']->id,
+                    'tariff_id' => $data['tariff']->id,
+                    'branch_id' => $data['branch']->id,
+                    'customs_code_id' => $data['customsCode']->id
+                ]
+            ],
+            'customPrices' => [null]
+        ];
+
+        $response = $this->put('/orders/' . $order->id, $putData);
+
+        $response->assertOk();
+
+        $this->assertCount(1, Order::all());
+
+        $this->assertCount(1, StoredItemInfo::all());
+
+        $this->assertCount(1, StoredItemInfo::onlyTrashed()->get());
     }
 
     private function prepareMockData()

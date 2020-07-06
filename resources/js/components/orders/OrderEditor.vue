@@ -120,7 +120,6 @@
                                 clientEmail: this.clientEmail
                             });
                         }
-                        // tHideSpinner()
                         window.location.href = '/orders';
                     } catch (e) {
                         hideBusySpinner();
