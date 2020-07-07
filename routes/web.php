@@ -34,7 +34,18 @@ Route::resource('trusted-user', 'Users\TrustedUserController');
 Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 
 //Order
-Route::resource('order.stored-items', 'Orders\OrderStoredItemsController')->only('index', 'show');
+//Route::resource('order.stored-items', 'Orders\OrderStoredItemsController')->only('index', 'show');
+
+Route::prefix('order')->name('order.')->group(function () {
+    Route::get('deliver-stored-items', 'Orders\StoredItemsDeliverController@index')
+        ->name('deliver-stored-items');
+
+    Route::post('{order}/update-price', 'Orders\OrderPriceController@update')
+        ->name('order-price.update');
+});
+
+Route::get('/orders/filtered', 'Orders\OrdersController@filtered')->name('order.filtered');
+
 Route::resource('order.delivered-stored-items', 'Orders\OrderDeliveredStoredItemsController');
 
 Route::resource('order.unpaid-stored-items', 'Orders\OrderUnpaidStoredItemsController')
@@ -49,13 +60,11 @@ Route::resource('client.active-orders', 'Orders\ClientActiveOrdersController');
 //Route::post('/deliver/{order}/items', 'Orders\OrderItemsController@deliver');
 //Route::post('/deliver/{order}/items/pending-payment', 'Orders\OrderItemsController@storePaymentRequest');
 
-Route::get('/orders/filtered', 'Orders\OrdersController@filtered')->name('order.filtered');
+
 //Route::get('/orders/{client}/active', 'Orders\OrdersController@activeOrders')->name('client.orders.active');
 Route::resource('orders', 'Orders\OrdersController')->parameters(['orders' => 'order']);
 Route::get('branch/{branch}/orders', 'Orders\OrdersController@filteredByBranch');
-Route::get('user/{user}/orders', 'Orders\OrdersController@filteredByUser');
-
-Route::post('/order/{order}/update-price', 'Orders\OrderPriceController@update')->name('order-price.update');
+Route::get('user/{user}/orders', 'Orders\OrdersController@filteredByUser');;
 
 
 Route::get('/orders/{client}/unpaid', 'Orders\ClientOrdersController@unpaid');
