@@ -13,15 +13,4 @@ class PendingPaymentsController extends Controller
         $branches = Branch::all();
         return view('till.payments.pending.index', compact('branches'));
     }
-
-    public function filtered(){
-        $query =  Payment::with('accountTo', 'cashier', 'payer', 'currency', 'paymentItem')
-            ->where('status', 'pending')
-            ->latest();
-
-        $filter = new PaymentFilter(request()->all(), $query);
-        $query = $filter->filter();
-
-        return $query->paginate(20);
-    }
 }

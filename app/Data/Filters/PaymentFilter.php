@@ -35,11 +35,6 @@ class PaymentFilter extends Filter
                 $query->where('id', $filters['item']);
             });
 
-//        if (isset($filters['branch']))
-//            $this->query->whereHas('branch', function (Builder $query) use ($filters) {
-//                $query->where('id', $filters['branch']);
-//            });
-
         if (isset($filters['withTrashed']))
             $this->query->withTrashed();
 
@@ -69,8 +64,8 @@ class PaymentFilter extends Filter
             $this->query->where('bill_currency_id', $filters['paidCurrency'])
                 ->orWhere('second_paid_currency_id', $filters['paidCurrency']);
 
-        if (isset($filters['selectedStatus']))
-            $this->query->where('status', $filters['selectedStatus']);
+        if (isset($filters['status']))
+            $this->query->where('status', $filters['status']);
 
         return $this->query;
     }
