@@ -156,17 +156,17 @@
                 this.$bvModal.hide('payment-error');
 
                 let data = {
-                    items: this.selectedItems.map((item) => {
+                    storedItems: this.selectedItems.map((item) => {
                         return item.id
                     }),
                     isDebtRequested: this.isDebtRequested
                 };
 
-                let action = `/deliver/${this.selectedOrder.id}/items/pending-payment`;
+                let action = `/order/${this.selectedOrder.id}/stored-items/pending-payment`;
 
                 try {
                     const response = await axios.post(action, data);
-                    window.location = `/payment/${response.data}`;
+                    window.location = `/payment/${response.data.id}`;
                 } catch (e) {
                     if (e.response && e.response.status === 400 || e.response.status === 422) {
                         this.errorMessage = e.response.data.message;

@@ -42,6 +42,8 @@ Route::prefix('order')->name('order.')->group(function () {
 
     Route::post('{order}/update-price', 'Orders\OrderPriceController@update')
         ->name('order-price.update');
+
+    Route::post('{order}/stored-items/pending-payment', 'Orders\OrderStoredItemsPendingPaymentsController@store');
 });
 
 Route::get('/orders/filtered', 'Orders\OrdersController@filtered')->name('order.filtered');

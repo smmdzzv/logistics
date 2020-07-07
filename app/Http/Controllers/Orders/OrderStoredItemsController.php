@@ -48,76 +48,76 @@ class OrderStoredItemsController extends Controller
 
     public function storePaymentRequest(Order $order)
     {
-        $items = StoredItem::whereIn('id', \request()->input('items'))->unpaid()->get();
-
-        //Calculate bill
-        $unpaidStoredItemInfos = $items->load('info.billingInfo')
-            ->map(function ($item) {
-                return $item->info;
-            });
-
-        $paymentSum = $unpaidStoredItemInfos->sum(function ($info) {
-            return $info->billingInfo->pricePerItem;
-        });
-
-        $paymentSum -= $order->owner->accounts()->dollarAccount()->balance;
-
-        if (request('isDebtRequested')) {
-            $trusted = TrustedUser::where('user_id', $order->owner->id)->where('to', '>=', Carbon::now()->toDateString())
-                ->first();
-
-            if ($trusted) {
-                $paymentSum -= $trusted->maxDebt;
-            }
-        }
-        $paymentSum = round($paymentSum, 2);
-        if ($paymentSum <= 0) {
-            return abort(400, 'На балансе клиента достаточно денег для оплаты выбранных товаров');
-        }
-
-        $dollar = Currency::where('isoName', 'USD')->first()->id;
-        $payment = new Payment([
-            'branch_id' => auth()->user()->branch->id,
-            'cashier_id' => auth()->user()->id,
-            'status' => 'pending',
-            'prepared_by_id' => auth()->user()->id,
-            'payer_id' => $order->owner->id,
-            'payer_account_in_bill_currency_id' => $order->owner->accounts()->dollarAccount()->id,
-            'payer_account_in_second_currency_id' => null,
-            'payer_type' => 'user',
-            'payee_id' => auth()->user()->branch->id,
-            'payee_account_in_bill_currency_id' => auth()->user()->branch->accounts()->dollarAccount()->id,
-            'payee_account_in_second_currency_id' => null,
-            'payee_type' => 'branch',
-            'payment_item_id' => PaymentItem::firstOrCreate([
-                'title' => 'Пополнение баланса',
-                'description' => 'Пополнение долларового счета пользователя'
-            ])->id,
-            'billAmount' => $paymentSum,
-            'paidAmountInBillCurrency' => $paymentSum,
-            'paidAmountInSecondCurrency' => 0,
-            'bill_currency_id' => $dollar,
-            'second_paid_currency_id' => null,
-            'exchange_rate_id' => null,
-            'comment' => 'Пополнение баланса пользователя для оплаты заказа',
-        ]);
-
-        $payment->fillExtras();
-        $payment->saveOrFail();
-
-        $orderPayment = OrderPayment::create([
-            'order_id' => $order->id,
-            'payment_id' => $payment->id
-        ]);
-
-        $items->each(function ($item, $key) use ($orderPayment) {
-            OrderPaymentItem::create([
-                'stored_item_id' => $item->id,
-                'order_payment_id' => $orderPayment->id
-            ]);
-        });
-
-        return $payment->id;
+//        $items = StoredItem::whereIn('id', \request()->input('items'))->unpaid()->get();
+//
+//        //Calculate bill
+//        $unpaidStoredItemInfos = $items->load('info.billingInfo')
+//            ->map(function ($item) {
+//                return $item->info;
+//            });
+//
+//        $paymentSum = $unpaidStoredItemInfos->sum(function ($info) {
+//            return $info->billingInfo->pricePerItem;
+//        });
+//
+//        $paymentSum -= $order->owner->accounts()->dollarAccount()->balance;
+//
+//        if (request('isDebtRequested')) {
+//            $trusted = TrustedUser::where('user_id', $order->owner->id)->where('to', '>=', Carbon::now()->toDateString())
+//                ->first();
+//
+//            if ($trusted) {
+//                $paymentSum -= $trusted->maxDebt;
+//            }
+//        }
+//        $paymentSum = round($paymentSum, 2);
+//        if ($paymentSum <= 0) {
+//            return abort(400, 'На балансе клиента достаточно денег для оплаты выбранных товаров');
+//        }
+//
+//        $dollar = Currency::where('isoName', 'USD')->first()->id;
+//        $payment = new Payment([
+//            'branch_id' => auth()->user()->branch->id,
+//            'cashier_id' => auth()->user()->id,
+//            'status' => 'pending',
+//            'prepared_by_id' => auth()->user()->id,
+//            'payer_id' => $order->owner->id,
+//            'payer_account_in_bill_currency_id' => $order->owner->accounts()->dollarAccount()->id,
+//            'payer_account_in_second_currency_id' => null,
+//            'payer_type' => 'user',
+//            'payee_id' => auth()->user()->branch->id,
+//            'payee_account_in_bill_currency_id' => auth()->user()->branch->accounts()->dollarAccount()->id,
+//            'payee_account_in_second_currency_id' => null,
+//            'payee_type' => 'branch',
+//            'payment_item_id' => PaymentItem::firstOrCreate([
+//                'title' => 'Пополнение баланса',
+//                'description' => 'Пополнение долларового счета пользователя'
+//            ])->id,
+//            'billAmount' => $paymentSum,
+//            'paidAmountInBillCurrency' => $paymentSum,
+//            'paidAmountInSecondCurrency' => 0,
+//            'bill_currency_id' => $dollar,
+//            'second_paid_currency_id' => null,
+//            'exchange_rate_id' => null,
+//            'comment' => 'Пополнение баланса пользователя для оплаты заказа',
+//        ]);
+//
+//        $payment->fillExtras();
+//        $payment->saveOrFail();
+//
+//        $orderPayment = OrderPayment::create([
+//            'order_id' => $order->id,
+//            'payment_id' => $payment->id
+//        ]);
+//
+//        $items->each(function ($item, $key) use ($orderPayment) {
+//            OrderPaymentItem::create([
+//                'stored_item_id' => $item->id,
+//                'order_payment_id' => $orderPayment->id
+//            ]);
+//        });
+//
+//        return $payment->id;
     }
 
     public function show(Order $order)
