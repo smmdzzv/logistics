@@ -4,7 +4,7 @@
             <td>№<strong>{{$payment->number}}</strong> Платеж от <strong>
                     <span
                         v-luxon="{ value: '{{$payment->updated_at}}' }"/></strong></td>
-            <td>Кассир <strong>{{$payment->cashier->name}}</strong></td>
+            <td>Кассир <strong>{{$payment->creator->name}}</strong></td>
             <td>{{$title}}</td>
         </tr>
         <tr>

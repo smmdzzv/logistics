@@ -23,7 +23,7 @@ class OrderDeliveredStoredItemsController extends BaseController
     public function store(Order $order)
     {
         $data = $this->getValidatedData();
-        return $this->service->deliver($order, collect($data['storedItems']), (bool)$data['isDebtRequested']);
+        return $this->service->deliver($order, collect($data['storedItems']), (bool)$data['isDebtRequested'])->id;
     }
 
     public function getValidatedData(): array
