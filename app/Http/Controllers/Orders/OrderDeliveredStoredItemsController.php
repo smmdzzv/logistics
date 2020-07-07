@@ -30,7 +30,7 @@ class OrderDeliveredStoredItemsController extends BaseController
     {
         return request()->validate([
             'storedItems' => 'required|array',
-            'isDebtRequested' => 'nullable|numeric'
+            'isDebtRequested' => 'nullable|boolean'
         ]);
     }
 }

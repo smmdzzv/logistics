@@ -195,7 +195,7 @@ class PaymentRequestWriter extends RequestWriter
     protected function updatePayment()
     {
         $this->payment->status = $this->request['status'];
-        $this->payment->cashier_id = auth()->user()->id;
+//        $this->payment->cashier_id = auth()->user()->id;
         $this->payment->branch_id = auth()->user()->branch->id;
         $this->payment->billAmount = $this->request['billAmount'];
         $this->payment->paidAmountInBillCurrency = $this->request['paidAmountInBillCurrency'];
@@ -211,9 +211,9 @@ class PaymentRequestWriter extends RequestWriter
     {
         $this->payment = new Payment([
             'branch_id' => auth()->user()->branch->id,
-            'cashier_id' => auth()->user()->id,
+//            'cashier_id' => auth()->user()->id,
             'status' => $this->request['status'],
-            'prepared_by_id' => $this->request['status'] === 'pending' ? auth()->user()->id : null,
+//            'prepared_by_id' => $this->request['status'] === 'pending' ? auth()->user()->id : null,
             'payer_id' => $this->request['payer'],
             'payer_account_in_bill_currency_id' =>
                 $this->payerAccountInBillCurrency === null ? null : $this->payerAccountInBillCurrency->id,

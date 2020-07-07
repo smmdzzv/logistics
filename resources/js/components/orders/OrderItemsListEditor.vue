@@ -183,13 +183,13 @@
                 this.$bvModal.hide('payment-error');
 
                 let data = {
-                    items: this.selectedItems.map((item) => {
+                    storedItems: this.selectedItems.map((item) => {
                         return item.id
                     }),
                     isDebtRequested: this.isDebtRequested
                 };
 
-                let action = `/deliver/${this.selectedOrder.id}/items`;
+                let action = `/order/${this.selectedOrder.id}/delivered-stored-items`;
 
                 try {
                     const response = await axios.post(action, data);
