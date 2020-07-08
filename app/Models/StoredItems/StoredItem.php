@@ -41,7 +41,8 @@ class StoredItem extends BaseModel
         return $query->whereDoesntHave('tripHistory');
     }
 
-    public function scopeNotDelivered($query){
+    public function scopeNotDelivered($query)
+    {
         return $query->where('status', '!=', self::STATUS_DELIVERED);
     }
 
@@ -54,21 +55,26 @@ class StoredItem extends BaseModel
 
     public function scopeUnpaid($query)
     {
-        return $query->whereDoesntHave('orderPaymentItems', function (Builder $query) {
-            $query->whereHas('orderPayment', function (Builder $query) {
-                $query->whereHas('payment', function (Builder $query) {
-                    $query->where('status', 'completed')->whereHas('paymentItem', function (Builder $query) {
+        return $query->whereDoesntHave('clientItemsSelections', function (Builder $query) {
+            $query->whereHas('payments', function (Builder $query) {
+                $query->where('status', 'completed')
+                    ->whereHas('paymentItem', function (Builder $query) {
                         $query->where('title', '=', 'Списание с баланса');
                     });
-                });
             });
         });
     }
 
-    public function orderPaymentItems()
+    public function clientItemsSelections()
     {
-        return $this->hasMany(OrderPaymentItem::class);
+        return $this->belongsToMany(ClientItemsSelection::class)
+            ->using('App\Models\Pivots\BasePivot');
     }
+
+//    public function orderPaymentItems()
+//    {
+//        return $this->hasMany(OrderPaymentItem::class);
+//    }
 
     public function info()
     {

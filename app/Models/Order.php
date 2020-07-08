@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Order\OrderPayment;
+use App\Models\Order\StoredItemsSelection;
 use App\Models\Order\OrderRemovedItem;
 use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemInfo;
@@ -76,7 +76,7 @@ class Order extends BaseModel
 //    }
     public function orderPayments()
     {
-        return $this->hasMany(OrderPayment::class);
+        return $this->hasMany(StoredItemsSelection::class);
     }
 
     public function orderRemovedItems()

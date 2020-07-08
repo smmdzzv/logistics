@@ -7,7 +7,7 @@ namespace App\Data\RequestWriters\Order;
 use App\Data\RequestWriters\RequestWriter;
 use App\Models\Currency;
 use App\Models\Order;
-use App\Models\Order\OrderPayment;
+use App\Models\Order\StoredItemsSelection;
 use App\Models\Order\OrderPaymentItem;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Till\Account;
@@ -143,7 +143,7 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
         $this->clientAccount->balance -= $paymentSum;
         $this->clientAccount->save();
 
-        $orderPayment = OrderPayment::create([
+        $orderPayment = StoredItemsSelection::create([
             'order_id' => $this->order->id,
             'payment_id' => $this->payment->id
         ]);

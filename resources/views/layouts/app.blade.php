@@ -55,7 +55,8 @@
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{route('stored-item-infos.index')}}">Принятые
                                         товары</a>
-                                    <a class="dropdown-item" href="{{route('order.deliver-stored-items')}}">Выдать товары</a>
+                                    <a class="dropdown-item" href="{{route('order.deliver-stored-items')}}">Выдать
+                                        товары</a>
                                     @if(Auth::user()->hasRole('admin'))
                                         {{--                                        <div class="dropdown-divider"></div>--}}
                                         {{--                                        <a class="dropdown-item" href="{{route('lost-items.index')}}">Потерянные--}}
@@ -173,18 +174,14 @@
                                 </div>
                             </li>
                         @endif
-                    <!--Storage-->
-                        {{--                        <li class="nav-item dropdown">--}}
-                        {{--                            <a id="storageMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"--}}
-                        {{--                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>--}}
-                        {{--                                Склад <span class="caret"></span>--}}
-                        {{--                            </a>--}}
-                        {{--                            <div class="dropdown-menu" aria-labelledby="storageMenuDropdown">--}}
-                        {{--                                <h6 class="dropdown-header">Рейсы</h6>--}}
-                        {{--                                <a class="dropdown-item" href="{{route('branches.index')}}">Приемка с рейса</a>--}}
-                        {{--                                <a class="dropdown-item" href="{{route('trip.edit-loaded')}}">Загрузка на рейс</a>--}}
-                        {{--                            </div>--}}
-                        {{--                        </li>--}}
+                    <!--Scanner-->
+                        @if(Auth::user()->hasAnyRole(['admin', 'manager', 'storekeeper']))
+                            <li class="nav-item">
+                                <a id="usersMenuDropdown" class="nav-link" href="{{route('scanner.index')}}">
+                                    Сканнер
+                                </a>
+                            </li>
+                        @endif
                     </ul>
             @endauth
             <!-- Right Side Of Navbar -->

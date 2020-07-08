@@ -2,6 +2,7 @@
 
 namespace App\Data\Dto\StoredItem;
 
+use App\Common\NumericHelper;
 use Spatie\DataTransferObject\FlexibleDataTransferObject;
 
 /**
@@ -41,4 +42,15 @@ class StoredItemInfoDto extends FlexibleDataTransferObject
     public string $customs_code_id;
 
     public string $customs_code_tax_id;
+
+    public function __construct(array $parameters = [])
+    {
+        $parameters['width'] = NumericHelper::roundFloatVal($parameters['width'], 3);
+        $parameters['height'] = NumericHelper::roundFloatVal($parameters['height'], 3);
+        $parameters['length'] = NumericHelper::roundFloatVal($parameters['length'], 3);
+        $parameters['weight'] = NumericHelper::roundFloatVal($parameters['weight'], 3);
+        $parameters['count'] = (int)$parameters['count'];
+
+        parent::__construct($parameters);
+    }
 }

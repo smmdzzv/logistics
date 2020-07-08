@@ -6,7 +6,7 @@ use App\Data\RequestWriters\Order\DeliverOrderItemsRequestWriter;
 use App\Models\Currency;
 use App\Models\LegalEntities\LegalEntity;
 use App\Models\Order;
-use App\Models\Order\OrderPayment;
+use App\Models\Order\StoredItemsSelection;
 use App\Models\Order\OrderPaymentItem;
 use App\Models\StoredItems\StoredItem;
 use App\Http\Controllers\Controller;
@@ -27,7 +27,7 @@ class OrderStoredItemsController extends Controller
     public function index()
     {
         $orderPayment = request()->get('payment') ?
-            OrderPayment::with('order.owner', 'paidItems.storedItem')
+            StoredItemsSelection::with('order.owner', 'paidItems.storedItem')
                 ->where('payment_id', request()->get('payment'))
                 ->first() : null;
 

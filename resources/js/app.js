@@ -4,6 +4,8 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+import {req} from "vuelidate/lib/validators/common";
+
 require('./bootstrap');
 
 let BootstrapVue = require('bootstrap-vue').default;
@@ -19,7 +21,7 @@ window.Vue.use(BootstrapVue);
 window.Vue.use(Vuelidate);
 window.Vue.use(VueEasyPrint);
 window.Vue.use(VueExcelXlsx);
-window.Vue.use(VueLuxon,{
+window.Vue.use(VueLuxon, {
     serverZone: 'utc',
     serverFormat: 'sql',
     clientZone: DateTime.local().zoneName,
@@ -86,6 +88,8 @@ Vue.component('ItemsTable', require('./components/items/ItemsTable.vue').default
 Vue.component('CustomsCodesTable', require('./components/customs/CustomsCodesTable.vue').default);
 
 Vue.component('CreateLostItem', require('./components/lost-and-found/CreateLostItem.vue').default);
+
+Vue.component('ScannerIndex', require('./components/scanner/ScannerIndex.vue').default);
 
 // Vue.component('DuobAccountsViewer', require('./components/accounts/branches/DuobAccountsViewer.vue').default);
 
