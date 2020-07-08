@@ -9,9 +9,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StoredItemTripHistory extends BaseModel
 {
-    protected $guarded = [];
-
     use SoftDeletes;
+
+    public const STATUS_LISTED = 'listed';
+
+    public const STATUS_ABANDONED = 'abandoned';
+
+    public const STATUS_COMPLETED = 'completed';
 
     public function storedItem(){
         return $this->belongsTo(StoredItem::class);
