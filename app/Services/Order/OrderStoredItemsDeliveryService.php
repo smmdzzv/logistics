@@ -16,6 +16,7 @@ use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
 use App\Models\Users\Client;
 use App\Models\Users\TrustedUser;
+use App\Services\Storage\StorageHistoryService;
 use App\Services\StoredItem\StoredItemsPaymentService;
 use App\StoredItems\StorageHistory;
 use Carbon\Carbon;
@@ -28,10 +29,17 @@ class OrderStoredItemsDeliveryService
 
     private OrderService $orderService;
 
-    public function __construct(StoredItemsPaymentService $paymentService, OrderService $orderService)
+    private StorageHistoryService $storageHistoryService;
+
+    public function __construct(
+        StoredItemsPaymentService $paymentService,
+        OrderService $orderService,
+        StorageHistoryService $storageHistoryService
+    )
     {
         $this->paymentService = $paymentService;
         $this->orderService = $orderService;
+        $this->storageHistoryService = $storageHistoryService;
     }
 
     /**
@@ -52,7 +60,7 @@ class OrderStoredItemsDeliveryService
 
         $this->deliverStoredItems($storedItems);
 
-        $storedItems->pluck('info.order')->unique('id')->each(function (Order $order){
+        $storedItems->pluck('info.order')->unique('id')->each(function (Order $order) {
             $this->orderService->updateStatus($order);
         });
 
@@ -62,7 +70,7 @@ class OrderStoredItemsDeliveryService
     private function checkPayment(Client $client, Collection $storedItems, bool $isDebtRequested): Payment
     {
         $paymentSum = $storedItems->pluck('info.billingInfo')->sum('pricePerItem');
-        
+
         /** @var Account $ownerAccount */
         $ownerAccount = $client->accounts()->dollarAccount();
 
@@ -131,12 +139,7 @@ class OrderStoredItemsDeliveryService
     {
         $ids = $storedItems->pluck('id');
 
-        StorageHistory::whereHas('storedItem', function (Builder $query) use ($ids) {
-            $query->whereIn('id', $ids);
-        })->update([
-            'deleted_at' => Carbon::now(),
-            'deleted_by_id' => auth()->user()->id
-        ]);
+        $this->storageHistoryService->massDelete($ids);
 
         StoredItem::whereIn('id', $ids)->update([
             'status' => StoredItem::STATUS_DELIVERED
