@@ -65,6 +65,10 @@ class StoredItemsDeliveryTest extends TestCase
         $this->assertEquals(StoredItem::STATUS_DELIVERED, $statuses->first());
 
         $this->assertCount(1, Payment::all());
+
+        $this->assertNotEquals(null, Payment::first()->clientItemsSelection);
+
+        $this->assertCount(10, Payment::first()->clientItemsSelection->storedItems);
     }
 
     private function create_test_order($itemsCount = 10)
