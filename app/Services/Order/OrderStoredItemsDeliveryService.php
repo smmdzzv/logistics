@@ -14,6 +14,7 @@ use App\Models\StoredItems\StoredItem;
 use App\Models\Till\Account;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
+use App\Models\Users\Client;
 use App\Models\Users\TrustedUser;
 use App\Services\StoredItem\StoredItemsPaymentService;
 use App\StoredItems\StorageHistory;
@@ -34,34 +35,36 @@ class OrderStoredItemsDeliveryService
     }
 
     /**
-     * @param Order $order
+     * @param Client $client
      * @param Collection $storedItemsIds that should be delivered
      * @param bool $isDebtRequested
      * @return Payment
      */
-    public function deliver(Order $order, Collection $storedItemsIds, bool $isDebtRequested): Payment
+    public function deliver(Client $client, Collection $storedItemsIds, bool $isDebtRequested): Payment
     {
-        $storedItems = StoredItem::with('info', 'info.billingInfo')
+        $storedItems = StoredItem::with('info', 'info.billingInfo', 'info.order')
             ->whereIn('id', $storedItemsIds->unique())
-            ->whereHas('info', function ($query) use ($order) {
-                $query->where('order_id', $order->id);
+            ->whereHas('info', function ($query) use ($client) {
+                $query->where('owner_id', $client->id);
             })->get();
 
-        $payment = $this->checkPayment($order, $storedItems, $isDebtRequested);
+        $payment = $this->checkPayment($client, $storedItems, $isDebtRequested);
 
         $this->deliverStoredItems($storedItems);
 
-        $this->orderService->updateStatus($order);
+        $storedItems->pluck('info.order')->unique('id')->each(function (Order $order){
+            $this->orderService->updateStatus($order);
+        });
 
         return $payment;
     }
 
-    private function checkPayment(Order $order, Collection $storedItems, bool $isDebtRequested): Payment
+    private function checkPayment(Client $client, Collection $storedItems, bool $isDebtRequested): Payment
     {
         $paymentSum = $storedItems->pluck('info')->sum('pricePerItem');
 
         /** @var Account $ownerAccount */
-        $ownerAccount = $order->owner->accounts()->dollarAccount();
+        $ownerAccount = $client->accounts()->dollarAccount();
 
         if ($ownerAccount->balance < $paymentSum) {
             if (!$isDebtRequested)
@@ -70,7 +73,7 @@ class OrderStoredItemsDeliveryService
                 abort(422, "Доверительный платеж не возможен");
         }
 
-        return $this->createPayment($paymentSum, $order, $ownerAccount, $storedItems);
+        return $this->createPayment($paymentSum, $client, $ownerAccount, $storedItems);
 
     }
 
@@ -95,7 +98,7 @@ class OrderStoredItemsDeliveryService
         return true;
     }
 
-    private function createPayment(float $paymentSum, Order $order, Account $account, Collection $storedItems): Payment
+    private function createPayment(float $paymentSum, Client $client, Account $account, Collection $storedItems): Payment
     {
         $dto = new PaymentDto([
             'branch_id' => auth()->user()->branch->id,
@@ -121,7 +124,7 @@ class OrderStoredItemsDeliveryService
             'comment' => 'Списание денег с баланса в счет оплаты заказа',
         ]);
 
-        return $this->paymentService->store($dto, $order->owner, $account, $storedItems);
+        return $this->paymentService->store($dto, $client, $account, $storedItems);
     }
 
     private function deliverStoredItems(Collection $storedItems)

@@ -4,14 +4,15 @@
  * @author Sultonazar Mamadazizov <sultonazar.mamadazizov@mail.ru> on 06.07.2020
  */
 
-namespace App\Http\Controllers\Orders;
+namespace App\Http\Controllers\Client;
 
 
 use App\Http\Controllers\BaseController;
 use App\Models\Order;
+use App\Models\Users\Client;
 use App\Services\Order\OrderStoredItemsDeliveryService;
 
-class OrderDeliveredStoredItemsController extends BaseController
+class ClientDeliveredStoredItemsController extends BaseController
 {
     private OrderStoredItemsDeliveryService $service;
 
@@ -20,10 +21,10 @@ class OrderDeliveredStoredItemsController extends BaseController
         $this->service = $service;
     }
 
-    public function store(Order $order)
+    public function store(Client $client)
     {
         $data = $this->getValidatedData();
-        return $this->service->deliver($order, collect($data['storedItems']), (bool)$data['isDebtRequested'])->id;
+        return $this->service->deliver($client, collect($data['storedItems']), (bool)$data['isDebtRequested'])->id;
     }
 
     public function getValidatedData(): array

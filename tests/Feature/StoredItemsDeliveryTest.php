@@ -42,7 +42,7 @@ class StoredItemsDeliveryTest extends TestCase
         $order = Order::first();
 
         $response = $this->actingAs($data['employee'])
-            ->post('/order/' . $order->id . '/delivered-stored-items', [
+            ->post('/client/' . $order->owner->id . '/delivered-stored-items', [
                 'storedItems' => $order->storedItems->pluck('id')->all(),
                 'isDebtRequested' => 1
             ]);
