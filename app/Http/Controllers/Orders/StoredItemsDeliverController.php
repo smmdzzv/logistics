@@ -8,14 +8,14 @@ namespace App\Http\Controllers\Orders;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Order\OrderPayment;
+use App\Models\Order\StoredItemsSelection;
 
 class StoredItemsDeliverController extends Controller
 {
     public function index()
     {
         $orderPayment = request()->get('payment') ?
-            OrderPayment::with('order.owner', 'paidItems.storedItem')
+            StoredItemsSelection::with('order.owner', 'paidItems.storedItem')
                 ->where('payment_id', request()->get('payment'))
                 ->first() : null;
 

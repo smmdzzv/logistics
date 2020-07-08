@@ -43,6 +43,7 @@ class CreatePaymentsTable extends Migration
             $table->integer('placesLeft')->nullable();
             $table->integer('number')->nullable();
 
+            $table->char('client_items_selection_id', 26)->index()->nullable();
             $table->decimal('discount', 10, 2)->nullable();
 
             $table->userStamp();

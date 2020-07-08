@@ -121,7 +121,7 @@ class OrderStoredItemsDeliveryService
             'comment' => 'Списание денег с баланса в счет оплаты заказа',
         ]);
 
-        return $this->paymentService->store($dto, $order, $account, $storedItems);
+        return $this->paymentService->store($dto, $order->owner, $account, $storedItems);
     }
 
     private function deliverStoredItems(Collection $storedItems)

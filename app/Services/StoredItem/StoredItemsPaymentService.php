@@ -8,11 +8,10 @@ namespace App\Services\StoredItem;
 
 
 use App\Data\Dto\Till\PaymentDto;
-use App\Models\Order;
-use App\Models\Order\OrderPayment;
-use App\Models\Order\OrderPaymentItem;
+use App\Models\StoredItems\ClientItemsSelection;
 use App\Models\Till\Account;
 use App\Models\Till\Payment;
+use App\Models\Users\Client;
 use App\Services\Till\Payment\PaymentService;
 use Illuminate\Support\Collection;
 
@@ -25,11 +24,18 @@ class StoredItemsPaymentService
         $this->paymentService = $paymentService;
     }
 
-    public function store(PaymentDto $dto, Order $order, Account $account, Collection $storedItems): Payment
+    public function store(PaymentDto $dto, Client $client, Account $account, Collection $storedItems): Payment
     {
         $payment = $this->paymentService->store($dto);
-        $payment->save();
 
+        $clientSelection = ClientItemsSelection::create([
+            'client_id' => $client->id
+        ]);
+
+        /** @var ClientItemsSelection $clientSelection */
+        $clientSelection->storedItems()->sync($storedItems);
+
+        $payment->client_items_selection_id = $clientSelection->id;
         $payment->clientDebt -= $payment->billAmount;
         $payment->placesLeft -= $storedItems->count();
         $payment->save();
@@ -37,17 +43,25 @@ class StoredItemsPaymentService
         $account->balance -= $payment->billAmount;
         $account->save();
 
-        $orderPayment = OrderPayment::create([
-            'order_id' => $order->id,
-            'payment_id' => $payment->id
-        ]);
+//
+//        $storedItems->each(function ($item) use ($orderPayment) {
+//            OrderPaymentItem::create([
+//                'stored_item_id' => $item->id,
+//                'order_payment_id' => $orderPayment->id
+//            ]);
+//        });
 
-        $storedItems->each(function ($item) use ($orderPayment) {
-            OrderPaymentItem::create([
-                'stored_item_id' => $item->id,
-                'order_payment_id' => $orderPayment->id
-            ]);
-        });
+//        $orderPayment = OrderPayment::create([
+//            'order_id' => $order->id,
+//            'payment_id' => $payment->id
+//        ]);
+//
+//        $storedItems->each(function ($item) use ($orderPayment) {
+//            OrderPaymentItem::create([
+//                'stored_item_id' => $item->id,
+//                'order_payment_id' => $orderPayment->id
+//            ]);
+//        });
 
         return $payment;
     }

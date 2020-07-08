@@ -4,7 +4,7 @@
  * @author Sultonazar Mamadazizov <sultonazar.mamadazizov@mail.ru> on 07.07.2020
  */
 
-namespace App\Http\Controllers\Orders;
+namespace App\Http\Controllers\Client;
 
 
 use App\Data\Dto\Till\PaymentDto;
@@ -13,12 +13,13 @@ use App\Models\Currency;
 use App\Models\Order;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Till\PaymentItem;
+use App\Models\Users\Client;
 use App\Models\Users\TrustedUser;
 use App\Services\StoredItem\StoredItemsPaymentService;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-class OrderStoredItemsPendingPaymentsController extends BaseController
+class ClientStoredItemsPendingPaymentsController extends BaseController
 {
     private StoredItemsPaymentService $paymentService;
 
@@ -27,21 +28,21 @@ class OrderStoredItemsPendingPaymentsController extends BaseController
         $this->paymentService = $paymentService;
     }
 
-    public function store(Order $order)
+    public function store(Client $client)
     {
         $storedItems = StoredItem::with('info.billingInfo')
             ->whereIn('id', \request()->get('storedItems'))
             ->unpaid()
             ->get();
 
-        $ownerAccount = $order->owner->accounts()->dollarAccount();
+        $ownerAccount = $client->accounts()->dollarAccount();
 
         /** @var Collection $storedItems */
         $paymentSum = $storedItems->pluck('info.billingInfo')->sum('pricePerItem')
             - $ownerAccount->balance;;
 
         if (request()->get('isDebtRequested', false)) {
-            $trusted = TrustedUser::where('user_id', $order->owner->id)->where('to', '>=', Carbon::now()->toDateString())
+            $trusted = TrustedUser::where('user_id', $client->id)->where('to', '>=', Carbon::now()->toDateString())
                 ->first();
 
             if ($trusted) {
@@ -57,7 +58,7 @@ class OrderStoredItemsPendingPaymentsController extends BaseController
         $paymentDto = new PaymentDto([
             'branch_id' => auth()->user()->branch->id,
             'status' => 'pending',
-            'payer_id' => $order->owner->id,
+            'payer_id' => $client->id,
             'payer_account_in_bill_currency_id' => $ownerAccount->id,
             'payer_account_in_second_currency_id' => null,
             'payer_type' => 'user',
@@ -78,6 +79,6 @@ class OrderStoredItemsPendingPaymentsController extends BaseController
             'comment' => 'Пополнение баланса пользователя для оплаты заказа',
         ]);
 
-        return $this->paymentService->store($paymentDto, $order, $ownerAccount, $storedItems);
+        return $this->paymentService->store($paymentDto, $client, $ownerAccount, $storedItems);
     }
 }

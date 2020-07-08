@@ -6,7 +6,8 @@ use App\Models\BaseModel;
 use App\Models\Branch;
 use App\Models\Currency;
 use App\Models\Order;
-use App\Models\Order\OrderPayment;
+use App\Models\Order\StoredItemsSelection;
+use App\Models\StoredItems\ClientItemsSelection;
 use App\Models\Users\Client;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -50,6 +51,7 @@ use Illuminate\Support\Carbon;
  * @property Currency|null secondPaidCurrency
  * @property Collection relatedPayments
  * @property string id
+ * @property string client_items_selection_id
  */
 class Payment extends BaseModel
 {
@@ -185,19 +187,24 @@ class Payment extends BaseModel
         return $this->hasMany(Payment::class, 'related_payment_id');
     }
 
-    public function orderPayments()
-    {
-        return $this->hasMany(Order\OrderPayment::class);
-    }
+//    public function orderPayments()
+//    {
+//        return $this->hasMany(Order\StoredItemsSelection::class);
+//    }
+//
+//    public function orderPayment()
+//    {
+//        return $this->hasOne(Order\StoredItemsSelection::class);
+//    }
 
-    public function orderPayment()
-    {
-        return $this->hasOne(Order\OrderPayment::class);
-    }
+//    public function orderPaymentItems()
+//    {
+//        return $this->hasManyThrough(Order\OrderPaymentItem::class, StoredItemsSelection::class);
+//    }
 
-    public function orderPaymentItems()
+    public function clientItemsSelection()
     {
-        return $this->hasManyThrough(Order\OrderPaymentItem::class, OrderPayment::class);
+        return $this->belongsTo(ClientItemsSelection::class);
     }
 
     public function fillExtras()

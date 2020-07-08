@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOrderPaymentsTable extends Migration
+class CreateClientItemsSelectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateOrderPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('order_payments', function (Blueprint $table) {
+        Schema::create('client_items_selections', function (Blueprint $table) {
             $table->char('id', 26)->primary();
-            $table->char('order_id', 26)->index();
-            $table->char('payment_id', 26)->index();
+            $table->char('client_id', 26)->index();
+//            $table->char('payment_id', 26)->index();
 
             $table->userStamp();
             $table->softDeletes();

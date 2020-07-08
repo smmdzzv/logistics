@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
  * @property string id
  * @property float balance
  * @property string owner_id
+ * @property mixed owner
  */
 class Account extends BaseModel
 {

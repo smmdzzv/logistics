@@ -27,7 +27,7 @@ class CreateStoredItemInfosTable extends Migration
 //            $table->char('tariff_price_history_id',26)->index();
             $table->integer('count');
             $table->double('weight',10, 3);
-            $table->double('height',10, 2);
+            $table->double('height',10, 3);
             $table->double('width',10, 3);
             $table->double('length',10, 3);
 //            $table->double('placeCount');
