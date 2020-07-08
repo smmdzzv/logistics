@@ -17,6 +17,8 @@ class StoredItemTripHistory extends BaseModel
 
     public const STATUS_COMPLETED = 'completed';
 
+    public const STATUS_CANCELED = 'canceled';
+
     public function storedItem(){
         return $this->belongsTo(StoredItem::class);
     }

@@ -11,6 +11,7 @@ use App\Data\Dto\Till\PaymentDto;
 use App\Models\Currency;
 use App\Models\Order;
 use App\Models\StoredItems\StoredItem;
+use App\Models\StoredItems\StoredItemTripHistory;
 use App\Models\Till\Account;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
@@ -18,6 +19,7 @@ use App\Models\Users\Client;
 use App\Models\Users\TrustedUser;
 use App\Services\Storage\StorageHistoryService;
 use App\Services\StoredItem\StoredItemsPaymentService;
+use App\Services\StoredItem\Trip\StoredItemTripHistoryService;
 use App\StoredItems\StorageHistory;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -31,15 +33,19 @@ class OrderStoredItemsDeliveryService
 
     private StorageHistoryService $storageHistoryService;
 
+    private StoredItemTripHistoryService $tripHistoryService;
+
     public function __construct(
         StoredItemsPaymentService $paymentService,
         OrderService $orderService,
-        StorageHistoryService $storageHistoryService
+        StorageHistoryService $storageHistoryService,
+        StoredItemTripHistoryService $tripHistoryService
     )
     {
         $this->paymentService = $paymentService;
         $this->orderService = $orderService;
         $this->storageHistoryService = $storageHistoryService;
+        $this->tripHistoryService = $tripHistoryService;
     }
 
     /**
@@ -140,6 +146,8 @@ class OrderStoredItemsDeliveryService
         $ids = $storedItems->pluck('id');
 
         $this->storageHistoryService->massDelete($ids);
+
+        $this->tripHistoryService->massDelete($ids, StoredItemTripHistory::STATUS_CANCELED);
 
         StoredItem::whereIn('id', $ids)->update([
             'status' => StoredItem::STATUS_DELIVERED
