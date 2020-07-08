@@ -56,8 +56,8 @@
         @endif
         <tr>
             <td>
-                @if($payment->orderPaymentItems && $payment->orderPaymentItems->count() > 0)
-                    Оплаченные места: <strong>{{$payment->orderPaymentItems->count()}}</strong>
+                @if($payment->clientItemsSelection && $payment->clientItemsSelection->storedItems->count() > 0)
+                    Оплаченные места: <strong>{{$payment->clientItemsSelection->storedItems->count()}}</strong>
                 @endif
             </td>
             @if($payment->payer_type === 'user')

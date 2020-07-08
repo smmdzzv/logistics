@@ -234,10 +234,10 @@ class Payment extends BaseModel
         if ($this->payer_type === 'user') {
             $client = Client::findOrFail($this->payer->id);
 
-            $stat = $client->getExpensesReport(Carbon::now()->addDay(), null);
+//            $stat = $client->getExpensesReport(Carbon::now()->addDay(), null); TODO this
 
-            $this->placesLeft = $stat->placesCountAtStart;
-            $this->clientDebt = $stat->debtAtStart;
+//            $this->placesLeft = $stat->placesCountAtStart;
+//            $this->clientDebt = $stat->debtAtStart;
         }
     }
 }

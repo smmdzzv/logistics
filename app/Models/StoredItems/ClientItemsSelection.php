@@ -20,15 +20,8 @@ class ClientItemsSelection extends BaseModel
             ->using('App\Models\Pivots\BasePivot');
     }
 
-//    public function order(){
-//        return $this->belongsTo(Order::class);
-//    }
-//
-//    public function payment(){
-//        return $this->belongsTo(Payment::class);
-//    }
-//
-//    public function paidItems(){
-//        return $this->hasMany(OrderPaymentItem::class);
-//    }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

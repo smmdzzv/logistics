@@ -45,7 +45,7 @@
                     @component('till/payments/payment', ['payment' => $relatedPayment, 'showProfileLink' => true])@endcomponent
                 @endforeach
 
-                @if($payment->orderPaymentItems && $payment->orderPaymentItems->count() > 0)
+                @if($payment->clientItemsSelection && $payment->clientItemsSelection->storedItems->count() > 0)
                     <h4>Оплаченные товары</h4>
                     <div class=" ">
                         <div class="card">
@@ -73,32 +73,32 @@
                                     </div>
                                 </div>
                             </div>
-                            @foreach($payment->orderPaymentItems as $orderPaymentItem)
+                            @foreach($payment->clientItemsSelection->storedItems as $storedItem)
                                 <li class="list-group-item">
                                     <div class="form-row text-center">
                                         <div class="col-md-2 text-md-left">
-                                            <span>{{$orderPaymentItem->storedItem->info->item->name}}</span>
+                                            <span>{{$storedItem->info->item->name}}</span>
                                         </div>
                                         <div class="col-md-3 text-md-left">
-                                            <span>{{$orderPaymentItem->storedItem->code}}</span>
+                                            <span>{{$storedItem->code}}</span>
                                         </div>
                                         <div class="col-md-3 text-md-left">
-                                            <span>{{$orderPaymentItem->storedItem->info->width}}
-                                                &times; {{$orderPaymentItem->storedItem->info->height}}
-                                                &times; {{$orderPaymentItem->storedItem->info->length}}
+                                            <span>{{$storedItem->info->width}}
+                                                &times; {{$storedItem->info->height}}
+                                                &times; {{$storedItem->info->length}}
                                             </span>
                                         </div>
                                         <div class="col-md-1 text-md-left">
-                                            <span>{{$orderPaymentItem->storedItem->info->weight}} кг</span>
+                                            <span>{{$storedItem->info->weight}} кг</span>
                                         </div>
                                         <div class="col-md-1 text-md-left">
-                                            <span>{{round($orderPaymentItem->storedItem->info->billingInfo->pricePerItem / $orderPaymentItem->storedItem->info->weight, 2)}} $</span>
+                                            <span>{{round($storedItem->info->billingInfo->pricePerItem / $storedItem->info->weight, 2)}} $</span>
                                         </div>
                                         <div class="col-md-1 text-md-left">
-                                            <span>{{$orderPaymentItem->storedItem->info->billingInfo->pricePerItem}} $</span>
+                                            <span>{{$storedItem->info->billingInfo->pricePerItem}} $</span>
                                         </div>
                                         <div class="col-md-1">
-                                            <a href="{{route('stored.show', $orderPaymentItem->storedItem->id)}}">
+                                            <a href="{{route('stored.show', $storedItem->id)}}">
                                                 <img src="/svg/file.svg" class="icon-btn-sm">
                                             </a>
                                         </div>

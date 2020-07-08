@@ -42,13 +42,9 @@ Route::prefix('order')->name('order.')->group(function () {
 
     Route::post('{order}/update-price', 'Orders\OrderPriceController@update')
         ->name('order-price.update');
-
-    Route::post('{order}/stored-items/pending-payment', 'Orders\OrderStoredItemsPendingPaymentsController@store');
 });
 
 Route::get('/orders/filtered', 'Orders\OrdersController@filtered')->name('order.filtered');
-
-Route::resource('order.delivered-stored-items', 'Orders\OrderDeliveredStoredItemsController');
 
 Route::resource('order.unpaid-stored-items', 'Orders\OrderUnpaidStoredItemsController')
     ->only('index');
@@ -59,11 +55,11 @@ Route::resource('order.payments', 'Orders\OrderPaymentsController')
 //Client Orders
 Route::resource('client.active-orders', 'Orders\ClientActiveOrdersController');
 
-//Route::post('/deliver/{order}/items', 'Orders\OrderItemsController@deliver');
-//Route::post('/deliver/{order}/items/pending-payment', 'Orders\OrderItemsController@storePaymentRequest');
+Route::post('/client/{client}/stored-items/pending-payment', 'Client\StoredItemsPendingPaymentsController@store');
+
+Route::resource('client.delivered-stored-items', 'Client\ClientDeliveredStoredItemsController');
 
 
-//Route::get('/orders/{client}/active', 'Orders\OrdersController@activeOrders')->name('client.orders.active');
 Route::resource('orders', 'Orders\OrdersController')->parameters(['orders' => 'order']);
 Route::get('branch/{branch}/orders', 'Orders\OrdersController@filteredByBranch');
 Route::get('user/{user}/orders', 'Orders\OrdersController@filteredByUser');;
@@ -125,6 +121,9 @@ Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch');
 Route::get('/stored-item-info', 'StoredItemInfo\StoredItemInfoController@index')->name('stored-item-infos.index');
 Route::get('/stored-item-info/statistics', 'StoredItemInfo\StoredItemInfoController@getClientStat');
 Route::get('/stored-item-info/filtered', 'StoredItemInfo\StoredItemInfoController@storedItemInfos');
+
+//StoredItem
+Route::resource('stored-items', 'StoredItems\StoredItemsController')->only('show');
 
 //Shops
 Route::resource('shop', 'Shops\ShopsController', ['only' => ['create', 'store']]);
@@ -199,6 +198,8 @@ Route::get('/accounts/{holder}', 'Till\Accounts\AccountsController@holderAccount
 
 //Countries
 Route::get('/countries', 'CountriesController@all');
+
+Route::get('/scanner', 'Scanner\ScannerController@index')->name('scanner.index');
 
 
 

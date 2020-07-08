@@ -10,7 +10,6 @@ namespace App\Http\Controllers\Client;
 use App\Data\Dto\Till\PaymentDto;
 use App\Http\Controllers\BaseController;
 use App\Models\Currency;
-use App\Models\Order;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Till\PaymentItem;
 use App\Models\Users\Client;
@@ -19,7 +18,7 @@ use App\Services\StoredItem\StoredItemsPaymentService;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-class ClientStoredItemsPendingPaymentsController extends BaseController
+class StoredItemsPendingPaymentsController extends BaseController
 {
     private StoredItemsPaymentService $paymentService;
 

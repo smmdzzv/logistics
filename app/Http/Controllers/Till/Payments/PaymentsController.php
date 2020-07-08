@@ -35,16 +35,6 @@ class PaymentsController extends BaseController
         return view('till.payments.index', compact('branches', 'currencies', 'paymentItems'));
     }
 
-//    public function all()
-//    {
-//        return Payment::without(
-//            'payerAccount',
-//            'payeeAccount',
-//            'exchangeRate')
-//            ->latest()
-//            ->paginate($this->pagination());
-//    }
-
     public function create()
     {
         $branches = $this->getBranches();
@@ -77,8 +67,8 @@ class PaymentsController extends BaseController
         $payment = Payment::withTrashed()
             ->with(
                 'destroyer',
-                'orderPaymentItems.storedItem.info.billingInfo',
-                'orderPaymentItems.storedItem.info.item',
+                'clientItemsSelection.storedItems.info.billingInfo',
+                'clientItemsSelection.storedItems.info.item',
                 'exchangeRate.fromCurrency',
                 'exchangeRate.toCurrency',
                 'relatedPayment',
