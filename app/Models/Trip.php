@@ -33,7 +33,13 @@ use Illuminate\Database\Eloquent\Collection;
  */
 class Trip extends BaseModel
 {
-    protected $guarded = [];
+    public const STATUS_ACTIVE = 'active';
+
+    public const STATUS_COMPLETED = 'completed';
+
+    public const STATUS_CANCELED = 'canceled';
+
+    public const STATUS_SCHEDULED = 'scheduled';
 
     protected $casts = [
         'hasTrailer' => 'boolean',

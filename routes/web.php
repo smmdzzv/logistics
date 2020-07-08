@@ -69,21 +69,25 @@ Route::get('/orders/{clientCode}/statistics', 'Orders\ClientOrdersController@get
 
 //Trips
 Route::get('/trips/all', 'Trips\TripsController@all');
+Route::get('/trips/filtered', 'Trips\FilteredTripsController@index');
 Route::post('/trip/{trip}/status', 'Trips\TripsController@changeStatus')->name('trip.status');
 Route::resource('trips', 'Trips\TripsController',
     ['except' => ['destroy']]);
 
-Route::get('/trip/{trip}/stored-items/edit', 'Trips\TripStoredItemsController@edit')->name('trip.edit-items');
-Route::get('/trip/{trip}/stored-items/generate', 'Trips\TripStoredItemsController@generate')->name('trip.generate-items-list');
-Route::get('/trip/stored-items/available', 'Trips\TripStoredItemsController@availableItems');
-Route::get('/trip/{branch}/stored-items/available', 'Trips\TripStoredItemsController@availableItemsAtBranch');
-Route::post('/trip/{trip}/stored-items', 'Trips\TripStoredItemsController@associateToTrip');
-Route::get('/trip/{trip}/stored-items/load', 'Trips\TripStoredItemsController@editLoaded')->name('trip.edit-loaded');
-Route::post('/trip/{trip}/stored-items/load', 'Trips\TripStoredItemsController@updateLoaded')->name('trip.update-loaded');
-Route::get('/trip/{trip}/stored-items/unload', 'Trips\TripStoredItemsController@editUnloaded')->name('trip.edit-unloaded');
-Route::post('/trip/{trip}/stored-items/unload', 'Trips\TripStoredItemsController@updateUnloaded')->name('trip.update-unloaded');
-Route::get('/trip/{trip}/exchange/stored-items', 'Trips\TripStoredItemsController@changeItemsTrip')->name('trip.change-items-trip');
-Route::post('/trip/{trip}/exchange/stored-items', 'Trips\TripStoredItemsController@exchangeItems')->name('trip.exchange-items');
+Route::prefix('trip')->group(function () {
+    Route::get('{trip}/stored-items/edit', 'Trips\TripStoredItemsController@edit')->name('trip.edit-items');
+    Route::get('{trip}/stored-items/generate', 'Trips\TripStoredItemsController@generate')->name('trip.generate-items-list');
+    Route::get('stored-items/available', 'Trips\TripStoredItemsController@availableItems');
+    Route::get('{branch}/stored-items/available', 'Trips\TripStoredItemsController@availableItemsAtBranch');
+    Route::post('{trip}/stored-items', 'Trips\TripStoredItemsController@associateToTrip');
+    Route::get('{trip}/stored-items/load', 'Trips\TripStoredItemsController@editLoaded')->name('trip.edit-loaded');
+    Route::post('{trip}/stored-items/load', 'Trips\TripStoredItemsController@updateLoaded')->name('trip.update-loaded');
+    Route::get('{trip}/stored-items/unload', 'Trips\TripStoredItemsController@editUnloaded')->name('trip.edit-unloaded');
+    Route::post('{trip}/stored-items/unload', 'Trips\TripStoredItemsController@updateUnloaded')->name('trip.update-unloaded');
+    Route::get('{trip}/exchange/stored-items', 'Trips\TripStoredItemsController@changeItemsTrip')->name('trip.change-items-trip');
+    Route::post('{trip}/exchange/stored-items', 'Trips\TripStoredItemsController@exchangeItems')->name('trip.exchange-items');
+
+});
 
 //Customs
 Route::resource('customs-code', 'Customs\CustomsCodeController')->parameters(['customs-code' => 'code']);

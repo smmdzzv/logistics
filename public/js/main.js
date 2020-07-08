@@ -74,6 +74,9 @@ $(document).on('keyup', 'input,select', function (e) {
 });
 
 function switchFocus(el) {
+    if($(el).hasClass('auto-switch-off'))
+        return
+
     // Get all focusable elements on the page
     let $canfocus = $(':focusable');
     let index = $canfocus.index(el) + 1;
