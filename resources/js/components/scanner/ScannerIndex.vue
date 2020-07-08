@@ -8,8 +8,8 @@
                 <label>Тип операции</label>
                 <select class="form-control form-control-sm" v-model="operation">
                     <option value="deliver">Выдать товары клиенту</option>
-                    <option value="load">Загрузить на рейс</option>
                     <option value="store">Принять на склад</option>
+                    <option value="load">Загрузить на рейс</option>
                     <option value="transfer">Перевести с рейса на рейс</option>
                 </select>
             </div>

@@ -142,7 +142,7 @@ class AssociateToTripRequestWriter extends RequestWriter
             $this->data->tripHiestories[] = new StoredItemTripHistory([
                 'trip_id' => $this->input->trip->id,
                 'stored_item_id' => $stored,
-                'registered_by_id' => $this->input->employee->id
+//                'registered_by_id' => $this->input->employee->id
             ]);
         }
     }
