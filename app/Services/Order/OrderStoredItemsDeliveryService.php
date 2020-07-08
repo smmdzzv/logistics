@@ -61,8 +61,8 @@ class OrderStoredItemsDeliveryService
 
     private function checkPayment(Client $client, Collection $storedItems, bool $isDebtRequested): Payment
     {
-        $paymentSum = $storedItems->pluck('info')->sum('pricePerItem');
-
+        $paymentSum = $storedItems->pluck('info.billingInfo')->sum('pricePerItem');
+        
         /** @var Account $ownerAccount */
         $ownerAccount = $client->accounts()->dollarAccount();
 
