@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <scanner-index></scanner-index>
+            <scanner-index :branch="{{Auth::user()->branch}}"></scanner-index>
         </div>
     </div>
 @endsection

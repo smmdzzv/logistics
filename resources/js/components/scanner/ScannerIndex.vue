@@ -6,10 +6,10 @@
         <div class="row">
             <div class="form-group col-md-4">
                 <label>Тип операции</label>
-                <select class="form-control form-control-sm">
-                    <option value="store">Принять на склад</option>
+                <select class="form-control form-control-sm" v-model="operation">
                     <option value="deliver">Выдать товары клиенту</option>
-                    <option value="transit">Загрузить на рейс</option>
+                    <option value="load">Загрузить на рейс</option>
+                    <option value="store">Принять на склад</option>
                     <option value="transfer">Перевести с рейса на рейс</option>
                 </select>
             </div>
@@ -27,7 +27,11 @@
 
         <div class="row mt-4">
             <div class="col-12">
-                <deliver-stored-items :stored-items="items"></deliver-stored-items>
+                <deliver-stored-items v-if="operation === 'deliver'" :stored-items="items"></deliver-stored-items>
+
+                <load-car v-if="operation === 'load'" :stored-items="items"></load-car>
+
+                <store-items v-if="operation === 'store'" :stored-items="items" :branch="branch"></store-items>
             </div>
         </div>
         <div class="row mt-5">
@@ -47,14 +51,19 @@
 </template>
 
 <script>
-    import {pad} from "../../tools";
     import DeliverStoredItems from "./DeliverStoredItems";
+    import StoreItems from "./StoreItems";
+    import LoadCar from "./LoadCar";
 
     export default {
         name: "ScannerIndex",
-        components: {DeliverStoredItems},
+        components: {StoreItems, LoadCar, DeliverStoredItems},
+        props: {
+            branch: Object
+        },
         data() {
             return {
+                operation: 'deliver',
                 items: [],
                 fields: {
                     index: {
@@ -72,8 +81,7 @@
                     'info.owner.code': {
                         label: 'Владелец'
                     }
-                }
-                ,
+                },
                 code: null
             }
         },

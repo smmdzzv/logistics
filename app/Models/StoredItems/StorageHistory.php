@@ -16,8 +16,6 @@ class StorageHistory extends BaseModel
 {
     use SoftDeletes;
 
-    protected $guarded = [];
-
     public function storage()
     {
         return $this->belongsTo(Storage::class);

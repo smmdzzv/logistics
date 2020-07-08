@@ -34,8 +34,6 @@ Route::resource('trusted-user', 'Users\TrustedUserController');
 Route::get('profile/{user}', 'ProfilesController@show')->name('profile.show');
 
 //Order
-//Route::resource('order.stored-items', 'Orders\OrderStoredItemsController')->only('index', 'show');
-
 Route::prefix('order')->name('order.')->group(function () {
     Route::get('deliver-stored-items', 'Orders\StoredItemsDeliverController@index')
         ->name('deliver-stored-items');
@@ -98,26 +96,17 @@ Route::get('/reports/expenses', 'Till\Reports\ClientExpenseReportsController@ind
 Route::get('/reports/expenses/generate', 'Till\Reports\ClientExpenseReportsController@generateReport');
 
 Route::get('/payments/all', 'Till\Payments\PaymentsController@all')->name('payments.all');
-//Route::get('/payments/filtered', 'Till\Payments\PaymentsController@filtered');
 Route::post('/payment', 'Till\Payments\PaymentsController@storeOrUpdate');
 Route::resource('payment', 'Till\Payments\PaymentsController', ['except' => ['store', 'update']]);
 
-//Route::resource('incoming-payments', 'Till\Payments\IncomingPaymentsController',
-//    ['except' => ['destroy']])->parameters(['incoming-payments' => 'payment']);
-
 Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController')->parameters(['outgoing-payments' => 'payment']);
 
-//Route::resource('payments', 'Till\Payments\PaymentsController', ['only' => ['index', 'show']])->parameters(['payments' => 'payment']);
-
 //StoredItems
-//Route::get('/stored', 'StoredItemsController@index')->name('stored.index');
 Route::get('/stored/all', 'StoredItemsController@all')->name('stored.all');
 Route::get('/stored/{storedItem}', 'StoredItemsController@show')->name('stored.show');
 Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch');
-//Route::post('/stored/trip/{trip}', 'StoredItemsController@associateToTrip');
 
 //StoredItemInfo
-//Route::get('/stored-item-info/available/filtered', 'StoredItemInfo\StoredItemInfoController@availableStoredItemInfos');
 Route::get('/stored-item-info', 'StoredItemInfo\StoredItemInfoController@index')->name('stored-item-infos.index');
 Route::get('/stored-item-info/statistics', 'StoredItemInfo\StoredItemInfoController@getClientStat');
 Route::get('/stored-item-info/filtered', 'StoredItemInfo\StoredItemInfoController@storedItemInfos');
@@ -139,12 +128,10 @@ Route::resource('tariffs', 'Tariffs\TariffsController', [
     'only' => ['index', 'store', 'destroy']
 ])->parameters(['tariffs' => 'tariff']);
 
-
 //Tariff price histories
 Route::get('/tariff-price-histories/all', "Tariffs\TariffPriceHistoriesController@all");
 Route::post('/tariff-price-history/{history}/orders/update-price', "Orders\OrderPriceController@updateByTariffPriceHistory")->name('update-price.tariff-price-history');
 Route::resource('tariff-price-histories', 'Tariffs\TariffPriceHistoriesController')->parameters(['tariff-price-histories' => 'history']);
-//Route::get('/tariff-price-histories/{tariff}', "TariffPriceHistoriesController@lastByTariff");
 
 //Cars
 Route::get('/cars/all', 'CarsController@all');
@@ -158,6 +145,7 @@ Route::resource('car-fuel-consumption', 'Cars\CarFuelConsumptionsController',
 Route::get('/branches/all', "BranchesController@all");
 Route::resource('branches', 'BranchesController',
     ['except' => ['create', 'edit', 'show']])->parameters(['branches' => 'branch']);
+Route::resource('branch.stored-items', 'Branch\BranchStoredItemsController');
 
 //PaymentItems
 Route::get('/payment-items/all', 'Till\PaymentItemsController@all');
@@ -182,9 +170,6 @@ Route::get('/exchange-money', 'Till\MoneyExchangesController@exchanger')->name('
 Route::get('/items/all', 'ItemsController@all');
 Route::get('/items/all/eager', 'ItemsController@allEager');
 Route::resource('items', 'ItemsController')->parameters(['items' => 'item']);
-
-//Lost and found
-//Route::resource('lost-items', 'LostAndFound\LostItemsController')->parameters(['lost-items' => 'item']);
 
 Route::post('/lost-stored-items', 'StoredItems\LostStoredItemsController@store');
 

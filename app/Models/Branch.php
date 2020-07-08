@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property  object|string director
  * @property string|null deleted_by_id
  * @property \DateTime deleted_at
+ * @property Storage mainStorage
  */
 class Branch extends BaseModel
 {

@@ -10,7 +10,7 @@ use App\Models\StoredItems\StoredItemTripHistory;
 use App\StoredItems\StorageHistory;
 use Carbon\Carbon;
 use stdClass;
-
+/**@deprecated*/
 class UnloadItemsFromCarRequestWriter extends RequestWriter
 {
 
