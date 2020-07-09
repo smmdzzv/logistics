@@ -6,18 +6,17 @@
         <div class="row">
             <div class="form-group col-md-4">
                 <label>Тип операции</label>
-                <select class="form-control form-control-sm" v-model="operation">
+                <select class="form-control" v-model="operation">
                     <option value="deliver">Выдать товары клиенту</option>
                     <option value="store">Принять на склад</option>
                     <option value="load">Загрузить на рейс</option>
-                    <option value="transfer">Перевести с рейса на рейс</option>
                 </select>
             </div>
             <div class="form-group col-md-8">
                 <label>Код товара</label>
                 <input type="text"
                        ref="codeInput"
-                       class="form-control form-control-sm auto-switch-off"
+                       class="form-control auto-switch-off"
                        placeholder="Просканируйте штрих код или введите код вручную"
                        v-model="code"
                        autofocus

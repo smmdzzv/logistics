@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="form-group col-md-5 mb-3">
+            <div class="form-group col-md-5 mb-3" style="margin-left: -15px">
                 <select v-model="trip" class="form-control">
                     <option :value="null">-- Выберите рейс --</option>
                     <option v-for="trip in activeTrips" :key="trip.id" :value="trip">
