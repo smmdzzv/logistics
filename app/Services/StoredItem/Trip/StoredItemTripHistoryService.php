@@ -23,4 +23,12 @@ class StoredItemTripHistoryService
             'deleted_by_id' => auth()->user()->id
         ]);
     }
+
+    public function massLoad(Collection $tripHistoriesIds){
+        StoredItemTripHistory::whereIn('id', $tripHistoriesIds)->update([
+            'loaded_at' => Carbon::now(),
+            'loaded_by_id' => auth()->id(),
+            'status' => StoredItemTripHistory::STATUS_LOADED
+        ]);
+    }
 }

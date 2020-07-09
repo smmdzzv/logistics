@@ -43,8 +43,21 @@
                     .then(response => this.activeTrips = response.data)
                     .finally(hideBusySpinner())
             },
-            submit() {
-                
+            async submit() {
+                try {
+                    let data = {
+                        storedItems: this.storedItems.map(i => i.id)
+                    };
+
+                    let action = `/trip/${this.trip.id}/stored-items/load`;
+                    const response = await axios.post(action, data);
+                    window.location = `/trips/${this.trip.id}`;
+                } catch (e) {
+                    this.$root.showErrorMsg(
+                        'Ошибка сохранения',
+                        'Не удалось загрузить товары на рейс. Повторите после обновления страницы'
+                    );
+                }
             }
         }
     }

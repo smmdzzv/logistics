@@ -14,6 +14,9 @@ use App\Models\Branch;
 use App\Models\Branches\Storage;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Trip;
+use App\Services\Storage\StorageHistoryService;
+use App\Services\StoredItem\Trip\StoredItemTripHistoryService;
+use App\Services\Trip\LoadTripItemsService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -45,16 +48,14 @@ class TripStoredItemsController extends Controller
         return view('trips.load-items', compact('trip'));
     }
 
-    public function updateLoaded(Trip $trip)
+    public function updateLoaded(
+        Trip $trip,
+        StoredItemTripHistoryService $tripHistoryService,
+        StorageHistoryService $storageHistoryService
+    )
     {
-        $data = new \stdClass();
-        $data->storedItems = $this->getTripItemsFromRequest($trip);
-
-        $data->employee = auth()->user();
-
-        $writer = new LoadItemsToCarRequestWriter($data);
-        $writer->write();
-
+        $service = new LoadTripItemsService($tripHistoryService, $storageHistoryService);
+        $service->load($trip, collect(request()->get('storedItems')));
         return;
     }
 

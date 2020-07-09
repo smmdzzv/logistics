@@ -15,19 +15,25 @@ class StoredItemTripHistory extends BaseModel
 
     public const STATUS_ABANDONED = 'abandoned';
 
+    public const STATUS_LOADED = 'loaded';
+
     public const STATUS_COMPLETED = 'completed';
 
     public const STATUS_CANCELED = 'canceled';
 
-    public function storedItem(){
+
+    public function storedItem()
+    {
         return $this->belongsTo(StoredItem::class);
     }
 
-    public function trip(){
+    public function trip()
+    {
         return $this->belongsTo(Trip::class);
     }
 
-    public function loadedBy(){
+    public function loadedBy()
+    {
         return $this->belongsTo(User::class);
     }
 
