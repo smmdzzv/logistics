@@ -114,6 +114,7 @@ Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch');
 Route::get('/stored-item-info', 'StoredItemInfo\StoredItemInfoController@index')->name('stored-item-infos.index');
 Route::get('/stored-item-info/statistics', 'StoredItemInfo\StoredItemInfoController@getClientStat');
 Route::get('/stored-item-info/filtered', 'StoredItemInfo\StoredItemInfoController@storedItemInfos');
+Route::get('/status-change-histories', 'StoredItems\ItemsStatusChangeHistoriesController@index');
 
 //StoredItem
 Route::resource('stored-items', 'StoredItems\StoredItemsController')->only('show');

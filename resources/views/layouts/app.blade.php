@@ -57,6 +57,7 @@
                                         товары</a>
                                     <a class="dropdown-item" href="{{route('order.deliver-stored-items')}}">Выдать
                                         товары</a>
+                                        <a class="dropdown-item" href="/status-change-histories">История изменений</a>
                                     @if(Auth::user()->hasRole('admin'))
                                         {{--                                        <div class="dropdown-divider"></div>--}}
                                         {{--                                        <a class="dropdown-item" href="{{route('lost-items.index')}}">Потерянные--}}
