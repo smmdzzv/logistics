@@ -77,31 +77,31 @@ class PaymentsController extends BaseController
         return view('till.payments.show', compact('payment'));
     }
 
-    public function filtered()
-    {
-
-        $query = Payment::without(
-            'payerAccount',
-            'payeeAccount',
-            'exchangeRate'
-        )->latest();
-
-        $filter = new PaymentFilter(request()->all(), $query);
-        $query = $filter->filter();
-
-        $report = null;
-
-        if (request()->get('calculateCash') === 'true'
-            && request()->get('branchPayer')) {
-            $report = new CashReport($query, request()->get('branchPayer'));
-            $report->formReport();
-            $report->convertToISONameKey();
-        }
-
-        $paginator = $query->paginate($this->pagination());
-        $paginator['cashReport'] = $report ? $report->toArray() : null;
-        return $paginator;
-    }
+//    public function filtered()
+//    {
+//
+//        $query = Payment::without(
+//            'payerAccount',
+//            'payeeAccount',
+//            'exchangeRate'
+//        )->latest();
+//
+//        $filter = new PaymentFilter(request()->all(), $query);
+//        $query = $filter->filter();
+//
+//        $report = null;
+//
+//        if (request()->get('calculateCash') === 'true'
+//            && request()->get('branchPayer')) {
+//            $report = new CashReport($query, request()->get('branchPayer'));
+//            $report->formReport();
+//            $report->convertToISONameKey();
+//        }
+//
+//        $paginator = $query->paginate($this->pagination());
+//        $paginator['cashReport'] = $report ? $report->toArray() : null;
+//        return $paginator;
+//    }
 
     public function destroy(Payment $payment)
     {

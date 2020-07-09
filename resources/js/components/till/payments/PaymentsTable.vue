@@ -317,7 +317,7 @@
         },
         methods: {
             prepareUrl(page) {
-                let action = '/payments/filtered?';
+                let action = '/filtered-payments?';
 
                 if (this.selectedBranch)
                     action += `branch=${this.selectedBranch.id}&`;
