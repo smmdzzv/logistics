@@ -24,7 +24,7 @@ class StorageHistoryService
             return new StorageHistory([
                 'stored_item_id' => $item->id,
                 'storage_id' => $storage->id,
-                'created_by_id' => auth()->id()
+                'created_by_id' => auth()->user()->id
             ]);
         })->pipe(function (Collection $histories) {
             $historyWriters = new StorageHistoriesWriter($histories->all());

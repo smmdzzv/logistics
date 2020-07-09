@@ -20,6 +20,7 @@
                         <th role="columnheader">
                             Дата
                         </th>
+                        <th role="columnheader"></th>
                     </tr>
                     </thead>
 
@@ -36,6 +37,11 @@
                             </td>
                             <td role="cell">
                                 <span v-luxon="{ value: '{{$history->created_at}}' }"/>
+                            </td>
+                            <td role="cell">
+                                <a href="{{route('status-change-histories.show', $history->id)}}">
+                                    <img src="/svg/file.svg" class="icon-btn-sm">
+                                </a>
                             </td>
                         </tr>
                     @endforeach

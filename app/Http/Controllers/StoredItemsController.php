@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use App\Models\StoredItems\StoredItem;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 
+/**@deprecated */
 class StoredItemsController extends Controller
 {
     public function __construct()
@@ -30,16 +30,16 @@ class StoredItemsController extends Controller
         return StoredItem::with('info.owner', 'info.item', 'storageHistory.storage')->latest()->paginate(10);
     }
 
-    public function show($storedItem)
-    {
-        $storedItem = StoredItem::withTrashed()->find($storedItem);
-        $storedItem->load('info', 'info.owner', 'info.billingInfo');
-        $storageHistories = $storedItem->storageHistories()->latest()
-            ->withTrashed()->with('storage', 'deletedBy', 'registeredBy')->get();
-        $tripHistories = $storedItem->tripHistory()->latest()
-            ->withTrashed()->with('trip', 'deletedBy', 'registeredBy', 'loadedBy')->get();
-        return view('stored.show', compact('storedItem', 'storageHistories', 'tripHistories'));
-    }
+//    public function show($storedItem)
+//    {
+//        $storedItem = StoredItem::withTrashed()->find($storedItem);
+//        $storedItem->load('info', 'info.owner', 'info.billingInfo');
+//        $storageHistories = $storedItem->storageHistories()->latest()
+//            ->withTrashed()->with('storage', 'deletedBy', 'registeredBy')->get();
+//        $tripHistories = $storedItem->tripHistory()->latest()
+//            ->withTrashed()->with('trip', 'deletedBy', 'registeredBy', 'loadedBy')->get();
+//        return view('stored.show', compact('storedItem', 'storageHistories', 'tripHistories'));
+//    }
 
     public function filteredByBranch(Branch $branch)
     {

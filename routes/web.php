@@ -106,18 +106,19 @@ Route::resource('payment', 'Till\Payments\PaymentsController', ['except' => ['st
 Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController')->parameters(['outgoing-payments' => 'payment']);
 
 //StoredItems
-Route::get('/stored/all', 'StoredItemsController@all')->name('stored.all');
-Route::get('/stored/{storedItem}', 'StoredItemsController@show')->name('stored.show');
-Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch');
+//Route::get('/stored/all', 'StoredItemsController@all')->name('stored.all');
+//Route::get('/stored/{storedItem}', 'StoredItemsController@show')->name('stored.show');
+//Route::get('/{branch}/stored', 'StoredItemsController@filteredByBranch');
 
 //StoredItemInfo
 Route::get('/stored-item-info', 'StoredItemInfo\StoredItemInfoController@index')->name('stored-item-infos.index');
 Route::get('/stored-item-info/statistics', 'StoredItemInfo\StoredItemInfoController@getClientStat');
 Route::get('/stored-item-info/filtered', 'StoredItemInfo\StoredItemInfoController@storedItemInfos');
-Route::get('/status-change-histories', 'StoredItems\ItemsStatusChangeHistoriesController@index');
+Route::resource('status-change-histories', 'StoredItems\ItemsStatusChangeHistoriesController')
+    ->parameters(['status-change-histories' => 'history'])->only('index', 'show');
 
 //StoredItem
-Route::resource('stored-items', 'StoredItems\StoredItemsController')->only('show');
+Route::resource('stored-items', 'StoredItems\StoredItemsController');
 
 //Shops
 Route::resource('shop', 'Shops\ShopsController', ['only' => ['create', 'store']]);
