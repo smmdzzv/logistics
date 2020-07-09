@@ -14,7 +14,7 @@ class ItemsStatusChangeHistoriesController extends BaseController
 {
     public function index()
     {
-        $histories = ItemsStatusChangeHistory::with('creator')->paginate(10);
+        $histories = ItemsStatusChangeHistory::latest()->with('creator')->paginate(10);
         return view('stored.status-change-histories-index', compact('histories'));
     }
 }
