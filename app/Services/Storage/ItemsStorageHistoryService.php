@@ -15,7 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
-class StorageHistoryService
+class ItemsStorageHistoryService
 {
     public function massStore(Collection $storedItems, Storage $storage): Collection
     {
@@ -40,5 +40,23 @@ class StorageHistoryService
             'deleted_at' => Carbon::now(),
             'deleted_by_id' => auth()->user()->id
         ]);
+    }
+
+    public function restoreStorageHistoryRecords(Collection $canceledStoredItems)
+    {
+        $canceledStoredItems->reject(function (StoredItem $storedItem) {
+            return $storedItem->storageHistory === null;
+        })->flatMap(function (StoredItem $storedItem) {
+            return $storedItem->storageHistory()->withTrashed()->get();
+        })->map(function (StorageHistory $trashedRecord) {
+            $trashedRecord->id = null;
+            $trashedRecord->deleted_by_id = null;
+            $trashedRecord->deleted_at = null;
+            $trashedRecord->updated_at = null;
+            return $trashedRecord;
+        })->pipe(function (Collection $newRecords) {
+            $writer = new StorageHistoriesWriter($newRecords->all());
+            return $writer->write();
+        });
     }
 }

@@ -10,7 +10,7 @@ use App\Data\RequestWriters\RequestWriter;
 use App\Models\StoredItems\StoredItemTripHistory;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-
+/**@deprecated*/
 class AssociateToTripRequestWriter extends RequestWriter
 {
 

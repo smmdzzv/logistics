@@ -121,7 +121,7 @@ class StoredItem extends BaseModel
 
     public function tripHistories()
     {
-        return $this->hasMany(StoredItemTripHistory::class)->withTrashed();
+        return $this->hasMany(StoredItemTripHistory::class);
     }
 
     public function tripHistory()

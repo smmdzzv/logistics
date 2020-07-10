@@ -1,4 +1,8 @@
 <?php
+/**
+ *
+ * @author Sultonazar Mamadazizov <sultonazar.mamadazizov@mail.ru>
+ */
 
 namespace App\StoredItems;
 
@@ -11,6 +15,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int deleted_at
+ * @property string id
+ * @property string deleted_by_id
+ * @property string updated_at
+ * @property string created_by_id
+ * @property string created_at
  */
 class StorageHistory extends BaseModel
 {
@@ -21,22 +30,8 @@ class StorageHistory extends BaseModel
         return $this->belongsTo(Storage::class);
     }
 
-//    public function branch()
-//    {
-//        return $this->hasOneThrough(Branch::class, Storage::class);
-//    }
-
     public function storedItem()
     {
         return $this->belongsTo(StoredItem::class);
-    }
-
-    public function registeredBy()
-    {
-        return $this->belongsTo(User::class, 'registeredById');
-    }
-
-    public function deletedBy(){
-        return $this->belongsTo(User::class, 'deletedById');
     }
 }

@@ -58,7 +58,7 @@ class TripsController extends Controller
 
     public function store(TripRequest $request)
     {
-        return Trip::create(array_merge($request->validated(), ['status' => Trip::STATUS_SCHEDULED]));
+        return Trip::create(array_merge($request->all(), ['status' => Trip::STATUS_SCHEDULED]));
     }
 
     public function edit(Trip $trip)

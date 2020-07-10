@@ -9,7 +9,7 @@ namespace App\Services\Trip;
 
 use App\Models\StoredItems\StoredItem;
 use App\Models\Trip;
-use App\Services\Storage\StorageHistoryService;
+use App\Services\Storage\ItemsStorageHistoryService;
 use App\Services\StoredItem\Trip\StoredItemTripHistoryService;
 use Illuminate\Support\Collection;
 
@@ -17,9 +17,9 @@ class LoadTripItemsService
 {
     private StoredItemTripHistoryService $tripHistoryService;
 
-    private StorageHistoryService $storageHistoryService;
+    private ItemsStorageHistoryService $storageHistoryService;
 
-    public function __construct(StoredItemTripHistoryService $tripHistoryService, StorageHistoryService $storageHistoryService)
+    public function __construct(StoredItemTripHistoryService $tripHistoryService, ItemsStorageHistoryService $storageHistoryService)
     {
         $this->tripHistoryService = $tripHistoryService;
         $this->storageHistoryService = $storageHistoryService;

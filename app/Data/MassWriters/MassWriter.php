@@ -30,6 +30,7 @@ abstract class MassWriter
         foreach ($this->entities as $entity) {
             $entity->id = $this->ulidGenerator->generate();
             $entity->created_at = Carbon::now();
+            $entity->created_by_id = auth()->id();
             $this->data[] = $entity->attributesToArray();
         };
     }

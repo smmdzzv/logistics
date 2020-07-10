@@ -12,7 +12,7 @@ use App\Models\Branch;
 use App\Models\Order;
 use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemInfo;
-use App\Services\Storage\StorageHistoryService;
+use App\Services\Storage\ItemsStorageHistoryService;
 use App\Services\StoredItem\BillingInfoService;
 use App\Services\StoredItem\StoredItemInfoService;
 use App\Services\StoredItem\StoredItemService;
@@ -25,13 +25,13 @@ class OrderService
 
     private StoredItemService $itemService;
 
-    private StorageHistoryService $storageHistoryService;
+    private ItemsStorageHistoryService $storageHistoryService;
 
     private BillingInfoService $billingInfoService;
 
     public function __construct(StoredItemInfoService $infoService,
                                 StoredItemService $itemService,
-                                StorageHistoryService $storageHistoryService,
+                                ItemsStorageHistoryService $storageHistoryService,
                                 BillingInfoService $billingInfoService
     )
     {

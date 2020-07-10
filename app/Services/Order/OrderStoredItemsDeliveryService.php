@@ -17,7 +17,7 @@ use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
 use App\Models\Users\Client;
 use App\Models\Users\TrustedUser;
-use App\Services\Storage\StorageHistoryService;
+use App\Services\Storage\ItemsStorageHistoryService;
 use App\Services\StoredItem\StoredItemsPaymentService;
 use App\Services\StoredItem\Trip\StoredItemTripHistoryService;
 use App\StoredItems\StorageHistory;
@@ -31,14 +31,14 @@ class OrderStoredItemsDeliveryService
 
     private OrderService $orderService;
 
-    private StorageHistoryService $storageHistoryService;
+    private ItemsStorageHistoryService $storageHistoryService;
 
     private StoredItemTripHistoryService $tripHistoryService;
 
     public function __construct(
         StoredItemsPaymentService $paymentService,
         OrderService $orderService,
-        StorageHistoryService $storageHistoryService,
+        ItemsStorageHistoryService $storageHistoryService,
         StoredItemTripHistoryService $tripHistoryService
     )
     {

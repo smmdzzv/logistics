@@ -14,16 +14,27 @@ use App\Models\Branch;
 use App\Models\Branches\Storage;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Trip;
-use App\Services\Storage\StorageHistoryService;
+use App\Services\Storage\ItemsStorageHistoryService;
 use App\Services\StoredItem\Trip\StoredItemTripHistoryService;
+use App\Services\Trip\AssociateItemsToTripsService;
 use App\Services\Trip\LoadTripItemsService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 class TripStoredItemsController extends Controller
 {
-    public function __construct()
+
+    private StoredItemTripHistoryService $tripHistoryService;
+    private ItemsStorageHistoryService $storageHistoryService;
+
+    public function __construct(
+        StoredItemTripHistoryService $tripHistoryService,
+        ItemsStorageHistoryService $storageHistoryService
+    )
     {
+        $this->tripHistoryService = $tripHistoryService;
+        $this->storageHistoryService = $storageHistoryService;
+
         $this->middleware('auth');
         $adminOnly = ['editLoaded', 'updateLoaded', 'editUnloaded', 'updateUnloaded', 'exchangeItems', 'changeItemsTrip'];
         $this->middleware('roles.deny:client,cashier,driver')->except($adminOnly);
@@ -32,12 +43,15 @@ class TripStoredItemsController extends Controller
 
     public function associateToTrip(Trip $trip)
     {
-        $data = new \stdClass();
-        $data->trip = $trip;
-        $data->storedItems = request()->storedItems;
-        $data->employee = auth()->user();
-        $writer = new AssociateToTripRequestWriter($data);
-        $writer->write();
+//        $data = new \stdClass();
+//        $data->trip = $trip;
+//        $data->storedItems = request()->storedItems;
+//        $data->employee = auth()->user();
+//        $writer = new AssociateToTripRequestWriter($data);
+//        $writer->write();
+
+        $service = new AssociateItemsToTripsService($this->storageHistoryService, $this->tripHistoryService);
+        $service->associate($trip, collect(request()->get('storedItems')));
 
         return $trip;
     }
@@ -48,13 +62,9 @@ class TripStoredItemsController extends Controller
         return view('trips.load-items', compact('trip'));
     }
 
-    public function updateLoaded(
-        Trip $trip,
-        StoredItemTripHistoryService $tripHistoryService,
-        StorageHistoryService $storageHistoryService
-    )
+    public function updateLoaded(Trip $trip)
     {
-        $service = new LoadTripItemsService($tripHistoryService, $storageHistoryService);
+        $service = new LoadTripItemsService($this->tripHistoryService, $this->storageHistoryService);
         $service->load($trip, collect(request()->get('storedItems')));
         return;
     }

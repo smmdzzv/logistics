@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Collection;
  * @property mixed trailerCargoWeightTo
  * @property array|string|null totalFuelConsumption
  * @property integer mileageAfter
+ * @property string id
  */
 class Trip extends BaseModel
 {
@@ -84,7 +85,7 @@ class Trip extends BaseModel
     {
 //        $current = Carbon::now()->toDateString();
 //        return $this->departureDate >= $current && $this->status === 'created';
-        return $this->status === 'created';
+        return $this->status === self::STATUS_SCHEDULED;
     }
 
     public function destinationBranch()

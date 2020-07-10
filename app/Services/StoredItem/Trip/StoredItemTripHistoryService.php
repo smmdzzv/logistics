@@ -2,7 +2,9 @@
 
 namespace App\Services\StoredItem\Trip;
 
+use App\Data\MassWriters\Trip\StoredItemTripHistoryWriter;
 use App\Models\StoredItems\StoredItemTripHistory;
+use App\Models\Trip;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -24,11 +26,26 @@ class StoredItemTripHistoryService
         ]);
     }
 
-    public function massLoad(Collection $tripHistoriesIds){
+    public function massLoad(Collection $tripHistoriesIds)
+    {
         StoredItemTripHistory::whereIn('id', $tripHistoriesIds)->update([
             'loaded_at' => Carbon::now(),
             'loaded_by_id' => auth()->id(),
             'status' => StoredItemTripHistory::STATUS_LOADED
         ]);
+    }
+
+    public function massStore(string $tripId, Collection $storedItemIds, string $status): Collection
+    {
+        return $storedItemIds->map(function (string $id) use ($tripId, $status) {
+            return new StoredItemTripHistory([
+                'stored_item_id' => $id,
+                'trip_id' => $tripId,
+                'status' => $status
+            ]);
+        })->pipe(function (Collection $tripHistories) {
+            $writer = new StoredItemTripHistoryWriter($tripHistories->all());
+            return collect($writer->write());
+        });
     }
 }

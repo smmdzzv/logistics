@@ -68,6 +68,8 @@
 </template>
 
 <script>
+    import {hideBusySpinner, showBusySpinner} from "../../tools";
+
     export default {
         name: "TripItemsListEditor",
         props: {
@@ -143,7 +145,7 @@
                 })
             },
             async submit() {
-                tShowSpinner();
+                showBusySpinner();
                 let data = {
                     storedItems: this.storedItems.map(function (item) {
                         return item.id;
@@ -158,7 +160,7 @@
                         'Не удалось закрепить список товаров за рейсом. Повторите попытку после перезагрузки страницы.'
                     );
                 }
-                tHideSpinner();
+                hideBusySpinner();
             },
             prepareUrl(page, vm) {
                 let action = `/trip/stored-items/available`;
