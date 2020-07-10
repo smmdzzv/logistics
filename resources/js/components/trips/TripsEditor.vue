@@ -432,8 +432,7 @@
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-md-4 col-form-label text-md-right" for="otherExpanses">Стоимость
-                                    рейса</label>
+                                <label class="col-md-4 col-form-label text-md-right" for="otherExpanses">Прочие расходы</label>
                                 <div class="col-md-6">
                                     <b-form-input
                                         :class="{'is-invalid': errors.otherExpanses}"
