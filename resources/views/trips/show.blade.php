@@ -15,9 +15,9 @@
                                 <a class="pl-3" href="{{route('trip.edit-unloaded', $trip)}}">
                                     <img class="icon-btn-sm" src="/svg/car-unloading.svg">
                                 </a>
-{{--                                <a class="pl-3" href="{{route('trip.change-items-trip', $trip)}}">--}}
-{{--                                    <img class="icon-btn-sm" src="/svg/car-sending.svg">--}}
-{{--                                </a>--}}
+                                {{--                                <a class="pl-3" href="{{route('trip.change-items-trip', $trip)}}">--}}
+                                {{--                                    <img class="icon-btn-sm" src="/svg/car-sending.svg">--}}
+                                {{--                                </a>--}}
                             @endif
                             @if($trip->isEditable())
                                 <a class="pl-3" href="/trips/{{$trip->id}}/edit">
@@ -33,13 +33,13 @@
                     <p>Машина: <span class="font-weight-bold">{{$trip->car->number}}</span></p>
                     <p>Статус:
                         @switch($trip->status)
-                            @case('created')
-                            <span>В ожидании загрузки</span>
+                            @case(\App\Models\Trip::STATUS_SCHEDULED)
+                            <span>В ожидании отправки</span>
                             @break
-                            @case('active')
+                            @case(\App\Models\Trip::STATUS_ACTIVE)
                             <span class="text-success">В пути</span>
                             @break
-                            @case('finished')
+                            @case(\App\Models\Trip::STATUS_COMPLETED)
                             <span class="text-danger">Завершен</span>
                             @break
                         @endswitch
@@ -76,7 +76,7 @@
                             (до {{$calculatedConsumptionTo}}, от {{$calculatedConsumptionFrom}}) л</span>
                     </p>
 
-                    <form method="post" action="{{route('trip.status', $trip)}}">
+                    <form id="changeStatusForm" method="post" action="{{route('trip.status', $trip)}}">
                         @csrf
                         <div class="form-group">
                             <label>Фактический расход топлива:</label>
@@ -84,7 +84,7 @@
                                    type='number'
                                    name="consumption"
                                    step="0.01"
-                                   @if($trip->status !== 'finished')
+                                   @if($trip->status !== \App\Models\Trip::STATUS_COMPLETED)
                                    value="{{$trip->totalFuelConsumption > 0 ? $trip->totalFuelConsumption : $calculatedConsumptionTo + $calculatedConsumptionFrom}}"
                                    @else
                                    disabled
@@ -98,7 +98,7 @@
                                    type='number'
                                    name="mileageAfter"
                                    step="1"
-                                   @if($trip->status === 'finished')
+                                   @if($trip->status === \App\Models\Trip::STATUS_COMPLETED)
                                    disabled
                                    @endif
                                    value="{{$trip->mileageAfter}}">
@@ -106,26 +106,37 @@
                         <p>Фактический километраж: {{$trip->mileageAfter}} - {{ $trip->mileageBefore }}= {{$distance}}
                             км</p>
 
-                        <input type="hidden" name="status"
-                               @switch($trip->status)
-                               @case('created')
-                               value="active"
-                               @break
-                               @case('active')
-                               value="finished"
-                            @break
-                            @endswitch
-                        >
+                        <input type="hidden" id="status" name="status" value="active">
 
-                        @switch($trip->status)
-                            @case('scheduled')
-                            <button class="btn btn-primary">Начать рейс</button>
-                            @break
-                            @case('active')
-                            <button class="btn btn-success">Завершить рейс</button>
-                            @break
-                        @endswitch
+                        {{--                        <input type="hidden" name="status"--}}
+                        {{--                               @switch($trip->status)--}}
+                        {{--                               @case(\App\Models\Trip::STATUS_SCHEDULED)--}}
+                        {{--                               value="active"--}}
+                        {{--                               @break--}}
+                        {{--                               @case(\App\Models\Trip::STATUS_ACTIVE)--}}
+                        {{--                               value="finished"--}}
+                        {{--                            @break--}}
+                        {{--                            @endswitch--}}
+                        {{--                        >--}}
+
+                        {{--                        @switch($trip->status)--}}
+                        {{--                            @case(\App\Models\Trip::STATUS_SCHEDULED)--}}
+                        {{--                            <button class="btn btn-primary">Начать рейс</button>--}}
+                        {{--                            @break--}}
+                        {{--                            @case(\App\Models\Trip::STATUS_ACTIVE)--}}
+                        {{--                            <button class="btn btn-success">Завершить рейс</button>--}}
+                        {{--                            @break--}}
+                        {{--                        @endswitch--}}
                     </form>
+                    @switch($trip->status)
+                        @case(\App\Models\Trip::STATUS_SCHEDULED)
+                        <button class="btn btn-primary" onclick="changeStatus('active')">Начать рейс</button>
+                        @break
+                        @case(\App\Models\Trip::STATUS_ACTIVE)
+                        <button class="btn btn-success" onclick="changeStatus('completed')">Завершить рейс</button>
+                        <button class="btn btn-secondary" onclick="changeStatus('scheduled')">Отменить начало</button>
+                        @break
+                    @endswitch
                 </div>
             </div>
         </div>
@@ -144,11 +155,8 @@
 @endsection
 
 <script>
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     $('#endTrip').click(function (event) {
-    //         event.preventDefault();
-    //         alert(2);
-    //     })
-    // });
-
+    function changeStatus(status) {
+        $('#status').val(status)
+        $('#changeStatusForm').submit();
+    }
 </script>

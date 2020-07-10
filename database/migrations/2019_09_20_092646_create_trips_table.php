@@ -45,6 +45,7 @@ class CreateTripsTable extends Migration
             $table->double('otherExpanses')->default(0);
             $table->double('fine')->default(0);
             $table->double('totalFuelConsumption')->default(0);
+            $table->double('fuelAmount')->default(0);
             $table->userStamp();
             $table->timestamps();
         });

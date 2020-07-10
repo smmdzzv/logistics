@@ -81,24 +81,24 @@ class TripsController extends Controller
         return $trip->storedItems;
     }
 
-    public function changeStatus(Trip $trip)
-    {
-        $status = request()->input('status');
-
-        if ($status === 'active')
-            $trip->departureAt = Carbon::now();
-        if ($status === 'finished') {
-            $trip->returnedAt = Carbon::now();
-            $trip->mileageAfter = request()->input('mileageAfter');
-            $trip->totalFuelConsumption = request()->input('consumption');
-            $trip->car->fuelAmount -= request()->input('consumption');
-            $trip->car->saveOrFail();
-        }
-
-        $trip->status = $status;
-
-        $trip->save();
-
-        return redirect(route('trips.show', $trip));
-    }
+//    public function changeStatus(Trip $trip)
+//    {
+//        $status = request()->input('status');
+//
+//        if ($status === 'active')
+//            $trip->departureAt = Carbon::now();
+//        if ($status === 'finished') {
+//            $trip->returnedAt = Carbon::now();
+//            $trip->mileageAfter = request()->input('mileageAfter');
+//            $trip->totalFuelConsumption = request()->input('consumption');
+//            $trip->car->fuelAmount -= request()->input('consumption');
+//            $trip->car->saveOrFail();
+//        }
+//
+//        $trip->status = $status;
+//
+//        $trip->save();
+//
+//        return redirect(route('trips.show', $trip));
+//    }
 }

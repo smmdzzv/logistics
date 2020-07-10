@@ -7,10 +7,11 @@
 namespace App\Http\Controllers\Trips;
 
 
+use App\Http\Controllers\BaseController;
 use App\Models\Trip;
 use App\Services\Trip\TripStatusService;
 
-class TripStatusController
+class TripStatusController extends BaseController
 {
     private TripStatusService $service;
 
@@ -21,7 +22,19 @@ class TripStatusController
 
     public function update(Trip $trip)
     {
-        $this->service->setActive($trip);
-        return;
+        switch (request()->get('status')) {
+            case Trip::STATUS_ACTIVE:
+                $this->service->setActive($trip);
+                break;
+            case Trip::STATUS_COMPLETED:
+                $this->service
+                    ->setCompleted($trip, (float)request()->get('mileageAfter'), (float)request()->get('consumption'));
+                break;
+            case Trip::STATUS_SCHEDULED:
+                $this->service->cancelActiveStatus($trip);
+                break;
+        }
+
+        return redirect(route('trips.show', $trip));
     }
 }
