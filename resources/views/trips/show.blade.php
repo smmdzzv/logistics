@@ -15,9 +15,9 @@
                                 <a class="pl-3" href="{{route('trip.edit-unloaded', $trip)}}">
                                     <img class="icon-btn-sm" src="/svg/car-unloading.svg">
                                 </a>
-                                <a class="pl-3" href="{{route('trip.change-items-trip', $trip)}}">
-                                    <img class="icon-btn-sm" src="/svg/car-sending.svg">
-                                </a>
+{{--                                <a class="pl-3" href="{{route('trip.change-items-trip', $trip)}}">--}}
+{{--                                    <img class="icon-btn-sm" src="/svg/car-sending.svg">--}}
+{{--                                </a>--}}
                             @endif
                             @if($trip->isEditable())
                                 <a class="pl-3" href="/trips/{{$trip->id}}/edit">
@@ -118,7 +118,7 @@
                         >
 
                         @switch($trip->status)
-                            @case('created')
+                            @case('scheduled')
                             <button class="btn btn-primary">Начать рейс</button>
                             @break
                             @case('active')

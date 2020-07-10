@@ -70,7 +70,7 @@ Route::get('/orders/{clientCode}/statistics', 'Orders\ClientOrdersController@get
 //Trips
 Route::get('/trips/all', 'Trips\TripsController@all');
 Route::get('/trips/filtered', 'Trips\FilteredTripsController@index');
-Route::post('/trip/{trip}/status', 'Trips\TripsController@changeStatus')->name('trip.status');
+Route::post('/trip-status/{trip}', 'Trips\TripStatusController@update')->name('trip.status');
 Route::resource('trips', 'Trips\TripsController',
     ['except' => ['destroy']]);
 
