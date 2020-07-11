@@ -40,10 +40,10 @@
                 type: String,
                 required: true
             },
-            branches:{
+            branches: {
                 type: Array
             },
-            trips:{
+            trips: {
                 type: Array
             }
         },
@@ -51,9 +51,10 @@
             return {
                 storedItems: null,
                 selectedItems: [],
-                actionUrl: null,
-                selectedBranch:null,
-                selectedTrip:null
+                selectedBranch: {
+                    id: null
+                },
+                selectedTrip: null
             }
         },
         methods: {
@@ -61,27 +62,25 @@
                 switch (this.action) {
                     case 'load':
                         this.storedItems = this.trip.unloadedItems;
-                        this.actionUrl = `/trip/${this.trip.id}/stored-items/load`;
                         break;
                     case 'unload':
                         this.storedItems = this.trip.loadedItems;
-                        this.actionUrl = `/trip/${this.trip.id}/stored-items/unload`;
                         break;
-                    case 'transfer':
-                        this.storedItems = this.trip.loadedItems;
-                        this.actionUrl = `/trip/${this.trip.id}/exchange/stored-items`;
-                        break;
+                    // case 'transfer':
+                    //     this.storedItems = this.trip.loadedItems;
+                    //     this.actionUrl = `/trip/${this.trip.id}/exchange/stored-items`;
+                    //     break;
                 }
             },
             onItemsSelected(items) {
                 this.selectedItems = items;
             },
-            onBranchSelected(branch){
+            onBranchSelected(branch) {
                 this.selectedBranch = branch;
             },
-            validate(){
+            validate() {
                 let result = true;
-                switch(this.action){
+                switch (this.action) {
                     case 'unload':
                         result = this.validateBranch();
                         break;
@@ -91,10 +90,10 @@
                 }
                 return result;
             },
-            validateBranch(){
-                if(this.selectedBranch)
+            validateBranch() {
+                if (this.selectedBranch)
                     return true;
-                else{
+                else {
                     this.$root.showErrorMsg(
                         'Выберите филиал',
                         'Для приема товаров необходимо выбрать филиал'
@@ -102,10 +101,10 @@
                     return false;
                 }
             },
-            validateTrip(){
-                if(this.selectedTrip)
+            validateTrip() {
+                if (this.selectedTrip)
                     return true;
-                else{
+                else {
                     this.$root.showErrorMsg(
                         'Выберите рейс',
                         'Для трансфера товаров необходимо выбрать рейс'
@@ -114,9 +113,9 @@
                 }
             },
             async submit() {
-                if(!this.validate())
+                if (!this.validate())
                     return;
-                if(this.selectedItems.length === 0)
+                if (this.selectedItems.length === 0)
                     return;
 
                 try {
@@ -135,6 +134,20 @@
                         'Ошибка сохранения',
                         'Не удалось загрузить товары на рейс. Повторите после обновления страницы'
                     );
+                }
+            }
+        },
+        computed: {
+            actionUrl() {
+                switch (this.action) {
+                    case 'load':
+                        return `/trip/${this.trip.id}/stored-items/load`;
+                    case 'unload':
+                        return `/branch/${this.selectedBranch.id}/stored-items`;
+                    // case 'transfer':
+                    //     this.storedItems = this.trip.loadedItems;
+                    //     this.actionUrl = `/trip/${this.trip.id}/exchange/stored-items`;
+                    //     break;
                 }
             }
         }
