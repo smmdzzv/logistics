@@ -12,7 +12,6 @@
             :sticky-header="tableHeight"
             :striped="striped"
             :tableBusy="false"
-            :customCells="customCells"
             :setRowClass="setRowClass"
             excelFileName="Список товаров"
             :excelSheetName="excelSheetName"
@@ -37,36 +36,52 @@
                 </div>
             </template>
 
-            <template slot="cubage" slot-scope="{item}">
-                <span>{{getCubage(item)}}</span>
+            <template v-slot:cell(weight)="{item}">
+                <span>{{item.weight.toFixed(3)}}</span>
             </template>
 
-            <template slot="totalCubage" slot-scope="{item}">
-                <span>{{getTotalCubage(item)}}</span>
+            <template v-slot:cell(width)="{item}">
+                <span>{{item.width.toFixed(3)}}</span>
             </template>
 
-            <template slot="totalWeight" slot-scope="{item}">
-                <span>{{getTotalWeight(item)}}</span>
+            <template v-slot:cell(height)="{item}">
+                <span>{{item.height.toFixed(3)}}</span>
             </template>
 
-            <template slot="weightPerCube" slot-scope="{item}">
-                <span>{{getWeightPerCube(item)}}</span>
+            <template v-slot:cell(length)="{item}">
+                <span>{{item.length.toFixed(3)}}</span>
             </template>
 
-            <template slot="selectedCount" slot-scope="{item}">
+            <template v-slot:cell(cubage)="{item}">
+                <span>{{getCubage(item).toFixed(3)}}</span>
+            </template>
+
+            <template v-slot:cell(totalCubage)="{item}">
+                <span>{{getTotalCubage(item).toFixed(3)}}</span>
+            </template>
+
+            <template v-slot:cell(totalWeight)="{item}">
+                <span>{{getTotalWeight(item).toFixed(3)}}</span>
+            </template>
+
+            <template v-slot:cell(weightPerCube)="{item}">
+                <span>{{getWeightPerCube(item).toFixed(3)}}</span>
+            </template>
+
+            <template v-slot:cell(selectedCount)="{item}">
                 <input class="form-control" type="text" maxlength="3" style="width:6em" v-model="item.selectedCount"
                        @change="updateSelectedStoredItems">
             </template>
 
-            <template slot="groupedStoredItemsCount" slot-scope="{item}">
+            <template v-slot:cell(groupedStoredItemsCount)="{item}">
                 <span>{{getItemsLength(item)}}</span>
             </template>
 
-            <template slot="totalPrice" slot-scope="{item}">
-                <span>{{getTotalPrice(item)}}</span>
+            <template v-slot:cell(totalPrice)="{item}">
+                <span>{{getTotalPrice(item).toFixed(2)}}</span>
             </template>
 
-            <template slot="edit" slot-scope="{item}">
+            <template v-slot:cell(edit)="{item}">
                 <a :id="item.id" href="#" @click.prevent="onLostItemSelected(item)">
                     <img class="icon-btn-sm" src="/svg/lost.svg" alt="">
                 </a>
@@ -183,87 +198,96 @@
                 pagination: null,
                 isBusy: false,
                 items: [],
-                customCells: ['cubage',
-                    'totalCubage',
-                    'totalWeight',
-                    'selectedCount',
-                    'groupedStoredItemsCount',
-                    'created_at',
-                    'weightPerCube',
-                    'totalPrice',
-                    'edit'],
-                fields: {
-                    'created_at': {
+                fields: [
+                    {
+                        key: 'created_at',
                         label: 'Дaта',
                         sortable: true
                     },
-                    'tariff.name': {
+                    {
+                        key: 'tariff.name',
                         label: 'Тариф',
                         sortable: true
                     },
-                    'owner.code': {
+                    {
+                        key: 'owner.code',
                         label: 'Владелец',
                         sortable: true
                     },
-                    'shop': {
+                    {
+                        key: 'shop',
                         label: 'Магазин',
                         sortable: true
                     },
-                    'item.name': {
+                    {
+                        key: 'item.name',
                         label: 'Наименование',
                         sortable: true
                     },
-                    'weight': {
+                    {
+                        key: 'weight',
                         label: 'Вес',
                         sortable: true
                     },
-                    'width': {
+                    {
+                        key: 'width',
                         label: 'Ширина',
                         sortable: true
                     },
-                    'height': {
+                    {
+                        key: 'height',
                         label: 'Высота',
                         sortable: true
                     },
-                    'length': {
+                    {
+                        key: 'length',
                         label: 'Длина',
                         sortable: true
                     },
-                    'cubage': {
+                    {
+                        key: 'cubage',
                         label: 'Кубатура',
                         sortable: true
                     },
-                    'groupedStoredItemsCount': {
+                    {
+                        key: 'groupedStoredItemsCount',
                         label: 'Количество',
                         sortable: true
                     },
-                    'selectedCount': {
+                    {
+                        key: 'selectedCount',
                         label: 'Кол-во мест'
                     },
-                    'totalCubage': {
+                    {
+                        key: 'totalCubage',
                         label: 'Общ. Кубатура',
                         sortable: true
                     },
-                    'totalWeight': {
+                    {
+                        key: 'totalWeight',
                         label: 'Общ. Вес',
                         sortable: true
                     },
-                    weightPerCube: {
+                    {
+                        key: 'weightPerCube',
                         label: 'Кг в 1 кубе',
                         sortable: true
                     },
-                    'totalPrice': {
+                    {
+                        key: 'totalPrice',
                         label: 'Сумма',
                         sortable: true
                     },
-                    'groupedStoredItemsStorage.name': {
+                    {
+                        key: 'groupedStoredItemsStorage.name',
                         label: 'Склад',
                         sortable: true
                     },
-                    'edit': {
+                    {
+                        key: 'edit',
                         label: ''
                     }
-                },
+                ],
 
                 compensation: 0,
                 lostItem: null,
@@ -272,15 +296,7 @@
         },
         methods: {
             hideColumns() {
-                let newFields = {};
-
-                Object.keys(this.fields).map((key) => {
-                    if (!this.columnsToHide.includes(key)) {
-                        newFields[key] = this.fields[key];
-                    }
-                });
-
-                this.fields = newFields;
+                this.fields = this.fields.filter(f => !this.columnsToHide.includes(f.key));
             },
             getCubage(item) {
                 if (item.type === 'dummy')
@@ -495,7 +511,8 @@
                         }
                     );
             }
-        },
+        }
+        ,
 
         watch: {
             selectedBranch() {
@@ -525,14 +542,17 @@
 
                 this.updateSelectedStoredItems(false);
             }
-        },
+        }
+        ,
         computed: {
             compensationModalState() {
                 return Boolean(this.compensation && this.lostStoredItemsCount > 0);
             }
-        },
+        }
+        ,
         components: {
-            'TableCard': require('../common/TableCard.vue').default
+            'TableCard':
+            require('../common/TableCard.vue').default
         }
     }
 </script>
