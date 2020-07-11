@@ -35,6 +35,9 @@
         </div>
         <div class="row mt-5">
             <div class="col-12">
+                <div class="d-flex">
+                    <b-button class="ml-auto mb-3" @click="showModal">Сохранить выборку</b-button>
+                </div>
                 <b-table head-variant="dark" small :items="items" :fields="fields" responsive striped>
                     <template slot='index' slot-scope="data">
                         {{data.index + 1}}
@@ -46,6 +49,32 @@
                 </b-table>
             </div>
         </div>
+
+        <b-modal
+            id="selection-name-modal"
+            ref="modal"
+            title="Сохранить выборку"
+            @show="resetModal"
+            @hidden="resetModal"
+            @ok="storeSelection"
+            ok-title="Сохранить"
+            cancel-title="Отмена"
+            centered
+        >
+            <b-form-group
+                :state="nameState"
+                label="Имя"
+                label-for="name-input"
+                invalid-feedback="Введите название выборки"
+            >
+                <b-form-input
+                    id="name-input"
+                    v-model="name"
+                    :state="nameState"
+                    required
+                ></b-form-input>
+            </b-form-group>
+        </b-modal>
     </div>
 </template>
 
@@ -64,24 +93,30 @@
             return {
                 operation: 'deliver',
                 items: [],
-                fields: {
-                    index: {
+                fields: [
+                    {
+                        key: 'index',
                         label: '№'
                     },
-                    code: {
+                    {
+                        key: 'code',
                         label: 'Код'
                     },
-                    size: {
+                    {
+                        key: 'size',
                         label: 'ШхВхД'
                     },
-                    'info.weight': {
+                    {
+                        key: 'info.weight',
                         label: 'Вес'
                     },
-                    'info.owner.code': {
+                    {
+                        key: 'info.owner.code',
                         label: 'Владелец'
                     }
-                },
-                code: null
+                ],
+                code: null,
+                name: null
             }
         },
         methods: {
@@ -97,11 +132,30 @@
                         }
                     });
                 this.code = null;
+            },
+            showModal() {
+                if (this.items.length > 0)
+                    this.$bvModal.show('selection-name-modal');
+                else this.$bvModal.msgBoxOk('Для создания выборки необходимо выбрать хотя бы 1 товар', {
+                    okTitle: 'Закрыть',
+                    title: 'Ошибка сохранения',
+                    centered: true
+                })
+            },
+            storeSelection() {
+                axios.post('/items-selection/', {
+                    storedItems: this.items.map(i => i.id),
+                    name: this.name
+                })
+            },
+            resetModal() {
+                this.name = null
+            }
+        },
+        computed: {
+            nameState() {
+                return Boolean(this.name);
             }
         }
     }
 </script>
-
-<style scoped>
-
-</style>

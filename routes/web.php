@@ -52,9 +52,7 @@ Route::resource('order.payments', 'Orders\OrderPaymentsController')
 
 //Client Orders
 Route::resource('client.active-orders', 'Orders\ClientActiveOrdersController');
-
 Route::post('/client/{client}/stored-items/pending-payment', 'Client\StoredItemsPendingPaymentsController@store');
-
 Route::resource('client.delivered-stored-items', 'Client\ClientDeliveredStoredItemsController');
 
 
@@ -189,13 +187,10 @@ Route::get('/accounts/{holder}', 'Till\Accounts\AccountsController@holderAccount
 
 //Countries
 Route::get('/countries', 'CountriesController@all');
-
 Route::get('/scanner', 'Scanner\ScannerController@index')->name('scanner.index');
 
-
-
-
-
+//Items Selection
+Route::resource('items-selection', 'Selection\ItemsSelectionController')->only('index', 'store');
 
 
 

@@ -16,7 +16,7 @@ class CreateItemsSelectionsTable extends Migration
         Schema::create('items_selections', function (Blueprint $table) {
             $table->char('id', 26)->primary();
             $table->char('user_id', 26)->index();
-//            $table->char('payment_id', 26)->index();
+            $table->string('name')->nullable();
 
             $table->userStamp();
             $table->softDeletes();

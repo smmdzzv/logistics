@@ -5,6 +5,7 @@ namespace App;
 use App\Data\Userstamps\Userstamps;
 use App\Models\Branch;
 use App\Models\Role;
+use App\Models\StoredItems\ItemsSelection;
 use App\Models\Till\Account;
 use App\Models\Till\Payment;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -75,6 +76,11 @@ class User extends Authenticatable
     public function outgoingPayments()
     {
         return $this->hasMany(Payment::class, 'payer_id');
+    }
+
+    public function itemsSelection()
+    {
+        return $this->hasMany(ItemsSelection::class);
     }
 
     public function hasAnyRole($roles)
