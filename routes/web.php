@@ -42,7 +42,7 @@ Route::prefix('order')->name('order.')->group(function () {
         ->name('order-price.update');
 });
 
-Route::get('/orders/filtered', 'Orders\OrdersController@filtered')->name('order.filtered');
+Route::get('/orders/filtered', 'Orders\FilteredOrdersController@index')->name('order.filtered');
 
 Route::resource('order.unpaid-stored-items', 'Orders\OrderUnpaidStoredItemsController')
     ->only('index');

@@ -55,7 +55,7 @@
                 </div>
             </template>
 
-            <template slot="selected" slot-scope="data">
+            <template v-slot:cell(selected)="data">
                 <span :class="checkedClass" v-if="isSelected(data.item)">
                     <slot name="selectedCell">&check;</slot>
                 </span>
@@ -64,16 +64,20 @@
                 </span>
             </template>
 
-            <template slot="created_at" slot-scope="{item}">
+            <template v-slot:cell(created_at)="{item}">
                 <span v-if="item.created_at"> {{item.created_at | luxon}} </span>
             </template>
 
-            <template slot="updated_at" slot-scope="{item}">
+            <template v-slot:cell(updated_at)="{item}">
                 <span v-if="item.updated_at"> {{item.updated_at | luxon}} </span>
             </template>
 
-            <template :slot="cell" slot-scope="data" v-for="cell in customCells">
-                <slot :name="cell" v-bind:item="data.item"></slot>
+<!--            <template :slot="cell" slot-scope="data" v-for="cell in customCells">-->
+<!--                <slot :name="cell" v-bind:item="data.item"></slot>-->
+<!--            </template>-->
+
+            <template v-for="(_, key) of $scopedSlots" v-slot:[key]="data">
+                <slot :name="key" v-bind="data"/>
             </template>
         </b-table>
 
@@ -96,7 +100,7 @@
                 required: true
             },
             fields: {
-                type: Object,
+                type: Array,
                 required: true
             },
             primaryKey: {

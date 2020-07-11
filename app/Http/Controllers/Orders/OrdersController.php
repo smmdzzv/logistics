@@ -175,21 +175,21 @@ class OrdersController extends BaseController
 //        return $client->activeOrders;
 //    }
 
-    public function filteredByBranch(Branch $branch)
-    {
-        $paginate = request()->paginate ?? 10;
-        if (isset($branch)) {
-            return $branch->orders()->with(['owner', 'registeredBy'])->paginate($paginate);
-        } else abort(404, 'Филиал не найден');
-    }
+//    public function filteredByBranch(Branch $branch)
+//    {
+//        $paginate = request()->paginate ?? 10;
+//        if (isset($branch)) {
+//            return $branch->orders()->with(['owner', 'registeredBy'])->paginate($paginate);
+//        } else abort(404, 'Филиал не найден');
+//    }
 
-    public function filteredByUser(User $user)
-    {
-        $paginate = request()->paginate ?? 10;
-        if (isset($user)) {
-            return $user->orders()->with(['owner', 'registeredBy'])->paginate($paginate);
-        } else abort(404, 'Пользователь не найден');
-    }
+//    public function filteredByUser(User $user)
+//    {
+//        $paginate = request()->paginate ?? 10;
+//        if (isset($user)) {
+//            return $user->orders()->with(['owner', 'registeredBy'])->paginate($paginate);
+//        } else abort(404, 'Пользователь не найден');
+//    }
 
     private function getData(OrderRequest $request): array
     {
@@ -212,6 +212,7 @@ class OrdersController extends BaseController
     }
 
     /**
+     * TODO remove from here
      * @param String $code
      * @return User
      */
@@ -241,43 +242,43 @@ class OrdersController extends BaseController
         return $client;
     }
 
-    private function getStoredItemInfos()
-    {
-        $storedItemInfos = array();
-        foreach (request()->input('storedItemInfos') as $itemData) {
-            $storedItemInfos[] = new StoredItemInfo([
-                'id' => $itemData['id'],
-                'width' => $itemData['width'],
-                'height' => $itemData['height'],
-                'length' => $itemData['length'],
-                'weight' => $itemData['weight'],
-                'count' => $itemData['count'],
-                'shop' => $itemData['shop'],
-                'item_id' => $itemData['item']['id'],
-//                'placeCount' => $itemData['placeCount'],
-                'ownerId' => request()->input('clientId'),
-                'branch_id' => auth()->user()->branch->id,
-                'tariff_id' => $itemData['tariff']['id'],
-                'customs_code_id' => $itemData['customsCode']['id']
-            ]);
+//    private function getStoredItemInfos()
+//    {
+//        $storedItemInfos = array();
+//        foreach (request()->input('storedItemInfos') as $itemData) {
+//            $storedItemInfos[] = new StoredItemInfo([
+//                'id' => $itemData['id'],
+//                'width' => $itemData['width'],
+//                'height' => $itemData['height'],
+//                'length' => $itemData['length'],
+//                'weight' => $itemData['weight'],
+//                'count' => $itemData['count'],
+//                'shop' => $itemData['shop'],
+//                'item_id' => $itemData['item']['id'],
+////                'placeCount' => $itemData['placeCount'],
+//                'ownerId' => request()->input('clientId'),
+//                'branch_id' => auth()->user()->branch->id,
+//                'tariff_id' => $itemData['tariff']['id'],
+//                'customs_code_id' => $itemData['customsCode']['id']
+//            ]);
+//
+////            $data->customPrices[$itemIndex] = isset($itemData['customPrice']) ? $itemData['customPrice'] : null;
+//        }
+//
+//        return $storedItemInfos;
+//    }
 
-//            $data->customPrices[$itemIndex] = isset($itemData['customPrice']) ? $itemData['customPrice'] : null;
-        }
-
-        return $storedItemInfos;
-    }
-
-    public function filtered()
-    {
-        $branches = $this->getBranches()->map(function ($branch) {
-            return $branch->id;
-        });
-        $query = Order::whereIn('branch_id', $branches)
-            ->with(['owner', 'registeredBy', 'storedItemInfos'])
-            ->latest();
-        $filter = new OrderFilter(request()->all(), $query);
-        $query = $filter->filter();
-
-        return $query->paginate($this->pagination());
-    }
+//    public function filtered()
+//    {
+//        $branches = $this->getBranches()->map(function ($branch) {
+//            return $branch->id;
+//        });
+//        $query = Order::whereIn('branch_id', $branches)
+//            ->with(['owner', 'registeredBy', 'storedItemInfos'])
+//            ->latest();
+//        $filter = new OrderFilter(request()->all(), $query);
+//        $query = $filter->filter();
+//
+//        return $query->paginate($this->pagination());
+//    }
 }

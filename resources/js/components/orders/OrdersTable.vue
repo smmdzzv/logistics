@@ -85,17 +85,17 @@
                 </div>
             </template>
 
-            <template slot="weightPerCube" slot-scope="{item}">
+            <template v-slot:cell(weightPerCube)="{item}">
                 <span>{{getWeightPerCube(item)}}</span>
             </template>
 
-            <template slot="details" slot-scope="{item}">
+            <template v-slot:cell(details)="{item}">
                 <a :href="getDetailsUrl(item)"
                    v-if="item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'">
                     <img class="icon-btn-sm" src="/svg/file.svg"></a>
             </template>
 
-            <template slot="edit" slot-scope="{item}">
+            <template v-slot:cell(edit)="{item}">
                 <a v-if="item.status !== 'completed' && item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'"
                    :href="getEditUrl(item)">
                     <img class="icon-btn-sm" src="/svg/edit.svg"></a>
@@ -313,58 +313,6 @@
                 return this.pagination.current_page;
             }
         },
-        watch: {
-            // selectedBranch: function () {
-            //     this.orders = [];
-            //     this.getOrders();
-            // },
-            // clientCode: function () {
-            //     this.orders = [];
-            //     this.getOrders();
-            //     this.getClientStat();
-            // },
-            // employeeCode: function () {
-            //     this.orders = [];
-            //     this.getOrders()
-            // },
-            // minCubage: function () {
-            //     this.orders = [];
-            //     this.getOrders()
-            // },
-            // maxCubage: function () {
-            //     this.orders = [];
-            //     this.getOrders()
-            // },
-            // minWeight: function () {
-            //     this.orders = [];
-            //     this.getOrders()
-            // },
-            // maxWeight: function () {
-            //     this.orders = [];
-            //     this.getOrders()
-            // },
-            // minPrice: function () {
-            //     this.orders = [];
-            //     this.getOrders()
-            // },
-            // maxPrice: function () {
-            //     this.orders = [];
-            //     this.getOrders()
-            // },
-            // dateFrom: function () {
-            //     this.orders = [];
-            //     this.getOrders();
-            //     this.getClientStat();
-            // },
-            // dateTo: function () {
-            //     this.orders = [];
-            //     this.getOrders()
-            // },
-            // status: function () {
-            //     this.orders = [];
-            //     this.getOrders()
-            // }
-        },
         data() {
             return {
                 selectedBranch: null,
@@ -384,50 +332,61 @@
                 dateFrom: null,
                 dateTo: null,
                 status: null,
-                fields: {
-                    'owner.code': {
+                fields: [
+                    {
+                        key: 'owner.code',
                         label: 'Владелец',
                         sortable: true
                     },
-                    placesCount: {
+                    {
+                        key: 'placesCount',
                         label: 'Кол-во мест',
                         sortable: true
                     },
-                    totalWeight: {
+                    {
+                        key: 'totalWeight',
                         label: 'Вес',
                         sortable: true
                     },
-                    weightPerCube: {
+                    {
+                        key: 'weightPerCube',
                         label: 'Кг в 1 кубе',
                         sortable: true
                     },
-                    totalCubage: {
+                    {
+                        key: 'totalCubage',
                         label: 'Кубатура',
                         sortable: true
                     },
-                    totalDiscount: {
+                    {
+                        key: 'totalDiscount',
                         label: 'Скидка',
                         sortable: true
                     },
-                    totalPrice: {
+                    {
+                        key: 'totalPrice',
                         label: 'Цена',
                         sortable: true
                     },
-                    'registeredBy.code': {
+                    {
+                        key: 'creator.code',
                         label: 'Принял',
                         sortable: true
                     },
-                    created_at: {
+                    {
+                        key: 'created_at',
                         label: 'Дата',
                         sortable: true
                     },
-                    'details': {
+                    {
+                        key: 'details',
                         label: '',
                     },
-                    'edit': {
+                    {
+                        key: 'edit',
                         label: '',
                     }
-                }
+                ]
             }
         },
         components: {
