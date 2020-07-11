@@ -8,7 +8,7 @@ namespace App\Services\StoredItem;
 
 
 use App\Data\Dto\Till\PaymentDto;
-use App\Models\StoredItems\ClientItemsSelection;
+use App\Models\StoredItems\ItemsSelection;
 use App\Models\Till\Account;
 use App\Models\Till\Payment;
 use App\Models\Users\Client;
@@ -28,11 +28,11 @@ class StoredItemsPaymentService
     {
         $payment = $this->paymentService->store($dto);
 
-        $clientSelection = ClientItemsSelection::create([
-            'client_id' => $client->id
+        $clientSelection = ItemsSelection::create([
+            'user_id' => $client->id
         ]);
 
-        /** @var ClientItemsSelection $clientSelection */
+        /** @var ItemsSelection $clientSelection */
         $clientSelection->storedItems()->sync($storedItems);
 
         $payment->client_items_selection_id = $clientSelection->id;

@@ -7,7 +7,7 @@ use App\Models\Branch;
 use App\Models\Currency;
 use App\Models\Order;
 use App\Models\Order\StoredItemsSelection;
-use App\Models\StoredItems\ClientItemsSelection;
+use App\Models\StoredItems\ItemsSelection;
 use App\Models\Users\Client;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -204,7 +204,7 @@ class Payment extends BaseModel
 
     public function clientItemsSelection()
     {
-        return $this->belongsTo(ClientItemsSelection::class);
+        return $this->belongsTo(ItemsSelection::class);
     }
 
     public function fillExtras()

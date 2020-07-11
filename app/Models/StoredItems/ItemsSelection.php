@@ -8,7 +8,7 @@ use App\Models\Till\Payment;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class ClientItemsSelection extends BaseModel
+class ItemsSelection extends BaseModel
 {
     use SoftDeletes;
 

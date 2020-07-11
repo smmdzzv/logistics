@@ -67,7 +67,7 @@ class StoredItem extends BaseModel
 
     public function clientItemsSelections()
     {
-        return $this->belongsToMany(ClientItemsSelection::class)
+        return $this->belongsToMany(ItemsSelection::class)
             ->using('App\Models\Pivots\BasePivot');
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClientItemsSelectionsTable extends Migration
+class CreateItemsSelectionStoredItemTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateClientItemsSelectionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('client_items_selections', function (Blueprint $table) {
+        Schema::create('items_selection_stored_item', function (Blueprint $table) {
             $table->char('id', 26)->primary();
-            $table->char('client_id', 26)->index();
-//            $table->char('payment_id', 26)->index();
-
-            $table->userStamp();
-            $table->softDeletes();
-            $table->timestamps();
+            $table->char('items_selection_id', 26);
+            $table->char('stored_item_id', 26);
         });
     }
 
@@ -31,6 +27,6 @@ class CreateClientItemsSelectionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_payments');
+        Schema::dropIfExists('client_items_selection_stored_item');
     }
 }
