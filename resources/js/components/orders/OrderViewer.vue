@@ -27,76 +27,84 @@
                  primary-key="id"
                  responsive
                  striped>
-            <template slot="count" slot-scope="{item}">
-                <span>{{item.count}}/{{item.storedItems.length}} ({{item.item.unit}})</span>
-            </template>
-
-            <template slot="FOOT[item.name]">
-                <span>Итого</span>
-            </template>
-            <template slot="FOOT[customsCodes.code]">
-                <span></span>
-            </template>
-            <template slot="FOOT[count]">
-                <span> </span>
-            </template>
-            <!--            <template slot="FOOT[placeCount]">-->
-            <!--                <span> </span>-->
-            <!--            </template>-->
-            <!--            <template slot="FOOT[pricePerPlaceCount]">-->
-            <!--                <span> </span>-->
-            <!--            </template>-->
-            <template slot="FOOT[billingInfo.totalWeight]">
-                <span>{{order.totalWeight}}</span>
-            </template>
-            <template slot="HEAD[billingInfo.totalCubage]">
-                <span>Объем, м<sup>3</sup></span>
-            </template>
-            <template slot="FOOT[billingInfo.totalCubage]">
-                <span>{{order.totalCubage}}</span>
-            </template>
-            <template slot="FOOT[billingInfo.totalDiscount]">
-                <span>{{order.totalDiscount}}</span>
-            </template>
-            <template slot="FOOT[billingInfo.totalPrice]">
-                <span>{{order.totalPrice}}</span>
-            </template>
-
-            <template slot="HEAD[customsCodes.code]">
+            <template v-slot:head(customsCode.code)>
                 <span id="code">Код</span>
                 <b-tooltip target="code" trigger="hover">
                     Таможенный код
                 </b-tooltip>
             </template>
 
-            <template slot="HEAD[count]">
+            <template v-slot:head(count)>
                 <span id="count-header">Кол-во мест</span>
                 <b-tooltip target="count-header" trigger="hover">
                     Количество мест товара. Общее кол-во/Остаток
                 </b-tooltip>
             </template>
 
-            <template slot="id" slot-scope="data">
-                <img @click="showShortInfo(data)" class="icon-btn-sm" src="/svg/barcode.svg">
-            </template>
-
-            <template slot="HEAD[id]">
+            <template v-slot:head(buttons)>
                 <img @click="showShortInfo()" class="icon-btn-sm" src="/svg/barcode.svg">
             </template>
 
-            <template slot="id" slot-scope="data">
+            <template v-slot:cell(count)="{item}">
+                <span>{{item.count}}/{{item.storedItems.length}} {{item.item.unit}}</span>
+            </template>
+
+            <template v-slot:cell(buttons)="data">
                 <img @click="showShortInfo(data)" class="icon-btn-sm" src="/svg/barcode.svg">
             </template>
 
-            <!--            <template slot="HEAD[pricePerPlaceCount]">-->
-            <!--                <span id="pricePerPlaceCountTitle">Цена</span>-->
-            <!--                <b-tooltip target="pricePerPlaceCountTitle" triggers="hover">-->
-            <!--                    Цена в расчете на единицу места-->
-            <!--                </b-tooltip>-->
-            <!--            </template>-->
-            <!--            <template slot="pricePerPlaceCount" slot-scope="data">-->
-            <!--                <span>{{pricePerCountPlace(data)}}</span>-->
-            <!--            </template>-->
+            <template v-slot:foot(item.name)>
+                <span>Итого</span>
+            </template>
+
+            <template v-slot:foot(customsCode.code)>
+                <span></span>
+            </template>
+
+            <template v-slot:foot(tariff.name)>
+                <span></span>
+            </template>
+
+            <template v-slot:foot(count)>
+                <span> </span>
+            </template>
+
+            <template v-slot:cell(billingInfo.totalWeight)="{item}">
+                <span>{{item.billingInfo.totalWeight.toFixed(3)}}</span>
+            </template>
+
+
+            <template v-slot:cell(billingInfo.totalCubage)="{item}">
+                <span>{{item.billingInfo.totalCubage.toFixed(3)}}</span>
+            </template>
+
+            <template v-slot:cell(billingInfo.totalDiscount)="{item}">
+                <span>{{item.billingInfo.totalDiscount.toFixed(2)}}</span>
+            </template>
+
+            <template v-slot:cell(billingInfo.totalPrice)="{item}">
+                <span>{{item.billingInfo.totalPrice.toFixed(2)}}</span>
+            </template>
+
+            <template v-slot:foot(billingInfo.totalWeight)>
+                <span>{{order.totalWeight.toFixed(3)}}</span>
+            </template>
+
+            <template v-slot:foot(billingInfo.totalCubage)>
+                <span>Объем, м<sup>3</sup></span>
+            </template>
+
+            <template v-slot:foot(billingInfo.totalCubage)>
+                <span>{{order.totalCubage.toFixed(3)}}</span>
+            </template>
+
+            <template v-slot:foot(billingInfo.totalDiscount)>
+                <span>{{order.totalDiscount.toFixed(2)}}</span>
+            </template>
+
+            <template v-slot:foot(billingInfo.totalPrice)>
+                <span>{{order.totalPrice.toFixed(2)}}</span>
+            </template>
         </b-table>
 
         <b-modal @hidden="onModalHidden()"
@@ -131,50 +139,52 @@
         },
         data() {
             return {
-                fields: {
-                    'item.name': {
+                fields: [
+                    {
+                        key: 'item.name',
                         label: 'Тип',
                         sortable: true
                     },
-                    'customsCode.code': {
+                    {
+                        key: 'customsCode.code',
                         label: 'Код',
                         sortable: true
                     },
-                    'tariff.name': {
+                    {
+                        key: 'tariff.name',
                         label: 'Тариф',
                         sortable: true
                     },
-                    count: {
+                    {
+                        key: 'count',
                         label: 'Кол-во мест',
                         sortable: true
                     },
-                    // placeCount: {
-                    //     label: 'Кол-во мест',
-                    //     sortable: true
-                    // },
-                    // 'pricePerPlaceCount': {
-                    //     label: 'Цена'
-                    // },
-                    'billingInfo.totalWeight': {
+                    {
+                        key: 'billingInfo.totalWeight',
                         label: 'Вес, кг',
                         sortable: true
                     },
-                    'billingInfo.totalCubage': {
+                    {
+                        key: 'billingInfo.totalCubage',
                         label: 'Объем, м3',
                         sortable: true
                     },
-                    'billingInfo.totalDiscount': {
+                    {
+                        key: 'billingInfo.totalDiscount',
                         label: 'Скидка',
                         sortable: true
                     },
-                    'billingInfo.totalPrice': {
+                    {
+                        key: 'billingInfo.totalPrice',
                         label: 'Сумма, $',
                         sortable: true
                     },
-                    'id': {
+                    {
+                        key: 'buttons',
                         label: ''
                     } //for barcode btn
-                },
+                ],
                 itemsToShow: []
             }
         },
@@ -271,6 +281,7 @@
         font-family: Arial;
         font-size: 12px;
     }
+
     /*@page {*/
     /*    size: USER;*/
     /*    margin: 0;*/
