@@ -86,7 +86,7 @@
         },
         methods: {
             fetchStoredItem() {
-                axios.get(`/stored-items/${this.code}`)
+                axios.get(`/stored-items/available/${this.code}`)
                     .then(response => {
                         if (!this.items.find(i => i.id === response.data.id)) {
                             response.data.info.width = response.data.info.width.toFixed(3);
