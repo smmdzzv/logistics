@@ -14,6 +14,6 @@ class SelectionItemsController extends BaseController
 {
     public function index(ItemsSelection $selection)
     {
-        return $selection->storedItems;
+        return $selection->storedItems()->with('info.owner')->get();
     }
 }

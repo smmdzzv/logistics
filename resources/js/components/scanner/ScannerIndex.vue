@@ -47,12 +47,18 @@
                     <b-button class="ml-3 mb-3" @click="showModal">Сохранить выборку</b-button>
                 </div>
                 <b-table head-variant="dark" small :items="items" :fields="fields" responsive striped>
-                    <template slot='index' slot-scope="data">
+                    <template v-slot:cell(index)="data">
                         {{data.index + 1}}
                     </template>
 
-                    <template slot='size' slot-scope="{item}">
+                    <template v-slot:cell(size)="{item}">
                         {{`${item.info.width}x${item.info.height}x${item.info.length}`}}
+                    </template>
+
+                    <template v-slot:cell(buttons)="item">
+                        <a href="#" @click="removeItem(item.id)">
+                            <img src="/svg/delete.svg" class="icon-btn-sm">
+                        </a>
                     </template>
                 </b-table>
             </div>
@@ -124,6 +130,10 @@
                     {
                         key: 'info.owner.code',
                         label: 'Владелец'
+                    },
+                    {
+                        key: 'buttons',
+                        label: ''
                     }
                 ],
                 code: null,
@@ -161,10 +171,16 @@
             },
             resetModal() {
                 this.name = null
+            },
+            removeItem(id) {
+                this.items = this.items.filter(i => i.id === id);
             }
         },
         watch: {
             selection() {
+                if (!this.selection)
+                    return;
+
                 showBusySpinner()
                 axios.get(`/items-selection/${this.selection.id}/stored-items`)
                     .then(response => this.items = response.data)
