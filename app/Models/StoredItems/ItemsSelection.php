@@ -7,8 +7,12 @@ use App\Models\Order;
 use App\Models\Till\Payment;
 use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 
+/**
+ * @property Collection storedItems
+ */
 class ItemsSelection extends BaseModel
 {
     use SoftDeletes;

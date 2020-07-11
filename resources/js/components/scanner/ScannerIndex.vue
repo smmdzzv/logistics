@@ -36,7 +36,15 @@
         <div class="row mt-5">
             <div class="col-12">
                 <div class="d-flex">
-                    <b-button class="ml-auto mb-3" @click="showModal">Сохранить выборку</b-button>
+                    <div class="form-group ml-auto">
+                        <select class="form-control" v-model="selection">
+                            <option :value="null">-- Выборка не выбрана --</option>
+                            <option v-for="selection in selections" :key="selection.id" :value="selection">
+                                {{selection.name}}
+                            </option>
+                        </select>
+                    </div>
+                    <b-button class="ml-3 mb-3" @click="showModal">Сохранить выборку</b-button>
                 </div>
                 <b-table head-variant="dark" small :items="items" :fields="fields" responsive striped>
                     <template slot='index' slot-scope="data">
@@ -82,17 +90,20 @@
     import DeliverStoredItems from "./DeliverStoredItems";
     import StoreItems from "./StoreItems";
     import LoadCar from "./LoadCar";
+    import {hideBusySpinner, showBusySpinner} from "../../tools";
 
     export default {
         name: "ScannerIndex",
         components: {StoreItems, LoadCar, DeliverStoredItems},
         props: {
-            branch: Object
+            branch: Object,
+            selections: Array
         },
         data() {
             return {
                 operation: 'deliver',
                 items: [],
+                selection: null,
                 fields: [
                     {
                         key: 'index',
@@ -150,6 +161,14 @@
             },
             resetModal() {
                 this.name = null
+            }
+        },
+        watch: {
+            selection() {
+                showBusySpinner()
+                axios.get(`/items-selection/${this.selection.id}/stored-items`)
+                    .then(response => this.items = response.data)
+                    .finally(hideBusySpinner)
             }
         },
         computed: {

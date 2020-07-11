@@ -190,7 +190,7 @@ Route::get('/countries', 'CountriesController@all');
 Route::get('/scanner', 'Scanner\ScannerController@index')->name('scanner.index');
 
 //Items Selection
+Route::get('/items-selection/{selection}/stored-items', 'Selection\SelectionItemsController@index');
 Route::resource('items-selection', 'Selection\ItemsSelectionController')->only('index', 'store');
-
 
 
