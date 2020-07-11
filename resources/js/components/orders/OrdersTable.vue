@@ -85,8 +85,24 @@
                 </div>
             </template>
 
+            <template v-slot:cell(totalWeight)="{item}">
+                <span>{{item.totalWeight.toFixed(3)}}</span>
+            </template>
+
+            <template v-slot:cell(totalCubage)="{item}">
+                <span>{{item.totalCubage.toFixed(3)}}</span>
+            </template>
+
             <template v-slot:cell(weightPerCube)="{item}">
-                <span>{{getWeightPerCube(item)}}</span>
+                <span>{{getWeightPerCube(item).toFixed(3)}}</span>
+            </template>
+
+            <template v-slot:cell(totalDiscount)="{item}">
+                <span>{{item.totalDiscount.toFixed(2)}}</span>
+            </template>
+
+            <template v-slot:cell(totalPrice)="{item}">
+                <span>{{item.totalPrice.toFixed(2)}}</span>
             </template>
 
             <template v-slot:cell(details)="{item}">
