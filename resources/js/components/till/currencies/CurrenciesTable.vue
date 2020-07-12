@@ -45,24 +45,28 @@
                 },
                 items: [],
                 isBusy: false,
-                fields: {
-                    name: {
+                fields: [
+                    {
+                        key:'name',
                         label: 'Название',
                         sortable: true
                     },
-                    shortName: {
+                    {
+                        key:'shortName',
                         label: 'Кор. обоз.',
                         sortable: true
                     },
-                    isoName: {
+                    {
+                        key:'isoName',
                         label: 'ISO',
                         sortable: true
                     },
-                    'country.name': {
+                    {
+                        key:'country.name',
                         label: 'Страна',
                         sortable: true
                     }
-                }
+                ]
             }
         },
         methods: {
