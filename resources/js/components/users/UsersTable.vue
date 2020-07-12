@@ -26,22 +26,22 @@
                     </div>
                 </template>
 
-                <template slot="roles" slot-scope="data">
+                <template v-slot:cell(roles)="data">
                     <select aria-label="Роли пользователя" class="form-control" v-if="data.item.roles.length > 0">
                         <option :key="index + data.item.id" v-for="(role, index) in data.item.roles">{{role.title}}
                         </option>
                     </select>
                     <span v-if="data.item.roles.length === 0">Нет ролей</span>
                 </template>
-                <template slot="id" slot-scope="data">
+                <template v-slot:cell(id)="data">
                     <a :href="getEditUrl(data.item)" class="btn btn-outline-secondary">Изменить</a>
                 </template>
 
-                <template slot="profile" slot-scope="data">
+                <template v-slot:cell(profile)="data">
                     <a :href="getProfileUrl(data.item)" class="btn btn-primary">Профиль</a>
                 </template>
 
-                <template slot="delete" slot-scope="data">
+                <template v-slot:cell(delete)="data">
                     <button @click="deleteUser(data.item)" class="btn btn-danger">Удалить</button>
                 </template>
             </b-table>
@@ -54,6 +54,8 @@
 </template>
 
 <script>
+    import {hideBusySpinner, showBusySpinner} from "../../tools";
+
     export default {
         name: "UsersTable",
         mounted() {
@@ -94,9 +96,8 @@
                     cancelTitle: 'Отмена'
                 })
                     .then(confirm => {
-                        if (confirm)
-                        {
-                            tShowSpinner();
+                        if (confirm) {
+                            showBusySpinner();
                             axios.delete('/users/' + item.id)
                                 .then(_ => this.users = this.users.filter(u => u.id !== item.id));
                         }
@@ -105,7 +106,7 @@
                         // An error occurred
                     })
                     .finally(_ => {
-                        tHideSpinner();
+                        hideBusySpinner();
                     })
             },
             async getUsers(page = 1) {
@@ -146,41 +147,50 @@
                 users: [],
                 selectedRole: null,
                 isBusy: false,
-                fields: {
-                    name: {
+                fields: [
+                    {
+                        key: 'name',
                         label: 'Имя',
                         sortable: true
                     },
-                    code: {
+                    {
+                        key: 'code',
                         label: 'Код',
                         sortable: true
                     },
-                    email: {
+                    {
+                        key: 'email',
                         label: 'Почта',
                         sortable: true
                     },
-                    phone: {
+                    {
+                        key: 'phone',
                         label: 'Телефон',
                         sortable: true
                     },
-                    'position.name': {
+                    {
+                        key: 'position.name',
                         label: 'Должность',
                         sortable: true
                     },
-                    'roles': {
+                    {
+                        key: 'roles',
                         label: 'Роли',
                         sortable: true
                     },
-                    'profile': {
+                    {
+                        key: 'profile',
                         label: 'Профиль'
                     },
-                    id: {
+                    {
+                        key: 'id',
                         label: 'Редактировать'
                     },
-                    'delete': {
+                    {
+                        key: 'delete',
                         label: 'Удалить'
                     }
-                }
+                ]
             }
         },
         components: {
