@@ -55,10 +55,11 @@
         <p>Остаток мест: <b>{{$payment->placesLeft}}</b></p>
     @endif
     <p>Комментарий: <b>{{$payment->comment}}</b></p>
-    @if($payment->preparedBy)
-        <p>Заявку подготовил: <b>{{$payment->creator->name}}</b></p>
-        <p>Дата создания заявки: <b>{{$payment->created_at}}</b></p>
+    @if($payment->creator)
+        <p>Платеж подготовил: <b>{{$payment->creator->name}}</b></p>
+        <p>Дата создания платежа: <b><span v-luxon="{ value: '{{$payment->created_at}}'}"/></b></p>
     @endif
     <p>Операцию провел: <b>{{$payment->editor->name}}</b></p>
+    <p>Дата изменения платежа: <b><span v-luxon="{ value: '{{$payment->updated_at}}'}"/></b></p>
     <p>Операция проведена в <b>{{$payment->branch->name}}</b></p>
 </div>

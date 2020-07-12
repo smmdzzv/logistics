@@ -45,7 +45,7 @@ class PaymentFilter extends Filter
             $this->query->where('created_at', '<', Carbon::createFromDate($filters['to'])->addDay());
 
         if (isset($filters['cashier']))
-            $this->query->whereHas('cashier', function (Builder $query) use ($filters) {
+            $this->query->whereHas('editor', function (Builder $query) use ($filters) {
                 $query->where('id', $filters['cashier']);
             });
 

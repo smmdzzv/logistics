@@ -11,7 +11,6 @@
         :sticky-header="tableHeight"
         :striped="striped"
         :isBusy="isBusy"
-        :customCells="customCells"
         :setRowClass="rowClass"
         class="shadow"
         excelFileName="История платежей"
@@ -154,16 +153,16 @@
             </div>
         </template>
 
-        <template slot="billAmount" slot-scope="{item}">
+        <template v-slot:cell(billAmount)="{item}">
             <span>{{item.billAmount}} {{item.billCurrency.isoName}}</span>
         </template>
 
-        <template slot="paidAmount" slot-scope="{item}">
-            <span v-if="item.paidAmountInBillCurrency > 0">{{item.paidAmountInBillCurrency}} {{item.billCurrency.isoName}}</span>
-            <span v-if="item.paidAmountInSecondCurrency > 0">{{item.paidAmountInSecondCurrency}} {{item.secondPaidCurrency.isoName}}</span>
+        <template v-slot:cell(paidAmount)="{item}">
+            <span v-if="item.paidAmountInBillCurrency > 0">{{item.paidAmountInBillCurrency.toFixed(2)}} {{item.billCurrency.isoName}}</span>
+            <span v-if="item.paidAmountInSecondCurrency > 0">{{item.paidAmountInSecondCurrency.toFixed(2)}} {{item.secondPaidCurrency.isoName}}</span>
         </template>
 
-        <template slot="status" slot-scope="{item}">
+        <template v-slot:cell(status)="{item}">
             <span v-if="item.status === 'completed'">
                 Проведенная
             </span>
@@ -172,11 +171,12 @@
             </span>
         </template>
 
-        <template slot="show" slot-scope="{item}">
+        <template v-slot:cell(show)="{item}">
             <a class="btn" :href="'/payment/' + item.id">
                 <img class="icon-btn-sm" src="/svg/file.svg">
             </a>
-            <a v-if="item.status === 'pending' && !Boolean(item.deleted_at)" class="btn" :href="'/payment/' + item.id + '/edit'">
+            <a v-if="item.status === 'pending' && !Boolean(item.deleted_at)" class="btn"
+               :href="'/payment/' + item.id + '/edit'">
                 <img class="icon-btn-sm" src="/svg/edit.svg">
             </a>
             <a v-if="!Boolean(item.deleted_at)" class="btn text-danger" href="#" @click.prevent="deletePayment(item)">
@@ -184,14 +184,14 @@
             </a>
         </template>
 
-        <template slot="payer.name" slot-scope="{item}">
+        <template v-slot:cell(payer.name)="{item}">
             <template v-if="item.payer">
                 <span v-if="item.payer_type === 'branch'">{{item.payer.name}}</span>
                 <span v-else>{{item.payer.code}}</span>
             </template>
         </template>
 
-        <template slot="payee.name" slot-scope="{item}">
+        <template v-slot:cell(payee.name)="{item}">
             <template v-if="item.payee">
                 <span v-if="item.payee_type === 'branch'">{{item.payee.name}}</span>
                 <span v-else>{{item.payee.code}}</span>
@@ -254,7 +254,6 @@
                 },
                 items: [],
                 isBusy: false,
-                customCells: ['show', 'billAmount', 'paidAmount', 'status', 'payer.name', 'payee.name'],
                 selectedBranch: null,
                 selectedType: null,
                 selectedPaymentItem: null,
@@ -272,47 +271,61 @@
                 calculateCash: false,
                 withTrashed: false,
                 cashReport: null,
-                fields: {
-                    created_at: {
+                fields: [
+                    {
+                        key: 'number',
+                        label: '№'
+                    },
+                    {
+                        key: 'created_at',
                         label: 'Дата',
                         sortable: true
                     },
-                    'payer.name': {
+                    {
+                        key: 'payer.name',
                         label: 'Плательщик',
                         sortable: true
                     },
-                    'payee.name': {
+                    {
+                        key: 'paymentItem.title',
                         label: 'Получатель',
                         sortable: true
                     },
-                    'paymentItem.title': {
+                    {
+                        key: 'paymentItem.title',
                         label: 'Статья',
                         sortable: true
                     },
-                    billAmount: {
+                    {
+                        key: 'billAmount',
                         label: 'Выставленная Сумма',
                         sortable: true
                     },
-                    paidAmount: {
+                    {
+                        key: 'paidAmount',
                         label: 'Оплачено',
                         sortable: true
                     },
 
-                    comment: {
+                    {
+                        key: 'comment',
                         label: "Комментарий"
                     },
-                    'cashier.name': {
+                    {
+                        key: 'creator.code',
                         label: 'Кассир',
                         sortable: true
                     },
-                    status: {
+                    {
+                        key: 'status',
                         label: 'Статус',
                         sortable: true
                     },
-                    'show': {
+                    {
+                        key: 'show',
                         label: ''
                     }
-                },
+                ],
             }
         },
         methods: {
@@ -382,7 +395,6 @@
                         this.pagination = response.data;
                         if (this.flowable) {
                             for (let [key, value] of Object.entries(response.data.data)) {
-                                console.log(key, value)
                                 if (key !== 'cashReport')
                                     this.items.push(value);
                             }

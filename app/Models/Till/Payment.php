@@ -72,8 +72,9 @@ class Payment extends BaseModel
      */
     protected $with = [
         'branch',
-        'preparedBy',
-        'cashier',
+        'editor',
+        'creator',
+        'destroyer',
         'payer',
         'payee',
         'payerAccountInBillCurrency',
