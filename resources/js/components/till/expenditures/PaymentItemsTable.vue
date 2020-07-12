@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <table-card
-            :customCells="customCells"
             :fields="fields"
             :isBusy="isBusy"
             :items="items"
@@ -12,26 +11,26 @@
             primary-key="id"
             responsive>
             <template #header>
-                    Статьи расходов/доходов
+                Статьи расходов/доходов
             </template>
 
-            <template slot="type" slot-scope="{item}">
+            <template v-slot:cell(type)="{item}">
                 <span v-if="item.type === 'in'">Доход</span>
                 <span v-if="item.type === 'out'">Расход</span>
             </template>
 
-            <template slot="type" slot-scope="{item}">
+            <template v-slot:cell(type)="{item}">
                 <span v-if="item.type === 'in'">Доход</span>
                 <span v-if="item.type === 'out'">Расход</span>
             </template>
 
-            <template slot="edit" slot-scope="{item}">
+            <template v-slot:cell(edit)="{item}">
                 <a :href="getEditUrl(item)">
                     <img class="icon-btn-sm" src="/svg/edit.svg">
                 </a>
             </template>
 
-            <template slot="delete" slot-scope="{item}">
+            <template v-slot:cell(delete)="{item}">
                 <img @click="deleteItem(item)" class="icon-btn-sm" src="/svg/delete.svg">
             </template>
 
@@ -79,26 +78,25 @@
                 },
                 items: [],
                 isBusy: false,
-                customCells: ['description', 'type', 'delete', 'edit'],
-                fields: {
-                    title: {
+                fields: [
+                    {
+                        key: 'title',
                         label: 'Статья',
                         sortable: true
                     },
-                    description: {
+                    {
+                        key: 'description',
                         label: 'Описание'
                     },
-                    // type: {
-                    //     label: 'Тип',
-                    //     sortable: true
-                    // },
-                    'edit': {
+                    {
+                        key: 'edit',
                         label: ''
                     },
-                    'delete': {
+                    {
+                        key: 'delete',
                         label: ''
                     }
-                }
+                ]
             }
         },
         methods: {
@@ -140,19 +138,18 @@
                     title: 'Подтверждение удаления'
                 });
                 this.$bvModal.show('busyModal');
-                if(confirm){
-                    try{
+                if (confirm) {
+                    try {
                         const response = await axios.delete('/payment-items/' + item.id);
                         this.items = this.items.filter(function (i) {
                             return i.id !== item.id
                         })
-                    }
-                    catch (e) {
+                    } catch (e) {
                         console.log(e);
                     }
                 }
                 this.$nextTick(
-                    ()=>{
+                    () => {
                         this.$bvModal.hide('busyModal');
                     }
                 )
