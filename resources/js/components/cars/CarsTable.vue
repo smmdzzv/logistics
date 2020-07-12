@@ -13,7 +13,7 @@
                 </div>
             </template>
 
-            <template slot="buttons" slot-scope="data">
+            <template v-slot:cell(buttons)="data">
                 <div class="row">
                     <a :href="getShowUrl(data.item)" class="btn">
                         <img class="icon-btn-sm" src="/svg/file.svg" alt="car details">
@@ -46,42 +46,51 @@
             return {
                 items: this.cars,
                 isBusy: false,
-                fields: {
-                    number: {
+                fields: [
+                    {
+                        key: 'number',
                         label: 'Гос. номер'
                     },
-                    serial: {
+                    {
+                        key: 'serial',
                         label: 'УКТ (ВИН)'
                     },
-                    trailerNumber: {
+                    {
+                        key: 'trailerNumber',
                         label: 'Номер прицепа'
                     },
-                    length: {
+                    {
+                        key: 'length',
                         label: 'Длина'
                     },
-                    width: {
+                    {
+                        key: 'width',
                         label: 'Ширина'
                     },
-                    height: {
+                    {
+                        key: 'height',
                         label: 'Высота'
                     },
-                    maxWeight: {
+                    {
+                        key: 'maxWeight',
                         label: 'Груз-ть, кг'
                     },
-                    maxCubage: {
+                    {
+                        key: 'maxCubage',
                         label: 'Объем, куб'
                     },
-                    'buttons': {
+                    {
+                        key: 'buttons',
                         label: ''
                     }
-                }
+                ]
             }
         },
         methods: {
             getEditUrl(car) {
                 return `/cars/${car.id}/edit`;
             },
-            getShowUrl(car){
+            getShowUrl(car) {
                 return `/cars/${car.id}`;
             },
             async deleteCar(car) {

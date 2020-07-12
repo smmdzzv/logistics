@@ -3,7 +3,6 @@
     :isBusy="isBusy"
     :fields="fields"
     :items="items"
-    :customCells="customCells"
     :striped="striped"
     excelFileName="Список рейсов"
     class="shadow"
@@ -13,17 +12,17 @@
                 Список рейсов
         </template>
 
-        <template slot="buttons" slot-scope="{item}">
+        <template v-slot:cell(buttons)="{item}">
             <a class="btn" :href="getDetailsUrl(item)">
                 <img class="icon-btn-sm" src="/svg/file.svg">
             </a>
         </template>
 
-        <template slot="departureDate" slot-scope="{item}">
+        <template v-slot:cell(departureDate)="{item}">
             <span> {{item.departureDate | luxon:format('dd-MM-yyyy')}} </span>
         </template>
 
-        <template slot="returnDate" slot-scope="{item}">
+        <template v-slot:cell(returnDate)="{item}">
             <span> {{item.returnDate | luxon:format('dd-MM-yyyy')}} </span>
         </template>
 
@@ -69,32 +68,37 @@
                 },
                 items:[],
                 isBusy: false,
-                customCells:['buttons', 'returnDate', 'departureDate'],
-                fields: {
-                    code: {
+                fields: [
+                    {
+                        key:'code',
                         label: 'Номер',
                         sortable: true
                     },
-                    'car.number': {
+                    {
+                        key:'car.number',
                         label: 'Машина',
                         sortable: true
                     },
-                    'driver.name': {
+                    {
+                        key:'driver.name',
                         label: 'Водитель',
                         sortable: true
                     },
-                    departureDate: {
+                    {
+                        key:'departureDate',
                         label: 'Дата отправления',
                         sortable: true
                     },
-                    returnDate: {
+                    {
+                        key:'returnDate',
                         label: 'Дата возрващения',
                         sortable: true
                     },
-                    'buttons':{
+                    {
+                        key:'buttons',
                         label:''
                     }
-                }
+                ]
             }
         },
         methods: {
