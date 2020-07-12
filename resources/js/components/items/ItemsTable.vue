@@ -18,23 +18,23 @@
                 </div>
             </template>
 
-            <template slot="onlyCustomPrice" slot-scope="{item}">
+            <template v-slot:cell(onlyCustomPrice)="{item}">
                 <b-check :checked="item.onlyCustomPrice" disabled></b-check>
             </template>
 
-            <template slot="onlyAgreedPrice" slot-scope="{item}">
+            <template v-slot:cell(onlyAgreedPrice)="{item}">
                 <b-check :checked="item.onlyAgreedPrice" disabled></b-check>
             </template>
 
-            <template slot="calculateByNormAndWeight" slot-scope="{item}">
+            <template v-slot:cell(calculateByNormAndWeight)="{item}">
                 <b-check :checked="item.calculateByNormAndWeight" disabled></b-check>
             </template>
 
-            <template slot="applyDiscount" slot-scope="{item}">
+            <template v-slot:cell(applyDiscount)="{item}">
                 <b-check :checked="item.applyDiscount" disabled></b-check>
             </template>
 
-            <template slot="buttons" slot-scope="{item}">
+            <template v-slot:cell(buttons)="{item}">
                 <div class="d-flex">
                     <a class="mr-2" :href="'/items/' + item.id + '/edit'">
                         <img class="icon-btn-sm" src="/svg/edit.svg">
@@ -78,39 +78,42 @@
                 items: [],
                 isBusy: false,
                 customCells: ['applyDiscount', 'onlyCustomPrice', 'onlyAgreedPrice', 'calculateByNormAndWeight', 'buttons'],
-                fields: {
-                    name: {
+                fields: [
+                    {
+                        key:'name',
                         label: 'Наименование',
                         sortable: true
                     },
-                    unit: {
+                    {
+                        key: 'unit',
                         label: 'Единица',
                         sortable: false
                     },
-                    // 'branch.name': {
-                    //     label: 'Филиал',
-                    //     sortable: true
-                    // },
-                    onlyCustomPrice: {
+                    {
+                        key: 'onlyCustomPrice',
                         label: 'Ручная цена',
                         sortable: true
                     },
-                    onlyAgreedPrice: {
-                        label: 'Дог-ная цена',
+                    {
+                        key: 'onlyAgreedPrice'
+,                        label: 'Дог-ная цена',
                         sortable: true
                     },
-                    calculateByNormAndWeight: {
+                    {
+                        key: 'calculateByNormAndWeight',
                         label: 'Расчет по норме и весу',
                         sortable: true
                     },
-                    applyDiscount: {
+                    {
+                        key: 'applyDiscount',
                         label: 'Учитывать скидку',
                         sortable: true
                     },
-                    buttons: {
+                    {
+                        key: 'buttons',
                         label: ''
                     }
-                }
+                ]
             }
         },
         methods: {
