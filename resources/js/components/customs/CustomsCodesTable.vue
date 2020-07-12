@@ -11,13 +11,12 @@
         :sticky-header="tableHeight"
         :striped="striped"
         :tableBusy="false"
-        :customCells=cells
         excelFileName="Список таможенных кодов"
         excelSheetName="Лист 1"
         primaryKey="id"
         responsive>
 
-        <template slot="isCalculatedByPiece" slot-scope="{item}">
+        <template v-slot:cell(isCalculatedByPiece)="{item}">
             <span v-if="item.tax.isCalculatedByPiece">
                 ✓
             </span>
@@ -25,7 +24,7 @@
             </span>
         </template>
 
-        <template slot="edit" slot-scope="{item}">
+        <template v-slot:cell(edit)="{item}">
             <div class="d-flex">
                 <a class="mr-2" :href="'/customs-code/' + item.id + '/edit'">
                     <img class="icon-btn-sm" src="/svg/edit.svg">
@@ -65,41 +64,48 @@
         },
         data() {
             return {
-                cells: ['isCalculatedByPiece', 'edit'],
                 items: [],
-                fields: {
-                    name: {
+                fields: [
+                    {
+                        key:'name',
                         label: 'Наименование',
                         sortable: true
                     },
-                    code: {
+                    {
+                        key: 'code',
                         label: 'Код',
                         sortable: true
                     },
-                    'tax.price': {
+                    {
+                        key: 'tax.price',
                         label: 'Цена',
                         sortable: true
                     },
-                    'tax.interestRate': {
+                    {
+                        key: 'tax.interestRate',
                         label: 'Базовая ставка, %',
                         sortable: true
                     },
-                    'tax.vat': {
+                    {
+                        key: 'tax.vat',
                         label: 'НДС, %',
                         sortable: true
                     },
-                    'tax.totalRate': {
+                    {
+                        key: 'tax.totalRate',
                         label: 'Итоговая ставка, %',
                         sortable: true
                     },
-                    isCalculatedByPiece: {
+                    {
+                        key: 'isCalculatedByPiece',
                         label: 'Расчет по шт.',
                         sortable: true
                     },
-                    edit: {
+                    {
+                        key: 'edit',
                         label: ''
                     }
-                }
+                ]
             }
         },
         methods: {

@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <table-card
-            :customCells="customCells"
             :fields="fields"
             :isBusy="isBusy"
             :items="items"
@@ -77,7 +76,6 @@
                 },
                 items: [],
                 isBusy: false,
-                customCells: ['applyDiscount', 'onlyCustomPrice', 'onlyAgreedPrice', 'calculateByNormAndWeight', 'buttons'],
                 fields: [
                     {
                         key:'name',
