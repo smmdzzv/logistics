@@ -1,3 +1,4 @@
+`
 <template>
     <div>
         <table-card
@@ -5,7 +6,6 @@
             :isBusy="isBusy"
             :items="items"
             :striped="true"
-            :customCells="['edit', 'created_at']"
             class="shadow"
             excelFileName="История тарифных планов"
             hover
@@ -15,11 +15,11 @@
                 История тарифных планов
             </template>
 
-            <template slot="created_at" slot-scope="{item}">
+            <template v-slot:cell(created_at)="{item}">
                 <span> {{item.created_at | luxon:format('dd-MM-yyyy')}} </span>
             </template>
 
-            <template slot="edit" slot-scope="{item}">
+            <template v-slot:cell(edit)="{item}">
                 <a :id="'up' + item.id" href="#" @click.prevent="updateOrdersPrices(item)">
                     <img class="icon-btn-sm" src="/svg/refresh.svg" alt="">
                 </a>
@@ -100,67 +100,82 @@
                 items: [],
                 isBusy: false,
                 updatedOrders: [],
-                fields: {
-                    created_at: {
+                fields: [
+                    {
+                        key: 'created_at',
                         label: 'Дата',
                         sortable: true
                     },
-                    'tariff.name': {
+                    {
+                        key: 'tariff.name',
                         label: 'Тариф',
                         sortable: true
                     },
-                    lowerLimit: {
+                    {
+                        key: 'lowerLimit',
                         label: 'Нижний предел',
                         sortable: true
                     },
-                    mediumLimit: {
+                    {
+                        key: 'mediumLimit',
                         label: 'Средний предел',
                         sortable: true
                     },
-                    upperLimit: {
+                    {
+                        key: 'upperLimit',
                         label: 'Верхний предел',
                         sortable: true
                     },
-                    pricePerCube: {
+                    {
+                        key: 'pricePerCube',
                         label: 'Цена за куб',
                         sortable: true
                     },
-                    discountForLowerLimit: {
+                    {
+                        key: 'discountForLowerLimit',
                         label: 'Скидка НП',
                         sortable: true
                     },
-                    discountForMediumLimit: {
+                    {
+                        key: 'discountForMediumLimit',
                         label: 'Скидка СП',
                         sortable: true
                     },
-                    agreedPricePerKg: {
+                    {
+                        key: 'agreedPricePerKg',
                         label: 'Договорная',
                         sortable: true
                     },
-                    maxWeightPerCube: {
+                    {
+                        key: 'maxWeightPerCube',
                         label: 'Макс. вес на куб',
                         sortable: true
                     },
-                    pricePerExtraKg: {
+                    {
+                        key: 'pricePerExtraKg',
                         label: 'Цена за доп. кг',
                         sortable: true
                     },
-                    maxWeight: {
+                    {
+                        key: 'maxWeight',
                         label: 'Общий вес',
                         sortable: true
                     },
-                    maxCubage: {
+                    {
+                        key: 'maxCubage',
                         label: 'Общая кубатура',
                         sortable: true
                     },
-                    totalMoney: {
+                    {
+                        key: 'totalMoney',
                         label: 'Сумма',
                         sortable: true
                     },
-                    'edit': {
+                    {
+                        key: 'edit',
                         label: ''
                     }
-                }
+                ]
             }
         },
         methods: {
