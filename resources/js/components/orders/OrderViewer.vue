@@ -183,9 +183,10 @@
                     {
                         key: 'buttons',
                         label: ''
-                    } //for barcode btn
+                    }
                 ],
-                itemsToShow: []
+                itemsToShow: [],
+                printUrl: '/print/order-labels/' + this.order.id
             }
         },
         methods: {
@@ -222,7 +223,8 @@
                 this.itemsToShow = [];
             },
             printLabels() {
-                this.$refs.easyPrint.print();
+                // this.$refs.easyPrint.print();
+                window.location.href = this.printUrl;
             },
             // pricePerCountPlace(data) {
             //     if (data && data.item.placeCount) {

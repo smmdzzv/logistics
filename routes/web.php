@@ -194,3 +194,5 @@ Route::get('/items-selection/{selection}/stored-items', 'Selection\SelectionItem
 Route::resource('items-selection', 'Selection\ItemsSelectionController')->only('index', 'store');
 
 
+//Print
+Route::get('/print/order-labels/{order}', 'Orders\OrderLabelsPrintController@show');
