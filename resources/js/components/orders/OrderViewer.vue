@@ -207,10 +207,14 @@
                 }
             },
             showShortInfo(data) {
-                if (data)
+                if (data){
                     this.itemsToShow.push(data.item);
-                else
+                    this.printUrl = '/print/info-labels/' + data.item.id;
+                }
+                else{
                     this.itemsToShow = this.order.storedItemInfos;
+                    this.printUrl = '/print/order-labels/' + this.order.id;
+                }
 
                 this.itemsToShow = this.itemsToShow.filter(function (item) {
                     return item.storedItems.length > 0;
@@ -224,7 +228,8 @@
             },
             printLabels() {
                 // this.$refs.easyPrint.print();
-                window.location.href = this.printUrl;
+                // window.location.href = this.printUrl;
+                window.open(this.printUrl, "_blank");
             },
             // pricePerCountPlace(data) {
             //     if (data && data.item.placeCount) {

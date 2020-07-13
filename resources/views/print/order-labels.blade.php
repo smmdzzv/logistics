@@ -52,4 +52,10 @@
 @endforeach
 </div>
 </body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        window.print();
+    }, false);
+</script>
 </html>
