@@ -8,7 +8,9 @@ namespace App\Services\StoredItem;
 
 
 use App\Data\MassWriters\Order\BillingInfosMassWriter;
+use App\Models\BillingInfo;
 use App\Models\StoredItems\StoredItemInfo;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class BillingInfoService
@@ -23,5 +25,17 @@ class BillingInfoService
             $massWriter = new BillingInfosMassWriter($billingInfos->all());
             return collect($massWriter->write());
         });
+    }
+
+    /**
+     * @param Collection $infos stored StoredItemInfos ids
+     * @return int
+     */
+    public function massDeleteByInfos(Collection $infos): int
+    {
+        return BillingInfo::whereIn('stored_item_info_id', $infos)->update([
+            'deleted_at' => Carbon::now(),
+            'deleted_by_id' => auth()->id()
+        ]);
     }
 }

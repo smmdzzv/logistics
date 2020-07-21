@@ -9,6 +9,7 @@ use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Users\Client;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property double totalCubage
@@ -25,6 +26,8 @@ use Illuminate\Database\Eloquent\Collection;
  */
 class Order extends BaseModel
 {
+    use SoftDeletes;
+
     public const STATUS_COMPLETED = 'completed';
 
     protected $casts = [
@@ -74,10 +77,10 @@ class Order extends BaseModel
 //    {
 //        return $this->belongsTo(Payment::class, 'paymentId');
 //    }
-    public function orderPayments()
-    {
-        return $this->hasMany(StoredItemsSelection::class);
-    }
+//    public function orderPayments()
+//    {
+//        return $this->hasMany(StoredItemsSelection::class);
+//    }
 
     public function orderRemovedItems()
     {

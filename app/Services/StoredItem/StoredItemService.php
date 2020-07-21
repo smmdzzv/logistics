@@ -9,9 +9,11 @@ namespace App\Services\StoredItem;
 
 
 use App\Data\MassWriters\StoredItem\StoredItemsMassWriter;
+use App\Models\Order;
 use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Users\Client;
+use App\Services\Storage\ItemsStorageHistoryService;
 use App\StoredItems\StorageHistory;
 use App\User;
 use Carbon\Carbon;
@@ -19,11 +21,17 @@ use Illuminate\Support\Collection;
 
 class StoredItemService
 {
+    /**
+     * @var Collection of generated bar codes in order to check uniqueness
+     */
     private Collection $codes;
 
-    public function __construct()
+    private ItemsStorageHistoryService $storageService;
+
+    public function __construct(ItemsStorageHistoryService $storageService)
     {
         $this->codes = new Collection();
+        $this->storageService = $storageService;
     }
 
     public function massStoreFromInfo(StoredItemInfo $info, $quantity = null, $status = 'stored'): Collection
@@ -59,6 +67,20 @@ class StoredItemService
         }
 
         return $info->storedItems;
+    }
+
+    /**
+     * @param Collection $storedItems ids
+     * @return int
+     */
+    public function massDelete(Collection $storedItems): int
+    {
+        $this->storageService->massDelete($storedItems);
+
+        return StoredItem::whereIn('id', $storedItems)->update([
+            'deleted_at' => Carbon::now(),
+            'deleted_by_id' => auth()->id()
+        ]);
     }
 
     /**

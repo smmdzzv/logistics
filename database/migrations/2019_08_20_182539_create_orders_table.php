@@ -16,8 +16,6 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->char('id', 26)->primary();;
             $table->char('owner_id', 26)->index();
-//            $table->char('paymentId', 26)->nullable()->unique();
-//            $table->char('registeredById', 26);
             $table->char('branch_id', 26);
             $table->string('status')->default('active');
             $table->decimal('totalCount', 10, 2);

@@ -9,6 +9,7 @@ use App\Models\Branches\Storage;
 use App\Models\Customs\CustomsCode;
 use App\Models\Customs\CustomsCodeTax;
 use App\Models\Order;
+use App\Models\Role;
 use App\Models\StoredItems\Item;
 use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemInfo;
@@ -31,8 +32,6 @@ class OrderControllerTest extends TestCase
     public function test_order_store()
     {
         $data = $this->prepareMockData();
-
-//        Auth::shouldReceive('id')->andReturn($data['employee']->id);
 
         $this->withoutMiddleware();
         $this->withoutExceptionHandling();
@@ -202,7 +201,73 @@ class OrderControllerTest extends TestCase
         $this->assertCount(30, StorageHistory::onlyTrashed()->get());
     }
 
-    public function test_order_delete_stored_item(){
+    public function test_order_destroy()
+    {
+        $data = $this->prepareMockData();
+
+//        $this->withoutMiddleware();
+        $this->withoutExceptionHandling();
+
+        $itemsCount = 100;
+
+        $adminRole = Role::create([
+            'name' => 'admin',
+            'title' => 'Администратор',
+            'description' => 'админ'
+        ]);
+
+        $data['employee']->roles()->sync($adminRole);
+
+        $storeResponse = $this->actingAs($data['employee'])
+            ->post('/orders', [
+                'clientCode' => $data['client']->code,
+                'branch_id' => $data['branch']->id,
+                'storedItemInfos' => [
+                    0 => [
+                        'width' => 0.25,
+                        'height' => 0.55,
+                        'length' => 0.65,
+                        'weight' => 3,
+                        'shop' => 'Test shop',
+                        'count' => $itemsCount,
+                        'item_id' => $data['item']->id,
+                        'tariff_id' => $data['tariff']->id,
+                        'branch_id' => $data['branch']->id,
+                        'customs_code_id' => $data['customsCode']->id
+                    ]
+                ],
+                'customPrices' => [null]
+            ]);
+
+        $storeResponse->assertStatus(201);
+
+        $response = $this->actingAs($data['employee'])->delete('/orders/' . Order::first()->id);
+
+        $response->assertStatus(200);
+
+        $this->assertCount(0, Order::all());
+
+        $this->assertCount(1, Order::withTrashed()->get());
+
+        $this->assertCount(0, StoredItemInfo::all());
+
+        $this->assertCount(1, StoredItemInfo::withTrashed()->get());
+
+        $this->assertCount(0, StoredItem::all());
+
+        $this->assertCount($itemsCount, StoredItem::withTrashed()->get());
+
+        $this->assertCount(0, StorageHistory::all());
+
+        $this->assertCount($itemsCount, StorageHistory::withTrashed()->get());
+
+        $this->assertCount(0, BillingInfo::all());
+
+        $this->assertCount(1, BillingInfo::withTrashed()->get());
+    }
+
+    public function test_order_delete_stored_item()
+    {
         $data = $this->prepareMockData();
 
         $this->withoutMiddleware();

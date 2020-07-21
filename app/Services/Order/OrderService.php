@@ -73,6 +73,13 @@ class OrderService
         return $this->updateStat($order);
     }
 
+    public function destroy(Order $order)
+    {
+        $this->infoService->deleteOrderStoredItems($order);
+
+        return $order->delete();
+    }
+
     public function updateStatus(Order $order)
     {
         if ($order->storedItems()->notDelivered()->count() === 0)

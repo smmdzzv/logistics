@@ -105,16 +105,19 @@
                 <span>{{item.totalPrice.toFixed(2)}}</span>
             </template>
 
-            <template v-slot:cell(details)="{item}">
+            <template v-slot:cell(actions)="{item}">
                 <a :href="getDetailsUrl(item)"
                    v-if="item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'">
-                    <img class="icon-btn-sm" src="/svg/file.svg"></a>
-            </template>
-
-            <template v-slot:cell(edit)="{item}">
-                <a v-if="item.status !== 'completed' && item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'"
+                    <img class="icon-btn-sm" src="/svg/file.svg">
+                </a>
+                <a class="ml-2"
+                   v-if="item.status !== 'completed' && item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'"
                    :href="getEditUrl(item)">
-                    <img class="icon-btn-sm" src="/svg/edit.svg"></a>
+                    <img class="icon-btn-sm" src="/svg/edit.svg">
+                </a>
+                <a class="ml-2" href="#" @click="deleteOrder(item)">
+                    <img class="icon-btn-sm" src="/svg/delete.svg">
+                </a>
             </template>
 
             <template #footer>
@@ -141,6 +144,78 @@
 
             if (this.loadItems)
                 this.getOrders();
+        },
+        data() {
+            return {
+                selectedBranch: null,
+                pagination: {},
+                orders: [],
+                action: this.url,
+                isBusy: false,
+                customCells: ['weightPerCube', 'details', 'edit'],
+                clientCode: null,
+                employeeCode: null,
+                minCubage: null,
+                maxCubage: null,
+                minWeight: null,
+                maxWeight: null,
+                minPrice: null,
+                maxPrice: null,
+                dateFrom: null,
+                dateTo: null,
+                status: null,
+                fields: [
+                    {
+                        key: 'owner.code',
+                        label: 'Владелец',
+                        sortable: true
+                    },
+                    {
+                        key: 'placesCount',
+                        label: 'Кол-во мест',
+                        sortable: true
+                    },
+                    {
+                        key: 'totalWeight',
+                        label: 'Вес',
+                        sortable: true
+                    },
+                    {
+                        key: 'weightPerCube',
+                        label: 'Кг в 1 кубе',
+                        sortable: true
+                    },
+                    {
+                        key: 'totalCubage',
+                        label: 'Кубатура',
+                        sortable: true
+                    },
+                    {
+                        key: 'totalDiscount',
+                        label: 'Скидка',
+                        sortable: true
+                    },
+                    {
+                        key: 'totalPrice',
+                        label: 'Цена',
+                        sortable: true
+                    },
+                    {
+                        key: 'creator.code',
+                        label: 'Принял',
+                        sortable: true
+                    },
+                    {
+                        key: 'created_at',
+                        label: 'Дата',
+                        sortable: true
+                    },
+                    {
+                        key: 'actions',
+                        label: '',
+                    }
+                ]
+            }
         },
         props: {
             branches: {
@@ -322,87 +397,15 @@
                 if (this.clientCode && this.dateFrom) {
                     this.getClientStat();
                 }
+            },
+            deleteOrder(order) {
+                axios.delete(`/orders/${order.id}`)
+                    .then(r => console.log(r));
             }
         },
         computed: {
             currentPage() {
                 return this.pagination.current_page;
-            }
-        },
-        data() {
-            return {
-                selectedBranch: null,
-                pagination: {},
-                orders: [],
-                action: this.url,
-                isBusy: false,
-                customCells: ['weightPerCube', 'details', 'edit'],
-                clientCode: null,
-                employeeCode: null,
-                minCubage: null,
-                maxCubage: null,
-                minWeight: null,
-                maxWeight: null,
-                minPrice: null,
-                maxPrice: null,
-                dateFrom: null,
-                dateTo: null,
-                status: null,
-                fields: [
-                    {
-                        key: 'owner.code',
-                        label: 'Владелец',
-                        sortable: true
-                    },
-                    {
-                        key: 'placesCount',
-                        label: 'Кол-во мест',
-                        sortable: true
-                    },
-                    {
-                        key: 'totalWeight',
-                        label: 'Вес',
-                        sortable: true
-                    },
-                    {
-                        key: 'weightPerCube',
-                        label: 'Кг в 1 кубе',
-                        sortable: true
-                    },
-                    {
-                        key: 'totalCubage',
-                        label: 'Кубатура',
-                        sortable: true
-                    },
-                    {
-                        key: 'totalDiscount',
-                        label: 'Скидка',
-                        sortable: true
-                    },
-                    {
-                        key: 'totalPrice',
-                        label: 'Цена',
-                        sortable: true
-                    },
-                    {
-                        key: 'creator.code',
-                        label: 'Принял',
-                        sortable: true
-                    },
-                    {
-                        key: 'created_at',
-                        label: 'Дата',
-                        sortable: true
-                    },
-                    {
-                        key: 'details',
-                        label: '',
-                    },
-                    {
-                        key: 'edit',
-                        label: '',
-                    }
-                ]
             }
         },
         components: {
