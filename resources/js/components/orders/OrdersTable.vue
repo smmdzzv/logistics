@@ -106,18 +106,19 @@
             </template>
 
             <template v-slot:cell(actions)="{item}">
-                <a :href="getDetailsUrl(item)"
-                   v-if="item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'">
-                    <img class="icon-btn-sm" src="/svg/file.svg">
-                </a>
-                <a class="ml-2"
-                   v-if="item.status !== 'completed' && item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'"
-                   :href="getEditUrl(item)">
-                    <img class="icon-btn-sm" src="/svg/edit.svg">
-                </a>
-                <a class="ml-2" href="#" @click="deleteOrder(item)">
-                    <img class="icon-btn-sm" src="/svg/delete.svg">
-                </a>
+                <div class="d-flex" v-if="item.id !== 'dummyStatItem' && item.id !== 'dummyStatItemPreviousData'">
+                    <a :href="getDetailsUrl(item)">
+                        <img class="icon-btn-sm" src="/svg/file.svg">
+                    </a>
+                    <a class="ml-2"
+                       v-if="item.status !== 'completed'"
+                       :href="getEditUrl(item)">
+                        <img class="icon-btn-sm" src="/svg/edit.svg">
+                    </a>
+                    <a class="ml-2" href="#" @click="deleteOrder(item)">
+                        <img class="icon-btn-sm" src="/svg/delete.svg">
+                    </a>
+                </div>
             </template>
 
             <template #footer>
@@ -399,8 +400,20 @@
                 }
             },
             deleteOrder(order) {
-                axios.delete(`/orders/${order.id}`)
-                    .then(r => console.log(r));
+                this.$bvModal.msgBoxConfirm(`Удалить заказ клиента ${order.owner.code}?`, {
+                    okTitle: 'Удалить',
+                    cancelTitle: 'Отмена',
+                    okVariant: 'danger',
+                    cancelVariant: 'primary',
+                    centered: true
+                }).then(confirmed => {
+                    if (confirmed) {
+                        showBusySpinner();
+                        axios.delete(`/orders/${order.id}`)
+                            .then(r => this.orders = this.orders.filter(i => i.id !== order.id))
+                            .finally(_ => hideBusySpinner());
+                    }
+                })
             }
         },
         computed: {
