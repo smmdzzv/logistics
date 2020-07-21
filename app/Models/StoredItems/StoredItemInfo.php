@@ -6,6 +6,7 @@ use App\Models\BaseModel;
 use App\Models\BillingInfo;
 use App\Models\Branch;
 use App\Models\Customs\CustomsCode;
+use App\Models\Customs\CustomsCodeTax;
 use App\Models\Order;
 use App\Models\Tariff;
 use App\Models\TariffPriceHistory;
@@ -89,7 +90,11 @@ class StoredItemInfo extends BaseModel
     }
 
     public function customsCode(){
-        return $this->belongsTo(CustomsCode::class, 'customs_code_id');
+        return $this->belongsTo(CustomsCode::class);
+    }
+
+    public function customsCodeTax(){
+        return $this->belongsTo(CustomsCodeTax::class);
     }
 
 //    public function shop(){

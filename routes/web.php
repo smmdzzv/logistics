@@ -73,6 +73,7 @@ Route::resource('trips', 'Trips\TripsController',
     ['except' => ['destroy']]);
 
 Route::prefix('trip')->group(function () {
+    Route::get('{trip}/customs-report', 'Trips\TripCustomsReportsController@show');
     Route::get('{trip}/stored-items/edit', 'Trips\TripStoredItemsController@edit')->name('trip.edit-items');
     Route::get('{trip}/stored-items/generate', 'Trips\TripStoredItemsController@generate')->name('trip.generate-items-list');
     Route::get('stored-items/available', 'Trips\TripStoredItemsController@availableItems');

@@ -95,6 +95,8 @@ Vue.component('ScannerIndex', require('./components/scanner/ScannerIndex.vue').d
 
 Vue.component('MainPaginator', require('./components/common/MainPaginator.vue').default);
 
+Vue.component('CustomsReportEditor', require('./components/customs/CustomsReportEditor.vue').default);
+
 Vue.component('BranchViewer', require('./components/branches/BranchViewer.vue').default);
 Vue.component('Barcode', require('@xkeshi/vue-barcode').default);
 Vue.component('QrCode', require('@chenfengyuan/vue-qrcode').default);

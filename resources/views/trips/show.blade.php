@@ -143,7 +143,7 @@
             </div>
         </div>
         <div class="col-12 col-lg-8">
-            <sortable-stored-table class="shadow" :stored-items="{{$trip->storedItems}}">
+            <sortable-stored-table class="shadow" :stored-items="{{$trip->storedItems}}" :trip="{{$trip}}">
                 <template v-slot:header>
                     <div class="text-right pl-3">
                         @if($trip->isEditable())

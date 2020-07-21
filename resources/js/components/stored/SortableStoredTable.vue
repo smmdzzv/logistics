@@ -5,8 +5,9 @@
                 <slot name="header">
 
                 </slot>
-                <div class="ml-md-auto" v-if="clients">
-                    <button class="btn btn-link" @click="groupByTariffAndCode">Группировать по коду</button>
+                <div class="ml-md-auto" v-if="trip">
+                    <!--                    <button class="btn btn-link" @click="groupByTariffAndCode">Группировать по коду</button>-->
+                    <a class="btn btn-primary" :href="`/trip/${trip.id}/customs-report`">Таможенная декларация</a>
                 </div>
                 <div class="ml-md-2">
                     <select class="form-control custom-select" id="branch" v-model="selectedClient">
@@ -44,12 +45,28 @@
                 </div>
             </template>
 
-            <template slot="owner" slot-scope="{item}">
+            <template v-slot:cell(owner)="{item}">
                 <span>{{item.info.owner.code}} {{item.info.owner.name}}</span>
             </template>
 
-            <template slot="info.cubage" slot-scope="{item}">
-                <span>{{calculateCubage(item.info)}}</span>
+            <template v-slot:cell(info.weight)="{item}">
+                <span>{{item.info.weight.toFixed(3)}}</span>
+            </template>
+
+            <template v-slot:cell(info.height)="{item}">
+                <span>{{item.info.height.toFixed(3)}}</span>
+            </template>
+
+            <template v-slot:cell(info.length)="{item}">
+                <span>{{item.info.length.toFixed(3)}}</span>
+            </template>
+
+            <template v-slot:cell(info.width)="{item}">
+                <span>{{item.info.width.toFixed(3)}}</span>
+            </template>
+
+            <template v-slot:cell(info.cubage)="{item}">
+                <span>{{calculateCubage(item.info).toFixed(3)}}</span>
             </template>
         </b-table>
         <vue-excel-xlsx
@@ -78,6 +95,10 @@
             storedItems: {
                 type: Array,
                 required: true
+            },
+            trip: {
+                type: Object,
+                required: true
             }
         },
         methods: {
@@ -88,21 +109,21 @@
                     }
                 }, this);
             },
-            groupByTariffAndCode() {
-                let groupedByTariff = groupBy(this.items, i => i.info.tariff.id);
-                let groupedByCode = [];
-
-                groupedByTariff.forEach((arr) => {
-                    let grouped = groupBy(arr, i => i.info.customsCode.id);
-                    grouped.forEach((arr) => {
-                        groupedByCode.push(...arr);
-                    })
-                });
-
-                this.items = groupedByCode;
-                this.fillGroupedData();
-                $('#grouped-data').click();
-            },
+            // groupByTariffAndCode() {
+            //     let groupedByTariff = groupBy(this.items, i => i.info.tariff.id);
+            //     let groupedByCode = [];
+            //
+            //     groupedByTariff.forEach((arr) => {
+            //         let grouped = groupBy(arr, i => i.info.customsCode.id);
+            //         grouped.forEach((arr) => {
+            //             groupedByCode.push(...arr);
+            //         })
+            //     });
+            //
+            //     this.items = groupedByCode;
+            //     this.fillGroupedData();
+            //     $('#grouped-data').click();
+            // },
             fillGroupedData() {
                 let groupedByCode = groupBy(this.items, i => i.info.customsCode.id);
                 groupedByCode.forEach((arr) => {
@@ -167,54 +188,66 @@
                 selectedClient: null,
                 clients: [],
                 groupedData: [],
-                fields: {
-                    'owner': {
+                fields: [
+                    {
+                        key: 'owner',
                         label: 'Владелец',
                         sortable: true
                     },
-                    'info.item.name': {
+                    {
+                        key: 'info.item.name',
                         label: 'Наименование',
                         sortable: true
                     },
-                    code: {
+                    {
+                        key: 'code',
                         label: 'Код',
                         sortable: true
                     },
-                    'info.tariff.name': {
+                    {
+                        key: 'info.tariff.name',
                         label: 'Тариф',
                         sortable: true
                     },
-                    'info.customsCode.code': {
+                    {
+                        key: 'info.customsCode.code',
                         label: 'Там. код',
                         sortable: true
                     },
-                    'info.width': {
+                    {
+                        key: 'info.width',
                         label: 'Ширина',
                         sortable: true
                     },
-                    'info.height': {
+                    {
+                        key: 'info.height',
                         label: 'Высота',
                         sortable: true
                     },
-                    'info.length': {
+                    {
+                        key: 'info.length',
                         label: 'Длина',
                         sortable: true
                     },
-                    'info.cubage': {
+                    {
+                        key: 'info.cubage',
                         label: 'Кубатура',
                         sortable: true
                     },
-                    'info.weight': {
+                    {
+                        key: 'info.weight',
                         label: 'Вес',
                         sortable: true
                     },
-                    'storageHistory.storage.name': {
+                    {
+                        key: 'storageHistory.storage.name',
                         label: 'Склад'
                     },
-                    'dutyPrice': {
-                        label: 'Таможенная пошлина'
-                    }
-                },
+                    // {
+                    //     key: 'dutyPrice',
+                    //     label: 'Таможенная пошлина'
+                    // }
+                ],
                 groupedDataColumns: [
                     {
                         label: 'Наименование',
