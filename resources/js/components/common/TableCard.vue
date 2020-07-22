@@ -10,13 +10,13 @@
                 <div class="col-2 col-md-2">
                     <div class="form-row align-items-center" :class="{'text-right': !selectable}">
                         <div class="col-12" v-if="excelColumns"
-                        :class="{'col-md-6':selectable}">
+                             :class="{'col-md-6':selectable}">
                             <vue-excel-xlsx
-                                    :columns="excelColumns"
-                                    :data="excelData"
-                                    :filename="excelFileName"
-                                    :sheetname="excelSheetName"
-                                    class="btn p-0 p-md-1">
+                                :columns="excelColumns"
+                                :data="excelData"
+                                :filename="excelFileName"
+                                :sheetname="excelSheetName"
+                                class="btn p-0 p-md-1">
                                 <img class="icon-btn-md" src="/svg/excel.svg">
                             </vue-excel-xlsx>
                         </div>
@@ -55,6 +55,10 @@
                 </div>
             </template>
 
+            <template v-slot:cell(index)="data">
+                <strong>{{data.index + 1}}</strong>
+            </template>
+
             <template v-slot:cell(selected)="data">
                 <span :class="checkedClass" v-if="isSelected(data.item)">
                     <slot name="selectedCell">&check;</slot>
@@ -71,10 +75,6 @@
             <template v-slot:cell(updated_at)="{item}">
                 <span v-if="item.updated_at"> {{item.updated_at | luxon}} </span>
             </template>
-
-<!--            <template :slot="cell" slot-scope="data" v-for="cell in customCells">-->
-<!--                <slot :name="cell" v-bind:item="data.item"></slot>-->
-<!--            </template>-->
 
             <template v-for="(_, key) of $scopedSlots" v-slot:[key]="data">
                 <slot :name="key" v-bind="data"/>
@@ -94,6 +94,12 @@
     export default {
         name: "TableCard",
         mixins: [ExcelDataPreparatory, TableCardProps],
+        mounted() {
+            this.fields.unshift({
+                key:'index',
+                label:'№'
+            })
+        },
         props: {
             items: {
                 type: Array,
@@ -106,7 +112,7 @@
             primaryKey: {
                 type: String,
                 required: true,
-                default:'id'
+                default: 'id'
             },
             isBusy: {
                 type: Boolean,
@@ -116,8 +122,8 @@
                 type: Array,
                 default: () => []
             },
-            setRowClass:{
-                type:Function
+            setRowClass: {
+                type: Function
             }
         },
         methods: {
@@ -144,12 +150,11 @@
                 if (this.isSelected(item)) return this.selectedRowClass
             }
         },
-        watch:{
-            selectAll(){
-                if(this.selectAll){
+        watch: {
+            selectAll() {
+                if (this.selectAll) {
                     this.selected = this.items;
-                }
-                else this.selected = [];
+                } else this.selected = [];
 
                 return this.$emit('itemsSelected', this.selected);
             }
