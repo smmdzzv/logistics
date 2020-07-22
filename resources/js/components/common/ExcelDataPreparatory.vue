@@ -8,7 +8,7 @@
             },
             excelFileName: {
                 type: String,
-                default: 'Ajoibot Logistics Export'
+                default: 'Coded Logistics Export'
             }
         },
         data() {
@@ -19,11 +19,11 @@
         },
         methods: {
             prepareExcelColumns() {
-                this.excelColumns = Object.keys(this.fields).map(function (key) {
-                    let value = {};
-                    Object.assign(value, this.fields[key]);
-                    value.field = key;
-                    return value;
+                this.excelColumns = this.fields.filter(f => f.key !== 'index').map(function (field) {
+                    return  {
+                        field: field.key,
+                        label: field.label
+                    };
                 }, this);
             },
             prepareExcelData() {
