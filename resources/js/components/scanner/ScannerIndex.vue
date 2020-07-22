@@ -176,7 +176,7 @@
                 this.name = null
             },
             removeItem(id) {
-                this.items = this.items.filter(i => i.id === id);
+                this.items = this.items.filter(i => i.id !== id);
             }
         },
         watch: {
