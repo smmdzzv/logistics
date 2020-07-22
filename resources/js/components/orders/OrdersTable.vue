@@ -172,7 +172,7 @@
                         sortable: true
                     },
                     {
-                        key: 'placesCount',
+                        key: 'stored_item_infos_count',
                         label: 'Кол-во мест',
                         sortable: true
                     },
@@ -298,7 +298,7 @@
                         });
 
                     this.pagination = response.data;
-                    let orders = this.prepareOrders(response.data.data);
+                    let orders = response.data.data;
                     if (this.flowable)
                         orders.forEach(item => {
                             this.orders.push(item);
@@ -316,14 +316,6 @@
                     hideBusySpinner();
                 })
             },
-            prepareOrders(orders) {
-                if (orders)
-                    for (let i = 0; i < orders.length; i++) {
-                        orders[i].placesCount = orders[i].storedItemInfos.reduce((sum, info) => sum + info.count, 0);
-                    }
-
-                return orders;
-            },
             updateStat() {
                 if (!this.orders)
                     return;
@@ -331,7 +323,7 @@
                 let dummyStatItem = {
                     id: 'dummyStatItem',
                     owner: {code: 'Суммарные данные'},
-                    placesCount: 0,
+                    stored_item_infos_count: 0,
                     totalPrice: 0,
                     totalWeight: 0,
                     totalDiscount: 0,
@@ -339,17 +331,17 @@
                 };
 
                 for (let i = 0; i < this.orders.length; i++) {
-                    dummyStatItem.placesCount += this.orders[i].placesCount;
+                    dummyStatItem.stored_item_infos_count += this.orders[i].stored_item_infos_count;
                     dummyStatItem.totalWeight += this.orders[i].totalWeight;
                     dummyStatItem.totalDiscount += this.orders[i].totalDiscount;
                     dummyStatItem.totalCubage += this.orders[i].totalCubage;
                     dummyStatItem.totalPrice += this.orders[i].totalPrice;
                 }
 
-                dummyStatItem.placesCount = Math.round(dummyStatItem.placesCount * 100) / 100;
-                dummyStatItem.totalWeight = Math.round(dummyStatItem.totalWeight * 100) / 100;
+                dummyStatItem.stored_item_infos_count = Math.round(dummyStatItem.stored_item_infos_count * 100) / 100;
+                dummyStatItem.totalWeight = Math.round(dummyStatItem.totalWeight * 1000) / 1000;
                 dummyStatItem.totalDiscount = Math.round(dummyStatItem.totalDiscount * 100) / 100;
-                dummyStatItem.totalCubage = Math.round(dummyStatItem.totalCubage * 100) / 100;
+                dummyStatItem.totalCubage = Math.round(dummyStatItem.totalCubage * 1000) / 1000;
                 dummyStatItem.totalPrice = Math.round(dummyStatItem.totalPrice * 100) / 100;
 
                 this.clearOrderStat();

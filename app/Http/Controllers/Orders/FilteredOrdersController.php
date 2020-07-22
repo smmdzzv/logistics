@@ -18,10 +18,16 @@ class FilteredOrdersController extends BaseController
         $branches = $this->getBranches()->map(function ($branch) {
             return $branch->id;
         });
-        $query = Order::whereIn('branch_id', $branches)
-            ->with(['owner', 'creator', 'storedItemInfos', 'branch'])
+
+        $query = Order::select([
+            'id', 'totalWeight', 'totalCubage', 'totalPrice', 'totalDiscount', 'created_by_id', 'created_at', 'branch_id', 'owner_id'
+        ])->whereIn('branch_id', $branches)
+            ->with(['owner:id,code,name', 'creator:id,code,name', 'branch:id,name'])
+            ->withCount('storedItemInfos')
             ->latest();
+
         $filter = new OrderFilter(request()->all(), $query);
+
         $query = $filter->filter();
 
         return $query->paginate($this->pagination());
