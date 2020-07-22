@@ -31,13 +31,6 @@ class StoredItemInfoController extends BaseController
         return view('stored.infos.index', compact('branches', 'items'));
     }
 
-    private function hideAttr(array $keys, $model)
-    {
-        foreach ($keys as $key) {
-            unset($model[$key]);
-        }
-    }
-
     public function getClientStat()
     {
         $dateTo = request()->get('dateFrom');
