@@ -11,62 +11,53 @@
                     <div class="text-light col-6 col-md-4 h5">Список товаров</div>
                 </div>
             </div>
-            <div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <div class="form-row">
-                            <div class="col-md-2 cell"> Тип товара</div>
-                            <div class="col-md-2 cell"> Объем</div>
-                            <div class="col-md-2 cell"> Вес</div>
-                            <!--                            <div id="titlePricePerPlaceCount" class="col-md-1 cell"> Цена</div>-->
-                            <!--                            <b-tooltip target="titlePricePerPlaceCount" triggers="hover">-->
-                            <!--                                Цена в расчете на единицу места-->
-                            <!--                            </b-tooltip>-->
-                            <div id="pricePerSingleItem" class="col-md-3 cell">Цена</div>
-                            <b-tooltip target="pricePerSingleItem" triggers="hover">
-                                Цена за единицу товара
-                            </b-tooltip>
-                            <div class="col-md-2 cell"> Сумма</div>
-                            <div class="col-md-1 cell">
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item"
-                        v-for="stored in storedItems"
-                        v-model="storedItems">
-                        <div :key="stored.id" class="form-row">
-                            <div class="col-md-2 cell"> {{stored.item.name}}</div>
-                            <div class="col-md-2 cell"> {{getCubage(stored, true)}} м<sup>3</sup></div>
-                            <div class="col-md-2 cell"> {{getWeight(stored, true)}} кг</div>
-                            <div class="col-md-3 cell"> {{getPriceForOne(stored)}} $</div>
-                            <div class="col-md-2 cell"> {{getPrice(stored)}} $</div>
-                            <div class="col-md-1">
-                                <img @click="editItem(stored)" alt="delete-item" class="icon-btn-sm"
-                                     src="/svg/edit.svg">
-                                <img @click="removeFromList(stored)" alt="delete-item" class="icon-btn-sm"
-                                     src="/svg/delete.svg">
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="list-group-item" v-if="storedItems.length === 0">
-                        Список товаров пока пуст
-                    </li>
-                </ul>
-            </div>
-            <div class="card-footer" v-if="storedItems.length > 0">
-                <div class="form-row">
-                    <div class="col-md-2 cell"> Итого</div>
-                    <div class="col-md-2 cell">{{getTotalCubage()}} м<sup>3</sup></div>
-                    <div class="col-md-2 cell"> {{getTotalWeight()}} кг</div>
-                    <div class="col-md-1 cell"></div>
-                    <div class="col-md-2 cell"></div>
-                    <div class="col-md-2 cell">{{getTotalPrice()}} $</div>
-                    <div class="col-md-1 cell"></div>
-                </div>
-            </div>
+            <table class="table table-striped table-responsive-md">
+                <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Магазин</th>
+                    <th>Товар</th>
+                    <th>Объем</th>
+                    <th>Вес</th>
+                    <th>Кол-во</th>
+                    <th>Цена за ед.</th>
+                    <th>Сумма</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(stored, index) in storedItems">
+                    <td>{{index + 1}}</td>
+                    <td>{{stored.shop}}</td>
+                    <td>{{stored.item.name}}</td>
+                    <td>{{getCubage(stored, true)}} м<sup>3</sup></td>
+                    <td>{{getWeight(stored, true)}} м<sup>3</sup></td>
+                    <td>{{stored.count}}</td>
+                    <td>{{getPriceForOne(stored)}} $</td>
+                    <td>{{getPrice(stored)}} $</td>
+                    <td>
+                        <img @click="editItem(stored)" alt="delete-item" class="icon-btn-sm"
+                             src="/svg/edit.svg">
+                        <img @click="removeFromList(stored)" alt="delete-item" class="icon-btn-sm"
+                             src="/svg/delete.svg">
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{getTotalCubage()}} м<sup>3</sup></td>
+                    <td>{{getTotalWeight()}} кг</td>
+                    <td>{{getTotalCount()}}</td>
+                    <td>{{getAveragePriceForOne()}} $</td>
+                    <td>{{getTotalPrice()}} $</td>
+                    <td></td>
+                </tr>
+                </tfoot>
+            </table>
         </div>
-
     </div>
 </template>
 
@@ -170,6 +161,10 @@
                 let price = this.getPrice(stored) / stored.count;
                 return price.toFixed(2);
             },
+            getAveragePriceForOne() {
+                let average = this.storedItems.reduce((sum, item) => sum + Number(this.getPriceForOne(item)), 0) / this.storedItems.length;
+                return average.toFixed(2);
+            },
             getTotalPrice() {
                 let sum = 0;
                 for (let stored of this.storedItems) {
@@ -188,7 +183,7 @@
                     let weight = this.getWeight(stored, false);
                     totalWeight += weight;
                 }
-                return totalWeight.toFixed(2);
+                return totalWeight.toFixed(3);
             },
             getTotalCubage() {
                 let totalCubage = 0;
@@ -196,8 +191,11 @@
                     let cubage = this.getCubage(stored, false);
                     totalCubage += cubage;
                 }
-                return totalCubage.toFixed(2);
-            }
+                return totalCubage.toFixed(3);
+            },
+            getTotalCount() {
+                return this.storedItems.reduce((sum, item) => sum + item.count, 0)
+            },
         },
         components: {
             'StoredItemBox': require('../stored/StoredItemBox').default
