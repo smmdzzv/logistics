@@ -306,18 +306,18 @@
             getTotalCubage(item) {
                 if (item.type === 'dummy')
                     return item.totalCubage;
-                return item.totalCubage = Math.round(item.cubage * item.groupedStoredItemsCount * 100) / 100
+                return item.totalCubage = Math.round(item.cubage * item.groupedStoredItemsCount * 1000) / 1000
             },
             getTotalWeight(item) {
                 if (item.type === 'dummy')
                     return item.totalWeight;
-                return item.totalWeight = Math.round(item.weight * item.groupedStoredItemsCount * 100) / 100
+                return item.totalWeight = Math.round(item.weight * item.groupedStoredItemsCount * 1000) / 1000
             },
             getWeightPerCube(item) {
                 if (item.type === 'dummy')
                     return item.weightPerCube;
                 if (item.totalCubage > 0)
-                    return item.weightPerCube = Math.round(item.totalWeight / item.totalCubage * 100) / 100
+                    return item.weightPerCube = Math.round(item.totalWeight / item.totalCubage * 1000) / 1000
             },
             getItemsLength(item) {
                 if (item.type === 'dummy')
