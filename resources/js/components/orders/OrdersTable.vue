@@ -212,6 +212,10 @@
                         sortable: true
                     },
                     {
+                        key: 'branch.name',
+                        label: 'Филиал'
+                    },
+                    {
                         key: 'actions',
                         label: '',
                     }

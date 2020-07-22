@@ -70,7 +70,7 @@ class Order extends BaseModel
 
     public function branch()
     {
-        return $this->belongsTo(Branch::class, 'branchId');
+        return $this->belongsTo(Branch::class);
     }
 
 //    public function payment()
