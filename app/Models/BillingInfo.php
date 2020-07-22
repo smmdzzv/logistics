@@ -98,9 +98,9 @@ class BillingInfo extends BaseModel
 
     public function roundData()
     {
-        $this->totalWeight = round($this->totalWeight, 2);
-        $this->totalCubage = round($this->totalCubage, 2);
-        $this->weightPerCube = round($this->weightPerCube, 2);
+        $this->totalWeight = round($this->totalWeight, 3);
+        $this->totalCubage = round($this->totalCubage, 3);
+        $this->weightPerCube = round($this->weightPerCube, 3);
         $this->pricePerItem = round($this->pricePerItem, 2);
         $this->discountPerCube = round($this->discountPerCube, 2);
         $this->totalDiscount = round($this->totalDiscount, 2);

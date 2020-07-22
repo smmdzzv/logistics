@@ -82,10 +82,10 @@ class Order extends BaseModel
 //        return $this->hasMany(StoredItemsSelection::class);
 //    }
 
-    public function orderRemovedItems()
-    {
-        return $this->hasMany(OrderRemovedItem::class);
-    }
+//    public function orderRemovedItems()
+//    {
+//        return $this->hasMany(OrderRemovedItem::class);
+//    }
 
     public function updateStat(Array $billings)
     {
@@ -113,8 +113,8 @@ class Order extends BaseModel
 
     public function roundStat()
     {
-        $this->totalCubage = round($this->totalCubage, 2);
-        $this->totalWeight = round($this->totalWeight, 2);
+        $this->totalCubage = round($this->totalCubage, 3);
+        $this->totalWeight = round($this->totalWeight, 3);
         $this->totalPrice = round($this->totalPrice, 2);
         $this->totalDiscount = round($this->totalDiscount, 2);
         $this->totalCount = round($this->totalCount, 2);

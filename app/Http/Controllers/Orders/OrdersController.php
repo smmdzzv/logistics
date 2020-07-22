@@ -55,8 +55,8 @@ class OrdersController extends BaseController
             'storedItemInfos.tariff',
             'storedItemInfos.storedItems',
             'storedItemInfos.branch',
-            'orderRemovedItems.storedItemInfo.item',
-            'orderRemovedItems.storedItemInfo.deletedBy',
+//            'orderRemovedItems.storedItemInfo.item',
+//            'orderRemovedItems.storedItemInfo.deletedBy',
             'owner'
         ]);
         return view('orders.show', compact('order'));
@@ -91,7 +91,7 @@ class OrdersController extends BaseController
             'storedItemInfos.tariff',
             'storedItemInfos.branch',
             'storedItemInfos.storedItems',
-            'orderRemovedItems.storedItemInfo.item',
+//            'orderRemovedItems.storedItemInfo.item',
             'owner'
         ]);
 

@@ -120,7 +120,7 @@ class OrderService
 
             $info->billingInfo()->delete();
         })->pipe(function (Collection $storedItemInfos) use ($orderDto, $order) {
-            $this->createBillingInfos($order, $storedItemInfos, $orderDto);
+            $this->createBillingInfos($storedItemInfos, $orderDto);
             return $storedItemInfos;
         })->flatMap(function (StoredItemInfo $info) {
             return $this->itemService->massUpdateFromInfo($info);
@@ -132,7 +132,7 @@ class OrderService
         });
     }
 
-    private function createBillingInfos(Order $order, Collection $storedItemInfos, OrderDto $dto): Collection
+    private function createBillingInfos(Collection $storedItemInfos, OrderDto $dto): Collection
     {
         return $this->billingInfoService->massStore($storedItemInfos, $dto->customPrices);
     }
@@ -153,7 +153,7 @@ class OrderService
     private function createStoredItemsRelations(Collection $storedItemInfos, OrderDto $orderDto, Order $order)
     {
         $storedItemInfos->pipe(function (Collection $storedItemInfos) use ($orderDto, $order) {
-            $this->createBillingInfos($order, $storedItemInfos, $orderDto);
+            $this->createBillingInfos($storedItemInfos, $orderDto);
             return $storedItemInfos;
         })->flatMap(function (StoredItemInfo $info) {
             return $this->itemService->massStoreFromInfo($info);
