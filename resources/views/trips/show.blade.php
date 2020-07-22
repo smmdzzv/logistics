@@ -56,6 +56,12 @@
 
                     <p>Длина маршрута до пункта назначения: <span class="font-weight-bold">{{$trip->routeLengthToDestination}} км</span>
                     </p>
+                    <p> Маршрут: <span class="font-weight-bold">
+                            {{$trip->departureBranch->name}} - {{$trip->destinationBranch->name}}
+                            @if($trip->routeLengthFromDestination > 0)
+                                - {{$trip->departureBranch->name}}
+                            @endif
+                        </span></p>
                     <p>Длина обратного пути: <span
                             class="font-weight-bold">{{$trip->routeLengthFromDestination}} км</span></p>
                     <p>Дата отправления: <span class="font-weight-bold"
