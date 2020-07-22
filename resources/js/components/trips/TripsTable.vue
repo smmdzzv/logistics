@@ -13,9 +13,15 @@
         </template>
 
         <template v-slot:cell(buttons)="{item}">
-            <a class="btn" :href="getDetailsUrl(item)">
-                <img class="icon-btn-sm" src="/svg/file.svg">
-            </a>
+            <div class="d-flex">
+                <a class="btn" :href="getDetailsUrl(item)">
+                    <img class="icon-btn-sm" src="/svg/file.svg">
+                </a>
+
+                <a class="btn ml-1" :href="`/trips/${item.id}/edit`">
+                    <img class="icon-btn-sm" src="/svg/edit.svg">
+                </a>
+            </div>
         </template>
 
         <template v-slot:cell(departureDate)="{item}">
