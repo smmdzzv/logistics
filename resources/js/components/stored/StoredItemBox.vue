@@ -357,6 +357,7 @@
                 let stored = JSON.parse(JSON.stringify(this.storedItem));
                 this.clearForm(null);
                 this.onStoredItemAdded(stored);
+                $('#shop').focus();
             },
 
             //Custom Price
