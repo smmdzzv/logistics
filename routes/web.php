@@ -112,7 +112,7 @@ Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController')
 //StoredItemInfo
 Route::get('/stored-item-info', 'StoredItemInfo\StoredItemInfoController@index')->name('stored-item-infos.index');
 Route::get('/stored-item-info/statistics', 'StoredItemInfo\StoredItemInfoController@getClientStat');
-Route::get('/stored-item-info/filtered', 'StoredItemInfo\StoredItemInfoController@storedItemInfos');
+Route::get('/stored-item-info/filtered', 'StoredItemInfo\FilteredStoredItemInfoController@index');
 Route::resource('status-change-histories', 'StoredItems\ItemsStatusChangeHistoriesController')
     ->parameters(['status-change-histories' => 'history'])->only('index', 'show');
 

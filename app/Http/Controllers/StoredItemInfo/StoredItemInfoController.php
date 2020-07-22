@@ -31,70 +31,83 @@ class StoredItemInfoController extends BaseController
         return view('stored.infos.index', compact('branches', 'items'));
     }
 
-    private function prepareQuery()
-    {
-        $query = StoredItemInfo::with(
-            'owner:id,code',
-            'item:id,name',
-            'tariff:id,name',
-            'billingInfo',
-            'storedItems',
-            'storedItems.storageHistory.storage'
-        )
-            ->whereHas('storedItems');
-
-        $filter = new StoredItemInfoFilter(request()->all(), $query);
-        return $filter->filter();
-    }
+//    private function prepareQuery()
+//    {
+//        $query = StoredItemInfo::with(
+//            'owner:id,code',
+//            'item:id,name',
+//            'tariff:id,name',
+//            'billingInfo',
+//            'storedItems',
+//            'storedItems.storageHistory.storage'
+//        )
+//            ->whereHas('storedItems');
+//
+//        $filter = new StoredItemInfoFilter(request()->all(), $query);
+//        return $filter->filter();
+//    }
 
     //TODO count relations and group on server side if needed
     public function storedItemInfos()
     {
-        $query = $this->prepareQuery();
-        $paginator = $query->paginate($this->pagination());
-        $paginator->getCollection()->transform(function ($value) {
-            foreach ($value->storedItems as $storedItem) {
-                //TODO refactor -> create methods in BaseModel
-                unset($storedItem->updated_at);
-                unset($storedItem->deleted_at);
-                unset($storedItem->created_by_id);
-                unset($storedItem->updated_by_id);
-                unset($storedItem->deleted_by_id);
+//        $query = $this->prepareQuery();
+//        $paginator = $query->paginate($this->pagination());
+//        $paginator->getCollection()->transform(function ($value) {
+//            foreach ($value->storedItems as $storedItem) {
+//                //TODO refactor -> create methods in BaseModel
+//                unset($storedItem->updated_at);
+//                unset($storedItem->deleted_at);
+//                unset($storedItem->created_by_id);
+//                unset($storedItem->updated_by_id);
+//                unset($storedItem->deleted_by_id);
+//
+//                if ($storedItem->storageHistory) {
+//                    unset($storedItem->storageHistory->stored_item_id);
+//                    unset($storedItem->storageHistory->registeredById);
+//                    unset($storedItem->storageHistory->deletedById);
+//                    unset($storedItem->storageHistory->storage_id);
+//                    unset($storedItem->storageHistory->created_at);
+//                    unset($storedItem->storageHistory->updated_at);
+//                    unset($storedItem->storageHistory->deleted_at);
+//                    unset($storedItem->storageHistory->created_by_id);
+//                    unset($storedItem->storageHistory->updated_by_id);
+//                    unset($storedItem->storageHistory->deleted_by_id);
+//                    unset($storedItem->storageHistory->storage->branch);
+//
+//                    unset($storedItem->storageHistory->storage->updated_at);
+//                    unset($storedItem->storageHistory->storage->deleted_at);
+//                    unset($storedItem->storageHistory->storage->created_by_id);
+//                    unset($storedItem->storageHistory->storage->updated_by_id);
+//                    unset($storedItem->storageHistory->storage->deleted_by_id);
+//                    unset($storedItem->storageHistory->storage->branch_id);
+//                }
+//
+//                unset($storedItem->stored_item_info_id);
+//                unset($storedItem->updated_at);
+//                unset($storedItem->deleted_at);
+//                unset($storedItem->created_by_id);
+//                unset($storedItem->updated_by_id);
+//                unset($storedItem->deleted_by_id);
+//            };
+//
+//            return $value;
+//        });
 
-                if ($storedItem->storageHistory)
-                {
-                    unset($storedItem->storageHistory->stored_item_id);
-                    unset($storedItem->storageHistory->registeredById);
-                    unset($storedItem->storageHistory->deletedById);
-                    unset($storedItem->storageHistory->storage_id);
-                    unset($storedItem->storageHistory->created_at);
-                    unset($storedItem->storageHistory->updated_at);
-                    unset($storedItem->storageHistory->deleted_at);
-                    unset($storedItem->storageHistory->created_by_id);
-                    unset($storedItem->storageHistory->updated_by_id);
-                    unset($storedItem->storageHistory->deleted_by_id);
-                    unset($storedItem->storageHistory->storage->branch);
+//        return $paginator;
+        $query = StoredItemInfo::select([
+            'id', 'weight', 'width', 'height', 'length', 'count', 'owner_id', 'item_id', 'tariff_id', 'created_at', 'shop'
+        ])->with(
+            'storedItems:id,stored_item_info_id',
+            'storedItems.storageHistory:id,stored_item_id,storage_id',
+            'storedItems.storageHistory.storage:id,name',
+            'owner:id,code',
+            'item:id,name',
+            'tariff:id,name',
+            'billingInfo:id,stored_item_info_id,pricePerItem'
+        )->whereHas('storedItems');
 
-                    unset($storedItem->storageHistory->storage->updated_at);
-                    unset($storedItem->storageHistory->storage->deleted_at);
-                    unset($storedItem->storageHistory->storage->created_by_id);
-                    unset($storedItem->storageHistory->storage->updated_by_id);
-                    unset($storedItem->storageHistory->storage->deleted_by_id);
-                    unset($storedItem->storageHistory->storage->branch_id);
-                }
-
-                unset($storedItem->stored_item_info_id);
-                unset($storedItem->updated_at);
-                unset($storedItem->deleted_at);
-                unset($storedItem->created_by_id);
-                unset($storedItem->updated_by_id);
-                unset($storedItem->deleted_by_id);
-            };
-
-            return $value;
-        });
-
-        return $paginator;
+        $filter = new StoredItemInfoFilter(request()->all(), $query);
+        return $filter->filter()->paginate($this->pagination());
     }
 
     private function hideAttr(array $keys, $model)

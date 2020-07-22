@@ -22,7 +22,7 @@ use Illuminate\Support\Collection;
  * @property double length
  * @property string item_id
  * @property string branch_id
- * @property string ownerId
+ * @property string owner_id
  * @property Item item
  * @property double count
  * @property BillingInfo billingInfo
