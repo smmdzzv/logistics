@@ -274,7 +274,7 @@
                 fields: [
                     {
                         key: 'number',
-                        label: '№'
+                        label: 'Чек'
                     },
                     {
                         key: 'created_at',
