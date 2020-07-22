@@ -55,8 +55,11 @@
                         {{`${item.info.width}x${item.info.height}x${item.info.length}`}}
                     </template>
 
-                    <template v-slot:cell(buttons)="item">
-                        <a href="#" @click="removeItem(item.id)">
+                    <template v-slot:cell(actions)="{item}">
+                        <a :href="`/stored-items/${item.id}`">
+                            <img src="/svg/file.svg" class="icon-btn-sm">
+                        </a>
+                        <a class="ml-1" href="#" @click="removeItem(item.id)">
                             <img src="/svg/delete.svg" class="icon-btn-sm">
                         </a>
                     </template>
@@ -132,7 +135,7 @@
                         label: 'Владелец'
                     },
                     {
-                        key: 'buttons',
+                        key: 'actions',
                         label: ''
                     }
                 ],
