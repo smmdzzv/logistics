@@ -175,8 +175,12 @@
 
                     <div class="form-group col-md-3 col-lg-2">
                         <label class="col-form-label text-md-right" for="branch">Филиал</label>
-                        <input class="form-control form-control-sm" disabled id="branch" name="branch"
-                               v-model="branch.name">
+                        <!--                        <input class="form-control form-control-sm" disabled id="branch" name="branch"-->
+                        <!--                               v-model="branch.name">-->
+                        <select class="form-control form-control-sm" v-model="storedItem.branch">
+                            <option disabled :value="null"> -- Выберите филиал --</option>
+                            <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
+                        </select>
                     </div>
                 </b-form-row>
 
@@ -224,7 +228,7 @@
     export default {
         name: "StoredItemBox",
         props: {
-            branch: {
+            branches: {
                 type: Object,
                 required: false,
                 default: function () {
@@ -254,7 +258,7 @@
                     length: null,
                     weight: null,
                     count: null,
-                    branch: this.branch,
+                    branch: this.branches[0],
                     item: null,
                     tariff: null,
                     // placeCount: null,
@@ -467,7 +471,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>

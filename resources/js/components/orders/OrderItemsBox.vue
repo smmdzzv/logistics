@@ -1,6 +1,6 @@
 <template>
     <div>
-        <stored-item-box :branch="user.branch"
+        <stored-item-box :branches="branches"
                          :providedStoredItemInfo="storedItemInfoToEdit"
                          :onStoredItemAdded="onStoredItemAdded"
                          :tariffs="tariffs"
@@ -74,7 +74,8 @@
         props: {
             user: null,
             tariffs: Array,
-            order: Object
+            order: Object,
+            branches: Array
         },
         data() {
             return {

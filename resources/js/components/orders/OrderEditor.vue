@@ -42,6 +42,7 @@
         <order-items-box :tariffs="tariffs"
                          :order="order"
                          :user="user"
+                         :branches="branches"
                          v-on:onStoredItemsChange="onStoredItemsChange"/>
 
         <div class="row">
@@ -69,7 +70,8 @@
         props: {
             user: null,
             tariffs: Array,
-            order: Object
+            order: Object,
+            branches: Array
         },
         data() {
             return {

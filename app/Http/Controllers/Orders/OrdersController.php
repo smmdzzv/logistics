@@ -66,7 +66,8 @@ class OrdersController extends BaseController
     {
         $user = auth()->user();
         $tariffs = $this->getTariffs();
-        return view('orders.create', compact('user', 'tariffs'));
+        $branches = $this->getBranches();
+        return view('orders.create', compact('user', 'tariffs', 'branches'));
     }
 
     public function store(OrderRequest $request)
@@ -96,8 +97,8 @@ class OrdersController extends BaseController
 
         $user = auth()->user();
         $tariffs = $this->getTariffs();
-
-        return view('orders.edit', compact('order', 'user', 'tariffs'));
+        $branches = $this->getBranches();
+        return view('orders.edit', compact('order', 'user', 'tariffs', 'branches'));
     }
 
     public function update($order, OrderRequest $request)
