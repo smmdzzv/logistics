@@ -31,7 +31,7 @@
                     <td>{{stored.shop}}</td>
                     <td>{{stored.item.name}}</td>
                     <td>{{getCubage(stored, true)}} м<sup>3</sup></td>
-                    <td>{{getWeight(stored, true)}} м<sup>3</sup></td>
+                    <td>{{getWeight(stored, true)}} кг</td>
                     <td>{{stored.count}}</td>
                     <td>{{getPriceForOne(stored)}} $</td>
                     <td>{{getPrice(stored)}} $</td>
@@ -99,13 +99,13 @@
                 if (!stored)
                     return null;
                 let weight = stored.totalWeight = stored.weight * stored.count;
-                return fixedResult ? weight.toFixed(2) : weight;
+                return fixedResult ? weight.toFixed(3) : weight;
             },
             getCubage(stored, fixedResult) {
                 if (!stored)
                     return null;
                 let cubage = stored.totalCubage = stored.width * stored.length * stored.height * stored.count;
-                return fixedResult ? cubage.toFixed(2) : cubage;
+                return fixedResult ? cubage.toFixed(3) : cubage;
             },
             removeFromList(stored) {
                 this.storedItems = jQuery.grep(this.storedItems, function (value) {
