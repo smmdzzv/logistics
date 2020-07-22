@@ -10,6 +10,7 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
+                        <th scope="col">Дата</th>
                         <th scope="col">Из</th>
                         <th scope="col">В</th>
                         <th scope="col">Курс</th>
@@ -18,6 +19,7 @@
                     <tbody>
                     @foreach($rates as $rate)
                         <tr>
+                            <td><span v-luxon="{ value: '{{$rate->created_at}}'}"/></td>
                             <td>{{$rate->fromCurrency->name}}</td>
                             <td>{{$rate->toCurrency->name}}</td>
                             <td>{{$rate->coefficient}}</td>
