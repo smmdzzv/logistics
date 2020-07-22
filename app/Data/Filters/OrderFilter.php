@@ -18,7 +18,7 @@ class OrderFilter extends Filter
         $filters = $this->filters;
 
         if (isset($filters['branch']) && auth()->user()->hasRole('admin'))
-            $this->query->where('branchId', $filters['branch']);
+            $this->query->where('branch_id', $filters['branch']);
 
         if (isset($filters['client']))
             $this->query->whereHas('owner', function ($query) use ($filters) {
