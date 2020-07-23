@@ -13,6 +13,12 @@ class PaymentFilter extends Filter
     {
         $filters = $this->filters;
 
+        if (isset($filters['branch'])) {
+            $this->query->where('branch_id',
+                auth()->user()->hasRole('admin') ? $filters['branch'] : auth()->user()->branch->id
+            );
+        }
+
         if (!auth()->user()->hasRole('admin'))
             $this->query->where('payer_id', auth()->user()->branch->id)
                 ->orWhere('payee_id', auth()->user()->branch->id);
