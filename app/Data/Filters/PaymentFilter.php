@@ -13,28 +13,7 @@ class PaymentFilter extends Filter
     {
         $filters = $this->filters;
 
-        if (isset($filters['branch'])) {
-            $this->query->where('branch_id',
-                auth()->user()->hasRole('admin') ? $filters['branch'] : auth()->user()->branch->id
-            );
-        }
-
-        if (!auth()->user()->hasRole('admin'))
-            $this->query->where('payer_id', auth()->user()->branch->id)
-                ->orWhere('payee_id', auth()->user()->branch->id);
-        else {
-            if (isset($filters['userPayer']))
-                $this->query->where('payer_id', $filters['userPayer']);
-
-            if (isset($filters['userPayee']))
-                $this->query->where('payee_id', $filters['userPayee']);
-
-            if (isset($filters['branchPayer']))
-                $this->query->orWhere('payer_id', $filters['branchPayer']);
-
-            if (isset($filters['branchPayee']))
-                $this->query->orWhere('payee_id', $filters['branchPayee']);
-        }
+        $this->filterByPayerAndPayee();
 
         if (isset($filters['item']))
             $this->query->whereHas('paymentItem', function (Builder $query) use ($filters) {
@@ -73,6 +52,53 @@ class PaymentFilter extends Filter
         if (isset($filters['status']))
             $this->query->where('status', $filters['status']);
 
+
+        $this->filterByBranch();
+
         return $this->query;
+    }
+
+    private function filterByBranch()
+    {
+        if (isset($this->filters['branch'])) {
+            $this->query->where('branch_id',
+                auth()->user()->hasRole('admin') ? $this->filters['branch'] : auth()->user()->branch->id
+            );
+        }
+    }
+
+    private function filterByPayerAndPayee()
+    {
+        if (!auth()->user()->hasRole('admin')) {
+            $branchId = auth()->user()->branch->id;
+
+            if (!isset($this->filters['userPayer']) && !isset($this->filters['userPayee']))
+                $this->query->where('payer_id', $branchId)->orWhere('payee_id', $branchId);
+
+            if (isset($this->filters['userPayer'])) {
+                $this->query->where('payer_id', $this->filters['userPayer'])
+                    ->where('payer_type', 'user')
+                    ->where('payee_id', $branchId);
+            }
+
+            if (isset($this->filters['userPayee'])) {
+                $this->query->where('payee_id', $this->filters['userPayee'])
+                    ->where('payee_type', 'user')
+                    ->where('payer_id', $branchId);
+            }
+
+        } else {
+            if (isset($this->filters['userPayer']))
+                $this->query->where('payer_id', $this->filters['userPayer']);
+
+            if (isset($this->filters['userPayee']))
+                $this->query->where('payee_id', $this->filters['userPayee']);
+
+            if (isset($this->filters['branchPayer']))
+                $this->query->where('payer_id', $this->filters['branchPayer']);
+
+            if (isset($this->filters['branchPayee']))
+                $this->query->where('payee_id', $this->filters['branchPayee']);
+        }
     }
 }
