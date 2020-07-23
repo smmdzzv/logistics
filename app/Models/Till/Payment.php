@@ -5,11 +5,9 @@ namespace App\Models\Till;
 use App\Models\BaseModel;
 use App\Models\Branch;
 use App\Models\Currency;
-use App\Models\Order;
-use App\Models\Order\StoredItemsSelection;
 use App\Models\StoredItems\ItemsSelection;
-use App\Models\StoredItems\StoredItem;
 use App\Models\Users\Client;
+use App\Services\Client\ClientExpensesReportService;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -213,7 +211,7 @@ class Payment extends BaseModel
     {
         $dateFrom = Carbon::now()->toDateString();
         $dateTo = Carbon::now()->addDay()->toDateString();
-        $lastPayment = Payment::select('number')
+        $lastPayment = Payment::select('id', 'number', 'branch_id')
             ->where('branch_id', $this->branch_id)
             ->where('created_at', '>=', $dateFrom)
             ->where('created_at', '<', $dateTo)
@@ -236,10 +234,12 @@ class Payment extends BaseModel
         if ($this->payer_type === 'user') {
             $client = Client::findOrFail($this->payer->id);
 
-//            $stat = $client->getExpensesReport(Carbon::now()->addDay(), null); TODO this
+            $service = new ClientExpensesReportService();
 
-//            $this->placesLeft = $stat->placesCountAtStart;
-//            $this->clientDebt = $stat->debtAtStart;
+            $stat = $service->generate($client, Carbon::now()->addDay(), null);
+
+            $this->placesLeft = $stat->placesCountAtStart;
+            $this->clientDebt = $stat->debtAtStart;
         }
     }
 }
