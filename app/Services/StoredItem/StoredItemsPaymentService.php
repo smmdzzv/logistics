@@ -44,7 +44,7 @@ class StoredItemsPaymentService
         }
 
         $payment->client_items_selection_id = $clientSelection->id;
-
+        $payment->fillExtras();
         $payment->save();
 
 //

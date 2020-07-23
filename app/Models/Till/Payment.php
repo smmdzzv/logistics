@@ -212,6 +212,7 @@ class Payment extends BaseModel
         $dateFrom = Carbon::now()->toDateString();
         $dateTo = Carbon::now()->addDay()->toDateString();
         $lastPayment = Payment::select('id', 'number', 'branch_id')
+            ->where('id', '!=', $this->id)
             ->where('branch_id', $this->branch_id)
             ->where('created_at', '>=', $dateFrom)
             ->where('created_at', '<', $dateTo)
