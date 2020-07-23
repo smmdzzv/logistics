@@ -27,7 +27,7 @@ class ItemsSelection extends BaseModel
 
     public function payments()
     {
-        return $this->hasMany(Payment::class);
+        return $this->hasMany(Payment::class, 'client_items_selection_id');
     }
 
     public function user(){

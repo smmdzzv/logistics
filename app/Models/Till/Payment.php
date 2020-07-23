@@ -204,7 +204,7 @@ class Payment extends BaseModel
 
     public function clientItemsSelection()
     {
-        return $this->belongsTo(ItemsSelection::class);
+        return $this->belongsTo(ItemsSelection::class, 'client_items_selection_id');
     }
 
     public function fillExtras()
