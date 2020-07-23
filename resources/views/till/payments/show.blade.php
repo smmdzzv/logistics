@@ -98,7 +98,7 @@
                                             <span>{{$storedItem->info->billingInfo->pricePerItem}} $</span>
                                         </div>
                                         <div class="col-md-1">
-                                            <a href="{{route('stored.show', $storedItem->id)}}">
+                                            <a href="{{route('stored-items.show', $storedItem->id)}}">
                                                 <img src="/svg/file.svg" class="icon-btn-sm">
                                             </a>
                                         </div>
