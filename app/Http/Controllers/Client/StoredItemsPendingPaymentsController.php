@@ -31,7 +31,7 @@ class StoredItemsPendingPaymentsController extends BaseController
     {
         $storedItems = StoredItem::with('info.billingInfo')
             ->whereIn('id', \request()->get('storedItems'))
-            ->unpaid()
+//            ->unpaid()
             ->get();
 
         $ownerAccount = $client->accounts()->dollarAccount();
@@ -78,6 +78,6 @@ class StoredItemsPendingPaymentsController extends BaseController
             'comment' => 'Пополнение баланса пользователя для оплаты заказа',
         ]);
 
-        return $this->paymentService->store($paymentDto, $client, $ownerAccount, $storedItems);
+        return $this->paymentService->store($paymentDto, $client, $ownerAccount, $storedItems, false);
     }
 }

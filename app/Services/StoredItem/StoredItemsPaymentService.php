@@ -24,7 +24,7 @@ class StoredItemsPaymentService
         $this->paymentService = $paymentService;
     }
 
-    public function store(PaymentDto $dto, Client $client, Account $account, Collection $storedItems): Payment
+    public function store(PaymentDto $dto, Client $client, Account $account, Collection $storedItems, bool $updateBalances = true): Payment
     {
         $payment = $this->paymentService->store($dto);
 
@@ -35,13 +35,17 @@ class StoredItemsPaymentService
         /** @var ItemsSelection $clientSelection */
         $clientSelection->storedItems()->sync($storedItems);
 
-        $payment->client_items_selection_id = $clientSelection->id;
-        $payment->clientDebt -= $payment->billAmount;
-        $payment->placesLeft -= $storedItems->count();
-        $payment->save();
+        if($updateBalances){
+            $account->balance -= $payment->billAmount;
+            $account->save();
 
-        $account->balance -= $payment->billAmount;
-        $account->save();
+            $payment->clientDebt -= $payment->billAmount;
+            $payment->placesLeft -= $storedItems->count();
+        }
+
+        $payment->client_items_selection_id = $clientSelection->id;
+
+        $payment->save();
 
 //
 //        $storedItems->each(function ($item) use ($orderPayment) {
