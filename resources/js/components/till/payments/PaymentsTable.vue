@@ -209,6 +209,7 @@
 
 <script>
     import TableCardProps from '../../common/TableCardProps.vue'
+    import {hideBusySpinner, showBusySpinner} from "../../../tools";
 
     export default {
         name: "PaymentsTable",
@@ -287,7 +288,7 @@
                         sortable: true
                     },
                     {
-                        key: 'paymentItem.title',
+                        key: 'payee.name',
                         label: 'Получатель',
                         sortable: true
                     },
@@ -319,6 +320,11 @@
                     {
                         key: 'status',
                         label: 'Статус',
+                        sortable: true
+                    },
+                    {
+                        key: 'branch.name',
+                        label: 'Филиал',
                         sortable: true
                     },
                     {
@@ -368,15 +374,12 @@
             },
             payerSelected(user) {
                 this.selectedUserPayer = user;
-                // this.getFilteredItems()
             },
             payeeSelected(user) {
                 this.selectedUserPayee = user;
-                // this.getFilteredItems()
             },
             cashierSelected(cashier) {
                 this.selectedCashier = cashier;
-                // this.getFilteredItems()
             },
             getFilteredItems() {
                 this.items = [];
@@ -402,11 +405,7 @@
                             if (page === 1) {
                                 this.cashReport = response.data.data.cashReport;
                             }
-                        }
-                            // response.data.data.forEach(item => {
-                            //     this.items.push(item);
-                        // });
-                        else
+                        } else
                             this.items = response.data.data;
                     })
                     .catch(e => {
@@ -439,7 +438,7 @@
                     })
                     .then(confirm => {
                         if (confirm) {
-                            tShowSpinner();
+                            showBusySpinner();
                             axios.delete('/payment/' + item.id)
                                 .then(_ => {
                                     this.items = [];
@@ -452,7 +451,7 @@
                         // An error occurred
                     })
                     .finally(_ => {
-                        tHideSpinner();
+                        hideBusySpinner();
                     })
             },
             rowClass(item) {
@@ -461,41 +460,6 @@
 
             }
         },
-        // watch: {
-        //     selectedBranch() {
-        //         this.getFilteredItems();
-        //     },
-        //     selectedBranchPayee() {
-        //         this.getFilteredItems();
-        //     },
-        //     selectedBranchPayer() {
-        //         this.getFilteredItems();
-        //     },
-        //     selectedType() {
-        //         this.getFilteredItems();
-        //     },
-        //     selectedPaymentItem() {
-        //         this.getFilteredItems();
-        //     },
-        //     selectedPaidCurrency() {
-        //         this.getFilteredItems();
-        //     },
-        //     dateFrom() {
-        //         this.getFilteredItems();
-        //     },
-        //     dateTo() {
-        //         this.getFilteredItems();
-        //     },
-        //     minPaidAmount() {
-        //         this.getFilteredItems();
-        //     },
-        //     maxPaidAmount() {
-        //         this.getFilteredItems();
-        //     },
-        //     selectedStatus() {
-        //         this.getFilteredItems()
-        //     }
-        // },
         components: {
             'MainPaginator':
             require('../../common/MainPaginator.vue').default,
