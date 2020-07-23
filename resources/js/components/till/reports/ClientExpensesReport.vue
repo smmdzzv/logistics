@@ -52,32 +52,40 @@
                 dateTo: null,
                 client: {code: ''},
                 reportData: [],
-                fields: {
-                    date: {
+                fields: [
+                    {
+                        key: 'date',
                         label: 'Дата'
                     },
-                    'in.amount': {
+                    {
+                        key: 'in.amount',
                         label: 'Пост. сумма'
                     },
-                    'in.placesCount': {
+                    {
+                        key: 'in.placesCount',
                         label: 'Пост. кол-во мест'
                     },
-                    'in.discount': {
+                    {
+                        key: 'in.discount',
                         label: 'Скидка'
                     },
-                    'out.amount': {
+                    {
+                        key: 'out.amount',
                         label: 'Оплата сумма'
                     },
-                    'out.placesCount': {
+                    {
+                        key: 'out.placesCount',
                         label: 'Оплата кол-во мест'
                     },
-                    placesLeft: {
+                    {
+                        key: 'placesLeft',
                         label: 'Остаток кол-ва мест'
                     },
-                    debt: {
+                    {
+                        key: 'debt',
                         label: 'Задолженность'
                     }
-                }
+                ]
             }
         },
         methods: {

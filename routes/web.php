@@ -96,7 +96,7 @@ Route::get('/pending-payments', 'Till\Payments\PendingPaymentsController@index')
 Route::get('/filtered-payments', 'Till\Payments\FilteredPaymentsController@index');
 
 Route::get('/reports/expenses', 'Till\Reports\ClientExpenseReportsController@index')->name('expense-report.index');
-Route::get('/reports/expenses/generate', 'Till\Reports\ClientExpenseReportsController@generateReport');
+Route::get('/reports/expenses/generate', 'Till\Reports\ClientExpenseReportsController@show');
 
 Route::get('/payments/all', 'Till\Payments\PaymentsController@all')->name('payments.all');
 Route::post('/payment', 'Till\Payments\PaymentsController@storeOrUpdate');

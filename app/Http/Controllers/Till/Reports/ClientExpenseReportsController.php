@@ -6,13 +6,18 @@ namespace App\Http\Controllers\Till\Reports;
 
 use App\Http\Controllers\Controller;
 use App\Models\Users\Client;
+use App\Services\Client\ClientExpensesReportService;
 use Carbon\Carbon;
 
 class ClientExpenseReportsController extends Controller
 {
-    public function __construct()
+    private ClientExpensesReportService $service;
+
+    public function __construct(ClientExpensesReportService $service)
     {
         $this->middleware('roles.allow:admin,cashier,manager');
+
+        $this->service = $service;
     }
 
     public function index()
@@ -20,10 +25,10 @@ class ClientExpenseReportsController extends Controller
         return view('till.reports.index');
     }
 
-    public function generateReport()
+    public function show()
     {
         $client = Client::findOrFail(request()->get('client'));
 
-        return $client->getExpensesReport(request()->get('dateFrom'), request()->get('dateTo'))->toJson();
+        return $this->service->generate($client, request()->get('dateFrom'), request()->get('dateTo'))->toJson();
     }
 }

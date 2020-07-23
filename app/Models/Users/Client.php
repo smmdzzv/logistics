@@ -44,6 +44,13 @@ class Client extends RoleUser
             ->orWhere('status', null);
     }
 
+    public function orderPayments()
+    {
+        return $this->outgoingPayments()->whereHas('paymentItem', function (Builder $query) {
+            return $query->where('title', 'Списание с баланса');
+        });
+    }
+
     public function getOrdersStatistics($dateFrom, $dateTo)
     {
         $orders = $this->orders()
@@ -71,60 +78,15 @@ class Client extends RoleUser
         }
 
         return [
-            'totalWeight' => round($totalWeight, 2),
-            'totalCubage' => round($totalCubage, 2),
+            'totalWeight' => round($totalWeight, 3),
+            'totalCubage' => round($totalCubage, 3),
             'totalDiscount' => round($totalDiscount, 2),
             'totalPrice' => round($totalPrice, 2),
             'placesCount' => round($placesCount, 2)
         ];
     }
 
-    /**
-     * @param string $dateFrom
-     * @param string|null $dateTo
-     * @return ClientExpenseDto expenses stat
-     */
-    public function getExpensesReport(string $dateFrom, ?string $dateTo)
-    {
-        $expensesDto = new ClientExpenseDto();
-        $dateTo = $dateTo ? Carbon::createFromDate($dateTo)->addDay() : Carbon::now();
-
-        $expensesDto->orderPayments = $this->orderPayments()->without([
-            'branch',
-            'preparedBy',
-            'cashier',
-            'payer',
-            'payee',
-            'payerAccountInBillCurrency',
-            'payerAccountInSecondCurrency',
-            'payeeAccountInBillCurrency',
-            'payeeAccountInSecondCurrency',
-            'paymentItem',
-            'billCurrency',
-            'secondPaidCurrency',
-            'exchangeRate'
-        ])
-            ->where('updated_at', '>=', Carbon::now()->startOfYear())
-            ->where('updated_at', '<', $dateTo)
-            ->withCount('orderPaymentItems')
-            ->get();
-
-        $expensesDto->orders = $this->orders()
-            ->where('created_at', '>=', Carbon::now()->startOfYear())
-            ->where('created_at', '<', $dateTo)
-            ->with('storedItemInfos')
-            ->get();
-
-
-        $expensesDto->orders->each(function ($order) {
-            $order->storedItemsCount = $order->storedItemInfos->sum('count');
-        });
-
-        $expensesDto->prepareReport($dateFrom);
-        return $expensesDto;
-    }
-
-    public function getStoredItemInfosStat($dateTo, Builder $query)
+    public function getStoredItemInfosStat($dateTo, $query)
     {
         $infos = $query->where('created_at', '>=', Carbon::now()->startOfYear())
             ->where('created_at', '<', $dateTo)->get();
@@ -143,17 +105,10 @@ class Client extends RoleUser
             $stat->averageWeightPerCube = $stat->weightPerCubeSum / $infos->count();
 
         $stat->totalPrice = round($stat->totalPrice, 2);
-        $stat->totalWeight = round($stat->totalWeight, 2);
-        $stat->totalCubage = round($stat->totalCubage, 2);
-        $stat->averageWeightPerCube = round($stat->averageWeightPerCube, 2);
+        $stat->totalWeight = round($stat->totalWeight, 3);
+        $stat->totalCubage = round($stat->totalCubage, 3);
+        $stat->averageWeightPerCube = round($stat->averageWeightPerCube, 3);
 
         return $stat;
-    }
-
-    public function orderPayments()
-    {
-        return $this->outgoingPayments()->whereHas('paymentItem', function (Builder $query) {
-            return $query->where('title', 'Списание с баланса');
-        });
     }
 }

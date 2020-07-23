@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Models\Till;
+namespace App\Data\Dto\Till;
 
 
 use App\Models\Order;
@@ -56,7 +56,7 @@ class ClientExpenseDto extends SerializableModel
                     return ['type' => 'out',
                         'amount' => $item->billAmount,
                         'discount' => 0,
-                        'placesCount' => $item->order_payment_items_count,
+                        'placesCount' => $item->clientItemsSelection->stored_items_count,
                         'date' => $item->updated_at];
 
             });

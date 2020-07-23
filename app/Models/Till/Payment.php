@@ -8,6 +8,7 @@ use App\Models\Currency;
 use App\Models\Order;
 use App\Models\Order\StoredItemsSelection;
 use App\Models\StoredItems\ItemsSelection;
+use App\Models\StoredItems\StoredItem;
 use App\Models\Users\Client;
 use App\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -200,7 +201,7 @@ class Payment extends BaseModel
 
 //    public function orderPaymentItems()
 //    {
-//        return $this->hasManyThrough(Order\OrderPaymentItem::class, StoredItemsSelection::class);
+//        return $this->hasManyThrough(StoredItem::class, ItemsSelection::class);
 //    }
 
     public function clientItemsSelection()
