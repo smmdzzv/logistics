@@ -118,6 +118,7 @@ class OrderStoredItemsDeliveryService
             'branch_id' => auth()->user()->branch->id,
             'status' => 'completed',
             'payer_id' => $account->owner_id,
+            'payer_type' => 'user',
             'payer_account_in_bill_currency_id' => $account->id,
             'payer_account_in_second_currency_id' => null,
 //            'payer_type' => 'user',
