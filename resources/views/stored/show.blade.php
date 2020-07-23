@@ -29,13 +29,13 @@
                 <div class="jumbotron">
                     @foreach($storageHistories as $history)
                         <p>Склад: <b>{{$history->storage->name}}</b></p>
-                        <p>Дата приемки:<b> {{$history->created_at}}</b></p>
+                        <p>Дата приемки:<b><span v-luxon="{ value: '{{$history->created_at}}'}"/></b></p>
                         @if($history->creator)
                             <p>Принял: <b>{{$history->creator->code}} {{$history->creator->name}}</b></p>
                         @endif
 
                         @if($history->deleted_at)
-                            <p>Дата выдачи: <b>{{$history->deleted_at}}</b></p>
+                            <p>Дата выдачи: <b><span v-luxon="{ value: '{{$history->deleted_at}}'}"/></b></p>
                             <p>Выдал: <b>{{$history->destroyer->code}} {{$history->destroyer->name}}</b></p>
                         @endif
                         @if(!$loop->last)
@@ -47,17 +47,17 @@
                 <div class="jumbotron">
                     @foreach($tripHistories as $history)
                         <p>Рейс: <b>{{$history->trip->code}}</b></p>
-                        <p>Добавлен в предварительный список: <b>{{$history->created_at}}</b></p>
+                        <p>Добавлен в предварительный список: <b><span v-luxon="{ value: '{{$history->created_at}}'}"/></b></p>
                         @if($history->creator)
                             <p>Добавил: <b>{{$history->creator->code}} {{$history->creator->name}} </b>
                                 @endif
                             </p>
                             @if($history->loaded_at)
-                                <p>Загружен на рейс: <b>{{$history->loaded_at}}</b></p>
+                                <p>Загружен на рейс: <b><span v-luxon="{ value: '{{$history->loaded_at}}'}"/></b></p>
                                 <p>Загрузил: <b>{{$history->loadedBy->code}} {{$history->loadedBy->name}}</b></p>
                             @endif
                             @if($history->deleted_at)
-                                <p>Дата снятия с рейса: <b>{{$history->deleted_at}}</b></p>
+                                <p>Дата снятия с рейса: <b><span v-luxon="{ value: '{{$history->deleted_at}}'}"/></b></p>
                                 @if($history->destroyer)
                                     <p>Снял с рейса: <b>{{$history->destroyer->code}} {{$history->destroyer->name}}</b></p>
                                 @endif
