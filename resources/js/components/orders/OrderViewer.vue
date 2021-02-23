@@ -9,12 +9,12 @@
                     Обновить стоимость
                 </button>
 
-                <p class="ml-3 badge badge-primary p-2" v-if="order.status !== 'completed'">
-                    Статус: <span class="text">{{getStatus()}}</span>
-                </p>
-                <p class="ml-3 badge badge-secondary p-2" v-else>
-                    Статус: <span class="text">{{getStatus()}}</span>
-                </p>
+<!--                <p class="ml-3 badge badge-primary p-2" v-if="order.status !== 'completed'">-->
+<!--                    Статус: <span class="text">{{getStatus()}}</span>-->
+<!--                </p>-->
+<!--                <p class="ml-3 badge badge-secondary p-2" v-else>-->
+<!--                    Статус: <span class="text">{{getStatus()}}</span>-->
+<!--                </p>-->
             </div>
         </div>
 
