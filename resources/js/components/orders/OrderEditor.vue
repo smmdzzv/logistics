@@ -122,6 +122,7 @@
                                 clientEmail: this.clientEmail
                             });
                         }
+                        window.open('/print/order-labels/' + response.data.id, "_blank");
                         window.location.href = '/orders/' + response.data.id;
                     } catch (e) {
                         hideBusySpinner();
