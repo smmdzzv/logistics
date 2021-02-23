@@ -122,7 +122,7 @@
                                 clientEmail: this.clientEmail
                             });
                         }
-                        window.location.href = '/orders';
+                        window.location.href = '/orders/' + response.data.id;
                     } catch (e) {
                         hideBusySpinner();
                         this.$root.showErrorMsg(

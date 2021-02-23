@@ -5,18 +5,17 @@ namespace App\Data\MassWriters;
 
 
 use Illuminate\Support\Carbon;
-use Rorecek\Ulid\Ulid;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Str;
 
 abstract class MassWriter
 {
     protected $entities;
     protected array $data;
     protected $entityClass;
-    private $ulidGenerator;
 
     public function __construct(Array $entities)
     {
-        $this->ulidGenerator = new Ulid();
         $this->entities = $entities;
         $this->data = [];
         $this->prepare();
@@ -28,8 +27,8 @@ abstract class MassWriter
     private function prepare()
     {
         foreach ($this->entities as $entity) {
-            $entity->id = $this->ulidGenerator->generate();
-            $entity->created_at = Carbon::now();
+            $entity->id = (string) Str::orderedUuid();
+            $entity->created_at = Date::now();
             $entity->created_by_id = auth()->id();
             $this->data[] = $entity->attributesToArray();
         };

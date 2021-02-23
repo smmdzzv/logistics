@@ -97,9 +97,10 @@ Vue.component('MainPaginator', require('./components/common/MainPaginator.vue').
 
 Vue.component('CustomsReportEditor', require('./components/customs/CustomsReportEditor.vue').default);
 
-Vue.component('BranchViewer', require('./components/branches/BranchViewer.vue').default);
-Vue.component('Barcode', require('@xkeshi/vue-barcode').default);
-Vue.component('QrCode', require('@chenfengyuan/vue-qrcode').default);
+// Vue.component('BranchViewer', require('./components/branches/BranchViewer.vue').default);
+// Vue.component('Barcode', require('@xkeshi/vue-barcode').default);
+// Vue.component('QrCode', require('@chenfengyuan/vue-qrcode').default);
+Vue.component('Barcode', require('@chenfengyuan/vue-barcode'))
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

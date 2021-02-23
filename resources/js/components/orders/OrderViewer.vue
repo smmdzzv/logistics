@@ -127,6 +127,8 @@
 </template>
 
 <script>
+import {hideBusySpinner, showBusySpinner} from "../../tools";
+
     export default {
         name: "OrderViewer",
         props: {
@@ -239,12 +241,14 @@
             //     }
             // },
             async updateOrderPrice() {
-                tShowSpinner();
+                showBusySpinner();
                 try {
                     const response = await axios.post(`/order/${this.order.id}/update-price`);
                     window.location.reload();
                 } catch (e) {
-                    tHideSpinner();
+
+                }finally {
+                    hideBusySpinner();
                 }
             }
         },

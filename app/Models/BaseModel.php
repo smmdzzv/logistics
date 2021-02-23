@@ -10,6 +10,7 @@ namespace App\Models;
 
 use App\Data\Userstamps\Userstamps;
 use App\Traits\UsesUUID;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
@@ -17,7 +18,6 @@ class BaseModel extends Model
     use UsesUUID;
 
     use Userstamps;
-
 
     public $incrementing = false;
 
@@ -27,7 +27,10 @@ class BaseModel extends Model
 
     public static $snakeAttributes = false;
 
-    protected $casts = ['id' => 'string'];
-
     protected $guarded = [];
+
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
 }
