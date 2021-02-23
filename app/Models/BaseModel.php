@@ -10,11 +10,10 @@ namespace App\Models;
 
 use App\Data\Userstamps\Userstamps;
 use Illuminate\Database\Eloquent\Model;
-use Rorecek\Ulid\HasUlid;
 
 class BaseModel extends Model
 {
-    use HasUlid, Userstamps;
+    use Userstamps;
 
     /**
      * Indicates if the IDs are auto-incrementing.

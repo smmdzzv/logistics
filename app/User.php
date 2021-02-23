@@ -11,7 +11,6 @@ use App\Models\Till\Payment;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Rorecek\Ulid\HasUlid;
 
 /**
  * @property string id
@@ -19,7 +18,7 @@ use Rorecek\Ulid\HasUlid;
  */
 class User extends Authenticatable
 {
-    use HasUlid, SoftDeletes, Userstamps;
+    use  SoftDeletes, Userstamps;
 
     /**
      * Indicates if the IDs are auto-incrementing.
