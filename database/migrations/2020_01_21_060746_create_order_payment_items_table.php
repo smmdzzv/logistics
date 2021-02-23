@@ -14,9 +14,9 @@ class CreateOrderPaymentItemsTable extends Migration
     public function up()
     {
         Schema::create('order_payment_items', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
-            $table->char('order_payment_id', 26)->index();
-            $table->char('stored_item_id', 26)->index();
+            $table->uuid('id')->primary();
+            $table->uuid('order_payment_id')->index();
+            $table->uuid('stored_item_id')->index();
 
             $table->userStamp();
             $table->softDeletes();

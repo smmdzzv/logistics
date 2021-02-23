@@ -14,13 +14,13 @@ class CreateStoredItemTripHistoriesTable extends Migration
     public function up()
     {
         Schema::create('stored_item_trip_histories', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
-            $table->char('stored_item_id', 26);
-            $table->char('trip_id', 26)->index();
-            $table->char('status', '30');
-//            $table->char('registered_by_id', 26);
-//            $table->char('deleted_by_id', 26)->nullable();
-            $table->char('loaded_by_id', 26)->nullable();
+            $table->uuid('id')->primary();
+            $table->uuid('stored_item_id');
+            $table->uuid('trip_id')->index();
+            $table->char('status', 30);
+//            $table->$this->uuid('registered_by_id');
+//            $table->$this->uuid('deleted_by_id')->nullable();
+            $table->uuid('loaded_by_id')->nullable();
             $table->dateTime('loaded_at')->nullable();
 
             $table->userStamp();

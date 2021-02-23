@@ -14,12 +14,12 @@ class CreateBranchesTable extends Migration
     public function up()
     {
         Schema::create('branches', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
-            $table->char('director', 26)->nullable();
-            $table->char('country', 26);
+            $table->uuid('id')->primary();
+            $table->uuid('director')->nullable();
+            $table->uuid('country');
             $table->string('name')->unique();
             $table->softDeletes();
-//            $table->char('deleted_by_id', 26)->nullable();
+//            $table->uuid('deleted_by_id', 26)->nullable();
             $table->userStamp();
             $table->timestamps();
         });

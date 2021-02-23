@@ -14,9 +14,9 @@ class CreateShopsTable extends Migration
     public function up()
     {
         Schema::create('shops', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
+            $table->uuid('id')->primary();
             $table->string('name', 255);
-            $table->char('code', 50)->index();
+            $table->string('code', 50)->index();
 
             $table->userStamp();
             $table->timestamps();

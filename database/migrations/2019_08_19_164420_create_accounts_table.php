@@ -14,10 +14,10 @@ class CreateAccountsTable extends Migration
     public function up()
     {
         Schema::create('accounts', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
-            $table->char('owner_id', 26)->index();
+            $table->uuid('id')->primary();
+            $table->uuid('owner_id')->index();
             $table->string('owner_type');
-            $table->char('currency_id',26);
+            $table->uuid('currency_id');
             $table->decimal('balance', 10, 2);
             $table->string('description', 255);
             $table->userStamp();

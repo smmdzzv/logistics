@@ -14,10 +14,10 @@ class CreateTariffsTable extends Migration
     public function up()
     {
         Schema::create('tariffs', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('description')->nullable()->default('');
-            $table->char('branch_id', 26)->index();
+            $table->uuid('branch_id')->index();
             $table->timestamps();
             $table->userStamp();
             $table->softDeletes();

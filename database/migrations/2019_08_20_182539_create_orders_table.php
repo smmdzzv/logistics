@@ -14,9 +14,9 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->char('id', 26)->primary();;
-            $table->char('owner_id', 26)->index();
-            $table->char('branch_id', 26);
+            $table->uuid('id')->primary();;
+            $table->uuid('owner_id')->index();
+            $table->uuid('branch_id');
             $table->string('status')->default('active');
             $table->decimal('totalCount', 10, 2);
             $table->decimal('totalWeight', 10, 3);

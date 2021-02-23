@@ -14,8 +14,8 @@ class CreateStoragesTable extends Migration
     public function up()
     {
         Schema::create('storages', function (Blueprint $table) {
-            $table->char('id',26)->primary();
-            $table->char('branch_id',26)->index();
+            $table->uuid('id')->primary();
+            $table->uuid('branch_id')->index();
             $table->string('name',255);
 
             $table->userStamp();

@@ -14,9 +14,9 @@ class CreateStorageHistoriesTable extends Migration
     public function up()
     {
         Schema::create('storage_histories', function (Blueprint $table) {
-            $table->char('id',26)->primary();
-            $table->char('storage_id',26);
-            $table->char('stored_item_id',26);
+            $table->uuid('id')->primary();
+            $table->uuid('storage_id');
+            $table->uuid('stored_item_id');
 //            $table->char('registeredById', 26);
 //            $table->char('deletedById', 26)->nullable();
 

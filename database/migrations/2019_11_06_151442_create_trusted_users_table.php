@@ -14,8 +14,8 @@ class CreateTrustedUsersTable extends Migration
     public function up()
     {
         Schema::create('trusted_users', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
-            $table->char('user_id',26)->index();
+            $table->uuid('id')->primary();
+            $table->uuid('user_id')->index();
             $table->date('from');
             $table->date('to');
             $table->decimal('maxDebt', 10, 2);

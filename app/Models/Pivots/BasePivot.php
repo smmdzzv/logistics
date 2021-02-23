@@ -2,14 +2,14 @@
 
 namespace App\Models\Pivots;
 
+use App\Traits\UsesUUID;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class BasePivot extends Pivot
 {
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
+    use UsesUUID;
+
     public $incrementing = false;
+    protected $primaryKey = 'id';
+    protected $keyType = 'uuid';
 }

@@ -14,11 +14,11 @@ class CreateTripsTable extends Migration
     public function up()
     {
         Schema::create('trips', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
-            $table->char('carId', 26)->index();
-            $table->char('driverId', 26)->index();
-            $table->char('departure_branch_id', 26);
-            $table->char('destination_branch_id', 26);
+            $table->uuid('id')->primary();
+            $table->uuid('carId')->index();
+            $table->uuid('driverId')->index();
+            $table->uuid('departure_branch_id');
+            $table->uuid('destination_branch_id');
 //            $table->boolean('emptyToDestination');
 //            $table->boolean('emptyFromDestination');
             $table->integer('routeLengthToDestination');
@@ -30,8 +30,8 @@ class CreateTripsTable extends Migration
             $table->integer('trailerCargoWeightFrom');
             $table->integer('mileageBefore');
             $table->integer('mileageAfter');
-            $table->char('to_consumption_id', 26);
-            $table->char('from_consumption_id', 26);
+            $table->uuid('to_consumption_id');
+            $table->uuid('from_consumption_id');
             $table->string('code', 20)->unique();
             $table->char('status', 15);
             $table->date('departureDate');

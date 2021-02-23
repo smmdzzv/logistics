@@ -14,9 +14,9 @@ class CreateItemsSelectionStoredItemTable extends Migration
     public function up()
     {
         Schema::create('items_selection_stored_item', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
-            $table->char('items_selection_id', 26);
-            $table->char('stored_item_id', 26);
+            $table->uuid('id')->primary();
+            $table->uuid('items_selection_id')->index();
+            $table->uuid('stored_item_id')->index();
         });
     }
 

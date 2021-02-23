@@ -14,9 +14,9 @@ class CreateStoredItemsTable extends Migration
     public function up()
     {
         Schema::create('stored_items', function (Blueprint $table) {
-            $table->char('id',26)->primary();
-            $table->char('stored_item_info_id',26)->index();
-            $table->char('code', 20)->unique();
+            $table->uuid('id')->primary();
+            $table->uuid('stored_item_info_id')->index();
+            $table->string('code')->unique();
             $table->string('status');
 //            $table->char('deleted_by_id', 26)->nullable();
             $table->softDeletes();

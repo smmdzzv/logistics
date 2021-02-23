@@ -14,7 +14,7 @@ class CreateItemsTable extends Migration
     public function up()
     {
         Schema::create('items', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
+            $table->uuid('id')->primary();
 //            $table->char('tariffId', 26);
 //            $table->char('branch_id', 26)->index();
             $table->string('name', 255);

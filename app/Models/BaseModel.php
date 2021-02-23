@@ -9,18 +9,21 @@ namespace App\Models;
 
 
 use App\Data\Userstamps\Userstamps;
+use App\Traits\UsesUUID;
 use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
 {
+    use UsesUUID;
+
     use Userstamps;
 
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
+
     public $incrementing = false;
+
+    protected $primaryKey = 'id';
+
+    protected $keyType = 'uuid';
 
     public static $snakeAttributes = false;
 

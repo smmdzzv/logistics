@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\StoredItems\ItemsSelection;
 use App\Models\Till\Account;
 use App\Models\Till\Payment;
+use App\Traits\UsesUUID;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,7 +19,7 @@ use Illuminate\Notifications\Notifiable;
  */
 class User extends Authenticatable
 {
-    use  SoftDeletes, Userstamps;
+    use  SoftDeletes, Userstamps, UsesUUID;
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -26,6 +27,8 @@ class User extends Authenticatable
      * @var bool
      */
     public $incrementing = false;
+    protected $primaryKey = 'id';
+    protected $keyType = 'uuid';
 
     use Notifiable;
 

@@ -14,10 +14,10 @@ class CreateBillingInfosTable extends Migration
     public function up()
     {
         Schema::create('billing_infos', function (Blueprint $table) {
-            $table->char('id', 26)->primary();;
-            $table->char('tariff_price_history_id', 26)->index();
-            $table->char('stored_item_info_id', 26)->index();
-//            $table->char('deleted_by_id', 26)->index()->nullable();
+            $table->uuid('id')->primary();;
+            $table->uuid('tariff_price_history_id')->index();
+            $table->uuid('stored_item_info_id')->index();
+//            $table->uuid('deleted_by_id', 26)->index()->nullable();
 //            $table->integer('placesCount');
             $table->decimal('totalCubage', 10,3);
             $table->decimal('totalWeight', 10,3);

@@ -14,11 +14,11 @@ class CreateCustomsCodesTable extends Migration
     public function up()
     {
         Schema::create('customs_codes', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
-            $table->char('name', 255);
-            $table->char('description', 255)->nullable();
-            $table->char('internationalName', 255)->nullable();
-            $table->char('code', 20)->unique();
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->string('description')->nullable();
+            $table->string('internationalName')->nullable();
+            $table->string('code')->unique();
 
             $table->userStamp();
             $table->softDeletes();

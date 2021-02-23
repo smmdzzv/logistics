@@ -14,7 +14,7 @@ class CreatePaymentItemsTable extends Migration
     public function up()
     {
         Schema::create('payment_items', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
+            $table->uuid('id')->primary();
             $table->string('title', 255)->unique();
 //            $table->char('type', 20);
             $table->string('description', 500)->nullable();

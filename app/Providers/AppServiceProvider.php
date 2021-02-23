@@ -29,9 +29,9 @@ class AppServiceProvider extends ServiceProvider
         StoredItemInfo::observe(StoredItemInfoObserver::class);
 
         Blueprint::macro('userStamp', function () {
-            $this->char('created_by_id', 26)->index()->nullable();
-            $this->char('updated_by_id', 26)->index()->nullable();
-            $this->char('deleted_by_id', 26)->index()->nullable();
+            $this->uuid('created_by_id')->index()->nullable();
+            $this->uuid('updated_by_id')->index()->nullable();
+            $this->uuid('deleted_by_id')->index()->nullable();
         });
     }
 }

@@ -14,9 +14,9 @@ class CreateLostStoredItemsTable extends Migration
     public function up()
     {
         Schema::create('lost_stored_items', function (Blueprint $table) {
-            $table->char('id',26)->primary();
-            $table->char('stored_item_id',26)->index();
-            $table->char('payment_id',26)->index();
+            $table->uuid('id')->primary();
+            $table->uuid('stored_item_id')->index();
+            $table->uuid('payment_id')->index();
 
             $table->userStamp();
             $table->timestamps();

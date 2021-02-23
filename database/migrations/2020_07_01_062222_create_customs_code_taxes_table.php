@@ -14,8 +14,8 @@ class CreateCustomsCodeTaxesTable extends Migration
     public function up()
     {
         Schema::create('customs_code_taxes', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
-            $table->char('customs_code_id', 26)->index();
+            $table->uuid('id')->primary();
+            $table->uuid('customs_code_id')->index();
             $table->double('price',2);
             $table->double('interestRate');
             $table->double('vat');

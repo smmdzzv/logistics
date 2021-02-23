@@ -14,8 +14,8 @@ class CreateItemsSelectionsTable extends Migration
     public function up()
     {
         Schema::create('items_selections', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
-            $table->char('user_id', 26)->index();
+            $table->uuid('id')->primary();
+            $table->uuid('user_id')->index();
             $table->string('name')->nullable();
 
             $table->userStamp();

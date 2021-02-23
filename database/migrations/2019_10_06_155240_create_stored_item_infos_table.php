@@ -14,17 +14,17 @@ class CreateStoredItemInfosTable extends Migration
     public function up()
     {
         Schema::create('stored_item_infos', function (Blueprint $table) {
-            $table->char('id',26)->primary();
-            $table->char('item_id',26)->index();
-            $table->char('owner_id',26)->index();
-//            $table->char('deleted_by_id',26)->index()->nullable();
-            $table->char('branch_id',26)->index();
-            $table->char('order_id',26)->index();
+            $table->uuid('id')->primary();
+            $table->uuid('item_id')->index();
+            $table->uuid('owner_id')->index();
+//            $table->uuid('deleted_by_id')->index()->nullable();
+            $table->uuid('branch_id')->index();
+            $table->uuid('order_id')->index();
             $table->char('shop',50)->nullable();
-            $table->char('customs_code_tax_id',26)->index();
-            $table->char('customs_code_id',26)->index();
-            $table->char('tariff_id',26)->index();
-//            $table->char('tariff_price_history_id',26)->index();
+            $table->uuid('customs_code_tax_id')->index();
+            $table->uuid('customs_code_id')->index();
+            $table->uuid('tariff_id')->index();
+//            $table->uuid('tariff_price_history_id',26)->index();
             $table->integer('count');
             $table->double('weight',10, 3);
             $table->double('height',10, 3);

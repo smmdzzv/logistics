@@ -14,36 +14,36 @@ class CreatePaymentsTable extends Migration
     public function up()
     {
         Schema::create('payments', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
-            $table->char('branch_id', 26)->index();
-//            $table->char('cashier_id', 26)->index();
-//            $table->char('prepared_by_id', 26)->index()->nullable();
+            $table->uuid('id')->primary();
+            $table->uuid('branch_id')->index();
+//            $table->uuid('cashier_id')->index();
+//            $table->uuid('prepared_by_id')->index()->nullable();
             $table->char('status', 20);
-            $table->char('payer_id', 26)->index()->nullable();
-            $table->char('payer_account_in_bill_currency_id', 26)->index()->nullable();
-            $table->char('payer_account_in_second_currency_id', 26)->index()->nullable();
+            $table->uuid('payer_id')->index()->nullable();
+            $table->uuid('payer_account_in_bill_currency_id')->index()->nullable();
+            $table->uuid('payer_account_in_second_currency_id')->index()->nullable();
             $table->char('payer_type', 20)->nullable();
-            $table->char('payee_id', 26)->index()->nullable();
-            $table->char('payee_account_in_bill_currency_id', 26)->index()->nullable();
-            $table->char('payee_account_in_second_currency_id', 26)->index()->nullable();
+            $table->uuid('payee_id')->index()->nullable();
+            $table->uuid('payee_account_in_bill_currency_id')->index()->nullable();
+            $table->uuid('payee_account_in_second_currency_id')->index()->nullable();
             $table->char('payee_type', 20)->nullable();
-            $table->char('payment_item_id', 26)->index();
-            $table->char('related_payment_id', 26)->index()->nullable();
+            $table->uuid('payment_item_id')->index();
+            $table->uuid('related_payment_id')->index()->nullable();
             $table->decimal('billAmount', 10, 2);
             $table->decimal('paidAmountInBillCurrency', 10, 2);
             $table->decimal('paidAmountInSecondCurrency', 10, 2);
-            $table->char('bill_currency_id', 26)->index();
-            $table->char('second_paid_currency_id', 26)->index()->nullable();
-            $table->char('exchange_rate_id', 26)->index()->nullable();
+            $table->uuid('bill_currency_id')->index();
+            $table->uuid('second_paid_currency_id')->index()->nullable();
+            $table->uuid('exchange_rate_id')->index()->nullable();
             $table->string('comment')->nullable();
 
             $table->decimal('billAmountInTjs', 10, 2)->nullable();
-            $table->char('exchange_rate_to_tjs', 26)->nullable();
+            $table->uuid('exchange_rate_to_tjs')->nullable();
             $table->decimal('clientDebt', 10, 2)->nullable();
             $table->integer('placesLeft')->nullable();
             $table->integer('number')->nullable();
 
-            $table->char('client_items_selection_id', 26)->index()->nullable();
+            $table->uuid('client_items_selection_id')->index()->nullable();
             $table->decimal('discount', 10, 2)->nullable();
 
             $table->userStamp();

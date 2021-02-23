@@ -14,7 +14,7 @@ class CreateItemsStatusChangeHistoriesTable extends Migration
     public function up()
     {
         Schema::create('items_status_change_histories', function (Blueprint $table) {
-            $table->char('id', 26)->primary();
+            $table->uuid('id')->primary();
             $table->string('operation');
             $table->timestamps();
             $table->userStamp();
