@@ -243,8 +243,8 @@
 </body>
 <footer class="container">
     <div class="row">
-        <a class="link mx-auto my-4  text-secondary text-decoration-none" href="https://ajoibot.tj/">2019
-            -{{ date('Y') }} © Разработано Аджоибот</a>
+        <a class="link mx-auto my-4  text-secondary text-decoration-none" href="https://coded.tj/">2019
+            -{{ date('Y') }} © CODED</a>
     </div>
 </footer>
 </html>
