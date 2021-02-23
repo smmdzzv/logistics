@@ -10,7 +10,7 @@ namespace App\Services\Storage;
 use App\Data\MassWriters\Order\StorageHistoriesWriter;
 use App\Models\Branches\Storage;
 use App\Models\StoredItems\StoredItem;
-use App\StoredItems\StorageHistory;
+use App\Models\StoredItems\StorageHistory;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;

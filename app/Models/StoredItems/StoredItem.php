@@ -5,10 +5,7 @@ namespace App\Models\StoredItems;
 
 use App\Models\BaseModel;
 use App\Models\Branches\Storage;
-use App\Models\Order\OrderPaymentItem;
 use App\Models\Trip;
-use App\StoredItems\StorageHistory;
-use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

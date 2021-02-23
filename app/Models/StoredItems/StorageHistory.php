@@ -4,13 +4,10 @@
  * @author Sultonazar Mamadazizov <sultonazar.mamadazizov@mail.ru>
  */
 
-namespace App\StoredItems;
+namespace App\Models\StoredItems;
 
 use App\Models\BaseModel;
-use App\Models\Branch;
 use App\Models\Branches\Storage;
-use App\Models\StoredItems\StoredItem;
-use App\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**

@@ -16,7 +16,7 @@ use App\Services\Storage\ItemsStorageHistoryService;
 use App\Services\StoredItem\BillingInfoService;
 use App\Services\StoredItem\StoredItemInfoService;
 use App\Services\StoredItem\StoredItemService;
-use App\StoredItems\StorageHistory;
+use App\Models\StoredItems\StorageHistory;
 use Illuminate\Support\Collection;
 
 class OrderService

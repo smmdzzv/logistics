@@ -5,7 +5,7 @@ namespace App\Data\MassWriters\Order;
 
 
 use App\Data\MassWriters\MassWriter;
-use App\StoredItems\StorageHistory;
+use App\Models\StoredItems\StorageHistory;
 
 class StorageHistoriesWriter extends MassWriter
 {
