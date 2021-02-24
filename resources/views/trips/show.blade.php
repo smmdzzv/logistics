@@ -17,9 +17,6 @@
                                 <a class="pl-3" href="{{route('trip.edit-unloaded', $trip)}}">
                                     <img class="icon-btn-sm" src="/svg/car-unloading.svg">
                                 </a>
-                                {{--                                <a class="pl-3" href="{{route('trip.change-items-trip', $trip)}}">--}}
-                                {{--                                    <img class="icon-btn-sm" src="/svg/car-sending.svg">--}}
-                                {{--                                </a>--}}
                             @endif
                             @if($trip->isEditable())
                                 <a class="pl-3" href="/trips/{{$trip->id}}/edit">
@@ -115,26 +112,6 @@
                             км</p>
 
                         <input type="hidden" id="status" name="status" value="active">
-
-                        {{--                        <input type="hidden" name="status"--}}
-                        {{--                               @switch($trip->status)--}}
-                        {{--                               @case(\App\Models\Trip::STATUS_SCHEDULED)--}}
-                        {{--                               value="active"--}}
-                        {{--                               @break--}}
-                        {{--                               @case(\App\Models\Trip::STATUS_ACTIVE)--}}
-                        {{--                               value="finished"--}}
-                        {{--                            @break--}}
-                        {{--                            @endswitch--}}
-                        {{--                        >--}}
-
-                        {{--                        @switch($trip->status)--}}
-                        {{--                            @case(\App\Models\Trip::STATUS_SCHEDULED)--}}
-                        {{--                            <button class="btn btn-primary">Начать рейс</button>--}}
-                        {{--                            @break--}}
-                        {{--                            @case(\App\Models\Trip::STATUS_ACTIVE)--}}
-                        {{--                            <button class="btn btn-success">Завершить рейс</button>--}}
-                        {{--                            @break--}}
-                        {{--                        @endswitch--}}
                     </form>
                     @switch($trip->status)
                         @case(\App\Models\Trip::STATUS_SCHEDULED)
