@@ -46,6 +46,8 @@ class CreatePaymentsTable extends Migration
             $table->uuid('client_items_selection_id')->index()->nullable();
             $table->decimal('discount', 10, 2)->nullable();
 
+            $table->boolean('approved')->nullable();
+
             $table->userStamp();
             $table->softDeletes();
             $table->timestamps();

@@ -86,7 +86,7 @@
                             </li>
                         @endif
                     <!--Till-->
-                        @if(Auth::user()->hasAnyRole(['admin', 'cashier','manager']))
+
                             <li class="nav-item dropdown">
                                 <a id="tillMenuDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -95,14 +95,10 @@
                                 <div class="dropdown-menu" aria-labelledby="tillMenuDropdown">
                                     <h6 class="dropdown-header">Платежи</h6>
                                     <a class="dropdown-item" href="{{route('payment.create')}}">Провести платеж</a>
+                                    @if(Auth::user()->hasAnyRole(['admin', 'cashier','manager']))
                                     <a class="dropdown-item" href="{{route('payment.index')}}">История платежей</a>
                                     <a class="dropdown-item" href="{{route('expense-report.index')}}">Акт сверки
                                         клиента</a>
-                                    {{--                                    <a class="dropdown-item" href="{{route('incoming-payments.create')}}">Приход</a>--}}
-                                    {{--                                    <a class="dropdown-item" href="{{route('outgoing-payments.create')}}">Расход</a>--}}
-                                    {{--                                    <div class="dropdown-divider"></div>--}}
-                                    {{--                                    <a class="dropdown-item" href="{{route('pending-payments.index')}}">Заявки</a>--}}
-                                    {{--                                    <div class="dropdown-divider"></div>--}}
                                     <a class="dropdown-item" href="{{route('branches.accounts.index')}}">Счета
                                         Дуоб</a>
                                     @if(Auth::user()->hasRole('admin'))
@@ -126,9 +122,9 @@
                                         <a class="dropdown-item" href="{{route('money-exchanges.index')}}">История
                                             курсов валют</a>
                                     @endif
+                                        @endif
                                 </div>
                             </li>
-                        @endif
                     <!--Users-->
                         @if(Auth::user()->hasRole('admin'))
                             <li class="nav-item dropdown">

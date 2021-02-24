@@ -54,6 +54,9 @@ class PaymentRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
+            if($this->request->get('status') == 'completed' && !auth()->user()->hasAnyRole(['cashier', 'admin']))
+                return $validator->errors()->add('status', 'Вы можете создавать только заявки');
+
             //Check payer and payee
             $payerId = $this->request->get('payer');
             $this->payer = $this->request->get('payer_type') === 'branch' ? $this->getBranch($payerId) : $this->getClient($payerId);
