@@ -7,16 +7,16 @@
                         <span v-if="branches">Товары на складе</span>
                         <span v-else>Товары на всех складах</span>
                     </div>
-                    <div class="ml-0 ml-sm-auto">
-                        <template v-if="listGenerator">
-                            <button id="generate-btn" class="btn btn-link" @click="generateList">Сгенерировать список
-                            </button>
-                            <b-tooltip target="generate-btn" triggers="hover">
-                                Генерация списка происходит с учетом выбранного фильтра и товаров,
-                                добавленных на рейс вручную. Для сброса сгенерированного списка, обновите страницу
-                            </b-tooltip>
-                        </template>
-                    </div>
+<!--                    <div class="ml-0 ml-sm-auto">-->
+<!--                        <template v-if="listGenerator">-->
+<!--                            <button id="generate-btn" class="btn btn-link" @click="generateList">Сгенерировать список-->
+<!--                            </button>-->
+<!--                            <b-tooltip target="generate-btn" triggers="hover">-->
+<!--                                Генерация списка происходит с учетом выбранного фильтра и товаров,-->
+<!--                                добавленных на рейс вручную. Для сброса сгенерированного списка, обновите страницу-->
+<!--                            </b-tooltip>-->
+<!--                        </template>-->
+<!--                    </div>-->
                     <template v-if="branches">
                         <div class="ml-3">
                             <select class="form-control custom-select" id="branch" v-model="selectedBranch">
@@ -99,9 +99,9 @@ export default {
             required: false,
             default: null
         },
-        listGenerator: {
-            type: Boolean
-        },
+        // listGenerator: {
+        //     type: Boolean
+        // },
         selectable: {
             type: Boolean,
             required: false,
@@ -235,31 +235,31 @@ export default {
                         this.items.push(item);
                 }
         },
-        async generateList() {
-            tShowSpinner();
-            try {
-                let action = `/trip/${this.tripId}/stored-items/generate`;
-                if (this.selectedBranch)
-                    action += `?branch=${this.selectedBranch.id}`;
-                const response = await axios.get(action);
-                // this.items = response.data;
-                for (let item of response.data) {
-                    if (!this.isInItems(item))
-                        this.items.push(item);
-
-                }
-
-                this.$emit('onItemsSelected', response.data);
-
-            } catch (e) {
-                this.$root.showErrorMsg(
-                    "Ошибка генерации",
-                    'Не удалось сгенерировать список. Попробуйте сгенерировать список позднее'
-                )
-            }
-
-            tHideSpinner();
-        }
+        // async generateList() {
+        //     tShowSpinner();
+        //     try {
+        //         let action = `/trip/${this.tripId}/stored-items/generate`;
+        //         if (this.selectedBranch)
+        //             action += `?branch=${this.selectedBranch.id}`;
+        //         const response = await axios.get(action);
+        //         // this.items = response.data;
+        //         for (let item of response.data) {
+        //             if (!this.isInItems(item))
+        //                 this.items.push(item);
+        //
+        //         }
+        //
+        //         this.$emit('onItemsSelected', response.data);
+        //
+        //     } catch (e) {
+        //         this.$root.showErrorMsg(
+        //             "Ошибка генерации",
+        //             'Не удалось сгенерировать список. Попробуйте сгенерировать список позднее'
+        //         )
+        //     }
+        //
+        //     tHideSpinner();
+        // }
     },
     computed: {
         currentPage() {
