@@ -9,11 +9,18 @@
             @endif>
             <div class="card-header">
                 <div class="row">
-                    <div class="ml-3">
+                    <div class="ml-3 font-weight-bold">
                         @if($payment->status === 'completed')
                             Платеж
                         @else
                             Заявка
+                            @if($payment->approved === null)
+                                <span>рассматривается</span>
+                            @elseif($payment->approved === false)
+                                <span>отклонена</span>
+                            @else
+                                <span>одобрена</span>
+                            @endif
                         @endif
                         от <span v-luxon="{ value: '{{$payment->updated_at}}' }"/>
                     </div>
