@@ -54,8 +54,7 @@
                  id="usersTable"
                  primary-key="id"
                  responsive
-                 select-mode="single"
-                 sticky-header="70vh">
+                 select-mode="single">
             <template v-slot:table-busy>
                 <div class="text-center text-info my-2">
                     <b-spinner class="align-middle"></b-spinner>

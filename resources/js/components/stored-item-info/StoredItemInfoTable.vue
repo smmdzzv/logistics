@@ -9,7 +9,6 @@
             :responsive="responsive"
             :select-mode="selectMode"
             :selectable="selectable"
-            :sticky-header="tableHeight"
             :striped="striped"
             :tableBusy="false"
             :setRowClass="setRowClass"
