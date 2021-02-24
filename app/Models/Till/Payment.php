@@ -59,7 +59,8 @@ class Payment extends BaseModel
     protected $casts = [
         'billAmount' => 'double',
         'paidAmountInBillCurrency' => 'double',
-        'paidAmountInSecondCurrency' => 'double'
+        'paidAmountInSecondCurrency' => 'double',
+        'approved' => 'bool'
     ];
 
     protected $guarded = [];

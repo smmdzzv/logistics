@@ -168,6 +168,9 @@
             </span>
             <span v-else>
                 Заявка
+                <span v-show="item.approved === null">рассматривается</span>
+                <span v-show="item.approved === false">отклонена</span>
+                <span v-show="item.approved">одобрена</span>
             </span>
         </template>
 
