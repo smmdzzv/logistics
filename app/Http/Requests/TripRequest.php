@@ -8,7 +8,7 @@ use App\Models\Trip;
 use App\Models\Users\Driver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class TripRequest extends FormRequest
@@ -99,13 +99,13 @@ class TripRequest extends FormRequest
                 if (!$departureConsumption)
                     return $validator->errors()->add('carId', 'Для указанной машины не утсановлен расход топлива из страны назначения');
 
-                Input::merge([
+                Request::merge([
                     'to_consumption_id' => $destinationConsumption->id,
                     'from_consumption_id' => $departureConsumption->id,
                 ]);
 
                 if (!$this->request->get('mileageAfter'))
-                    Input::merge([
+                    Request::merge([
                         'mileageAfter' => $this->request->get('routeLengthFromDestination')
                     ]);
 
