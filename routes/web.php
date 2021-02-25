@@ -11,6 +11,7 @@
 |
 */
 
+use App\Http\Controllers\Till\Payments\ModeratedPaymentsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -104,6 +105,8 @@ Route::post('/payment', 'Till\Payments\PaymentsController@storeOrUpdate');
 Route::resource('payment', 'Till\Payments\PaymentsController', ['except' => ['store', 'update']]);
 
 Route::resource('outgoing-payments', 'Till\Payments\OutgoingPaymentsController')->parameters(['outgoing-payments' => 'payment']);
+
+Route::put('/moderated-payments/{payment}', [ModeratedPaymentsController::class, 'update']);
 
 //StoredItems
 //Route::get('/stored/all', 'StoredItemsController@all')->name('stored.all');

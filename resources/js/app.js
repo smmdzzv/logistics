@@ -1,23 +1,18 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
-import {req} from "vuelidate/lib/validators/common";
-
 require('./bootstrap');
 
-let BootstrapVue = require('bootstrap-vue').default;
+// let BootstrapVue = require('bootstrap-vue').default;
+// let BootstrapIcon = require('IconsPlugin )
 let Vuelidate = require('vuelidate').default;
 let VueEasyPrint = require('vue-easy-print');
 let VueExcelXlsx = require('vue-excel-xlsx').default;
 let VueLuxon = require('vue-luxon');
 
 import {DateTime} from 'luxon';
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
 window.Vue = require('vue');
 window.Vue.use(BootstrapVue);
+window.Vue.use(IconsPlugin);
 window.Vue.use(Vuelidate);
 window.Vue.use(VueEasyPrint);
 window.Vue.use(VueExcelXlsx);
