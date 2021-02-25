@@ -253,7 +253,8 @@ export default {
         type: {
             type: String,
             default: 'in'
-        }
+        },
+        canApprove:Boolean
     },
     data() {
         return {

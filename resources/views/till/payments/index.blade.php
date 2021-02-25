@@ -7,6 +7,9 @@
                             :branches="{{$branches}}"
                             :currencies="{{$currencies}}"
                             :payment-items="{{$paymentItems}}"
+                            @if(Auth::user()->hasAnyRole(['admin', 'financier']))
+                            :can-approve="true"
+                            @endif
                             flowable></payments-table>
         </div>
     </div>
