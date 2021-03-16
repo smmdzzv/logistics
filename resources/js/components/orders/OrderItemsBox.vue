@@ -20,6 +20,7 @@
                     <th>Объем</th>
                     <th>Вес</th>
                     <th>Кол-во</th>
+                    <th>Кол-во мест</th>
                     <th>Цена за ед.</th>
                     <th>Сумма</th>
                     <th></th>
@@ -33,6 +34,7 @@
                     <td>{{getCubage(stored, true)}} м<sup>3</sup></td>
                     <td>{{getWeight(stored, true)}} кг</td>
                     <td>{{stored.count}}</td>
+                    <td>{{stored.placeCount}}</td>
                     <td>{{getPriceForOne(stored)}} $</td>
                     <td>{{getPrice(stored)}} $</td>
                     <td>
@@ -51,6 +53,7 @@
                     <td>{{getTotalCubage()}} м<sup>3</sup></td>
                     <td>{{getTotalWeight()}} кг</td>
                     <td>{{getTotalCount()}}</td>
+                    <td>{{getPlaceTotalCount()}}</td>
                     <td>{{getAveragePriceForOne()}} $</td>
                     <td>{{getTotalPrice()}} $</td>
                     <td></td>
@@ -64,12 +67,14 @@
 <script>
     export default {
         name: "OrderItemsBox",
+        components: {
+            'StoredItemBox': require('../stored/StoredItemBox').default
+        },
         mounted() {
             if (this.order)
-                for (var i = 0; i < this.order.storedItemInfos.length; i++) {
+                for (let i = 0; i < this.order.storedItemInfos.length; i++) {
                     this.onStoredItemAdded(this.order.storedItemInfos[i]);
                 }
-
         },
         props: {
             user: null,
@@ -154,25 +159,19 @@
                 price = Math.round(price * 100) / 100;
                 return price;
             },
-            // getPricePerPlaceCount(stored) {
-            //     let price = this.getPriceForOne(stored) / stored.placeCount;
-            //     return price.toFixed(2);
-            // },
             getPriceForOne(stored) {
                 let price = this.getPrice(stored) / stored.count;
                 return price.toFixed(2);
             },
             getAveragePriceForOne() {
                 let average = this.storedItems.reduce((sum, item) => sum + Number(this.getPriceForOne(item)), 0) / this.storedItems.length;
+                if(!average)
+                    average = 0;
                 return average.toFixed(2);
             },
             getTotalPrice() {
                 let sum = 0;
                 for (let stored of this.storedItems) {
-                    // let price = stored.price;
-                    // if (price)
-                    //     sum += price;
-                    // else
                     let price = this.getPrice(stored);
                     sum += Number(price);
                 }
@@ -197,15 +196,9 @@
             getTotalCount() {
                 return this.storedItems.reduce((sum, item) => sum + item.count, 0)
             },
-        },
-        components: {
-            'StoredItemBox': require('../stored/StoredItemBox').default
+            getPlaceTotalCount() {
+                return this.storedItems.reduce((sum, item) => sum + item.count * item.placeCount, 0)
+            },
         }
     }
 </script>
-
-<style scoped>
-    .cell {
-        text-align: center !important;
-    }
-</style>

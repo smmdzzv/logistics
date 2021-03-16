@@ -13,7 +13,7 @@
                     </div>
 
                     <div class="form-group col-md-3 col-lg-2">
-                        <label class="col-form-label text-md-right" for="item">Наименование товара</label>
+                        <label class="col-form-label text-md-right" for="item">Наименование</label>
                         <suggestions-input :onItemSearchInputChange="onItemSearchInputChange"
                                            :onSelected="onItemSelected"
                                            :initQuery="itemInitQuery"
@@ -135,7 +135,7 @@
                     </div>
 
                     <div class="form-group col-md-3 col-lg-2">
-                        <label class="col-form-label text-md-right" for="count">Кол-во мест</label>
+                        <label class="col-form-label text-md-right" for="count">Кол-во</label>
                         <input @blur="$v.storedItem.count.$touch()"
                                class="form-control form-control-sm"
                                id="count"
@@ -145,9 +145,26 @@
                                required v-model.number="storedItem.count">
                         <b-popover
                             :show.sync="$v.storedItem.count.$error"
-                            content="Определите количество товаров"
+                            content="Определите количество товаров данного типа"
                             placement="bottom"
                             target="count"
+                            triggers="null"
+                            variant="danger"/>
+                    </div>
+
+                    <div class="form-group col-md-3 col-lg-2">
+                        <label class="col-form-label text-md-right" for="count">Кол-во мест</label>
+                        <input @blur="$v.storedItem.count.$touch()"
+                               class="form-control form-control-sm"
+                               id="place-count"
+                               maxlength="4"
+                               placeholder="занимаемых мест"
+                               required v-model.number="storedItem.placeCount">
+                        <b-popover
+                            :show.sync="$v.storedItem.placeCount.$error"
+                            content="Определите количество занимаемых мест"
+                            placement="bottom"
+                            target="place-count"
                             triggers="null"
                             variant="danger"/>
                     </div>
@@ -175,8 +192,6 @@
 
                     <div class="form-group col-md-3 col-lg-2">
                         <label class="col-form-label text-md-right" for="branch">Филиал</label>
-                        <!--                        <input class="form-control form-control-sm" disabled id="branch" name="branch"-->
-                        <!--                               v-model="branch.name">-->
                         <select class="form-control form-control-sm" v-model="storedItem.branch">
                             <option disabled :value="null"> -- Выберите филиал --</option>
                             <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
@@ -227,6 +242,9 @@
 
     export default {
         name: "StoredItemBox",
+        components: {
+            SuggestionsInput: require('../common/SuggestionInput').default
+        },
         props: {
             branches: {
                 type: Object,
@@ -261,14 +279,13 @@
                     branch: this.branches[0],
                     item: null,
                     tariff: null,
-                    // placeCount: null,
+                    placeCount: null,
                     customsCode: null,
                     billingInfo: {
                         tariffPricing: null
                     },
                     shop: null
                 },
-                // tariff: {name: null},
                 customPrice: 0,
                 customPriceState: null
             }
@@ -314,7 +331,6 @@
             },
             onItemSelected(item) {
                 this.storedItem.item = item;
-                // this.tariff = this.tariffs.find(x => x.id === item.tariffId);
                 if (item)
                     this.customsCodes = item.codes;
             },
@@ -327,7 +343,7 @@
                 this.storedItem.length = '';
                 this.storedItem.width = '';
                 this.storedItem.count = '';
-                // this.storedItem.placeCount = '';
+                this.storedItem.placeCount = '';
                 this.storedItem.item = null;
                 this.filteredItems = [];
                 this.storedItem.price = null;
@@ -338,7 +354,6 @@
                 this.$refs.suggestionInput.query = '';
                 this.$nextTick(() => {
                     this.$v.$reset();
-                    // this.$refs.modal.hide()
                 })
             },
             async onAdded(e) {
@@ -406,16 +421,6 @@
         watch: {
             providedStoredItemInfo() {
                 this.onItemSelected(this.providedStoredItemInfo.item);
-                //this is needed, because attached customsCode could differ as an object from options (customsCodes)
-                // this.storedItem.customsCode = this.customsCodes.find(function (el) {
-                //     if (el.id === this.providedStoredItemInfo.customsCode.id)
-                //         return el;
-                // }, this);
-
-                // this.providedStoredItemInfo.shop = this.shops.find(function (el) {
-                //     if(el.id === this.providedStoredItemInfo.shop.id)
-                //         return el;
-                // }, this);
                 this.storedItem = $.extend(true, {}, this.providedStoredItemInfo);
                 this.storedItem.customsCode = this.customsCodes.find(function (el) {
                     if (el.id === this.providedStoredItemInfo.customsCode.id)
@@ -423,9 +428,6 @@
                 }, this);
                 this.itemInitQuery = this.providedStoredItemInfo.item.name;
             }
-        },
-        components: {
-            SuggestionsInput: require('../common/SuggestionInput').default
         },
         validations: {
             storedItem: {
@@ -457,10 +459,9 @@
                 item: {
                     required
                 },
-                // placeCount: {
-                //     required,
-                //     integer
-                // },
+                placeCount: {
+                    required
+                },
                 customsCode: {
                     required
                 },
