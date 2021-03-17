@@ -11,11 +11,11 @@ use App\Models\Customs\CustomsCodeTax;
 use App\Models\Order;
 use App\Models\Role;
 use App\Models\StoredItems\Item;
+use App\Models\StoredItems\StorageHistory;
 use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Tariff;
 use App\Models\TariffPriceHistory;
-use App\StoredItems\StorageHistory;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -36,7 +36,7 @@ class OrderControllerTest extends TestCase
         $this->withoutMiddleware();
         $this->withoutExceptionHandling();
 
-        $itemsCount = 100;
+        $itemsCount = 10;
 
         $response = $this->actingAs($data['employee'])
             ->post('/orders', [
@@ -50,6 +50,7 @@ class OrderControllerTest extends TestCase
                         'weight' => 3,
                         'shop' => 'Test shop',
                         'count' => $itemsCount,
+                        'placeCount' => $itemsCount,
                         'item_id' => $data['item']->id,
                         'tariff_id' => $data['tariff']->id,
                         'branch_id' => $data['branch']->id,
@@ -73,9 +74,9 @@ class OrderControllerTest extends TestCase
 
         $this->assertCount(1, BillingInfo::all());
 
-        $this->assertCount($itemsCount, StoredItem::all());
+        $this->assertCount(100, StoredItem::all());
 
-        $this->assertCount($itemsCount, StorageHistory::all());
+        $this->assertCount(100, StorageHistory::all());
 
         $statuses = StoredItem::all()->pluck('status')->unique();
 
@@ -125,6 +126,7 @@ class OrderControllerTest extends TestCase
                         'weight' => 3,
                         'shop' => 'Test shop',
                         'count' => 10,
+                        'placeCount' => 20,
                         'item_id' => $data['item']->id,
                         'tariff_id' => $data['tariff']->id,
                         'branch_id' => $data['branch']->id,
@@ -137,6 +139,7 @@ class OrderControllerTest extends TestCase
                         'weight' => 5,
                         'shop' => 'Test shop 2',
                         'count' => 20,
+                        'placeCount' => 20,
                         'item_id' => $data['item']->id,
                         'tariff_id' => $data['tariff']->id,
                         'branch_id' => $data['branch']->id,
@@ -161,7 +164,8 @@ class OrderControllerTest extends TestCase
                     'length' => 0.5,
                     'weight' => 8,
                     'shop' => 'Test shop',
-                    'count' => 15,
+                    'count' => 10,
+                    'placeCount' => 15,
                     'item_id' => $data['item']->id,
                     'tariff_id' => $data['tariff']->id,
                     'branch_id' => $data['branch']->id,
@@ -175,6 +179,7 @@ class OrderControllerTest extends TestCase
                     'weight' => 5,
                     'shop' => 'Test shop 2',
                     'count' => 10,
+                    'placeCount' => 10,
                     'item_id' => $data['item']->id,
                     'tariff_id' => $tariff->id,
                     'branch_id' => $data['branch']->id,
@@ -192,13 +197,13 @@ class OrderControllerTest extends TestCase
 
         $this->assertCount(2, StoredItemInfo::all());
 
-        $this->assertCount(25, StoredItem::all());
+        $this->assertCount(250, StoredItem::all());
 
-        $this->assertCount(10, StoredItem::onlyTrashed()->get());
+        $this->assertCount(350, StoredItem::onlyTrashed()->get());
 
-        $this->assertCount(25, StorageHistory::all());
+        $this->assertCount(250, StorageHistory::all());
 
-        $this->assertCount(30, StorageHistory::onlyTrashed()->get());
+        $this->assertCount(600, StorageHistory::onlyTrashed()->get());
     }
 
     public function test_order_destroy()
@@ -208,7 +213,7 @@ class OrderControllerTest extends TestCase
 //        $this->withoutMiddleware();
         $this->withoutExceptionHandling();
 
-        $itemsCount = 100;
+        $itemsCount = 10;
 
         $adminRole = Role::create([
             'name' => 'admin',
@@ -230,6 +235,7 @@ class OrderControllerTest extends TestCase
                         'weight' => 3,
                         'shop' => 'Test shop',
                         'count' => $itemsCount,
+                        'placeCount' => $itemsCount,
                         'item_id' => $data['item']->id,
                         'tariff_id' => $data['tariff']->id,
                         'branch_id' => $data['branch']->id,
@@ -255,11 +261,11 @@ class OrderControllerTest extends TestCase
 
         $this->assertCount(0, StoredItem::all());
 
-        $this->assertCount($itemsCount, StoredItem::withTrashed()->get());
+        $this->assertCount(100, StoredItem::withTrashed()->get());
 
         $this->assertCount(0, StorageHistory::all());
 
-        $this->assertCount($itemsCount, StorageHistory::withTrashed()->get());
+        $this->assertCount(100, StorageHistory::withTrashed()->get());
 
         $this->assertCount(0, BillingInfo::all());
 
@@ -284,6 +290,7 @@ class OrderControllerTest extends TestCase
                         'weight' => 3,
                         'shop' => 'Test shop',
                         'count' => 10,
+                        'placeCount' => 10,
                         'item_id' => $data['item']->id,
                         'tariff_id' => $data['tariff']->id,
                         'branch_id' => $data['branch']->id,
@@ -308,6 +315,7 @@ class OrderControllerTest extends TestCase
                     'weight' => 5,
                     'shop' => 'Test shop 2',
                     'count' => 10,
+                    'placeCount' => 10,
                     'item_id' => $data['item']->id,
                     'tariff_id' => $data['tariff']->id,
                     'branch_id' => $data['branch']->id,
