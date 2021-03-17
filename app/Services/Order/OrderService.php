@@ -44,6 +44,10 @@ class OrderService
         $this->billingInfoService = $billingInfoService;
     }
 
+    /**
+     * @param OrderDto $orderDto
+     * @return Order
+     */
     public function store(OrderDto $orderDto): Order
     {
         /** @var Order $order */

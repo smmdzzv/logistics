@@ -247,10 +247,10 @@
         },
         props: {
             branches: {
-                type: Object,
+                type: Array,
                 required: false,
                 default: function () {
-                    return {name: ''}
+                    return [{name: ''}]
                 }
             },
             tariffs: Array,

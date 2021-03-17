@@ -18,7 +18,7 @@ class CreateBillingInfosTable extends Migration
             $table->uuid('tariff_price_history_id')->index();
             $table->uuid('stored_item_info_id')->index();
 //            $table->uuid('deleted_by_id', 26)->index()->nullable();
-//            $table->integer('placesCount');
+            $table->integer('totalPlaceCount');
             $table->decimal('totalCubage', 10,3);
             $table->decimal('totalWeight', 10,3);
             $table->decimal('weightPerCube',10,3);

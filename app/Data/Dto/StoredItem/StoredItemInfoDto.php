@@ -23,6 +23,8 @@ class StoredItemInfoDto extends FlexibleDataTransferObject
 
     public int $count;
 
+    public int $placeCount;
+
 //    public ?float $customPrice;
 
     public ?string $shop;
@@ -50,6 +52,7 @@ class StoredItemInfoDto extends FlexibleDataTransferObject
         $parameters['length'] = NumericHelper::roundFloatVal($parameters['length'], 3);
         $parameters['weight'] = NumericHelper::roundFloatVal($parameters['weight'], 3);
         $parameters['count'] = (int)$parameters['count'];
+        $parameters['placeCount'] = (int)$parameters['placeCount'];
 
         parent::__construct($parameters);
     }

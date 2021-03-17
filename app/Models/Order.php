@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Order\StoredItemsSelection;
-use App\Models\Order\OrderRemovedItem;
 use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemInfo;
 use App\Models\Users\Client;
@@ -23,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string id
  * @property Collection orderPayments
  * @property Client owner
+ * @property int totalPlaceCount
  */
 class Order extends BaseModel
 {
@@ -97,6 +96,7 @@ class Order extends BaseModel
             $this->totalPrice += $billing['totalPrice'];
             $this->totalDiscount += $billing['totalDiscount'];
             $this->totalCount += $billing['count'];
+            $this->totalPlaceCount += $billing['totalPlaceCount'];
         }
 
         $this->roundStat();
@@ -117,7 +117,8 @@ class Order extends BaseModel
         $this->totalWeight = round($this->totalWeight, 3);
         $this->totalPrice = round($this->totalPrice, 2);
         $this->totalDiscount = round($this->totalDiscount, 2);
-        $this->totalCount = round($this->totalCount, 2);
+//        $this->totalCount = round($this->totalCount, 2);
+//        $this->totalPlaceCount = round($this->totalCount, 2);
     }
 
     public function complete()

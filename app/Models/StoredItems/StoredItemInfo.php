@@ -24,7 +24,8 @@ use Illuminate\Support\Collection;
  * @property string branch_id
  * @property string owner_id
  * @property Item item
- * @property double count
+ * @property int count
+ * @property int placeCount
  * @property BillingInfo billingInfo
  * @property Tariff tariff
  * @property string id
@@ -122,6 +123,7 @@ class StoredItemInfo extends BaseModel
         $this->billingInfo->weightPerCube = $this->billingInfo->totalWeight / $this->billingInfo->totalCubage;
         $this->billingInfo->discountPerCube = 0;
         $this->billingInfo->count = $this->count;
+        $this->billingInfo->totalPlaceCount = $this->getTotalPlaceCount();
 
         if ($this->item->onlyCustomPrice) {
             if (!$customPrice)
@@ -147,5 +149,9 @@ class StoredItemInfo extends BaseModel
         }
 
         return $items;
+    }
+
+    public function getTotalPlaceCount(){
+        return $this->count * $this->placeCount;
     }
 }

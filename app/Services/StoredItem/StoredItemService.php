@@ -34,7 +34,7 @@ class StoredItemService
 
     public function massStoreFromInfo(StoredItemInfo $info, $quantity = null, $status = 'stored'): Collection
     {
-        return collect([])->pad($quantity ?? $info->count, null)->map(function ($i) use ($info, $status) {
+        return collect([])->pad($quantity ?? $info->count * $info->placeCount, null)->map(function ($i) use ($info, $status) {
             return new StoredItem([
                 'stored_item_info_id' => $info->id,
                 'status' => $status,
@@ -50,9 +50,9 @@ class StoredItemService
 
     public function massUpdateFromInfo(StoredItemInfo $info)
     {
-        $diff = $info->storedItems()->count() - $info->count;
+        $diff = $info->storedItems()->count() - $info->getTotalPlaceCount();
         if ($diff > 0) {
-            $items = $info->storedItems()
+            $info->storedItems()
                 ->with('storageHistory')
                 ->limit($diff)
                 ->get()

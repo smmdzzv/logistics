@@ -29,6 +29,7 @@ class OrderRequest extends FormRequest
             'storedItemInfos.*.length' => 'required|numeric',
             'storedItemInfos.*.weight' => 'required|numeric',
             'storedItemInfos.*.count' => 'required|numeric',
+            'storedItemInfos.*.placeCount' => 'required|numeric',
             'storedItemInfos.*.customPrice' => 'nullable|numeric',
             'storedItemInfos.*.item_id' => 'required|exists:items,id',
             'storedItemInfos.*.tariff_id' => 'required|exists:tariffs,id',

@@ -21,6 +21,8 @@ class OrderDto extends FlexibleDataTransferObject
 
     public float $totalCount = 0;
 
+    public float $totalPlaceCount = 0;
+
     public float $totalWeight = 0;
 
     public float $totalCubage = 0;

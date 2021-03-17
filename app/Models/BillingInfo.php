@@ -14,7 +14,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property double totalDiscount
  * @property double totalPrice
  * @property string tariff_price_history_id
- * @property double count
+ * @property integer count
+ * @property integer totalPlaceCount
  * @property TariffPriceHistory tariffPricing
  * @property string created_by_id
  */

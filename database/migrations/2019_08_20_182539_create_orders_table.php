@@ -18,7 +18,8 @@ class CreateOrdersTable extends Migration
             $table->uuid('owner_id')->index();
             $table->uuid('branch_id');
             $table->string('status')->default('active');
-            $table->decimal('totalCount', 10, 2);
+            $table->integer('totalCount');
+            $table->integer('totalPlaceCount');
             $table->decimal('totalWeight', 10, 3);
             $table->decimal('totalCubage', 10, 3);
             $table->decimal('totalPrice', 10, 2);
