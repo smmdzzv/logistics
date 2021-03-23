@@ -57,8 +57,7 @@ class StoredItemService
                 ->limit($diff)
                 ->get()
                 ->each(function (StoredItem $item) {
-                    $item->storageHistory->delete();
-                    $item->delete();
+                    $this->delete($item, StoredItem::STATUS_DELETED);
                 });
         } else {
             $this->massStoreFromInfo($info, abs($diff));
@@ -77,6 +76,17 @@ class StoredItemService
         $this->storageService->massDelete($storedItems);
 
         return StoredItem::whereIn('id', $storedItems)->update([
+            'deleted_at' => Carbon::now(),
+            'deleted_by_id' => auth()->id(),
+            'status' => $status
+        ]);
+    }
+
+    public function delete(StoredItem $storedItem, string $status)
+    {
+        $storedItem->storageHistory->delete();
+
+        return $storedItem->update([
             'deleted_at' => Carbon::now(),
             'deleted_by_id' => auth()->id(),
             'status' => $status

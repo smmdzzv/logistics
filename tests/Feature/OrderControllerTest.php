@@ -202,8 +202,8 @@ class OrderControllerTest extends TestCase
         $this->assertCount(350, StoredItem::onlyTrashed()->get());
 
         $this->assertCount(1, StoredItem::onlyTrashed()->pluck('status')->unique());
-//dd(StoredItem::onlyTrashed()->pluck('status')->first());
-//        $this->assertEquals(StoredItem::STATUS_DELETED, StoredItem::onlyTrashed()->pluck('status')->first());
+
+        $this->assertEquals(StoredItem::STATUS_DELETED, StoredItem::onlyTrashed()->pluck('status')->first());
 
         $this->assertCount(250, StorageHistory::all());
 

@@ -97,7 +97,8 @@ class OrderService
                 || $infosDto->pluck('id')->contains($info->id);
         })->each(function (StoredItemInfo $info) {
             StorageHistory::whereIn('stored_item_id', $info->storedItems->pluck('id'))->delete();
-            $info->storedItems()->delete();
+//            $info->storedItems()->delete();
+            $this->itemService->massDelete($info->storedItems, StoredItem::STATUS_DELETED);
             $info->delete();
         });
     }
