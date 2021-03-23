@@ -296,7 +296,7 @@ class OrderControllerTest extends TestCase
                         'length' => 0.65,
                         'weight' => 3,
                         'shop' => 'Test shop',
-                        'count' => 2,
+                        'count' => 1,
                         'placeCount' => 10,
                         'item_id' => $data['item']->id,
                         'tariff_id' => $data['tariff']->id,
@@ -321,8 +321,8 @@ class OrderControllerTest extends TestCase
                     'length' => 0.98,
                     'weight' => 5,
                     'shop' => 'Test shop 2',
-                    'count' => 2,
-                    'placeCount' => 10,
+                    'count' => 1,
+                    'placeCount' => 5,
                     'item_id' => $data['item']->id,
                     'tariff_id' => $data['tariff']->id,
                     'branch_id' => $data['branch']->id,
@@ -341,6 +341,14 @@ class OrderControllerTest extends TestCase
         $this->assertCount(1, StoredItemInfo::all());
 
         $this->assertCount(1, StoredItemInfo::onlyTrashed()->get());
+
+        $this->assertEquals(StoredItemInfo::STATUS_DELETED, StoredItemInfo::onlyTrashed()->first()->status);
+
+        $this->assertCount(5, StoredItem::all());
+
+        $this->assertCount(10, StoredItem::onlyTrashed()->get());
+
+        $this->assertEquals(StoredItem::STATUS_DELETED, StoredItem::onlyTrashed()->pluck('status')->first());
     }
 
     private function prepareMockData()

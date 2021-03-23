@@ -57,4 +57,12 @@ class StoredItemInfoService
             'status' => $status
         ]);
     }
+
+    public function delete(StoredItemInfo $info, string $status){
+        $info->update([
+            'deleted_at' => Carbon::now(),
+            'deleted_by_id' => auth()->id(),
+            'status' => $status
+        ]);
+    }
 }
