@@ -214,7 +214,6 @@ class OrderControllerTest extends TestCase
     {
         $data = $this->prepareMockData();
 
-//        $this->withoutMiddleware();
         $this->withoutExceptionHandling();
 
         $itemsCount = 10;
@@ -257,23 +256,27 @@ class OrderControllerTest extends TestCase
 
         $this->assertCount(0, Order::all());
 
-        $this->assertCount(1, Order::withTrashed()->get());
+        $this->assertCount(1, Order::onlyTrashed()->get());
 
         $this->assertCount(0, StoredItemInfo::all());
 
-        $this->assertCount(1, StoredItemInfo::withTrashed()->get());
+        $this->assertCount(1, StoredItemInfo::onlyTrashed()->get());
+
+        $this->assertEquals(StoredItemInfo::STATUS_DELETED, StoredItemInfo::onlyTrashed()->first()->status);
 
         $this->assertCount(0, StoredItem::all());
 
-        $this->assertCount(100, StoredItem::withTrashed()->get());
+        $this->assertCount(100, StoredItem::onlyTrashed()->get());
+
+        $this->assertEquals(StoredItem::STATUS_DELETED, StoredItem::onlyTrashed()->pluck('status')->first());
 
         $this->assertCount(0, StorageHistory::all());
 
-        $this->assertCount(100, StorageHistory::withTrashed()->get());
+        $this->assertCount(100, StorageHistory::onlyTrashed()->get());
 
         $this->assertCount(0, BillingInfo::all());
 
-        $this->assertCount(1, BillingInfo::withTrashed()->get());
+        $this->assertCount(1, BillingInfo::onlyTrashed()->get());
     }
 
     public function test_order_delete_stored_item()
