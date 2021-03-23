@@ -58,7 +58,7 @@ class StoredItemInfo extends BaseModel
 
     public function owner()
     {
-        return $this->belongsTo(Client::class, 'owner_id', 'id', 'users');
+        return $this->belongsTo(Client::class, 'owner_id', 'id', 'users')->withTrashed();
     }
 
     public function branch()

@@ -3,9 +3,24 @@
 @section('content')
     <div class="container col-md-10">
         <div class="card">
-            <div class="card-header">
-                Информация о товаре <b>{{$storedItem->code}}</b>
-            </div>
+            @switch($storedItem->status)
+                @case(\App\Models\StoredItems\StoredItem::STATUS_DELETED)
+                <div class="card-header bg-danger">
+                    Удаленный товар <b>{{$storedItem->code}}</b>
+                </div>
+                @break
+                @case(\App\Models\StoredItems\StoredItem::STATUS_DELIVERED)
+                <div class="card-header bg-primary">
+                    Доставленный товар<b>{{$storedItem->code}}</b>
+                </div>
+                @break
+                @default
+                <div class="card-header bg-success">
+                    Активный товар <b>{{$storedItem->code}}</b>
+                </div>
+                @break
+            @endswitch
+
             <div class="card-body">
                 <h4>Общая информация</h4>
                 <div class="jumbotron">
@@ -36,7 +51,7 @@
 
                         @if($history->deleted_at)
                             <p>Дата выдачи: <b><span v-luxon="{ value: '{{$history->deleted_at}}'}"/></b></p>
-                            <p>Выдал: <b>{{$history->destroyer->code}} {{$history->destroyer->name}}</b></p>
+                            <p>Выдал: <b>{{$history->destroyer?->code}} {{$history->destroyer?->name}}</b></p>
                         @endif
                         @if(!$loop->last)
                             <hr>
@@ -47,7 +62,8 @@
                 <div class="jumbotron">
                     @foreach($tripHistories as $history)
                         <p>Рейс: <b>{{$history->trip->code}}</b></p>
-                        <p>Добавлен в предварительный список: <b><span v-luxon="{ value: '{{$history->created_at}}'}"/></b></p>
+                        <p>Добавлен в предварительный список: <b><span v-luxon="{ value: '{{$history->created_at}}'}"/></b>
+                        </p>
                         @if($history->creator)
                             <p>Добавил: <b>{{$history->creator->code}} {{$history->creator->name}} </b>
                                 @endif
@@ -57,9 +73,11 @@
                                 <p>Загрузил: <b>{{$history->loadedBy->code}} {{$history->loadedBy->name}}</b></p>
                             @endif
                             @if($history->deleted_at)
-                                <p>Дата снятия с рейса: <b><span v-luxon="{ value: '{{$history->deleted_at}}'}"/></b></p>
+                                <p>Дата снятия с рейса: <b><span v-luxon="{ value: '{{$history->deleted_at}}'}"/></b>
+                                </p>
                                 @if($history->destroyer)
-                                    <p>Снял с рейса: <b>{{$history->destroyer->code}} {{$history->destroyer->name}}</b></p>
+                                    <p>Снял с рейса: <b>{{$history->destroyer->code}} {{$history->destroyer->name}}</b>
+                                    </p>
                                 @endif
                             @endif
                             @if(!$loop->last)

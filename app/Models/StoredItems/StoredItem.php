@@ -78,12 +78,12 @@ class StoredItem extends BaseModel
 
     public function info()
     {
-        return $this->belongsTo(StoredItemInfo::class, 'stored_item_info_id');
+        return $this->belongsTo(StoredItemInfo::class, 'stored_item_info_id')->withTrashed();
     }
 
     public function storageHistories()
     {
-        return $this->hasMany(StorageHistory::class);
+        return $this->hasMany(StorageHistory::class)->withTrashed();
     }
 
     public function storageHistory()
