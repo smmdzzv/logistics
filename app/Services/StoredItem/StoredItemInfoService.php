@@ -40,15 +40,21 @@ class StoredItemInfoService
         });
     }
 
-    public function deleteOrderStoredItems(Order $order): int
+    public function deleteOrderStoredItems(Order $order, string $status): int
     {
-        $this->storedItemsService->massDelete($order->storedItems->pluck('id'));
+        $this->storedItemsService->massDelete($order->storedItems->pluck('id'), $status);
 
         $this->billingService->massDeleteByInfos($order->storedItemInfos->pluck('id'));
 
-        return StoredItemInfo::whereIn('id', $order->storedItemInfos->pluck('id'))->update([
+        return $this->massDelete($order->storedItemInfos->pluck('id'), $status);
+    }
+
+    public function massDelete(Collection $storedItemInfos, string $status)
+    {
+        return StoredItemInfo::whereIn('id', $storedItemInfos)->update([
             'deleted_at' => Carbon::now(),
-            'deleted_by_id' => auth()->id()
+            'deleted_by_id' => auth()->id(),
+            'status' => $status
         ]);
     }
 }

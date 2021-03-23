@@ -69,22 +69,24 @@ class StoredItemService
 
     /**
      * @param Collection $storedItems ids
+     * @param string $status
      * @return int
      */
-    public function massDelete(Collection $storedItems): int
+    public function massDelete(Collection $storedItems, string $status): int
     {
         $this->storageService->massDelete($storedItems);
 
         return StoredItem::whereIn('id', $storedItems)->update([
             'deleted_at' => Carbon::now(),
-            'deleted_by_id' => auth()->id()
+            'deleted_by_id' => auth()->id(),
+            'status' => $status
         ]);
     }
 
     /**
      * Generates unique (in terms of order) codes
      * to distinguish same items visually
-     * @param User $owner
+     * @param Client $owner
      * @return string
      * @throws \Exception
      */

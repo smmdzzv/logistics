@@ -79,7 +79,7 @@ class OrderService
 
     public function destroy(Order $order)
     {
-        $this->infoService->deleteOrderStoredItems($order);
+        $this->infoService->deleteOrderStoredItems($order, StoredItemInfo::STATUS_DELETED);
 
         return $order->delete();
     }

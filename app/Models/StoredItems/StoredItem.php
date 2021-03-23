@@ -29,6 +29,8 @@ class StoredItem extends BaseModel
 
     public const STATUS_LOST = 'lost';
 
+    public const STATUS_DELETED = 'deleted';
+
     /**
      * @param $query
      * @return mixed

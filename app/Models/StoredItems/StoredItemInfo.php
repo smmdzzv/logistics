@@ -37,6 +37,10 @@ class StoredItemInfo extends BaseModel
 {
     use SoftDeletes;
 
+    public const STATUS_STORED = 'active';
+
+    public const STATUS_DELETED = 'deleted';
+
     protected $guarded = [];
 
     protected $casts = [

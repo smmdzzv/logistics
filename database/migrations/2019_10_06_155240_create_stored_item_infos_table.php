@@ -31,7 +31,7 @@ class CreateStoredItemInfosTable extends Migration
             $table->double('height',10, 3);
             $table->double('width',10, 3);
             $table->double('length',10, 3);
-            $table->string('status');
+            $table->string('status')->default('active');
 
 
             $table->userStamp();
