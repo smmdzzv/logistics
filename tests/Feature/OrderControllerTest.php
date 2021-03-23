@@ -189,7 +189,7 @@ class OrderControllerTest extends TestCase
             'customPrices' => [null, 92.5]
         ];
 
-        $response = $this->put('/orders/' . $order->id, $putData);
+        $response = $this->actingAs($data['employee'])->put('/orders/' . $order->id, $putData);
 
         $response->assertOk();
 
@@ -208,6 +208,8 @@ class OrderControllerTest extends TestCase
         $this->assertCount(250, StorageHistory::all());
 
         $this->assertCount(600, StorageHistory::onlyTrashed()->get());
+
+        $this->assertEquals($data['employee']->id, StorageHistory::onlyTrashed()->first()->destroyer->id);
     }
 
     public function test_order_destroy()
@@ -273,6 +275,8 @@ class OrderControllerTest extends TestCase
         $this->assertCount(0, StorageHistory::all());
 
         $this->assertCount(100, StorageHistory::onlyTrashed()->get());
+
+        $this->assertEquals($data['employee']->id, StorageHistory::onlyTrashed()->first()->destroyer->id);
 
         $this->assertCount(0, BillingInfo::all());
 
@@ -349,6 +353,8 @@ class OrderControllerTest extends TestCase
         $this->assertCount(10, StoredItem::onlyTrashed()->get());
 
         $this->assertEquals(StoredItem::STATUS_DELETED, StoredItem::onlyTrashed()->pluck('status')->first());
+
+        $this->assertEquals($data['employee']->id, StorageHistory::onlyTrashed()->first()->destroyer->id);
     }
 
     private function prepareMockData()
