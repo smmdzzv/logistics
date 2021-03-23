@@ -35,10 +35,10 @@ class ItemsStorageHistoryService
     public function massDelete(Collection $storedItemIds)
     {
         StorageHistory::whereHas('storedItem', function (Builder $query) use ($storedItemIds) {
-            $query->whereIn('id', $storedItemIds);
+            $query->whereIn('id', $storedItemIds->all());
         })->update([
             'deleted_at' => Carbon::now(),
-            'deleted_by_id' => auth()->user()->id
+            'deleted_by_id' => auth()->id()
         ]);
     }
 

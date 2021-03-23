@@ -75,7 +75,7 @@ class StoredItemService
     {
         $this->storageService->massDelete($storedItems);
 
-        return StoredItem::whereIn('id', $storedItems)->update([
+        return StoredItem::whereIn('id', $storedItems->all())->update([
             'deleted_at' => Carbon::now(),
             'deleted_by_id' => auth()->id(),
             'status' => $status
