@@ -56,6 +56,10 @@ class Payment extends BaseModel
 {
     use SoftDeletes;
 
+    public const STATUS_COMPLETED = 'completed';
+
+    public const STATUS_PENDING = 'pending';
+
     protected $casts = [
         'billAmount' => 'double',
         'paidAmountInBillCurrency' => 'double',

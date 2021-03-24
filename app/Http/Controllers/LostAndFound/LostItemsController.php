@@ -9,7 +9,9 @@ use App\Models\Till\Payment;
 use App\Http\Controllers\Controller;
 use App\Models\Till\PaymentItem;
 use Illuminate\Database\Eloquent\Builder;
-
+/**
+ * @deprecated
+*/
 class LostItemsController extends Controller
 {
     public function __construct()

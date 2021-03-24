@@ -7,6 +7,7 @@ use App\Data\RequestWriters\Payments\PaymentRequestWriterFabric;
 use App\Http\Controllers\BaseController;
 use App\Models\Currency;
 use App\Models\StoredItems\StoredItem;
+use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
 
 class LostStoredItemsController extends BaseController
@@ -25,16 +26,16 @@ class LostStoredItemsController extends BaseController
         $storedItem->update(['status' => StoredItem::STATUS_LOST]);
 
         $paymentData = [
-            'status' => 'pending',
+            'status' => Payment::STATUS_COMPLETED,
             'payer' => auth()->user()->branch->id,
             'payer_type' => 'branch',
             'payee' => $storedItem->info->owner->id,
             'payee_type' => 'user',
             'paymentItem' => PaymentItem::where('title', 'Бонус')->firstOrFail()->id,
-            'billAmount' => request()->get('compensation'),
+            'billAmount' =>  $data['compensation'],
             'paidAmountInBillCurrency' => $data['compensation'],
             'billCurrency' => Currency::where('isoName', 'USD')->firstOrFail()->id,
-            'comment' => 'Пополение баланса в счет утерянного товара ' . $storedItem->code,
+            'comment' => 'Бонус в счет утерянного товара ' . $storedItem->code
         ];
 
         $fabric = new PaymentRequestWriterFabric($paymentData);

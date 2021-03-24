@@ -9,6 +9,8 @@ use App\Models\Till\Account;
 use App\Models\Till\ExchangeRate;
 use App\Models\Till\Payment;
 use App\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 
 class PaymentRequestWriter extends RequestWriter
@@ -181,6 +183,11 @@ class PaymentRequestWriter extends RequestWriter
         return $subject;
     }
 
+    /**
+     * @param $subject
+     * @param $currencyId
+     * @return account for branch, in case of user returns null
+     */
     protected function getSubjectAccount($subject, $currencyId)
     {
         $account = null;
