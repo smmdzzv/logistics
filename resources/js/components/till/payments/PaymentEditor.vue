@@ -1,16 +1,19 @@
 <template>
     <div class="container">
         <div class="alert alert-info" v-if="payerAccounts">
-            <span>{{payment.payer.name}}
-                <span v-if="payment.payer.code">{{payment.payer.code}}</span>
+            <span>{{ payment.payer.name }}
+                <span v-if="payment.payer.code">{{ payment.payer.code }}</span>
                 <span v-for="account in payerAccounts">
-                {{account.balance}} {{account.currency.isoName}} |
+                {{ account.balance }} {{ account.currency.isoName }} |
                 </span>
             </span>
         </div>
         <div class="card">
-            <div class="card-header">
-                Провести платеж
+            <div class="card-header"
+                 :class="{'bg-success': payment.approved, 'bg-danger': payment.approved === false, 'bg-warning':payment.approved === null}">
+                Провести платеж <span v-if="payment.approved">(Заявка одобрена)</span>
+                <span v-if="payment.approved === false">(Заявка отклонена)</span>
+                <span v-if="payment.approved === null">(Заявка на рассмотрении)</span>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -25,7 +28,7 @@
                             <option value="completed">ПРОВЕДЕННАЯ</option>
                         </b-form-select>
                         <b-form-invalid-feedback :state="errors.status"><strong
-                            v-for="message in errors.status"> {{message}}</strong>
+                            v-for="message in errors.status"> {{ message }}</strong>
                         </b-form-invalid-feedback>
                     </div>
                 </div>
@@ -55,10 +58,10 @@
                         <b-form-select v-else :disabled="disable" v-model="payment.payer"
                                        :class="{'is-invalid':errors.payer}">
                             <option :value="null">-- Выберите филиал --</option>
-                            <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
+                            <option v-for="branch in branches" :value="branch">{{ branch.name }}</option>
                         </b-form-select>
                         <span class="invalid-feedback" role="alert" v-if="errors.payer">
-                                             <strong v-for="message in errors.payer">{{message}}</strong>
+                                             <strong v-for="message in errors.payer">{{ message }}</strong>
                                         </span>
                     </b-input-group>
 
@@ -84,10 +87,10 @@
                         <b-form-select v-else :disabled="disable" v-model="payment.payee"
                                        :class="{'is-invalid':errors.payee}">
                             <option :value="null">-- Выберите филиал --</option>
-                            <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
+                            <option v-for="branch in branches" :value="branch">{{ branch.name }}</option>
                         </b-form-select>
                         <b-form-invalid-feedback :state="errors.payee"><strong
-                            v-for="message in errors.payee">{{message}}</strong></b-form-invalid-feedback>
+                            v-for="message in errors.payee">{{ message }}</strong></b-form-invalid-feedback>
                     </b-input-group>
                 </div>
 
@@ -100,11 +103,11 @@
                                        class="form-control">
                             <option :value="null" disabled>-- Выберите статью --</option>
                             <option v-for="paymentItem in paymentItems" :value="paymentItem">
-                                {{paymentItem.title}}
+                                {{ paymentItem.title }}
                             </option>
                         </b-form-select>
                         <b-form-invalid-feedback :state="errors.paymentItem"><strong
-                            v-for="message in errors.paymentItem">{{message}}</strong>
+                            v-for="message in errors.paymentItem">{{ message }}</strong>
                         </b-form-invalid-feedback>
                     </div>
 
@@ -117,7 +120,7 @@
                                :disabled="disable"
                                type="number">
                         <b-form-invalid-feedback :state="errors.billAmount"><strong
-                            v-for="message in errors.billAmount">{{message}}</strong></b-form-invalid-feedback>
+                            v-for="message in errors.billAmount">{{ message }}</strong></b-form-invalid-feedback>
                     </div>
 
                     <div class="col-md-4 form-group">
@@ -132,12 +135,12 @@
                                        :class="{'is-invalid':errors.billCurrency}">
                             <option :value="null" disabled>-- Выберите валюту --</option>
                             <option v-for="currency in currencies" :value="currency">
-                                {{currency.name.charAt(0).toUpperCase() + currency.name.slice(1)}}
-                                {{currency.isoName}}
+                                {{ currency.name.charAt(0).toUpperCase() + currency.name.slice(1) }}
+                                {{ currency.isoName }}
                             </option>
                         </b-form-select>
                         <b-form-invalid-feedback :state="errors.billCurrency"><strong
-                            v-for="message in errors.billCurrency">{{message}}</strong></b-form-invalid-feedback>
+                            v-for="message in errors.billCurrency">{{ message }}</strong></b-form-invalid-feedback>
                     </div>
                 </div>
 
@@ -154,7 +157,7 @@
                                class="form-control"
                                type="number">
                         <b-form-invalid-feedback :state="errors.paidAmountInBillCurrency"><strong
-                            v-for="message in errors.paidAmountInBillCurrency">{{message}}</strong>
+                            v-for="message in errors.paidAmountInBillCurrency">{{ message }}</strong>
                         </b-form-invalid-feedback>
                     </div>
 
@@ -168,8 +171,8 @@
                                        disabled>
                             <option :value="null" disabled>-- Выберите валюту --</option>
                             <option v-for="currency in currencies" :value="currency">
-                                {{currency.name.charAt(0).toUpperCase() + currency.name.slice(1)}}
-                                {{currency.isoName}}
+                                {{ currency.name.charAt(0).toUpperCase() + currency.name.slice(1) }}
+                                {{ currency.isoName }}
                             </option>
                         </b-form-select>
                     </div>
@@ -190,7 +193,7 @@
                                       class="form-control"
                                       type="number">
                             <b-form-invalid-feedback :state="errors.paidAmountInSecondCurrency"><strong
-                                v-for="message in errors.paidAmountInSecondCurrency">{{message}}</strong>
+                                v-for="message in errors.paidAmountInSecondCurrency">{{ message }}</strong>
                             </b-form-invalid-feedback>
                         </b-form-input>
 
@@ -221,12 +224,13 @@
                             <option :value="null">-- Выберите валюту --</option>
                             <option v-for="currency in currencies" :value="currency"
                                     :disabled="payment.billCurrency && currency.id === payment.billCurrency.id">
-                                {{currency.name.charAt(0).toUpperCase() + currency.name.slice(1)}}
-                                {{currency.isoName}}
+                                {{ currency.name.charAt(0).toUpperCase() + currency.name.slice(1) }}
+                                {{ currency.isoName }}
                             </option>
                         </b-form-select>
                         <b-form-invalid-feedback :state="errors.secondPaidCurrency"><strong
-                            v-for="message in errors.secondPaidCurrency">{{message}}</strong></b-form-invalid-feedback>
+                            v-for="message in errors.secondPaidCurrency">{{ message }}</strong>
+                        </b-form-invalid-feedback>
                     </div>
                 </div>
 
@@ -241,7 +245,7 @@
                         max-rows="6"
                     ></b-form-textarea>
                     <b-form-invalid-feedback :state="errors.comment"><strong
-                        v-for="message in errors.comment">{{message}}</strong></b-form-invalid-feedback>
+                        v-for="message in errors.comment">{{ message }}</strong></b-form-invalid-feedback>
                 </div>
 
                 <div class="row my-4">
@@ -253,257 +257,257 @@
 </template>
 
 <script>
-    import {hideBusySpinner, showBusySpinner} from "../../../tools";
+import {hideBusySpinner, showBusySpinner} from "../../../tools";
 
-    export default {
-        name: "PaymentEditor",
-        mounted() {
-            if (this.providedPayment) {
-                this.pausePayerWatcher = true;
-                this.pausePayeeWatcher = true;
-                this.isPayerIndividual = this.providedPayment.payer_type === 'user';
-                this.isPayeeIndividual = this.providedPayment.payee_type === 'user';
-                this.payment = this.providedPayment
-            }
-        },
-        props: {
-            branches: {
-                type: Array,
-                required: true
-            },
-            currencies: {
-                type: Array,
-                required: true
-            },
-            paymentItems: {
-                type: Array,
-                required: true
-            },
-            providedPayment: {
-                type: Object
-            },
-            disable: {
-                type: Boolean,
-                default: false
-            }
-        },
-        data() {
-            return {
-                isPayerIndividual: false,
-                isPayeeIndividual: false,
-                payment: {
-                    status: 'pending',
-                    payer: null,
-                    payer_type: null,
-                    payee: null,
-                    payee_type: null,
-                    paymentItem: null,
-                    billAmount: 0,
-                    billCurrency: null,
-                    exchangeRate: {
-                        coefficient: null
-                    },
-                    paidAmountInBillCurrency: 0,
-                    paidAmountInSecondCurrency: 0,
-                    secondPaidCurrency: null,
-                    comment: null
-                },
-                //originally fetched exchange rate
-                exchangeRate: null,
-                payerAccounts: null,
-                pausePayerWatcher: false,
-                errors: {
-                    id: null,
-                    status: null,
-                    payer: null,
-                    payer_type: null,
-                    payee: null,
-                    payee_type: null,
-                    paymentItem: null,
-                    billAmount: null,
-                    billCurrency: null,
-                    paidAmountInBillCurrency: null,
-                    paidAmountInSecondCurrency: null,
-                    secondPaidCurrency: null,
-                    comment: null,
-                    exchangeRate: null
-                }
-            }
-        },
-        watch: {
-            'payment.billAmount'() {
-                this.calculatePaidInBillCurrencyAmount();
-            },
-            'payment.paidAmountInSecondCurrency'() {
-                this.calculatePaidInBillCurrencyAmount();
-            },
-            'payment.paidAmountInBillCurrency'() {
-                this.calculatePaidInSecondCurrencyAmount();
-            },
-            'payment.billCurrency'() {
-                this.checkIfNeededConverting()
-            },
-            'payment.secondPaidCurrency'() {
-                this.checkIfNeededConverting()
-            },
-            'payment.exchangeRate'() {
-                this.calculatePaidInBillCurrencyAmount();
-            },
-            'payment.exchangeRate.coefficient'() {
-                this.calculatePaidInBillCurrencyAmount();
-            },
-            isPayerIndividual() {
-                if (!this.pausePayerWatcher)
-                    this.payment.payer = null;
-                else
-                    this.pausePayerWatcher = false;
-            },
-            isPayeeIndividual() {
-                if (!this.pausePayeeWatcher)
-                    this.payment.payee = null;
-                else
-                    this.pausePayeeWatcher = false;
-            },
-            'payment.payer'() {
-                this.payerAccounts = null;
-                this.getPayerAccounts();
-            }
-        },
-        methods: {
-            calculatePaidInSecondCurrencyAmount() {
-                if (this.payment.secondPaidCurrency && this.payment.exchangeRate)
-                    this.payment.paidAmountInSecondCurrency =
-                        Math.round((this.payment.billAmount - this.payment.paidAmountInBillCurrency)
-                            / this.payment.exchangeRate.coefficient * 100) / 100;
-                else {
-                    this.payment.paidAmountInBillCurrency = this.payment.billAmount;
-                    this.payment.paidAmountInSecondCurrency = 0;
-                }
-            },
-            calculatePaidInBillCurrencyAmount() {
-                if (this.payment.secondPaidCurrency
-                    && this.payment.exchangeRate
-                    && this.payment.paidAmountInSecondCurrency > 0) {
-                    let amount =
-                        Math.round(
-                            (this.payment.billAmount - this.payment.paidAmountInSecondCurrency * this.payment.exchangeRate.coefficient
-                            ) * 100
-                        ) / 100;
-
-                    this.payment.paidAmountInBillCurrency = amount < 0 ? 0 : amount
-                } else
-                    this.payment.paidAmountInBillCurrency = this.payment.billAmount;
-            },
-            checkIfNeededConverting() {
-                let needConverting = this.payment.billCurrency
-                    && this.payment.secondPaidCurrency
-                    && this.payment.billCurrency.id !== this.payment.secondPaidCurrency.id;
-
-                if (needConverting)
-                    this.fetchExchangeRate();
-                else {
-                    this.payment.exchangeRate = {
-                        coefficient: null
-                    };
-                    this.exchangeRate = null;
-                }
-
-            },
-            onPayerSelected(user) {
-                this.payment.payer = user
-
-            },
-            onPayeeSelected(user) {
-                this.payment.payee = user
-            },
-            async fetchExchangeRate() {
-                showBusySpinner();
-                let action = `exchange-history/rate/${this.payment.secondPaidCurrency.id}/${this.payment.billCurrency.id}`;
-                try {
-                    const result = await axios.get(action);
-                    this.exchangeRate = result.data;
-                    this.payment.exchangeRate = Object.assign({}, result.data);
-                } catch (e) {
-                    this.$root.showErrorMsg('Ошибка загрузки',
-                        'Не удалось загрузить курс валют. Убедитесь, что курс для данной валюты создан.')
-                    this.payment.exchangeRate = {coefficient: null};
-                    this.exchangeRate = null;
-                }
-
-                this.$nextTick(
-                    () => {
-                        hideBusySpinner();
-                    }
-                )
-            },
-            async getPayerAccounts() {
-                if (!this.payment.payer)
-                    return;
-
-                try {
-                    let action = '/accounts/' + this.payment.payer.id;
-                    const response = await axios.get(action);
-                    this.payerAccounts = response.data;
-                } catch (e) {
-                    this.$root.showErrorMsg('Ошибка загрузки',
-                        'Не удалось загрузить информацию о счетах плательщика')
-                }
-            },
-            async submit() {
-                try {
-                    let data = {
-                        id: this.payment.id,
-                        status: this.payment.status,
-                        payer: this.payment.payer ? this.payment.payer.id : null,
-                        payer_type: this.payment.payer_type = this.isPayerIndividual ? 'user' : 'branch',
-                        payee: this.payment.payee ? this.payment.payee.id : null,
-                        payee_type: this.payment.payer_type = this.isPayeeIndividual ? 'user' : 'branch',
-                        paymentItem: this.payment.paymentItem.id,
-                        billAmount: this.payment.billAmount,
-                        billCurrency: this.payment.billCurrency.id,
-                        paidAmountInBillCurrency: this.payment.paidAmountInBillCurrency,
-                        paidAmountInSecondCurrency: this.payment.paidAmountInSecondCurrency,
-                        secondPaidCurrency: this.payment.secondPaidCurrency ? this.payment.secondPaidCurrency.id : null,
-                        comment: this.payment.comment,
-                        exchangeRate: null,
-                        customExchangeRate: null
-                    };
-
-                    if (this.payment.exchangeRate.id)
-                        if (this.exchangeRate.coefficient === this.payment.exchangeRate.coefficient)
-                            data.exchangeRate = this.payment.exchangeRate.id;
-                        else
-                            data.customExchangeRate = this.payment.exchangeRate.coefficient;
-
-                    await axios.post('/payment', data);
-                    // window.location.href = '/payment/' + response.data;
-                    window.location.href = '/payment';
-                } catch (e) {
-                    console.log(e);
-                    if (e.response && e.response.status === 422) {
-                        this.errors.id = e.response.data.errors.id;
-                        this.errors.status = e.response.data.errors.status;
-                        this.errors.payer = e.response.data.errors.payer;
-                        this.errors.payer_type = e.response.data.errors.payer_type;
-                        this.errors.payee = e.response.data.errors.payee;
-                        this.errors.payee_type = e.response.data.errors.payee_type;
-                        this.errors.paymentItem = e.response.data.errors.paymentItem;
-                        this.errors.billAmount = e.response.data.errors.billAmount;
-                        this.errors.billCurrency = e.response.data.errors.billCurrency;
-                        this.errors.paidAmountInBillCurrency = e.response.data.errors.paidAmountInBillCurrency;
-                        this.errors.paidAmountInSecondCurrency = e.response.data.errors.paidAmountInSecondCurrency;
-                        this.errors.secondPaidCurrency = e.response.data.errors.secondPaidCurrency;
-                        this.errors.comment = e.response.data.errors.comment;
-                        this.errors.exchangeRate = e.response.data.errors.exchangeRate;
-                    } else {
-                        this.$root.showErrorMsg('Ошибка сохранения',
-                            'Убедитесь, что все поля были заполнены корректно.')
-                    }
-                }
-            }
-        },
-        components: {
-            'SearchUserDropdown': require('../../users/SearchUserDropdown.vue').default
+export default {
+    name: "PaymentEditor",
+    mounted() {
+        if (this.providedPayment) {
+            this.pausePayerWatcher = true;
+            this.pausePayeeWatcher = true;
+            this.isPayerIndividual = this.providedPayment.payer_type === 'user';
+            this.isPayeeIndividual = this.providedPayment.payee_type === 'user';
+            this.payment = this.providedPayment
         }
+    },
+    props: {
+        branches: {
+            type: Array,
+            required: true
+        },
+        currencies: {
+            type: Array,
+            required: true
+        },
+        paymentItems: {
+            type: Array,
+            required: true
+        },
+        providedPayment: {
+            type: Object
+        },
+        disable: {
+            type: Boolean,
+            default: false
+        }
+    },
+    data() {
+        return {
+            isPayerIndividual: false,
+            isPayeeIndividual: false,
+            payment: {
+                status: 'pending',
+                payer: null,
+                payer_type: null,
+                payee: null,
+                payee_type: null,
+                paymentItem: null,
+                billAmount: 0,
+                billCurrency: null,
+                exchangeRate: {
+                    coefficient: null
+                },
+                paidAmountInBillCurrency: 0,
+                paidAmountInSecondCurrency: 0,
+                secondPaidCurrency: null,
+                comment: null
+            },
+            //originally fetched exchange rate
+            exchangeRate: null,
+            payerAccounts: null,
+            pausePayerWatcher: false,
+            errors: {
+                id: null,
+                status: null,
+                payer: null,
+                payer_type: null,
+                payee: null,
+                payee_type: null,
+                paymentItem: null,
+                billAmount: null,
+                billCurrency: null,
+                paidAmountInBillCurrency: null,
+                paidAmountInSecondCurrency: null,
+                secondPaidCurrency: null,
+                comment: null,
+                exchangeRate: null
+            }
+        }
+    },
+    watch: {
+        'payment.billAmount'() {
+            this.calculatePaidInBillCurrencyAmount();
+        },
+        'payment.paidAmountInSecondCurrency'() {
+            this.calculatePaidInBillCurrencyAmount();
+        },
+        'payment.paidAmountInBillCurrency'() {
+            this.calculatePaidInSecondCurrencyAmount();
+        },
+        'payment.billCurrency'() {
+            this.checkIfNeededConverting()
+        },
+        'payment.secondPaidCurrency'() {
+            this.checkIfNeededConverting()
+        },
+        'payment.exchangeRate'() {
+            this.calculatePaidInBillCurrencyAmount();
+        },
+        'payment.exchangeRate.coefficient'() {
+            this.calculatePaidInBillCurrencyAmount();
+        },
+        isPayerIndividual() {
+            if (!this.pausePayerWatcher)
+                this.payment.payer = null;
+            else
+                this.pausePayerWatcher = false;
+        },
+        isPayeeIndividual() {
+            if (!this.pausePayeeWatcher)
+                this.payment.payee = null;
+            else
+                this.pausePayeeWatcher = false;
+        },
+        'payment.payer'() {
+            this.payerAccounts = null;
+            this.getPayerAccounts();
+        }
+    },
+    methods: {
+        calculatePaidInSecondCurrencyAmount() {
+            if (this.payment.secondPaidCurrency && this.payment.exchangeRate)
+                this.payment.paidAmountInSecondCurrency =
+                    Math.round((this.payment.billAmount - this.payment.paidAmountInBillCurrency)
+                        / this.payment.exchangeRate.coefficient * 100) / 100;
+            else {
+                this.payment.paidAmountInBillCurrency = this.payment.billAmount;
+                this.payment.paidAmountInSecondCurrency = 0;
+            }
+        },
+        calculatePaidInBillCurrencyAmount() {
+            if (this.payment.secondPaidCurrency
+                && this.payment.exchangeRate
+                && this.payment.paidAmountInSecondCurrency > 0) {
+                let amount =
+                    Math.round(
+                        (this.payment.billAmount - this.payment.paidAmountInSecondCurrency * this.payment.exchangeRate.coefficient
+                        ) * 100
+                    ) / 100;
+
+                this.payment.paidAmountInBillCurrency = amount < 0 ? 0 : amount
+            } else
+                this.payment.paidAmountInBillCurrency = this.payment.billAmount;
+        },
+        checkIfNeededConverting() {
+            let needConverting = this.payment.billCurrency
+                && this.payment.secondPaidCurrency
+                && this.payment.billCurrency.id !== this.payment.secondPaidCurrency.id;
+
+            if (needConverting)
+                this.fetchExchangeRate();
+            else {
+                this.payment.exchangeRate = {
+                    coefficient: null
+                };
+                this.exchangeRate = null;
+            }
+
+        },
+        onPayerSelected(user) {
+            this.payment.payer = user
+
+        },
+        onPayeeSelected(user) {
+            this.payment.payee = user
+        },
+        async fetchExchangeRate() {
+            showBusySpinner();
+            let action = `exchange-history/rate/${this.payment.secondPaidCurrency.id}/${this.payment.billCurrency.id}`;
+            try {
+                const result = await axios.get(action);
+                this.exchangeRate = result.data;
+                this.payment.exchangeRate = Object.assign({}, result.data);
+            } catch (e) {
+                this.$root.showErrorMsg('Ошибка загрузки',
+                    'Не удалось загрузить курс валют. Убедитесь, что курс для данной валюты создан.')
+                this.payment.exchangeRate = {coefficient: null};
+                this.exchangeRate = null;
+            }
+
+            this.$nextTick(
+                () => {
+                    hideBusySpinner();
+                }
+            )
+        },
+        async getPayerAccounts() {
+            if (!this.payment.payer)
+                return;
+
+            try {
+                let action = '/accounts/' + this.payment.payer.id;
+                const response = await axios.get(action);
+                this.payerAccounts = response.data;
+            } catch (e) {
+                this.$root.showErrorMsg('Ошибка загрузки',
+                    'Не удалось загрузить информацию о счетах плательщика')
+            }
+        },
+        async submit() {
+            try {
+                let data = {
+                    id: this.payment.id,
+                    status: this.payment.status,
+                    payer: this.payment.payer ? this.payment.payer.id : null,
+                    payer_type: this.payment.payer_type = this.isPayerIndividual ? 'user' : 'branch',
+                    payee: this.payment.payee ? this.payment.payee.id : null,
+                    payee_type: this.payment.payer_type = this.isPayeeIndividual ? 'user' : 'branch',
+                    paymentItem: this.payment.paymentItem.id,
+                    billAmount: this.payment.billAmount,
+                    billCurrency: this.payment.billCurrency.id,
+                    paidAmountInBillCurrency: this.payment.paidAmountInBillCurrency,
+                    paidAmountInSecondCurrency: this.payment.paidAmountInSecondCurrency,
+                    secondPaidCurrency: this.payment.secondPaidCurrency ? this.payment.secondPaidCurrency.id : null,
+                    comment: this.payment.comment,
+                    exchangeRate: null,
+                    customExchangeRate: null
+                };
+
+                if (this.payment.exchangeRate.id)
+                    if (this.exchangeRate.coefficient === this.payment.exchangeRate.coefficient)
+                        data.exchangeRate = this.payment.exchangeRate.id;
+                    else
+                        data.customExchangeRate = this.payment.exchangeRate.coefficient;
+
+                await axios.post('/payment', data);
+                // window.location.href = '/payment/' + response.data;
+                window.location.href = '/payment';
+            } catch (e) {
+                console.log(e);
+                if (e.response && e.response.status === 422) {
+                    this.errors.id = e.response.data.errors.id;
+                    this.errors.status = e.response.data.errors.status;
+                    this.errors.payer = e.response.data.errors.payer;
+                    this.errors.payer_type = e.response.data.errors.payer_type;
+                    this.errors.payee = e.response.data.errors.payee;
+                    this.errors.payee_type = e.response.data.errors.payee_type;
+                    this.errors.paymentItem = e.response.data.errors.paymentItem;
+                    this.errors.billAmount = e.response.data.errors.billAmount;
+                    this.errors.billCurrency = e.response.data.errors.billCurrency;
+                    this.errors.paidAmountInBillCurrency = e.response.data.errors.paidAmountInBillCurrency;
+                    this.errors.paidAmountInSecondCurrency = e.response.data.errors.paidAmountInSecondCurrency;
+                    this.errors.secondPaidCurrency = e.response.data.errors.secondPaidCurrency;
+                    this.errors.comment = e.response.data.errors.comment;
+                    this.errors.exchangeRate = e.response.data.errors.exchangeRate;
+                } else {
+                    this.$root.showErrorMsg('Ошибка сохранения',
+                        'Убедитесь, что все поля были заполнены корректно.')
+                }
+            }
+        }
+    },
+    components: {
+        'SearchUserDropdown': require('../../users/SearchUserDropdown.vue').default
     }
+}
 </script>
