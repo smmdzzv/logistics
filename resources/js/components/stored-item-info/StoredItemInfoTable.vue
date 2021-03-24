@@ -346,7 +346,7 @@ export default {
             this.$set(item, 'groupedStoredItemsCount', item.storedItems.length);
             return item.groupedStoredItemsCount;
         },
-        getTotalPrice(item) {
+        getTotalPrice(item) {console.log(item.billingInfo)
             if (item.type === 'dummy')
                 return item.totalPrice;
             if (item.billingInfo)
