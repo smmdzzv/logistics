@@ -5,18 +5,28 @@
         <div class="card">
             @switch($storedItem->status)
                 @case(\App\Models\StoredItems\StoredItem::STATUS_DELETED)
-                <div class="card-header bg-danger">
+                <div class="card-header bg-secondary">
                     Удаленный товар <b>{{$storedItem->code}}</b>
                 </div>
                 @break
                 @case(\App\Models\StoredItems\StoredItem::STATUS_DELIVERED)
-                <div class="card-header bg-primary">
+                <div class="card-header bg-success">
                     Доставленный товар<b>{{$storedItem->code}}</b>
                 </div>
                 @break
-                @default
-                <div class="card-header bg-success">
-                    Активный товар <b>{{$storedItem->code}}</b>
+                @case(\App\Models\StoredItems\StoredItem::STATUS_STORED)
+                <div class="card-header bg-primary">
+                    Товар на складе <b>{{$storedItem->code}}</b>
+                </div>
+                @break
+                @case(\App\Models\StoredItems\StoredItem::STATUS_LOST)
+                <div class="card-header bg-red">
+                    Утерянный товар <b>{{$storedItem->code}}</b>
+                </div>
+                @break
+                @case(\App\Models\StoredItems\StoredItem::STATUS_TRANSIT)
+                <div class="card-header bg-warning">
+                    Товар в пути <b>{{$storedItem->code}}</b>
                 </div>
                 @break
             @endswitch

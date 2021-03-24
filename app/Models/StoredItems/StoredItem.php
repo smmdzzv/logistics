@@ -20,15 +20,15 @@ class StoredItem extends BaseModel
     use SoftDeletes;
 
     protected $guarded = [];
-
+    //blue
     public const STATUS_STORED = 'stored';
-
+    //green
     public const STATUS_DELIVERED = 'delivered';
-
+    //yellow
     public const STATUS_TRANSIT = 'transit';
-
+    //red
     public const STATUS_LOST = 'lost';
-
+    //gray
     public const STATUS_DELETED = 'deleted';
 
     /**
