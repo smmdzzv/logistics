@@ -107,7 +107,8 @@
                         <a class="btn mr-2" :href="'/stored-items/' + storedItem.id">
                             <b-icon-file-earmark-text></b-icon-file-earmark-text>
                         </a>
-                        <a class="btn" :id="storedItem.id" href="#" @click.prevent="onLostItemSelected(storedItem)">
+                        <a v-if="storedItem.status !== 'lost'" class="btn" :id="storedItem.id" href="#"
+                           @click.prevent="onLostItemSelected(storedItem)">
                             <b-icon-question-diamond></b-icon-question-diamond>
                         </a>
                     </div>
@@ -507,13 +508,11 @@ export default {
             this.lostStoredItemsCount = 0;
         },
         submitLostStoredItems() {
-
-
             axios.post('/lost-stored-items/' + this.lostItem.id, {
                 compensation: this.compensation
             })
                 .then(response => {
-                    window.location.href = `payment/${response.data}/edit`;
+                    window.location.href = `payment/${response.data}`;
                 })
                 .catch(e => {
                     if (e.response && e.response.status === 422) {
