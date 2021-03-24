@@ -166,7 +166,7 @@
 
         <template v-slot:cell(status)="{item}" class="bg-warning">
             <div class="bg-primary" v-if="item.status === 'completed'">
-                Проведенная завка
+                Проведенный платеж
             </div>
             <template v-else>
                 <div class="bg-warning" v-if="item.approved === null">
