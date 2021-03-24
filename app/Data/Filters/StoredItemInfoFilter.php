@@ -5,6 +5,7 @@ namespace App\Data\Filters;
 
 
 use App\Models\Branch;
+use App\Models\StoredItems\StoredItem;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -64,6 +65,8 @@ class StoredItemInfoFilter extends Filter
             $branch = Branch::find(request('branch'));
 
         $this->query->with(['storedItems.storageHistory.storage.branch', 'storedItems' => function ($query) use ($branch) {
+            $query->withTrashed();
+
             if (isset($this->filters['trip'])) {
                 $query = $this->applyTripScope($query);
             }
@@ -74,10 +77,13 @@ class StoredItemInfoFilter extends Filter
                 });
             }
 
-            if (isset($this->filters['status']) && $this->filters['status'] === 'completed') {
-                $query->onlyTrashed();
-            } elseif (!isset($this->filters['status']))
-                $query->withTrashed();
+            if(isset($this->filters['status']))
+                $query->where('status', $this->filters['status']);
+
+//            if (isset($this->filters['status']) && $this->filters['status'] === 'completed') {
+//                $query->onlyTrashed();
+//            } elseif (!isset($this->filters['status']))
+
         }]);
     }
 

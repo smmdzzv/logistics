@@ -46,8 +46,11 @@
                     <label for="status">Статус</label>
                     <select id="status" v-model.lazy="status" class="form-control form-control-sm">
                         <option :value="null">--Любые--</option>
-                        <option value="accepted">Активные</option>
-                        <option value="completed">Выданные</option>
+                        <option value="stored">На складе</option>
+                        <option value="delivered">Доставленные</option>
+                        <option value="transit">В пути</option>
+                        <option value="lost">Утерянные</option>
+                        <option value="deleted">Удаленные</option>
                     </select>
                 </div>
                 <div class="form-group col-md-2">
