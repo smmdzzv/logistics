@@ -5,6 +5,9 @@ namespace App\Models\LostAndFound;
 use App\Models\BaseModel;
 use App\Models\StoredItems\StoredItem;
 
+/**
+ * @deprecated
+*/
 class LostStoredItem extends BaseModel
 {
     protected $guarded = [];

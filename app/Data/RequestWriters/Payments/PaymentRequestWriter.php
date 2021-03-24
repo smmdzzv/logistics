@@ -83,7 +83,7 @@ class PaymentRequestWriter extends RequestWriter
 
     private function createCustomExchangeRate()
     {
-        if ($this->request['customExchangeRate']) {
+        if (isset($this->request['customExchangeRate'])) {
             $customRate = ExchangeRate::create([
                 'from_currency_id' => $this->request['secondPaidCurrency'],
                 'to_currency_id' => $this->request['billCurrency'],

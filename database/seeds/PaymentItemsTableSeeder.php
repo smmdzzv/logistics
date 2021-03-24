@@ -74,5 +74,12 @@ class PaymentItemsTableSeeder extends Seeder
                 'description' => 'Обмен валют для клиентов',
             ]
         );
+
+        PaymentItem::create(
+            [
+                'title' => 'Бонус',
+                'description' => 'Бонус для клиентов',
+            ]
+        );
     }
 }

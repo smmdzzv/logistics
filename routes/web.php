@@ -123,7 +123,7 @@ Route::resource('status-change-histories', 'StoredItems\ItemsStatusChangeHistori
 //StoredItem
 Route::get('stored-items/available/{storedItem}', 'StoredItems\AvailableStoredItemsController@show');
 Route::resource('stored-items', 'StoredItems\StoredItemsController');
-Route::post('/lost-stored-items', 'StoredItems\LostStoredItemsController@store');
+Route::post('/lost-stored-items/{storedItem}', 'StoredItems\LostStoredItemsController@store');
 
 //Shops
 Route::resource('shop', 'Shops\ShopsController', ['only' => ['create', 'store']]);

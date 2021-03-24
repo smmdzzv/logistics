@@ -32,6 +32,9 @@ class PaymentRequestWriterFabric
             case 'Обмен валют':
                 $this->writer = new MoneyExchangePaymentRequestWriter($this->request);
                 break;
+            case 'Бонус':
+                $this->writer = new BonusPaymentRequestWriter($this->request);
+                break;
             default:
                 $this->writer = new PaymentRequestWriter($this->request);
                 break;

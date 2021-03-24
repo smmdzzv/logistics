@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string id
  * @property StorageHistory storageHistory
  * @property StoredItemTripHistory tripHistory
+ * @property string code
  */
 class StoredItem extends BaseModel
 {

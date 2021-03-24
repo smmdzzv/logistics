@@ -6,6 +6,9 @@ namespace App\Http\Requests\StoredItem;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @deprecated
+*/
 class LostStoredItemsRequest extends FormRequest
 {
     public function authorize()

@@ -85,9 +85,9 @@
                     <button class="btn" @click="row.toggleDetails">
                         <b-icon-list></b-icon-list>
                     </button>
-                    <a class="btn" :id="row.item.id" href="#" @click.prevent="onLostItemSelected(row.item)">
-                        <img class="icon-btn-sm" src="/svg/lost.svg" alt="">
-                    </a>
+                    <!--                    <a class="btn" :id="row.item.id" href="#" @click.prevent="onLostItemSelected(row.item)">-->
+                    <!--                        <img class="icon-btn-sm" src="/svg/lost.svg" alt="">-->
+                    <!--                    </a>-->
                     <b-tooltip :target="row.item.id" triggers="hover">
                         Отметить товар утерянным
                     </b-tooltip>
@@ -95,8 +95,8 @@
             </template>
 
             <template v-slot:row-details="{item}">
-                <div class="container-fluid" v-for="(storedItem, index) in item.storedItems">
-                    <div class="row py-2"
+                <div class="container-fluid" v-for="storedItem in item.storedItems">
+                    <div class="row py-2 align-items-baseline"
                          :class="{'bg-danger': storedItem.status === 'lost',
                           'bg-secondary': storedItem.status === 'deleted',
                           'bg-primary': storedItem.status === 'stored',
@@ -104,8 +104,11 @@
                           'bg-success': storedItem.status === 'delivered'
                          }">
                         <div class="font-weight-bolder ml-auto pr-5">{{ storedItem.code }}</div>
-                        <a class="text-decoration-none text-dark mr-3" :href="'/stored-items/' + storedItem.id">
+                        <a class="btn mr-2" :href="'/stored-items/' + storedItem.id">
                             <b-icon-file-earmark-text></b-icon-file-earmark-text>
+                        </a>
+                        <a class="btn" :id="storedItem.id" href="#" @click.prevent="onLostItemSelected(storedItem)">
+                            <b-icon-question-diamond></b-icon-question-diamond>
                         </a>
                     </div>
                 </div>
@@ -128,20 +131,20 @@
             ref="compensationModal"
             title="Оформление утерянных товаров"
         >
-            <b-form-group
-                :state="compensationModalState"
-                invalid-feedback="Необходимо указать количество потерянных мест"
-                label="Количество мест"
-                label-for="lostStoredItemsCount"
-            >
-                <b-form-input
-                    id="lostStoredItemsCount"
-                    required
-                    min="0"
-                    type="number"
-                    v-model="lostStoredItemsCount"
-                ></b-form-input>
-            </b-form-group>
+            <!--            <b-form-group-->
+            <!--                :state="compensationModalState"-->
+            <!--                invalid-feedback="Необходимо указать количество потерянных мест"-->
+            <!--                label="Количество мест"-->
+            <!--                label-for="lostStoredItemsCount"-->
+            <!--            >-->
+            <!--                <b-form-input-->
+            <!--                    id="lostStoredItemsCount"-->
+            <!--                    required-->
+            <!--                    min="0"-->
+            <!--                    type="number"-->
+            <!--                    v-model="lostStoredItemsCount"-->
+            <!--                ></b-form-input>-->
+            <!--            </b-form-group>-->
 
             <b-form-group
                 :state="compensationModalState"
@@ -346,7 +349,8 @@ export default {
             this.$set(item, 'groupedStoredItemsCount', item.storedItems.length);
             return item.groupedStoredItemsCount;
         },
-        getTotalPrice(item) {console.log(item.billingInfo)
+        getTotalPrice(item) {
+            console.log(item.billingInfo)
             if (item.type === 'dummy')
                 return item.totalPrice;
             if (item.billingInfo)
@@ -504,12 +508,10 @@ export default {
         },
         submitLostStoredItems() {
 
-            let data = {
-                storedItems: this.lostItem.storedItems.splice(0, this.lostStoredItemsCount).map(s => s.id),
-                compensation: this.compensation
-            };
 
-            axios.post('/lost-stored-items', data)
+            axios.post('/lost-stored-items/' + this.lostItem.id, {
+                compensation: this.compensation
+            })
                 .then(response => {
                     window.location.href = `payment/${response.data}/edit`;
                 })
