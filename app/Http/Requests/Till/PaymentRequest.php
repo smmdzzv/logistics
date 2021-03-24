@@ -6,6 +6,7 @@ use App\Http\Requests\BaseValidationPolicy;
 use App\Http\Requests\BaseValidationPolicyDecorator;
 use App\Http\Requests\RequestValidationPolicy;
 use App\Models\Branch;
+use App\Models\Till\PaymentItem;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -77,8 +78,9 @@ class PaymentRequest extends FormRequest
             $this->validationRules =
                 new PaymentAmountValidationPolicy($this->validationRules, $validator, request(), $payer, $payee);
 
-            $this->validationRules =
-                new PaymentPayerAccountBalanceValidationPolicy($this->validationRules, $validator, request(), $payer, $payee);
+            if ($this->request->get('paymentItem') !== PaymentItem::select('id')->where('title', 'Бонус')->first()->id)
+                $this->validationRules =
+                    new PaymentPayerAccountBalanceValidationPolicy($this->validationRules, $validator, request(), $payer, $payee);
 
             $this->validationRules->apply();
         });
