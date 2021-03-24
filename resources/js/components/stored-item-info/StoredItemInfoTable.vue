@@ -36,23 +36,23 @@
             </template>
 
             <template v-slot:cell(weight)="{item}">
-                <span>{{ item.weight.toFixed(3) }}</span>
+                <span v-if="item.type !== 'dummy'">{{ item.weight.toFixed(3) }}</span>
             </template>
 
             <template v-slot:cell(width)="{item}">
-                <span>{{ item.width.toFixed(3) }}</span>
+                <span v-if="item.type !== 'dummy'">{{ item.width.toFixed(3) }}</span>
             </template>
 
             <template v-slot:cell(height)="{item}">
-                <span>{{ item.height.toFixed(3) }}</span>
+                <span v-if="item.type !== 'dummy'">{{ item.height.toFixed(3) }}</span>
             </template>
 
             <template v-slot:cell(length)="{item}">
-                <span>{{ item.length.toFixed(3) }}</span>
+                <span v-if="item.type !== 'dummy'">{{ item.length.toFixed(3) }}</span>
             </template>
 
             <template v-slot:cell(cubage)="{item}">
-                <span>{{ getCubage(item).toFixed(3) }}</span>
+                <span v-if="item.type !== 'dummy'">{{ getCubage(item).toFixed(3) }}</span>
             </template>
 
             <template v-slot:cell(totalCubage)="{item}">
@@ -81,15 +81,17 @@
             </template>
 
             <template v-slot:cell(edit)="row">
-                <button class="btn" @click="row.toggleDetails">
-                    <b-icon-list></b-icon-list>
-                </button>
-                <a class="btn" :id="row.item.id" href="#" @click.prevent="onLostItemSelected(row.item)">
-                    <img class="icon-btn-sm" src="/svg/lost.svg" alt="">
-                </a>
-                <b-tooltip :target="row.item.id" triggers="hover">
-                    Отметить товар утерянным
-                </b-tooltip>
+                <div class="d-flex" v-if="row.item.type !== 'dummy'">
+                    <button class="btn" @click="row.toggleDetails">
+                        <b-icon-list></b-icon-list>
+                    </button>
+                    <a class="btn" :id="row.item.id" href="#" @click.prevent="onLostItemSelected(row.item)">
+                        <img class="icon-btn-sm" src="/svg/lost.svg" alt="">
+                    </a>
+                    <b-tooltip :target="row.item.id" triggers="hover">
+                        Отметить товар утерянным
+                    </b-tooltip>
+                </div>
             </template>
 
             <template v-slot:row-details="{item}">
