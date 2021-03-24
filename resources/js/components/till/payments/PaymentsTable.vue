@@ -164,32 +164,39 @@
                 v-if="item.paidAmountInSecondCurrency > 0">{{ item.paidAmountInSecondCurrency.toFixed(2) }} {{ item.secondPaidCurrency.isoName }}</span>
         </template>
 
-        <template v-slot:cell(status)="{item}">
-            <span v-if="item.status === 'completed'">
-                Проведенная
-            </span>
-            <span v-else>
-                Заявка
-                <span v-show="item.approved === null">рассматривается</span>
-                <span v-show="item.approved === false">отклонена</span>
-                <span v-show="item.approved">одобрена</span>
-            </span>
+        <template v-slot:cell(status)="{item}" class="bg-warning">
+            <div class="bg-primary" v-if="item.status === 'completed'">
+                Проведенная завка
+            </div>
+            <template v-else>
+                <div class="bg-warning" v-if="item.approved === null">
+                    Заявка рассматривается
+                </div>
+                <div class="bg-danger" v-if="item.approved === false">
+                    Заявка отклонена
+                </div>
+                <div class="bg-success" v-if="item.approved">
+                    Заявка одобрена
+                </div>
+            </template>
         </template>
 
         <template v-slot:cell(show)="{item}">
-            <a class="btn" :href="'/payment/' + item.id">
-                <b-icon-file-earmark-text></b-icon-file-earmark-text>
-            </a>
-            <a v-if="item.status === 'pending' && !Boolean(item.deleted_at)" class="btn"
-               :href="'/payment/' + item.id + '/edit'">
-                <b-icon-pencil></b-icon-pencil>
-            </a>
-            <a v-if="Boolean(canApprove) && item.status === 'pending'" class="btn" href="#" @click.prevent="approvePayment(item)">
-                <b-icon-file-earmark-check></b-icon-file-earmark-check>
-            </a>
-            <a v-if="!Boolean(item.deleted_at)" class="btn text-danger" href="#" @click.prevent="deletePayment(item)">
-                <b-icon-trash></b-icon-trash>
-            </a>
+            <div class="d-flex">
+                <a class="btn" :href="'/payment/' + item.id">
+                    <b-icon-file-earmark-text></b-icon-file-earmark-text>
+                </a>
+                <a v-if="item.status === 'pending' && !Boolean(item.deleted_at)" class="btn"
+                   :href="'/payment/' + item.id + '/edit'">
+                    <b-icon-pencil></b-icon-pencil>
+                </a>
+                <a v-if="Boolean(canApprove) && item.status === 'pending'" class="btn" href="#" @click.prevent="approvePayment(item)">
+                    <b-icon-file-earmark-check></b-icon-file-earmark-check>
+                </a>
+                <a v-if="!Boolean(item.deleted_at)" class="btn text-danger" href="#" @click.prevent="deletePayment(item)">
+                    <b-icon-trash></b-icon-trash>
+                </a>
+            </div>
         </template>
 
         <template v-slot:cell(payer.name)="{item}">

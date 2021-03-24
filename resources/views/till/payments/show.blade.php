@@ -7,7 +7,18 @@
              @else
              class="card"
             @endif>
-            <div class="card-header">
+
+            @if($payment->status === 'completed')
+                <div class="card-header bg-primary">
+            @else
+                @if($payment->approved === null)
+                    <div class="card-header bg-warning">
+                @elseif($payment->approved === false)
+                    <div class="card-header bg-danger">
+                @else
+                    <div class="card-header bg-success">
+                @endif
+            @endif
                 <div class="row">
                     <div class="ml-3 font-weight-bold">
                         @if($payment->status === 'completed')
