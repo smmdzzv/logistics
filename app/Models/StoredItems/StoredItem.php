@@ -44,7 +44,7 @@ class StoredItem extends BaseModel
 
     public function scopeNotDelivered($query)
     {
-        return $query->where('status', '!=', self::STATUS_DELIVERED);
+        return $query->whereNotIn('stored_items.status', [self::STATUS_DELIVERED, self::STATUS_LOST]);
     }
 
     public function scopeStorage($query, $id)

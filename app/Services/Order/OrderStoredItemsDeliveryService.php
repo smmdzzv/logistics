@@ -18,11 +18,10 @@ use App\Models\Till\PaymentItem;
 use App\Models\Users\Client;
 use App\Models\Users\TrustedUser;
 use App\Services\Storage\ItemsStorageHistoryService;
+use App\Services\StoredItem\StoredItemService;
 use App\Services\StoredItem\StoredItemsPaymentService;
 use App\Services\StoredItem\Trip\StoredItemTripHistoryService;
-use App\StoredItems\StorageHistory;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class OrderStoredItemsDeliveryService
@@ -35,17 +34,21 @@ class OrderStoredItemsDeliveryService
 
     private StoredItemTripHistoryService $tripHistoryService;
 
+    private StoredItemService $storedItemService;
+
     public function __construct(
         StoredItemsPaymentService $paymentService,
         OrderService $orderService,
         ItemsStorageHistoryService $storageHistoryService,
-        StoredItemTripHistoryService $tripHistoryService
+        StoredItemTripHistoryService $tripHistoryService,
+        StoredItemService $storedItemService
     )
     {
         $this->paymentService = $paymentService;
         $this->orderService = $orderService;
         $this->storageHistoryService = $storageHistoryService;
         $this->tripHistoryService = $tripHistoryService;
+        $this->storedItemService = $storedItemService;
     }
 
     /**
@@ -76,9 +79,10 @@ class OrderStoredItemsDeliveryService
     private function checkPayment(Client $client, Collection $storedItems, bool $isDebtRequested): Payment
     {
         $paymentSum = $storedItems->pluck('info.billingInfo')->sum('pricePerItem');
+        $dollarAccount = Currency::where('isoName', 'USD')->firstOrFail();
 
         /** @var Account $ownerAccount */
-        $ownerAccount = $client->accounts()->dollarAccount();
+        $ownerAccount = $client->accounts()->where('currency_id',$dollarAccount->id)->firstOrFail();
 
         if ($ownerAccount->balance < $paymentSum) {
             if (!$isDebtRequested)
@@ -150,8 +154,10 @@ class OrderStoredItemsDeliveryService
 
         $this->tripHistoryService->massDelete($ids, StoredItemTripHistory::STATUS_CANCELED);
 
-        StoredItem::whereIn('id', $ids)->update([
-            'status' => StoredItem::STATUS_DELIVERED
-        ]);
+        $this->storedItemService->massDelete($ids, StoredItem::STATUS_DELIVERED);
+
+//        StoredItem::whereIn('id', $ids)->update([
+//            'status' => StoredItem::STATUS_DELIVERED
+//        ]);
     }
 }
