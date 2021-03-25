@@ -100,6 +100,8 @@ Vue.component('CustomsReportEditor', require('./components/customs/CustomsReport
 // Vue.component('QrCode', require('@chenfengyuan/vue-qrcode').default);
 Vue.component('Barcode', require('@chenfengyuan/vue-barcode'))
 
+Vue.component('StoredItemRows', require('./components/stored/StoredItemRows.vue').default)
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
