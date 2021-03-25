@@ -14354,6 +14354,15 @@ input[type=color].form-control:disabled {
   vertical-align: text-bottom;
 }
 
+body,
+main {
+  width: 100%;
+}
+
+#app {
+  height: 90%;
+}
+
 .icon-btn-sm {
   width: 18px;
 }

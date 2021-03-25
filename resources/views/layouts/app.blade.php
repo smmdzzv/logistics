@@ -25,7 +25,7 @@
     <div class="spinner"></div>
 </div>
 <div id="app">
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/home') }}">
                 Duob Logistics
@@ -221,7 +221,7 @@
     </nav>
 
     <main class="py-4 container-fluid">
-        <div class="row">
+        <div class="row h-100">
                 @yield('content')
         </div>
     </main>
