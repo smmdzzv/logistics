@@ -6,6 +6,7 @@ use App\Data\Dto\Payment\PaymentAccountsDto;
 use App\Models\Till\Payment;
 use App\Services\Till\Account\AccountService;
 use App\Services\Till\Payment\PaymentAccount\BalanceReplenishmentPaymentAccountsService;
+use App\Services\Till\Payment\PaymentAccount\BonusPaymentAccountsService;
 use App\Services\Till\Payment\PaymentAccount\DefaultPaymentAccountsService;
 use App\Services\Till\Payment\PaymentAccount\TransferBetweenBranchAccountsService;
 
@@ -63,9 +64,9 @@ class PaymentRollbackServiceFabric
             case 'Перевод между счетами филиала':
                 $service = new TransferBetweenBranchAccountsService($this->payment);
                 break;
-//            case 'Обмен валют':
-//                $this->writer = new MoneyExchangePaymentRequestWriter($this->request);
-//                break;
+            case 'Бонус':
+                $service= new BonusPaymentAccountsService($this->payment);
+                break;
             default:
                 $service = new DefaultPaymentAccountsService($this->payment);
                 break;
