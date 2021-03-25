@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Data\Helpers\Math;
 use App\Models\StoredItems\StoredItemInfo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -51,7 +52,7 @@ class BillingInfo extends BaseModel
     public function setCustomPrice($customPrice)
     {
         $this->totalPrice = $customPrice;
-        $this->pricePerItem = $customPrice / $this->count;
+        $this->pricePerItem = $customPrice / $this->totalPlaceCount;
         $this->totalDiscount = 0;
     }
 
@@ -62,7 +63,7 @@ class BillingInfo extends BaseModel
             && $storedItemInfo->item->calculateByNormAndWeight) {
 
             $this->totalPrice = $this->tariffPricing->agreedPricePerKg * $this->totalWeight;
-            $this->pricePerItem = $this->totalPrice / $this->count;
+            $this->pricePerItem = $this->totalPrice / $this->totalPlaceCount;
 
             return $this->roundData();
 
@@ -92,7 +93,7 @@ class BillingInfo extends BaseModel
 
         $this->totalDiscount = $this->discountPerCube * $storedItemInfo->count;
         $this->totalPrice = $pricePerCube * $this->totalCubage;
-        $this->pricePerItem = $this->totalPrice / $this->count;
+        $this->pricePerItem = $this->totalPrice / $this->totalPlaceCount;
 
         return $this->roundData();
     }
@@ -102,10 +103,10 @@ class BillingInfo extends BaseModel
         $this->totalWeight = round($this->totalWeight, 3);
         $this->totalCubage = round($this->totalCubage, 3);
         $this->weightPerCube = round($this->weightPerCube, 3);
-        $this->pricePerItem = round($this->pricePerItem, 2);
+        $this->pricePerItem = Math::roundUp($this->pricePerItem, 2);
         $this->discountPerCube = round($this->discountPerCube, 2);
         $this->totalDiscount = round($this->totalDiscount, 2);
-        $this->totalPrice = round($this->totalPrice, 2);
+        $this->totalPrice = Math::roundUp($this->totalPrice, 2);
         $this->count = round($this->count, 2);
     }
 }
