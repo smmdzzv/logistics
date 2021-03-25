@@ -160,7 +160,8 @@
                 return price;
             },
             getPriceForOne(stored) {
-                let price = this.getPrice(stored) / stored.count;
+                let price = this.getPrice(stored) / (stored.count * stored.placeCount);
+                price = Math.ceil(price * 100) / 100
                 return price.toFixed(2);
             },
             getAveragePriceForOne() {
