@@ -9,13 +9,18 @@ use App\Models\Currency;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
+use App\Services\StoredItem\StoredItemService;
 
 class LostStoredItemsController extends BaseController
 {
-    public function __construct()
+    private StoredItemService $storedItemService;
+
+    public function __construct(StoredItemService $storedItemService)
     {
         $this->middleware('auth');
         $this->middleware('roles.allow:admin');
+
+        $this->storedItemService = $storedItemService;
     }
 
     public function store(StoredItem $storedItem){
@@ -23,7 +28,7 @@ class LostStoredItemsController extends BaseController
             'compensation' => 'required|numeric'
         ]);
 
-        $storedItem->update(['status' => StoredItem::STATUS_LOST]);
+        $this->storedItemService->delete($storedItem, StoredItem::STATUS_LOST);
 
         $paymentData = [
             'status' => Payment::STATUS_COMPLETED,

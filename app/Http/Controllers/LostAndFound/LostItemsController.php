@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Till\PaymentItem;
 use Illuminate\Database\Eloquent\Builder;
 /**
- * @deprecated
+ * @deprecated lost items moved to App\Http\Controllers\StoredItems\LostStoredItemsController.php
 */
 class LostItemsController extends Controller
 {
