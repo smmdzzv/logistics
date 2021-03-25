@@ -223,8 +223,18 @@
     <main class="py-4 container-fluid">
         <div class="row h-100">
                 @yield('content')
+
+            <div class="container-fluid">
+                <div class="row">
+                    <a class="link mx-auto my-4  text-secondary text-decoration-none" href="https://coded.tj/">2019
+                        - {{ date('Y') }} © CODED</a>
+                </div>
+            </div>
         </div>
     </main>
+
+
+
     <b-modal
         no-close-on-esc
         no-close-on-backdrop
@@ -239,10 +249,10 @@
     </b-modal>
 </div>
 </body>
-<footer class="container">
-    <div class="row">
-        <a class="link mx-auto my-4  text-secondary text-decoration-none" href="https://coded.tj/">2019
-            -{{ date('Y') }} © CODED</a>
-    </div>
-</footer>
+{{--<footer class="container">--}}
+{{--    <div class="row">--}}
+{{--        <a class="link mx-auto my-4  text-secondary text-decoration-none" href="https://coded.tj/">2019--}}
+{{--            -{{ date('Y') }} © CODED</a>--}}
+{{--    </div>--}}
+{{--</footer>--}}
 </html>
