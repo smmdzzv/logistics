@@ -178,6 +178,11 @@ import {hideBusySpinner, showBusySpinner} from "../../tools";
                         sortable: true
                     },
                     {
+                        key: 'billingInfo.pricePerItem',
+                        label: 'Цена за ед, $',
+                        sortable: true
+                    },
+                    {
                         key: 'billingInfo.totalPrice',
                         label: 'Сумма, $',
                         sortable: true

@@ -221,7 +221,11 @@
     </nav>
 
     <main class="py-4 container-fluid">
-            @yield('content')
+        <div class="row">
+            <div class="col-12">
+                @yield('content')
+            </div>
+        </div>
     </main>
     <b-modal
         no-close-on-esc
