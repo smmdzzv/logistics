@@ -39,6 +39,9 @@ window.Vue.use(VueLuxon, {
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 // Vue.component('Profile', require('./components/users/Profile.vue').default);
 
+import VueQrcode from '@chenfengyuan/vue-qrcode';
+Vue.component(VueQrcode.name, VueQrcode);
+
 Vue.component('UsersTable', require('./components/users/UsersTable.vue').default);
 Vue.component('TrustedUserEditor', require('./components/users/trusted-users/TrustedUserEditor.vue').default);
 

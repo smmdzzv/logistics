@@ -66,7 +66,7 @@
             @endif
             <td></td>
             <td rowspan="3">
-                <qr-code value="{{route('payment.show',$payment->id )}}" :options="{ scale:2 }"></qr-code>
+                <qrcode value="{{route('payment.show',$payment->id )}}" :options="{ scale:2 }"></qrcode>
             </td>
         </tr>
         <tr>

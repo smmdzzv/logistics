@@ -25,9 +25,10 @@
     },
     "dependencies": {
         "@chenfengyuan/vue-barcode": "^1.0.1",
+        "@chenfengyuan/vue-qrcode": "^1.0.2",
         "bootstrap-vue": "^2.15.0",
         "laravel-vue-pagination": "^2.3.1",
-        "vue": "^2.6.11",
+        "vue": "^2.6.12",
         "vue-easy-print": "0.0.8",
         "vue-excel-xlsx": "^1.0.11",
         "vue-luxon": "^0.7.3",
