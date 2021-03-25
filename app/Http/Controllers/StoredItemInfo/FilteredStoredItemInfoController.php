@@ -15,6 +15,7 @@ class FilteredStoredItemInfoController extends BaseController
     public function index()
     {
         $query = StoredItemInfo::withTrashed()
+            ->latest()
             ->select([
                 'id', 'weight', 'width', 'height', 'length', 'count', 'owner_id', 'item_id', 'tariff_id', 'created_at', 'shop', 'deleted_at'
             ])
