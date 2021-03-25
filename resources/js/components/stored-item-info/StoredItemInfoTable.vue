@@ -97,17 +97,20 @@
             <template v-slot:row-details="{item}">
                 <div class="container-fluid" v-for="storedItem in item.storedItems">
                     <div class="row py-2 align-items-baseline"
-                         :class="{'bg-danger': storedItem.status === 'lost',
-                          'bg-secondary': storedItem.status === 'deleted',
-                          'bg-primary': storedItem.status === 'stored',
-                          'bg-warning': storedItem.status === 'transit',
-                          'bg-success': storedItem.status === 'delivered'
+                         :class="{'table-danger': storedItem.status === 'lost',
+                          'table-secondary': storedItem.status === 'deleted',
+                          'table-primary': storedItem.status === 'stored',
+                          'table-warning': storedItem.status === 'transit',
+                          'table-success': storedItem.status === 'delivered'
                          }">
                         <div class="font-weight-bolder ml-auto pr-5">{{ storedItem.code }}</div>
                         <a class="btn mr-2" :href="'/stored-items/' + storedItem.id">
                             <b-icon-file-earmark-text></b-icon-file-earmark-text>
                         </a>
-                        <a v-if="storedItem.status !== 'lost'" class="btn" :id="storedItem.id" href="#"
+                        <a v-if="storedItem.status !== 'lost'
+                            && storedItem.status !== 'delivered'
+                            && storedItem.status !== 'deleted'"
+                           class="btn" :id="storedItem.id" href="#"
                            @click.prevent="onLostItemSelected(storedItem)">
                             <b-icon-question-diamond></b-icon-question-diamond>
                         </a>
