@@ -43,13 +43,17 @@ class OrdersController extends BaseController
     public function show(Order $order)
     {
         $order->load([
-            'storedItemInfos',
+            'storedItemInfos' => function ($query) {
+                $query->withTrashed();
+            },
             'storedItemInfos.customsCode',
             'storedItemInfos.owner',
             'storedItemInfos.billingInfo',
             'storedItemInfos.item',
             'storedItemInfos.tariff',
-            'storedItemInfos.storedItems',
+            'storedItemInfos.storedItems' => function ($query) {
+                $query->withTrashed();
+            },
             'storedItemInfos.branch',
             'owner'
         ]);
