@@ -15,7 +15,6 @@ class CreateItemsSelectionsTable extends Migration
     {
         Schema::create('items_selections', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id')->index();
             $table->string('name')->nullable();
 
             $table->userStamp();

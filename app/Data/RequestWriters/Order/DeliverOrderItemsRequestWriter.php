@@ -7,16 +7,16 @@ namespace App\Data\RequestWriters\Order;
 use App\Data\RequestWriters\RequestWriter;
 use App\Models\Currency;
 use App\Models\Order;
-use App\Models\Order\StoredItemsSelection;
-use App\Models\Order\OrderPaymentItem;
+use App\Models\StoredItems\ItemsSelection;
+use App\Models\StoredItems\StorageHistory;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Till\Account;
 use App\Models\Till\Payment;
 use App\Models\Till\PaymentItem;
 use App\Models\Users\TrustedUser;
-use App\StoredItems\StorageHistory;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Ramsey\Collection\Collection;
 
 /**@deprecated*/
 class DeliverOrderItemsRequestWriter extends RequestWriter
@@ -105,9 +105,15 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
         return true;
     }
 
-    private function createPayment($paymentSum, $unpaidStoredItems)
+    private function createPayment($paymentSum, Collection $unpaidStoredItems)
     {
         $dollar = Currency::where('isoName', 'USD')->first()->id;
+
+        $itemsSelection = ItemsSelection::create([
+            'name' => 'Заказ ' . $this->order->owner->code
+        ]);
+
+        $itemsSelection->sync($unpaidStoredItems->pluck('id'));
 
         $this->payment = new Payment([
             'branch_id' => auth()->user()->branch->id,
@@ -133,6 +139,7 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
             'second_paid_currency_id' => null,
             'exchange_rate_id' => null,
             'comment' => 'Списание денег с баланса в счет оплаты заказа',
+            'client_items_selection_id' => $itemsSelection->id
         ]);
 
         $this->payment->fillExtras();
@@ -143,17 +150,14 @@ class DeliverOrderItemsRequestWriter extends RequestWriter
         $this->clientAccount->balance -= $paymentSum;
         $this->clientAccount->save();
 
-        $orderPayment = StoredItemsSelection::create([
-            'order_id' => $this->order->id,
-            'payment_id' => $this->payment->id
-        ]);
 
-        $unpaidStoredItems->each(function ($item, $key) use ($orderPayment) {
-            OrderPaymentItem::create([
-                'stored_item_id' => $item->id,
-                'order_payment_id' => $orderPayment->id
-            ]);
-        });
+//
+//        $unpaidStoredItems->each(function ($item, $key) use ($orderPayment) {
+//            OrderPaymentItem::create([
+//                'stored_item_id' => $item->id,
+//                'order_payment_id' => $orderPayment->id
+//            ]);
+//        });
     }
 
     private function deliverItems()

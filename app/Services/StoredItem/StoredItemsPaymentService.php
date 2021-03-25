@@ -29,7 +29,7 @@ class StoredItemsPaymentService
         $payment = $this->paymentService->store($dto);
 
         $clientSelection = ItemsSelection::create([
-            'user_id' => $client->id
+            'name' => 'Товары '. $client->code
         ]);
 
         /** @var ItemsSelection $clientSelection */

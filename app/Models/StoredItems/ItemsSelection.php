@@ -22,7 +22,7 @@ class ItemsSelection extends BaseModel
     public function storedItems()
     {
         return $this->belongsToMany(StoredItem::class)
-            ->using('App\Models\Pivots\BasePivot');
+            ->using('App\Models\Pivots\BasePivot')->withTrashed();
     }
 
     public function payments()
