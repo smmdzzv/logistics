@@ -28,7 +28,7 @@
             centered
             ok-title="Сохранить"
             cancel-title="Отменить"
-            id="compensationModal"
+            :id="id"
             ref="compensationModal"
             title="Оформление утерянных товаров"
         >
@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import {generateId} from "../../tools";
+
 export default {
     name: "StoredItemRows",
     props: {
@@ -60,13 +62,14 @@ export default {
     data() {
         return {
             lostItem: null,
-            compensation: 0
+            compensation: 0,
+            id:generateId()
         }
     },
     methods: {
         onLostItemSelected(item) {
             this.lostItem = item;
-            this.$bvModal.show('compensationModal');
+            this.$bvModal.show(this.id);
         },
         resetModal() {
             this.compensation = 0;

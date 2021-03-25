@@ -222,9 +222,7 @@
 
     <main class="py-4 container-fluid">
         <div class="row">
-            <div class="col-12">
                 @yield('content')
-            </div>
         </div>
     </main>
     <b-modal
