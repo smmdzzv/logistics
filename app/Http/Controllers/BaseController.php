@@ -13,7 +13,7 @@ class BaseController extends Controller
      */
     protected function pagination()
     {
-        return request()->input('paginate') ?? 40;
+        return request()->input('paginate') ?? 100;
     }
 
     protected function getBranches()

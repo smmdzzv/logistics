@@ -30,6 +30,6 @@ class FilteredStoredItemInfoController extends BaseController
             );
 
         $filter = new StoredItemInfoFilter(request()->all(), $query);
-        return $filter->filter()->paginate($this->pagination());
+        return $filter->filter()->simplePaginate($this->pagination());
     }
 }

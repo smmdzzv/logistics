@@ -59,7 +59,7 @@
                                         :providedSelectedStoredItems="storedItems"
                                         @onItemsSelected="onItemsSelected"
                                         :columns-to-hide="['created_at', 'totalPrice']"
-                                        url="/stored-item-info/filtered?trip=doesntHaveTrip&status=accepted&"
+                                        url="/stored-item-info/filtered?trip=doesntHaveTrip&"
                                         flowable>
 
                 </stored-item-info-table>

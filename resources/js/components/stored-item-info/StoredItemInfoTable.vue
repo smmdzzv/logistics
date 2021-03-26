@@ -135,10 +135,12 @@ export default {
             default: 'stored-item-info/filtered?'
         },
         providedStoredItems: {
-            type: Array
+            type: Array,
+            default:() =>[]
         },
         providedSelectedStoredItems: {
-            type: Array
+            type: Array,
+            default:() => []
         },
         preventItemLoading: {
             type: Boolean,
@@ -369,10 +371,21 @@ export default {
             });
         },
         setItems() {
-            if (this.providedStoredItems) {
-                let storedItemInfos = this.convertStoredItemsToInfos(this.providedStoredItems);
-                let storedItems = this.groupStoredItemInfosByBranch(storedItemInfos, true);
-                for (let item of storedItems) {
+            let storedItems = [...this.providedSelectedStoredItems, ...this.providedStoredItems];
+            let ids = [];
+            let distinctStoredItems = [];
+
+            storedItems.forEach(storedItem => {
+                if (!ids.includes(storedItem.id)) {
+                    distinctStoredItems.push(storedItem)
+                    ids.push(storedItem.id)
+                }
+            })
+
+            if (distinctStoredItems.length > 0) {
+                let storedItemInfos = this.convertStoredItemsToInfos(distinctStoredItems);
+                let groupedStoredItems = this.groupStoredItemInfosByBranch(storedItemInfos, true);
+                for (let item of groupedStoredItems) {
                     this.items.push(item);
                 }
             }
