@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="col-12">
         <div class="row">
             <button class="ml-auto mr-5 btn btn-sm btn-primary" @click="toggleTable">Переключить вид</button>
         </div>
