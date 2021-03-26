@@ -57,7 +57,6 @@
                 <stored-item-info-table :branches="branches"
                                         :providedStoredItems="trip.storedItems"
                                         :providedSelectedStoredItems="storedItems"
-                                        :selectedItems="storedItems"
                                         @onItemsSelected="onItemsSelected"
                                         :columns-to-hide="['created_at', 'totalPrice']"
                                         url="/stored-item-info/filtered?trip=doesntHaveTrip&status=accepted&"

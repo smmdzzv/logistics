@@ -343,7 +343,8 @@ export default {
                     storedItemInfo.primaryKey = storedItemInfo.id + storedItemInfo.storedItems[0].storageHistory.storage.id;
                     // storedItemInfo.groupedStoredItemsCount = storedItemInfo.storedItems.length;
                     storedItemInfo.groupedStoredItemsStorage = storedItemInfo.storedItems[0].storageHistory.storage;
-                    storedItemInfo.selectedCount = countStoredItems ? storedItemInfo.storedItems.length : 0;
+                    // storedItemInfo.selectedCount = countStoredItems ? storedItemInfo.storedItems.length : 0;
+                    storedItemInfo.selectedCount = countStoredItems ? this.countSelectedStoredItemsForInfo(storedItemInfo) : 0;
                     return storedItemInfo;
                 });
 
@@ -351,6 +352,21 @@ export default {
             });
 
             return storedItemInfos;
+        },
+        countSelectedStoredItemsForInfo(storedItemInfo) {
+            let count = 0;
+            storedItemInfo.storedItems.forEach(storedItem => {
+                    if (this.isInProvidedSelectedItems(storedItem))
+                        count++
+                }
+            )
+
+            return count;
+        },
+        isInProvidedSelectedItems(storedItem) {
+            return this.providedSelectedStoredItems.find(function (selectedStoredItem) {
+                return selectedStoredItem.id === storedItem.id;
+            });
         },
         setItems() {
             if (this.providedStoredItems) {
