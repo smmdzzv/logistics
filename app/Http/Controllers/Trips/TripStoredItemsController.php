@@ -79,10 +79,8 @@ class TripStoredItemsController extends Controller
     {
         $trip->load('loadedItems.info.item', 'loadedItems.info.tariff', 'loadedItems.info.owner', 'loadedItems.storageHistory.storage', 'car');
         $branches = new Collection([$trip->departureBranch, $trip->destinationBranch]);
-        if (!auth()->user()->hasRole('admin'))
-            $branches = new Collection([$branches->first(function ($branch) {
-                return $branch->id === auth()->user()->branch->id;
-            })]);
+        if (auth()->user()->hasRole('admin'))
+            $branches = Branch::all();
 
         return view('trips.unload-items', compact('trip', 'branches'));
     }

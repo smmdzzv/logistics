@@ -31,6 +31,8 @@ use Illuminate\Database\Eloquent\Collection;
  * @property array|string|null totalFuelConsumption
  * @property integer mileageAfter
  * @property string id
+ * @property Branch departureBranch
+ * @property Branch destinationBranch
  */
 class Trip extends BaseModel
 {
