@@ -6,20 +6,20 @@
 
                 </slot>
                 <div class="ml-md-auto d-flex" v-if="trip">
-                    <a class="btn btn-primary mr-md-1" :href="`/trip/${trip.id}/customs-report`">Декларация</a>
-                    <select class="form-control custom-select mr-md-1">
-                        <option :value="null">--Статус--</option>
+                    <a class="btn btn-primary mr-md-1" style="height: 38px" :href="`/trip/${trip.id}/customs-report`">Декларация</a>
+                    <select class="form-control custom-select  mr-md-1" id="branch" v-model="selectedClient">
+                        <option :value="null">--Все клиенты--</option>
+                        <option :key="client.id" :value="client" v-for="client in clients">
+                            {{ client.code }}
+                        </option>
+                    </select>
+                    <select class="form-control custom-select" multiple @change="filterItems"
+                            v-model="selectedStoredItemTripStatuses">
                         <option value="listed">Добавлен в предварительный список</option>
                         <option value="abandoned">Не был загружен в машину</option>
                         <option value="loaded">Загружен в машину</option>
                         <option value="completed">Выгружен из машины</option>
                         <option value="canceled">Удален</option>
-                    </select>
-                    <select class="form-control custom-select" id="branch" v-model="selectedClient">
-                        <option :value="null">--Все клиенты--</option>
-                        <option :key="client.id" :value="client" v-for="client in clients">
-                            {{ client.code }}
-                        </option>
                     </select>
                 </div>
                 <div class="ml-md-3">
@@ -131,84 +131,6 @@ export default {
             required: true
         }
     },
-    methods: {
-        extractClients() {
-            this.storedItems.forEach((item) => {
-                if (!this.clients.find(x => x.id === item.info.owner.id)) {
-                    this.clients.push(item.info.owner);
-                }
-            }, this);
-        },
-        // groupByTariffAndCode() {
-        //     let groupedByTariff = groupBy(this.items, i => i.info.tariff.id);
-        //     let groupedByCode = [];
-        //
-        //     groupedByTariff.forEach((arr) => {
-        //         let grouped = groupBy(arr, i => i.info.customsCode.id);
-        //         grouped.forEach((arr) => {
-        //             groupedByCode.push(...arr);
-        //         })
-        //     });
-        //
-        //     this.items = groupedByCode;
-        //     this.fillGroupedData();
-        //     $('#grouped-data').click();
-        // },
-        fillGroupedData() {
-            let groupedByCode = groupBy(this.items, i => i.info.customsCode.id);
-            groupedByCode.forEach((arr) => {
-                let totalDutyPrice = 0;
-                let totalWeight = 0;
-                let count = 0;
-                let totalPrice = 0;
-
-                arr.forEach((item) => {
-                    totalDutyPrice += item.dutyPrice;
-                    totalWeight += item.info.weight;
-                    totalPrice += item.info.billingInfo.pricePerItem;
-                    count++;
-                });
-
-                let customsCode = arr[0].info.customsCode;
-
-                this.groupedData.push({
-                    name: customsCode.name,
-                    code: customsCode.code,
-                    count: count,
-                    totalWeight: totalWeight,
-                    totalPrice: totalPrice,
-                    averagePricePerItem: Math.round(totalPrice / count * 100) / 100,
-                    totalDutyPrice: totalDutyPrice
-                });
-            });
-        },
-        calculateDutyPrices() {
-            this.items.forEach((item) => {
-                let dutyPrice = 0;
-                let customsTariff = item.info.customsCode;
-                if (customsTariff.isCalculatedByPiece) {
-                    dutyPrice = customsTariff.price * customsTariff.totalRate / 100
-                } else {
-                    let tonnage = item.info.weight / 1000;
-                    dutyPrice = tonnage * customsTariff.price * customsTariff.totalRate / 100
-                }
-                item.dutyPrice = Math.round(dutyPrice * 100) / 100;
-            })
-        },
-        calculateCubage(info) {
-            return info.cubage = Math.round(info.height * info.width * info.length * 100) / 100;
-        }
-    },
-    watch: {
-        selectedClient() {
-            if (this.selectedClient)
-                this.items = this.storedItems.filter((item) => {
-                    return item.info.owner.id === this.selectedClient.id
-                }, this);
-            else
-                this.items = this.storedItems;
-        }
-    },
     data() {
         return {
             items: [],
@@ -218,6 +140,7 @@ export default {
             selectedClient: null,
             clients: [],
             groupedData: [],
+            selectedStoredItemTripStatuses: [],
             fields: [
                 {
                     key: 'owner',
@@ -313,6 +236,75 @@ export default {
                     field: 'totalDutyPrice'
                 }
             ]
+        }
+    },
+    methods: {
+        extractClients() {
+            this.storedItems.forEach((item) => {
+                if (!this.clients.find(x => x.id === item.info.owner.id)) {
+                    this.clients.push(item.info.owner);
+                }
+            }, this);
+        },
+        filterItems() {
+            if (this.selectedStoredItemTripStatuses.length > 0)
+                this.items = this.trip.storedItems.filter(s => this.selectedStoredItemTripStatuses.includes(s.tripHistory.status));
+            else
+                this.items = this.trip.storedItems;
+        },
+        fillGroupedData() {
+            let groupedByCode = groupBy(this.items, i => i.info.customsCode.id);
+            groupedByCode.forEach((arr) => {
+                let totalDutyPrice = 0;
+                let totalWeight = 0;
+                let count = 0;
+                let totalPrice = 0;
+
+                arr.forEach((item) => {
+                    totalDutyPrice += item.dutyPrice;
+                    totalWeight += item.info.weight;
+                    totalPrice += item.info.billingInfo.pricePerItem;
+                    count++;
+                });
+
+                let customsCode = arr[0].info.customsCode;
+
+                this.groupedData.push({
+                    name: customsCode.name,
+                    code: customsCode.code,
+                    count: count,
+                    totalWeight: totalWeight,
+                    totalPrice: totalPrice,
+                    averagePricePerItem: Math.round(totalPrice / count * 100) / 100,
+                    totalDutyPrice: totalDutyPrice
+                });
+            });
+        },
+        calculateDutyPrices() {
+            this.items.forEach((item) => {
+                let dutyPrice = 0;
+                let customsTariff = item.info.customsCode;
+                if (customsTariff.isCalculatedByPiece) {
+                    dutyPrice = customsTariff.price * customsTariff.totalRate / 100
+                } else {
+                    let tonnage = item.info.weight / 1000;
+                    dutyPrice = tonnage * customsTariff.price * customsTariff.totalRate / 100
+                }
+                item.dutyPrice = Math.round(dutyPrice * 100) / 100;
+            })
+        },
+        calculateCubage(info) {
+            return info.cubage = Math.round(info.height * info.width * info.length * 100) / 100;
+        }
+    },
+    watch: {
+        selectedClient() {
+            if (this.selectedClient)
+                this.items = this.storedItems.filter((item) => {
+                    return item.info.owner.id === this.selectedClient.id
+                }, this);
+            else
+                this.items = this.storedItems;
         }
     },
     components: {
