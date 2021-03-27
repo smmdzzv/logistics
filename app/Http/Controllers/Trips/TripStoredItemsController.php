@@ -66,7 +66,6 @@ class TripStoredItemsController extends Controller
     {
         $service = new LoadTripItemsService($this->tripHistoryService, $this->storageHistoryService);
         $service->load($trip, collect(request()->get('storedItems')));
-        return;
     }
 
     private function getTripItemsFromRequest(Trip $trip)

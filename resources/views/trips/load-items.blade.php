@@ -9,7 +9,7 @@
 {{--                             hover/>--}}
 {{--    </div>--}}
 
-    <div class="container">
+    <div class="container-fluid">
         <trip-items-editor :trip="{{$trip}}" action="load"></trip-items-editor>
     </div>
 @endsection

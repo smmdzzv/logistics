@@ -10,7 +10,7 @@
 {{--                               hover/>--}}
 {{--    </div>--}}
 
-<div class="container">
+<div class="container-fluid">
     <trip-items-editor :trip="{{$trip}}" :branches="{{$branches}}" action="unload"></trip-items-editor>
 </div>
 @endsection

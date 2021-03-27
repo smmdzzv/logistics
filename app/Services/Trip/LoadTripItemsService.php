@@ -32,6 +32,9 @@ class LoadTripItemsService
             ->whereIn('id', $storedItemsIds)
             ->get()
             ->pipe(function (Collection $storedItems) use ($trip) {
+                $storedItems->toQuery()->update([
+                    'status' => StoredItem::STATUS_TRANSIT
+                ]);
                 $this->loadNotListedItems($storedItems, $trip);
                 return $storedItems;
             })

@@ -35,6 +35,12 @@ class StoredItemTripHistoryService
         ]);
     }
 
+    /**
+     * @param string $tripId
+     * @param Collection $storedItemIds
+     * @param string $status
+     * @return Collection of StoredItemTripHistory created for provided storedItems
+     */
     public function massStore(string $tripId, Collection $storedItemIds, string $status): Collection
     {
         return $storedItemIds->map(function (string $id) use ($tripId, $status) {
