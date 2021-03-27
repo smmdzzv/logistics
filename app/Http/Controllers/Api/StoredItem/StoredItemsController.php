@@ -15,9 +15,8 @@ class StoredItemsController extends Controller
         $this->middleware('roles.allow:employee');
     }
 
-    public function getItem(){
-        if(request('code'))
-            return StoredItem::with('info.owner')->where('code', request('code'))->first();
-        abort(404, 'Stored item was not found');
+    public function getItem()
+    {
+        return StoredItem::with('info.owner')->where('code', request('code'))->firstOrFail();
     }
 }

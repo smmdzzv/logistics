@@ -67,6 +67,24 @@
             <template v-slot:cell(info.cubage)="{item}">
                 <span>{{calculateCubage(item.info).toFixed(3)}}</span>
             </template>
+
+            <template v-slot:cell(tripHistory.status)="{item}">
+                <div v-if="item.tripHistory.status === 'listed'" class="table-warning p-2 rounded">
+                    Добавлен в редварительный список
+                </div>
+                <div v-if="item.tripHistory.status === 'abandoned'" class="table-danger p-2 rounded">
+                   Не был загружен в машину
+                </div>
+                <div v-if="item.tripHistory.status === 'loaded'" class="table-primary p-2 rounded">
+                    Загружен в машину
+                </div>
+                <div v-if="item.tripHistory.status === 'completed'" class="table-success p-2 rounded">
+                   Завершен
+                </div>
+                <div v-if="item.tripHistory.status === 'canceled'" class="table-seconda p-2 roundedry">
+                   Удален
+                </div>
+            </template>
         </b-table>
         <vue-excel-xlsx
             id="grouped-data"
@@ -246,6 +264,10 @@
                     //     key: 'dutyPrice',
                     //     label: 'Таможенная пошлина'
                     // }
+                    {
+                        key: 'tripHistory.status',
+                        label: 'Статус товара'
+                    }
                 ],
                 groupedDataColumns: [
                     {

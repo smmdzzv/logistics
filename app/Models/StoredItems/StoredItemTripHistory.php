@@ -10,15 +10,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class StoredItemTripHistory extends BaseModel
 {
     use SoftDeletes;
-
+    //yellow
     public const STATUS_LISTED = 'listed';
-
+    //red
     public const STATUS_ABANDONED = 'abandoned';
-
+    //primary
     public const STATUS_LOADED = 'loaded';
-
+    //green
     public const STATUS_COMPLETED = 'completed';
-
+    //gray
     public const STATUS_CANCELED = 'canceled';
 
 

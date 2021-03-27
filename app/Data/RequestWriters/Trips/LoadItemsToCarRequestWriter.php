@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use stdClass;
 
-/**@deprecated*/
+/**@deprecated user Service
+ */
 class LoadItemsToCarRequestWriter extends RequestWriter
 {
 

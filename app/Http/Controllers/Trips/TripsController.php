@@ -48,7 +48,9 @@ class TripsController extends Controller
             'storedItems.info.tariff',
             'storedItems.info.customsCode',
             'storedItems.info.billingInfo',
-            'storedItems.storageHistory.storage');
+            'storedItems.storageHistory.storage',
+            'storedItems.tripHistory'
+        );
 
         $calculatedConsumptionTo = $trip->getCalculatedConsumptionTo();
         $calculatedConsumptionFrom = $trip->getCalculatedConsumptionFrom();
