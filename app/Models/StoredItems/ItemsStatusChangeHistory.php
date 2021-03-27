@@ -4,6 +4,9 @@ namespace App\Models\StoredItems;
 
 use App\Models\BaseModel;
 
+/**
+ * @deprecated find more general approach
+*/
 class ItemsStatusChangeHistory extends BaseModel
 {
     public const LOAD_ITEMS_TO_CAR = 'load';

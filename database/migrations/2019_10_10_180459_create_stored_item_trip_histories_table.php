@@ -17,7 +17,7 @@ class CreateStoredItemTripHistoriesTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('stored_item_id');
             $table->uuid('trip_id')->index();
-            $table->char('status', 30);
+            $table->string('status');
 //            $table->$this->uuid('registered_by_id');
 //            $table->$this->uuid('deleted_by_id')->nullable();
             $table->uuid('loaded_by_id')->nullable();

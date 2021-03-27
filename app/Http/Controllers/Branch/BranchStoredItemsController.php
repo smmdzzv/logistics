@@ -21,6 +21,6 @@ class BranchStoredItemsController extends BaseController
 
     public function store(Branch $branch)
     {
-        return $this->service->store(collect(request()->get('storedItems')), $branch);
+        $this->service->store(collect(request()->get('storedItems')), $branch);
     }
 }

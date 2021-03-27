@@ -15,6 +15,10 @@ use Illuminate\Support\Collection;
  */
 class StoredItemTripHistoryService
 {
+    /**
+     * @param Collection $storedItemIds
+     * @param string $status
+     */
     public function massDelete(Collection $storedItemIds, string $status)
     {
         StoredItemTripHistory::whereHas('storedItem', function (Builder $query) use ($storedItemIds, $status) {
