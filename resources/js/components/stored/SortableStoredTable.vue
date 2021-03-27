@@ -12,7 +12,7 @@
                         <option value="listed">Добавлен в предварительный список</option>
                         <option value="abandoned">Не был загружен в машину</option>
                         <option value="loaded">Загружен в машину</option>
-                        <option value="completed">Завершен</option>
+                        <option value="completed">Выгружен из машины</option>
                         <option value="canceled">Удален</option>
                     </select>
                     <select class="form-control custom-select" id="branch" v-model="selectedClient">
@@ -85,7 +85,7 @@
                         Загружен в машину
                     </div>
                     <div v-if="item.tripHistory.status === 'completed'" class="table-success p-2 rounded text-center">
-                        Завершен
+                        Выгружен из машины
                     </div>
                     <div v-if="item.tripHistory.status === 'canceled'" class="table-secondary p-2 rounded text-center">
                         Удален
