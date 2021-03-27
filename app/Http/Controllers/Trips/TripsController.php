@@ -7,7 +7,6 @@ use App\Http\Requests\TripRequest;
 use App\Models\Branch;
 use App\Models\Car;
 use App\Models\Trip;
-use Carbon\Carbon;
 
 class TripsController extends Controller
 {
@@ -37,7 +36,7 @@ class TripsController extends Controller
 
     public function show(Trip $trip)
     {
-        $trip->load(
+        $trip->load([
             'driver',
             'car',
             'toConsumption',
@@ -48,9 +47,9 @@ class TripsController extends Controller
             'storedItems.info.tariff',
             'storedItems.info.customsCode',
             'storedItems.info.billingInfo',
-            'storedItems.storageHistory.storage',
-            'storedItems.tripHistory'
-        );
+            'storedItems.storageHistory.storage'
+        ]);
+
 
         $calculatedConsumptionTo = $trip->getCalculatedConsumptionTo();
         $calculatedConsumptionFrom = $trip->getCalculatedConsumptionFrom();

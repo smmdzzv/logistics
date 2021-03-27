@@ -5,11 +5,16 @@
                 <slot name="header">
 
                 </slot>
-                <div class="ml-md-auto" v-if="trip">
-                    <!--                    <button class="btn btn-link" @click="groupByTariffAndCode">Группировать по коду</button>-->
-                    <a class="btn btn-primary" :href="`/trip/${trip.id}/customs-report`">Таможенная декларация</a>
-                </div>
-                <div class="ml-md-2">
+                <div class="ml-md-auto d-flex" v-if="trip">
+                    <a class="btn btn-primary mr-md-1" :href="`/trip/${trip.id}/customs-report`">Декларация</a>
+                    <select class="form-control custom-select mr-md-1">
+                        <option :value="null">--Статус--</option>
+                        <option value="listed">Добавлен в предварительный список</option>
+                        <option value="abandoned">Не был загружен в машину</option>
+                        <option value="loaded">Загружен в машину</option>
+                        <option value="completed">Завершен</option>
+                        <option value="canceled">Удален</option>
+                    </select>
                     <select class="form-control custom-select" id="branch" v-model="selectedClient">
                         <option :value="null">--Все клиенты--</option>
                         <option :key="client.id" :value="client" v-for="client in clients">
@@ -69,21 +74,23 @@
             </template>
 
             <template v-slot:cell(tripHistory.status)="{item}">
-                <div v-if="item.tripHistory.status === 'listed'" class="table-warning p-2 rounded">
-                    Добавлен в редварительный список
-                </div>
-                <div v-if="item.tripHistory.status === 'abandoned'" class="table-danger p-2 rounded">
-                   Не был загружен в машину
-                </div>
-                <div v-if="item.tripHistory.status === 'loaded'" class="table-primary p-2 rounded">
-                    Загружен в машину
-                </div>
-                <div v-if="item.tripHistory.status === 'completed'" class="table-success p-2 rounded">
-                   Завершен
-                </div>
-                <div v-if="item.tripHistory.status === 'canceled'" class="table-seconda p-2 roundedry">
-                   Удален
-                </div>
+                <template v-if="item.tripHistory">
+                    <div v-if="item.tripHistory.status === 'listed'" class="table-warning p-2 rounded text-center">
+                        Добавлен в редварительный список
+                    </div>
+                    <div v-if="item.tripHistory.status === 'abandoned'" class="table-danger p-2 rounded text-center">
+                        Не был загружен в машину
+                    </div>
+                    <div v-if="item.tripHistory.status === 'loaded'" class="table-primary p-2 rounded text-center">
+                        Загружен в машину
+                    </div>
+                    <div v-if="item.tripHistory.status === 'completed'" class="table-success p-2 rounded text-center">
+                        Завершен
+                    </div>
+                    <div v-if="item.tripHistory.status === 'canceled'" class="table-secondary p-2 rounded text-center">
+                        Удален
+                    </div>
+                </template>
             </template>
         </b-table>
         <vue-excel-xlsx

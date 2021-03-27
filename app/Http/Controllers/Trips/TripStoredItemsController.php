@@ -5,9 +5,7 @@ namespace App\Http\Controllers\Trips;
 
 
 use App\Data\Helpers\GenerateTripStoredItemListHelper;
-use App\Data\RequestWriters\Trips\AssociateToTripRequestWriter;
 use App\Data\RequestWriters\Trips\ChangeItemsTripRequest;
-use App\Data\RequestWriters\Trips\LoadItemsToCarRequestWriter;
 use App\Data\RequestWriters\Trips\UnloadItemsFromCarRequestWriter;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
@@ -58,7 +56,11 @@ class TripStoredItemsController extends Controller
 
     public function editLoaded(Trip $trip)
     {
-        $trip->load('unloadedItems.info.item', 'unloadedItems.info.tariff', 'unloadedItems.info.owner', 'unloadedItems.storageHistory.storage', 'car');
+        $trip->load('unloadedItems.info.item',
+            'unloadedItems.info.tariff',
+            'unloadedItems.info.owner',
+            'unloadedItems.storageHistory.storage',
+            'car');
         return view('trips.load-items', compact('trip'));
     }
 
@@ -77,7 +79,11 @@ class TripStoredItemsController extends Controller
 
     public function editUnloaded(Trip $trip)
     {
-        $trip->load('loadedItems.info.item', 'loadedItems.info.tariff', 'loadedItems.info.owner', 'loadedItems.storageHistory.storage', 'car');
+        $trip->load('loadedItems.info.item',
+            'loadedItems.info.tariff',
+            'loadedItems.info.owner',
+            'loadedItems.storageHistory.storage',
+            'car');
         $branches = new Collection([$trip->departureBranch, $trip->destinationBranch]);
         if (auth()->user()->hasRole('admin'))
             $branches = Branch::all();

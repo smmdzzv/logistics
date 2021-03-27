@@ -3,9 +3,7 @@
 namespace App\Models;
 
 use App\Models\StoredItems\StoredItem;
-use App\Models\StoredItems\StoredItemTripHistory;
 use App\Models\Users\Driver;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -69,7 +67,8 @@ class Trip extends BaseModel
             'trip_id',
             'stored_item_id')
             ->using('App\Models\Pivots\BasePivot')
-            ->wherePivot('deleted_at', null)
+            ->as('tripHistory')
+            ->withPivot('status')
             ->withTimestamps();
     }
 
