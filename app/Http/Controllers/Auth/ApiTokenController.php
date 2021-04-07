@@ -30,6 +30,8 @@ class ApiTokenController extends Controller
                 ])->save();
             return ['token' => auth()->user()->api_token];
         }
+
+        return response("Некорректные учетные данные", 403);
     }
 
     /**
