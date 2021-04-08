@@ -21,7 +21,7 @@ class ApiTokenController extends Controller
      * @return mixed
      */
     public function login(Request $request){
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('code', 'password');
 
         if (Auth::attempt($credentials)) {
             if(!auth()->user()->api_token)
@@ -31,7 +31,7 @@ class ApiTokenController extends Controller
             return ['token' => auth()->user()->api_token];
         }
 
-        return response("Некорректные учетные данные", 403);
+        return response("Некорректные учетные данные", 401);
     }
 
     /**
