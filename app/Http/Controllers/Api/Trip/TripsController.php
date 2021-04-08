@@ -8,21 +8,26 @@ use App\Data\RequestWriters\Trips\UnloadItemsFromCarRequestWriter;
 use App\Models\Branch;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Trip;
+use App\Services\Trip\TripService;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
 
 class TripsController extends Controller
 {
-    public function __construct()
+    private TripService $tripService;
+
+    public function __construct(TripService $tripService)
     {
         $this->middleware('auth:api');
         $this->middleware('roles.allow:employee');
+
+        $this->tripService = $tripService;
     }
 
-    public function activeTrips()
+    public function availableTrips()
     {
-        return Trip::where('status', 'active')->latest()->get();
+        return $this->tripService->getAvailableTrips();
     }
 
     public function unloadItem(Trip $trip)

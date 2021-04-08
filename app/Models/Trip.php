@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Collection;
  * @property Collection<StoredItem> storedItems
  * @property FuelConsumption toConsumption
  * @property FuelConsumption fromConsumption
- * // * @property boolean emptyToDestination
- * // * @property mixed emptyFromDestination
+ * @property boolean emptyToDestination
+ * @property mixed emptyFromDestination
  * @property int routeLengthToDestination
  * @property int routeLengthFromDestination
  * @property mixed routeLengthWithCargoFrom

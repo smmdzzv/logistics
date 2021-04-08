@@ -20,7 +20,7 @@ Route::patch('/token/refresh', 'Auth\ApiTokenController@update');
 
 Route::get('/user', 'Api\User\UserController@authenticated');
 
-Route::get('/trips', 'Api\Trip\TripsController@activeTrips');
+Route::get('/available-trips', 'Api\Trip\TripsController@availableTrips');
 Route::post('/trip/{trip}/unload', 'Api\Trip\TripsController@unloadItem');
 Route::post('/trip/{trip}/load', 'Api\Trip\TripsController@loadItem');
 Route::post('/trip/{trip}/transfer/{targetTrip}', 'Api\Trip\TripsController@transferItem');
