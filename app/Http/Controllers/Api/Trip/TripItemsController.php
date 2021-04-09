@@ -6,11 +6,12 @@
 namespace App\Http\Controllers\Api\Trip;
 
 
+use App\Http\Controllers\Controller;
 use App\Models\StoredItems\StoredItem;
 use App\Models\Trip;
 use App\Services\Trip\TripService;
 
-class TripItemsController
+class TripItemsController extends Controller
 {
     public function __construct(TripService $tripService)
     {
