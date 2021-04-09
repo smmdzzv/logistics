@@ -28,6 +28,7 @@ class TripItemsController extends Controller
                 StoredItem::STATUS_TRANSIT
             ])->get()->map(function (StoredItem $storedItem){
                 $storedItem->trip_status = $storedItem->tripHistory->status;
+                $storedItem->trip_id = $storedItem->tripHistory->trip_id;
                 $storedItem->unsetRelation('tripHistory');
                 return $storedItem;
             });
