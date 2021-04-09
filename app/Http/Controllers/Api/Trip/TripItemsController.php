@@ -26,6 +26,10 @@ class TripItemsController extends Controller
             ->whereIn('stored_items.status', [
                 StoredItem::STATUS_STORED,
                 StoredItem::STATUS_TRANSIT
-            ])->get();
+            ])->get()->map(function (StoredItem $storedItem){
+                $storedItem->trip_status = $storedItem->tripHistory->status;
+                $storedItem->unsetRelation('tripHistory');
+                return $storedItem;
+            });
     }
 }
