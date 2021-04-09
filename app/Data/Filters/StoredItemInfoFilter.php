@@ -89,13 +89,10 @@ class StoredItemInfoFilter extends Filter
 
     private function applyTripScope($query)
     {
-        switch ($this->filters['trip']) {
-            case 'hasTrip':
-                return $query->whereHas('tripHistory');
-            case 'doesntHaveTrip':
-                return $query->whereDoesntHave('tripHistory');
-            default:
-                return $query;
-        }
+        return match ($this->filters['trip']) {
+            'hasTrip' => $query->whereHas('tripHistory'),
+            'doesntHaveTrip' => $query->whereDoesntHave('tripHistory'),
+            default => $query,
+        };
     }
 }
