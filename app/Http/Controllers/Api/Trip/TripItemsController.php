@@ -23,6 +23,9 @@ class TripItemsController extends Controller
     {
         return $trip->storedItems()
             ->select(['stored_items.id', 'stored_item_info_id', 'code', 'stored_items.status'])
+            ->with(['info' => function($query){
+                $query->select(['id', 'shop', 'count', 'weight', 'height', 'length', 'width']);
+            }])
             ->whereIn('stored_items.status', [
                 StoredItem::STATUS_STORED,
                 StoredItem::STATUS_TRANSIT
