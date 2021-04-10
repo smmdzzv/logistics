@@ -35,7 +35,7 @@ class TripItemsController extends Controller
             ])->get()->map(function (StoredItem $storedItem){
                 $storedItem->trip_status = $storedItem->tripHistory->status;
                 $storedItem->trip_id = $storedItem->tripHistory->trip_id;
-                $storedItem->owner_code = $storedItem->info->owner->code;
+                $storedItem->info->owner_code = $storedItem->info->owner->code;
                 $storedItem->unsetRelation('tripHistory');
                 $storedItem->info->unsetRelation('owner');
                 return $storedItem;
