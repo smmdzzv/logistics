@@ -26,6 +26,8 @@ Route::prefix('trips')->group(function (){
     Route::get('/{trip}/items', 'Api\Trip\TripItemsController@index');
 });
 
+Route::get('/branches', 'Api\Branch\BranchesController@index');
+
 Route::post('/trip/{trip}/unload', 'Api\Trip\TripsController@unloadItem');
 Route::post('/trip/{trip}/load', 'Api\Trip\TripsController@loadItem');
 Route::post('/trip/{trip}/transfer/{targetTrip}', 'Api\Trip\TripsController@transferItem');
