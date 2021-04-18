@@ -26,6 +26,8 @@ class ActionsController extends Controller
         ItemsStorageHistoryService $storageHistoryService
     )
     {
+        $this->middleware('auth:api');
+        $this->middleware('roles.allow:employee');
         $this->tripHistoryService = $tripHistoryService;
         $this->storageHistoryService = $storageHistoryService;
     }

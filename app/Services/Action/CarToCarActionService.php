@@ -10,6 +10,7 @@ use App\Data\Dto\Actions\CarToCarDto;
 use App\Data\MassDelete\MassDelete;
 use App\Data\MassWriters\Trip\StoredItemTripHistoryWriter;
 use App\Models\StoredItems\StoredItemTripHistory;
+use Illuminate\Support\Facades\Date;
 
 class CarToCarActionService
 {
@@ -21,27 +22,34 @@ class CarToCarActionService
 
     }
 
-    public function transfer(){
+    public function transfer()
+    {
         $this->detachFromCurrentTrip();
 
         $this->attachToTargetTrip();
     }
 
-    private function detachFromCurrentTrip(){
-        $records = $this->dto->storedItems->map(function ($item){
-            return $item->tripHistory->id;
+    private function detachFromCurrentTrip()
+    {
+        $records = $this->dto->storedItems->map(function ($item) {
+            return $item->tripHistory ? $item->tripHistory->id : null;
         });
 
         $deleter = new MassDelete($records->all(), StoredItemTripHistory::class, auth()->id());
         $deleter->delete();
     }
 
-    private function attachToTargetTrip(){
-        $newRecords = $this->dto->storedItems->map(function ($item){
+    private function attachToTargetTrip()
+    {
+        $newRecords = $this->dto->storedItems->map(function ($item) {
             return new StoredItemTripHistory([
                 'trip_id' => $this->dto->targetTripId,
                 'stored_item_id' => $item->id,
-                'registered_by_id' => auth()->id()
+                'loaded_at' => Date::now(),
+                'loaded_by_id' => auth()->id(),
+                'updated_at' => Date::now(),
+                'updated_by_id' => auth()->id(),
+                'status' => StoredItemTripHistory::STATUS_LOADED
             ]);
         });
 

@@ -21,8 +21,8 @@ class CarToCarDto extends FlexibleDataTransferObject
 
     public function __construct(array $parameters = [])
     {
-        parent::__construct($parameters);
+        $parameters['storedItems'] = StoredItem::whereIn('id', $parameters['storedItems'])->get();
 
-        $this->storedItems = StoredItem::whereIn('id', $parameters['storedItems'])->get();
+        parent::__construct($parameters);
     }
 }
