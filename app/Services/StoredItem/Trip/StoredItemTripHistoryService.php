@@ -2,12 +2,14 @@
 
 namespace App\Services\StoredItem\Trip;
 
+use App\Data\Dto\Actions\CarToCarDto;
 use App\Data\MassWriters\Trip\StoredItemTripHistoryWriter;
+use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemTripHistory;
-use App\Models\Trip;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 
 /**
  *
@@ -26,7 +28,7 @@ class StoredItemTripHistoryService
         })->update([
             'status' => $status,
             'deleted_at' => Carbon::now(),
-            'deleted_by_id' => auth()->user()->id
+            'deleted_by_id' => auth()->id()
         ]);
     }
 
@@ -57,5 +59,25 @@ class StoredItemTripHistoryService
             $writer = new StoredItemTripHistoryWriter($tripHistories->all());
             return collect($writer->write());
         });
+    }
+
+    public function transfer(CarToCarDto $dto): array
+    {
+        $this->massDelete($dto->storedItems->pluck('id'), StoredItemTripHistory::STATUS_CANCELED);
+
+        $newRecords = $dto->storedItems->map(function ($item) use ($dto) {
+            return new StoredItemTripHistory([
+                'trip_id' => $dto->targetTripId,
+                'stored_item_id' => $item->id,
+                'loaded_at' => Date::now(),
+                'loaded_by_id' => auth()->id(),
+                'updated_at' => Date::now(),
+                'updated_by_id' => auth()->id(),
+                'status' => StoredItemTripHistory::STATUS_LOADED
+            ]);
+        });
+
+        $writer = new StoredItemTripHistoryWriter($newRecords->all());
+        return $writer->write();
     }
 }

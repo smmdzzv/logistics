@@ -62,11 +62,15 @@ class ActionsController extends Controller
 
     private function carToCar()
     {
-        $service = new CarToCarActionService(
+//        $service = new CarToCarActionService(
+//            new CarToCarDto(request()->all())
+//        );
+//
+//        $service->transfer();
+
+        return $this->tripHistoryService->transfer(
             new CarToCarDto(request()->all())
         );
-
-        $service->transfer();
     }
 
     private function carToBranch()
