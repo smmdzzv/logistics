@@ -6,16 +6,18 @@
 namespace App\Data\Dto\Actions;
 
 
+use App\Models\Branch;
 use App\Models\StoredItems\StoredItem;
-use App\Models\Trip;
 use Illuminate\Support\Collection;
 use Spatie\DataTransferObject\FlexibleDataTransferObject;
 
-class CarToCarDto extends FlexibleDataTransferObject
+class CarToBranchDto extends FlexibleDataTransferObject
 {
-    public String $tripId;
+    public String $branchId;
 
-    public String $targetTripId;
+    public Branch $branch;
+
+    public String $tripId;
 
     public Collection $storedItems;
 
@@ -23,6 +25,11 @@ class CarToCarDto extends FlexibleDataTransferObject
     {
         parent::__construct($parameters);
 
+        $this->branch = Branch::findOrFail($parameters['branchId']);
+
         $this->storedItems = StoredItem::whereIn('id', $parameters['storedItems'])->get();
+
+
     }
+
 }

@@ -1,33 +1,34 @@
 <?php
-
-
-namespace App\Data\RequestWriters\Trips;
-
-
-use App\Data\MassWriters\Order\StorageHistoriesWriter;
-use App\Data\RequestWriters\RequestWriter;
-use App\Models\StoredItems\StoredItemTripHistory;
-use App\StoredItems\StorageHistory;
-use Carbon\Carbon;
-use stdClass;
-/**@deprecated
- * use CarToBranchActionService
+/**
+ * @author Sultonazar Mamadazizov <sultonazar.mamadazizov@mail.ru>
  */
-class UnloadItemsFromCarRequestWriter extends RequestWriter
-{
 
-    /**
-     * @return stdClass which contains saved models
-     */
-    function write()
-    {
+namespace App\Services\Action;
+
+
+use App\Data\Dto\Actions\CarToBranchDto;
+use App\Data\MassWriters\Order\StorageHistoriesWriter;
+use App\Models\Branches\Storage;
+use App\Models\StoredItems\StorageHistory;
+use App\Models\StoredItems\StoredItemTripHistory;
+use Carbon\Carbon;
+
+class CarToBranchActionService
+{
+    private CarToBranchDto $dto;
+
+    private Storage $storage;
+
+    public function __construct(CarToBranchDto $dto){
+        $this->dto =$dto;
+    }
+
+    public function unload(){
         $this->getStorage();
 
         $this->writeStorageHistoryRecords();
 
         $this->softDeleteTripHistories();
-
-        return $this->saved;
     }
 
     /**
@@ -35,8 +36,8 @@ class UnloadItemsFromCarRequestWriter extends RequestWriter
      */
     private function getStorage()
     {
-        $this->data->storage = $this->input->branch->mainStorage;
-        if (!$this->data->storage)
+        $this->storage = $this->dto->branch->mainStorage;
+        if (!$this->storage)
             abort(500, "Branch doesn't have main storage");
     }
 
@@ -45,26 +46,26 @@ class UnloadItemsFromCarRequestWriter extends RequestWriter
      */
     private function writeStorageHistoryRecords()
     {
-        $storageHistories = $this->input->storedItems->map(function ($item) {
+        $storageHistories = $this->dto->storedItems->map(function ($item) {
             return new StorageHistory([
-                'storage_id' => $this->data->storage->id,
+                'storage_id' => $this->storage->id,
                 'stored_item_id' => $item->id,
-                'registeredById' => $this->input->employee->id
+                'registeredById' => auth()->id()
             ]);
         });
 
         $writer = new StorageHistoriesWriter($storageHistories->all());
-        $this->saved->storageHistories = $writer->write();
+        $writer->write();
     }
 
     private function softDeleteTripHistories(){
-        $tripHistories = $this->input->storedItems->map(function ($item) {
+        $tripHistories = $this->dto->storedItems->map(function ($item) {
             return $item->tripHistory->id;
         });
 
         StoredItemTripHistory::whereIn('id', $tripHistories->all())->update([
             'deleted_at' => Carbon::now(),
-            'deleted_by_id' => $this->input->employee->id
+            'deleted_by_id' => auth()->id()
         ]);
     }
 }

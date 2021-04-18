@@ -6,9 +6,11 @@
 namespace App\Http\Controllers\Api\Action;
 
 
+use App\Data\Dto\Actions\CarToBranchDto;
 use App\Data\Dto\Actions\CarToCarDto;
 use App\Http\Controllers\Controller;
 use App\Models\Trip;
+use App\Services\Action\CarToBranchActionService;
 use App\Services\Action\CarToCarActionService;
 use App\Services\Storage\ItemsStorageHistoryService;
 use App\Services\StoredItem\Trip\StoredItemTripHistoryService;
@@ -65,7 +67,12 @@ class ActionsController extends Controller
         $service->transfer();
     }
 
-    private function carToBranch(){
+    private function carToBranch()
+    {
+        $service = new CarToBranchActionService(
+            new CarToBranchDto(request()->all())
+        );
 
+        $service->unload();
     }
 }
