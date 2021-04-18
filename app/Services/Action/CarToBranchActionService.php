@@ -7,10 +7,9 @@ namespace App\Services\Action;
 
 
 use App\Data\Dto\Actions\CarToBranchDto;
-use App\Data\MassWriters\Order\StorageHistoriesWriter;
 use App\Models\Branches\Storage;
-use App\Models\StoredItems\StorageHistory;
 use App\Models\StoredItems\StoredItemTripHistory;
+use App\Services\Storage\ItemsStorageHistoryService;
 use Carbon\Carbon;
 
 class CarToBranchActionService
@@ -19,8 +18,12 @@ class CarToBranchActionService
 
     private Storage $storage;
 
+    private ItemsStorageHistoryService $itemsStorageHistoryService;
+
     public function __construct(CarToBranchDto $dto){
         $this->dto =$dto;
+
+        $this->itemsStorageHistoryService = new ItemsStorageHistoryService();
     }
 
     public function unload(){
@@ -46,16 +49,17 @@ class CarToBranchActionService
      */
     private function writeStorageHistoryRecords()
     {
-        $storageHistories = $this->dto->storedItems->map(function ($item) {
-            return new StorageHistory([
-                'storage_id' => $this->storage->id,
-                'stored_item_id' => $item->id,
-                'registeredById' => auth()->id()
-            ]);
-        });
-
-        $writer = new StorageHistoriesWriter($storageHistories->all());
-        $writer->write();
+        $this->itemsStorageHistoryService->massStore($this->dto->storedItems, $this->storage);
+//        $storageHistories = $this->dto->storedItems->map(function ($item) {
+//            return new StorageHistory([
+//                'storage_id' => $this->storage->id,
+//                'stored_item_id' => $item->id,
+//                'registeredById' => auth()->id()
+//            ]);
+//        });
+//
+//        $writer = new StorageHistoriesWriter($storageHistories->all());
+//        $writer->write();
     }
 
     private function softDeleteTripHistories(){

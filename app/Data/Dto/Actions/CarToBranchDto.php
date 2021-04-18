@@ -23,6 +23,8 @@ class CarToBranchDto extends FlexibleDataTransferObject
 
     public function __construct(array $parameters = [])
     {
+        $parameters['storedItems'] = StoredItem::whereIn('id', $parameters['storedItems'])->get();
+
         $parameters['branch']= Branch::findOrFail($parameters['branchId']);
 
         parent::__construct($parameters);
