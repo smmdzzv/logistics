@@ -4,7 +4,6 @@ namespace App\Services\StoredItem\Trip;
 
 use App\Data\Dto\Actions\CarToCarDto;
 use App\Data\MassWriters\Trip\StoredItemTripHistoryWriter;
-use App\Models\StoredItems\StoredItem;
 use App\Models\StoredItems\StoredItemTripHistory;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
