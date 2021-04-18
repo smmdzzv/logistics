@@ -8,8 +8,12 @@ use App\Data\MassDelete\MassDelete;
 use App\Data\MassWriters\Trip\StoredItemTripHistoryWriter;
 use App\Data\RequestWriters\RequestWriter;
 use App\Models\StoredItems\StoredItemTripHistory;
+use phpDocumentor\Reflection\DocBlock\Tags\Deprecated;
 use stdClass;
 
+/**@deprecated
+ * user CarToCarActionService
+ */
 class ChangeItemsTripRequest extends RequestWriter
 {
 

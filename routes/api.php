@@ -22,6 +22,8 @@ Route::get('/user', 'Api\User\UserController@authenticated');
 
 Route::get('/available-trips', 'Api\Trip\TripsController@availableTrips');
 
+Route::post('/actions', 'Api\Action\ActionsController@store');
+
 Route::prefix('trips')->group(function (){
     Route::get('/{trip}/items', 'Api\Trip\TripItemsController@index');
 });
