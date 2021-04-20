@@ -202,3 +202,5 @@ Route::resource('items-selection', 'Selection\ItemsSelectionController')->only('
 //Print
 Route::get('/print/order-labels/{order}', 'Orders\OrderLabelsPrintController@show');
 Route::get('/print/info-labels/{info}', 'StoredItemInfo\InfoStoredItemsLabelsPrintController@show');
+
+Route::resource('car-providers', "CarProvidersController");
