@@ -23,6 +23,9 @@
                             <div class="row text-center">
                                 <h5 class="col-12 mb-4">Машина</h5>
                             </div>
+                            @if($car->provider)
+                                <p>Поставщик: {{$car->provider->name}}</p>
+                            @endif
                             <p>Серийный номер: {{$car->serial}}</p>
                             <p>Остаток топлива: {{$car->fuelAmount}} л</p>
                             <p>Длина: {{$car->length}} | Ширина: {{$car->width}} | Высота: {{$car->height}} </p>
