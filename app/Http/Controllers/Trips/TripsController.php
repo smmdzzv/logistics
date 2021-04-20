@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TripRequest;
 use App\Models\Branch;
 use App\Models\Car;
+use App\Models\CarProvider;
 use App\Models\Trip;
 
 class TripsController extends Controller
@@ -20,7 +21,8 @@ class TripsController extends Controller
     {
         $cars = Car::all();
         $branches = Branch::all();
-        return view('trips.create', compact('cars', 'branches'));
+        $carProviders = CarProvider::all();
+        return view('trips.create', compact('cars', 'branches', 'carProviders'));
     }
 
     public function all()
@@ -67,7 +69,8 @@ class TripsController extends Controller
         $cars = Car::all();
         $branches = Branch::all();
         $trip->load('driver', 'car', 'destinationBranch', 'departureBranch');
-        return view('trips.edit', compact('cars', 'trip', 'branches'));
+        $carProviders = CarProvider::all();
+        return view('trips.edit', compact('cars', 'trip', 'branches', 'carProviders'));
     }
 
     public function update(TripRequest $request, Trip $trip)

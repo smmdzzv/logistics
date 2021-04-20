@@ -32,8 +32,9 @@ class CarsController extends Controller
 
     public function show(Car $car)
     {
+        $carProviders = CarProvider::all();
         $car->load('toChinaConsumption', 'fromChinaConsumption');
-        return view('cars.show', compact('car'));
+        return view('cars.show', compact('car', 'carProviders'));
     }
 
     public function edit(Car $car)
