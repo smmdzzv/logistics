@@ -153,6 +153,7 @@
                                         <a class="dropdown-item" href="{{route('trips.create')}}">Создать рейс</a>
                                         <div class="dropdown-divider"></div>
                                         <h6 class="dropdown-header">Машины</h6>
+                                        <a class="dropdown-item" href="{{route('car-providers.index')}}">Поставщики машин</a>
                                         <a class="dropdown-item" href="{{route('cars.create')}}">Добавить машину</a>
                                         <a class="dropdown-item" href="{{route('cars.index')}}">Список машин</a>
                                     @endif
