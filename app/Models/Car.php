@@ -64,4 +64,8 @@ class Car extends BaseModel
     {
         return $this->hasMany(Trip::class, 'carId');
     }
+
+    public function provider(){
+        return $this->belongsTo(CarProvider::class, 'car_provider_id');
+    }
 }

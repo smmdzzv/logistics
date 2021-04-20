@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Car;
 use App\Http\Requests\CarRequest;
-use Illuminate\Http\Request;
+use App\Models\CarProvider;
 
 class CarsController extends Controller
 {
@@ -26,7 +26,8 @@ class CarsController extends Controller
 
     public function create()
     {
-        return view('cars.create');
+        $carProviders = CarProvider::all();
+        return view('cars.create', compact('carProviders'));
     }
 
     public function show(Car $car)
@@ -37,24 +38,24 @@ class CarsController extends Controller
 
     public function edit(Car $car)
     {
-        return view('cars.edit', compact('car'));
+        $carProviders = CarProvider::all();
+        return view('cars.edit', compact('car', 'carProviders'));
     }
 
     public function destroy(Car $car)
     {
-        $car->delete();
-        return;
+        return $car->delete();
     }
 
     public function store(CarRequest $request)
     {
-        $car = Car::create($request->all());
+        $car = Car::create($request->validated());
         return redirect(route('cars.show', $car));
     }
 
     public function update(CarRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
         $car = Car::findOrFail($data['id']);
         $car->fill($data);
         $car->save();

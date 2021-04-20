@@ -25,6 +25,7 @@ class CarRequest extends FormRequest
     {
         return [
             'id' => 'string',
+            'car_provider_id' => 'string',
             'number' => 'required|string|max:20',
             'length' => 'numeric',
             'height' => 'numeric',

@@ -27,6 +27,29 @@
                             </div>
 
                             <div class="form-group row">
+                                <label for="car_provider_id"
+                                       class="col-md-4 col-form-label text-md-right">Поставщик</label>
+                                <div class="col-md-6">
+                                    <select class="form-control custom-select" name="car_provider_id">
+                                        @foreach($carProviders as $provider)
+                                            <option value="{{$provider->id}}"
+
+                                                    @if($provider->id === old('car_provider_id'))
+                                                    selected
+                                                @endif
+                                            >{{$provider->name}}</option>
+                                        @endforeach
+                                    </select>
+
+                                    @error('car_provider_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 <label for="length" class="col-md-4 col-form-label text-md-right">Длина</label>
                                 <div class="col-md-6">
                                     <input id="length" placeholder="в метрах" type="text"
@@ -98,7 +121,8 @@
                                            class="form-control @error('maxWeight') is-invalid @enderror"
                                            name="maxWeight" value="{{ old('maxWeight') }}" required
                                            autocomplete="maxWeight" autofocus>
-                                    <small id="maxWeightHelp" class="form-text text-muted">Введите грузоподъемность машины (без учета прицепа)</small>
+                                    <small id="maxWeightHelp" class="form-text text-muted">Введите грузоподъемность
+                                        машины (без учета прицепа)</small>
 
                                     @error('maxWeight')
                                     <span class="invalid-feedback" role="alert">
@@ -116,7 +140,8 @@
                                            class="form-control @error('maxCubage') is-invalid @enderror"
                                            name="maxCubage" value="{{ old('maxCubage') }}" required
                                            autocomplete="maxCubage" autofocus>
-                                    <small id="maxWeightHelp" class="form-text text-muted">Введите грузоподъемность машины (без учета прицепа)</small>
+                                    <small id="maxWeightHelp" class="form-text text-muted">Введите грузоподъемность
+                                        машины (без учета прицепа)</small>
 
                                     @error('maxCubage')
                                     <span class="invalid-feedback" role="alert">
@@ -127,7 +152,8 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="fuelAmount" class="col-md-4 col-form-label text-md-right">Остаток топлива</label>
+                                <label for="fuelAmount" class="col-md-4 col-form-label text-md-right">Остаток
+                                    топлива</label>
                                 <div class="col-md-6">
                                     <input id="fuelAmount" placeholder="в литрах" type="text"
                                            class="form-control @error('fuelAmount') is-invalid @enderror"
