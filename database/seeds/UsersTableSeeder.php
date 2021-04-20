@@ -59,12 +59,12 @@ class UsersTableSeeder extends Seeder
 
 
         $user = User::create([
-            'name' => 'Худжамова Мукаррама',
+            'name' => 'Далер',
             'branch_id' => $branchId,
             'phone' => '557001025',
-            'password' => Hash::make('reToier23'),
-            'email' => 'miranshabozov@gmail.com',
-            'code' => '0506'
+            'password' => Hash::make('1234567890'),
+            'email' => 'daler@gmail.com',
+            'code' => '222222'
         ]);
 
         $user->roles()->attach($roleAdmin);
