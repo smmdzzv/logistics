@@ -279,7 +279,7 @@
                     branch: this.branches[0],
                     item: null,
                     tariff: null,
-                    placeCount: null,
+                    placeCount: '1',
                     customsCode: null,
                     billingInfo: {
                         tariffPricing: null
@@ -343,7 +343,7 @@
                 this.storedItem.length = '';
                 this.storedItem.width = '';
                 this.storedItem.count = '';
-                this.storedItem.placeCount = '';
+                this.storedItem.placeCount = '1';
                 this.storedItem.item = null;
                 this.filteredItems = [];
                 this.storedItem.price = null;
