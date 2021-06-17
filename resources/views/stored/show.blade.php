@@ -11,7 +11,7 @@
                 @break
                 @case(\App\Models\StoredItems\StoredItem::STATUS_DELIVERED)
                 <div class="card-header bg-success">
-                    Доставленный товар<b>{{$storedItem->code}}</b>
+                    Доставленный товар <b>{{$storedItem->code}}</b>
                 </div>
                 @break
                 @case(\App\Models\StoredItems\StoredItem::STATUS_STORED)
