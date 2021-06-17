@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property string number
  * @property double fuelAmount
  * @property string id
+ * @property string car_provider_id
  */
 class Car extends BaseModel
 {

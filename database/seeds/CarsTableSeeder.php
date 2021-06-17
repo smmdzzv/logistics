@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Car;
+use App\Models\CarProvider;
 use Illuminate\Database\Seeder;
 
 class CarsTableSeeder extends Seeder
@@ -191,8 +192,13 @@ class CarsTableSeeder extends Seeder
             ]
         ];
 
+        $carProvider = CarProvider::create([
+            'name' => 'Дуоб'
+        ]);
+
         foreach ($cars as $carData) {
             $car = new Car();
+            $car->car_provider_id = $carProvider->id;
             $car->number = $carData[0];
             $car->trailerNumber = $carData[2];
             $car->length =  $carData[3];
@@ -204,6 +210,8 @@ class CarsTableSeeder extends Seeder
             $car->trailerMaxCubage = '50';
             $car->fuelAmount = 0;
             $car->save();
+
+            $car->storeDefaultConsumptions();
         }
     }
 }
