@@ -43,7 +43,7 @@
                             <option value="null" disabled>-- Выберите таможенный код --</option>
                             <option :value="customsCode"
                                     v-for="customsCode in customsCodes"
-                            >{{customsCode.code}} - {{customsCode.name}}
+                            >{{ customsCode.code }} - {{ customsCode.name }}
                             </option>
                         </select>
                         <b-popover
@@ -178,7 +178,7 @@
                             <option value="null" disabled>-- Выберите тариф --</option>
                             <option :value="tariff"
                                     v-for="tariff in tariffs"
-                            >{{tariff.name}}
+                            >{{ tariff.name }}
                             </option>
                         </select>
                         <b-popover
@@ -194,7 +194,7 @@
                         <label class="col-form-label text-md-right" for="branch">Филиал</label>
                         <select class="form-control form-control-sm" v-model="storedItem.branch">
                             <option disabled :value="null"> -- Выберите филиал --</option>
-                            <option v-for="branch in branches" :value="branch">{{branch.name}}</option>
+                            <option v-for="branch in branches" :value="branch">{{ branch.name }}</option>
                         </select>
                     </div>
                 </b-form-row>
@@ -237,238 +237,244 @@
 </template>
 
 <script>
-    import {required, maxLength, decimal, integer} from 'vuelidate/lib/validators';
-    import {hideBusySpinner, showBusySpinner} from "../../tools";
+import {decimal, integer, maxLength, required} from 'vuelidate/lib/validators';
+import {hideBusySpinner, showBusySpinner} from "../../tools";
 
-    export default {
-        name: "StoredItemBox",
-        components: {
-            SuggestionsInput: require('../common/SuggestionInput').default
-        },
-        props: {
-            branches: {
-                type: Array,
-                required: false,
-                default: function () {
-                    return [{name: ''}]
-                }
-            },
-            tariffs: Array,
-            providedStoredItemInfo: Object,
-            onStoredItemAdded: {
-                type: Function,
-                required: true
+export default {
+    name: "StoredItemBox",
+    components: {
+        SuggestionsInput: require('../common/SuggestionInput').default
+    },
+    props: {
+        branches: {
+            type: Array,
+            required: false,
+            default: function () {
+                return [{name: ''}]
             }
         },
-        mounted() {
-            this.getItems();
-        },
-        data() {
-            return {
-                items: [],
-                filteredItems: [],
-                customsCodes: [],
-                itemInitQuery: '',
-                storedItem: {
-                    id: null,
-                    width: null,
-                    height: null,
-                    length: null,
-                    weight: null,
-                    count: null,
-                    branch: this.branches[0],
-                    item: null,
-                    tariff: null,
-                    placeCount: '1',
-                    customsCode: null,
-                    billingInfo: {
-                        tariffPricing: null
-                    },
-                    shop: null
-                },
-                customPrice: 0,
-                customPriceState: null
-            }
-        },
-        methods: {
-            async getItems() {
-                try {
-                    const response = await axios.get('/items/all/eager');
-                    this.items = response.data;
-                } catch (e) {
-                    this.$root.showErrorMsg(
-                        'Ошибка загрузки',
-                        'Не удалось загрузить список наименований. Повторите попытку после перезагрузки страницы'
-                    )
-                }
-            },
-            async getPricing() {
-                //if stored item is being edited pricing should be the same
-                if (this.storedItem.billingInfo.tariffPricing
-                    && this.providedStoredItemInfo
-                    && this.storedItem.item.id === this.providedStoredItemInfo.item.id
-                    && this.storedItem.tariff.id === this.providedStoredItemInfo.tariff.id)
-                    return;
-                showBusySpinner();
-                try {
-                    let action = `tariff/${this.storedItem.tariff.id}/pricing`;
-                    const response = await axios.get(action);
-                    this.storedItem.billingInfo.tariffPricing = response.data;
-                } catch (e) {
-                    this.$root.showErrorMsg(
-                        'Ошибка загрузки',
-                        'Не удалось загрузить расценки для выбранного тарифа. Убедитесь, что расценки заданы в системе'
-                    )
-                }
-                hideBusySpinner();
-            },
-            onItemSearchInputChange(query) {
-                if (query === "")
-                    return this.filteredItems = [];
-                this.filteredItems = this.items.filter(value => {
-                    return value.name.toLowerCase().includes(query.toLowerCase())
-                });
-            },
-            onItemSelected(item) {
-                this.storedItem.item = item;
-                if (item)
-                    this.customsCodes = item.codes;
-            },
-            clearForm(e) {
-                if (e) e.preventDefault();
-                this.itemInitQuery = '';
-                this.storedItem.weight = '';
-                this.storedItem.id = null;
-                this.storedItem.height = '';
-                this.storedItem.length = '';
-                this.storedItem.width = '';
-                this.storedItem.count = '';
-                this.storedItem.placeCount = '1';
-                this.storedItem.item = null;
-                this.filteredItems = [];
-                this.storedItem.price = null;
-                this.storedItem.customsCode = null;
-                this.storedItem.shop = null;
-                this.storedItem.tariff = null;
-                this.customsCodes = [];
-                this.$refs.suggestionInput.query = '';
-                this.$nextTick(() => {
-                    this.$v.$reset();
-                })
-            },
-            async onAdded(e) {
-                if (e) e.preventDefault();
-
-                if (this.$v.$invalid)
-                    this.$v.$touch();
-                else {
-                    //TODO refactor
-                    await this.getPricing();
-                    if (this.storedItem.item.onlyCustomPrice)
-                        this.showModal();
-                    else
-                        this.submit();
-                }
-            },
-            submit() {
-                //Copy data to new variable
-                // let stored = $.extend(true, {}, this.storedItem);
-                let stored = JSON.parse(JSON.stringify(this.storedItem));
-                this.clearForm(null);
-                this.onStoredItemAdded(stored);
-                $('#shop').focus();
-            },
-
-            //Custom Price
-            showModal() {
-                this.$bvModal.show('customPriceModal');
-            },
-            checkFormValidity() {
-                const valid = this.$refs.customPriceForm.checkValidity();
-                this.customPriceState = valid ? 'valid' : 'invalid';
-                return valid
-            },
-
-            resetModal() {
-                this.customPrice = 0;
-                this.customPriceState = null;
-            },
-
-            //Custom Price Modal
-            handleOk(bvModalEvt) {
-                // Prevent modal from closing
-                bvModalEvt.preventDefault();
-                // Trigger submit handler
-                this.handleSubmit()
-            },
-
-            handleSubmit() {
-                // Exit when the form isn't valid
-                if (!this.checkFormValidity()) {
-                    return
-                }
-
-                this.storedItem.customPrice = parseFloat(this.customPrice) * parseFloat(this.storedItem.count);
-
-                // Hide the modal manually
-                this.$nextTick(() => {
-                    this.$refs.customPriceModal.hide();
-                    this.submit()
-                })
-            }
-
-        },
-        watch: {
-            providedStoredItemInfo() {
-                this.onItemSelected(this.providedStoredItemInfo.item);
-                this.storedItem = $.extend(true, {}, this.providedStoredItemInfo);
-                this.storedItem.customsCode = this.customsCodes.find(function (el) {
-                    if (el.id === this.providedStoredItemInfo.customsCode.id)
-                        return el;
-                }, this);
-                this.itemInitQuery = this.providedStoredItemInfo.item.name;
-            }
-        },
-        validations: {
+        tariffs: Array,
+        providedStoredItemInfo: Object,
+        onStoredItemAdded: {
+            type: Function,
+            required: true
+        }
+    },
+    mounted() {
+        this.getItems();
+    },
+    data() {
+        return {
+            items: [],
+            filteredItems: [],
+            customsCodes: [],
+            itemInitQuery: '',
             storedItem: {
-                width: {
-                    required,
-                    decimal,
-                    maxLength: maxLength(6)
+                id: null,
+                width: null,
+                height: null,
+                length: null,
+                weight: null,
+                count: null,
+                branch: this.branches[0],
+                item: null,
+                tariff: null,
+                placeCount: '1',
+                customsCode: null,
+                billingInfo: {
+                    tariffPricing: null
                 },
-                height: {
-                    required,
-                    decimal,
-                    maxLength: maxLength(6)
-                },
-                length: {
-                    required,
-                    decimal,
-                    maxLength: maxLength(6)
-                },
-                weight: {
-                    required,
-                    decimal,
-                    maxLength: maxLength(6)
-                },
-                count: {
-                    required,
-                    integer,
-                    maxLength: maxLength(6)
-                },
-                item: {
-                    required
-                },
-                placeCount: {
-                    required
-                },
-                customsCode: {
-                    required
-                },
-                tariff: {
-                    required
-                }
+                shop: null
+            },
+            customPrice: 0,
+            customPriceState: null
+        }
+    },
+    methods: {
+        async getItems() {
+            try {
+                const response = await axios.get('/items/all/eager');
+                this.items = response.data;
+            } catch (e) {
+                this.$root.showErrorMsg(
+                    'Ошибка загрузки',
+                    'Не удалось загрузить список наименований. Повторите попытку после перезагрузки страницы'
+                )
+            }
+        },
+        async getPricing() {
+            //if stored item is being edited pricing should be the same
+            if (this.storedItem.billingInfo.tariffPricing
+                && this.providedStoredItemInfo
+                && this.storedItem.item.id === this.providedStoredItemInfo.item.id
+                && this.storedItem.tariff.id === this.providedStoredItemInfo.tariff.id)
+                return true;
+            showBusySpinner();
+
+            let fetched = false;
+            try {
+                let action = `tariff/${this.storedItem.tariff.id}/pricing`;
+                const response = await axios.get(action);
+                this.storedItem.billingInfo.tariffPricing = response.data;
+                fetched = true;
+            } catch (e) {
+                this.$root.showErrorMsg(
+                    'Ошибка загрузки',
+                    'Не удалось загрузить расценки для выбранного тарифа. Убедитесь, что расценки заданы в системе'
+                )
+            }
+            hideBusySpinner();
+            return fetched;
+        },
+        onItemSearchInputChange(query) {
+            if (query === "")
+                return this.filteredItems = [];
+            this.filteredItems = this.items.filter(value => {
+                return value.name.toLowerCase().includes(query.toLowerCase())
+            });
+        },
+        onItemSelected(item) {
+            this.storedItem.item = item;
+            if (item)
+                this.customsCodes = item.codes;
+        },
+        clearForm(e) {
+            if (e) e.preventDefault();
+            this.itemInitQuery = '';
+            this.storedItem.weight = '';
+            this.storedItem.id = null;
+            this.storedItem.height = '';
+            this.storedItem.length = '';
+            this.storedItem.width = '';
+            this.storedItem.count = '';
+            this.storedItem.placeCount = '1';
+            this.storedItem.item = null;
+            this.filteredItems = [];
+            this.storedItem.price = null;
+            this.storedItem.customsCode = null;
+            this.storedItem.shop = null;
+            this.storedItem.tariff = null;
+            this.customsCodes = [];
+            this.$refs.suggestionInput.query = '';
+            this.$nextTick(() => {
+                this.$v.$reset();
+            })
+        },
+        async onAdded(e) {
+            if (e) e.preventDefault();
+
+            if (this.$v.$invalid)
+                this.$v.$touch();
+            else {
+                //TODO refactor
+                let isPriseFetched = await this.getPricing();
+                if (!isPriseFetched)
+                    return;
+                if (this.storedItem.item.onlyCustomPrice)
+                    this.showModal();
+                else
+                    this.submit();
+            }
+        },
+        submit() {
+            //Copy data to new variable
+            // let stored = $.extend(true, {}, this.storedItem);
+            let stored = JSON.parse(JSON.stringify(this.storedItem));
+            this.clearForm(null);
+            this.onStoredItemAdded(stored);
+            $('#shop').focus();
+        },
+
+        //Custom Price
+        showModal() {
+            this.$bvModal.show('customPriceModal');
+        },
+        checkFormValidity() {
+            const valid = this.$refs.customPriceForm.checkValidity();
+            this.customPriceState = valid ? 'valid' : 'invalid';
+            return valid
+        },
+
+        resetModal() {
+            this.customPrice = 0;
+            this.customPriceState = null;
+        },
+
+        //Custom Price Modal
+        handleOk(bvModalEvt) {
+            // Prevent modal from closing
+            bvModalEvt.preventDefault();
+            // Trigger submit handler
+            this.handleSubmit()
+        },
+
+        handleSubmit() {
+            // Exit when the form isn't valid
+            if (!this.checkFormValidity()) {
+                return
+            }
+
+            this.storedItem.customPrice = parseFloat(this.customPrice) * parseFloat(this.storedItem.count);
+
+            // Hide the modal manually
+            this.$nextTick(() => {
+                this.$refs.customPriceModal.hide();
+                this.submit()
+            })
+        }
+
+    },
+    watch: {
+        providedStoredItemInfo() {
+            this.onItemSelected(this.providedStoredItemInfo.item);
+            this.storedItem = $.extend(true, {}, this.providedStoredItemInfo);
+            this.storedItem.customsCode = this.customsCodes.find(function (el) {
+                if (el.id === this.providedStoredItemInfo.customsCode.id)
+                    return el;
+            }, this);
+            this.itemInitQuery = this.providedStoredItemInfo.item.name;
+        }
+    },
+    validations: {
+        storedItem: {
+            width: {
+                required,
+                decimal,
+                maxLength: maxLength(6)
+            },
+            height: {
+                required,
+                decimal,
+                maxLength: maxLength(6)
+            },
+            length: {
+                required,
+                decimal,
+                maxLength: maxLength(6)
+            },
+            weight: {
+                required,
+                decimal,
+                maxLength: maxLength(6)
+            },
+            count: {
+                required,
+                integer,
+                maxLength: maxLength(6)
+            },
+            item: {
+                required
+            },
+            placeCount: {
+                required
+            },
+            customsCode: {
+                required
+            },
+            tariff: {
+                required
             }
         }
     }
+}
 </script>

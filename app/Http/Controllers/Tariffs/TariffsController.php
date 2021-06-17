@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Tariffs;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\Tariff;
+use Illuminate\Http\Client\Response;
 
 class TariffsController extends Controller
 {
@@ -48,6 +49,6 @@ class TariffsController extends Controller
 
     public function pricing(Tariff $tariff)
     {
-        return $tariff->lastPriceHistory;
+        return $tariff->lastPriceHistory ?? abort(404);
     }
 }

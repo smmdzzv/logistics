@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string id
- * @property TariffPriceHistory lastPriceHistory
+ * @property TariffPriceHistory|null lastPriceHistory
  * @property string description
  * @property string branch_id
  */
