@@ -7,6 +7,7 @@
 namespace App\Services\Trip;
 
 
+use App\Data\Dto\Trip\CompletedTripDto;
 use App\Models\StoredItems\StoredItemTripHistory;
 use App\Models\Trip;
 use Carbon\Carbon;
@@ -28,22 +29,28 @@ class TripStatusService
             ]);
     }
 
-    public function setCompleted(Trip $trip, float $mileageAfter, float $consumption)
+    public function setCompleted(CompletedTripDto $dto)
     {
-        $trip->update([
+        $dto->trip->update([
             'status' => Trip::STATUS_COMPLETED,
             'returnedAt' => Carbon::now(),
-            'mileageAfter' => $mileageAfter,
-            'totalFuelConsumption' => $consumption
+            'mileageAfter' => $dto->mileageAfter,
+            'totalFuelConsumption' => $dto->consumption
         ]);
 
-        $trip->decrement('fuelAmount', $consumption);
+        $dto->trip->decrement('fuelAmount', $dto->consumption);
 
-        StoredItemTripHistory::whereIn('stored_item_id', $trip->storedItems->pluck('id'))
+        StoredItemTripHistory::whereIn('stored_item_id', $dto->trip->storedItems->pluck('id'))
             ->update([
                 'status' => StoredItemTripHistory::STATUS_COMPLETED
             ]);
+
+        //TODO create payment
+
+
     }
+
+
 
     public function cancelActiveStatus(Trip $trip){
         $trip->update([
