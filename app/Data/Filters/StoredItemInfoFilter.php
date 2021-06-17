@@ -5,7 +5,6 @@ namespace App\Data\Filters;
 
 
 use App\Models\Branch;
-use App\Models\StoredItems\StoredItem;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -77,7 +76,7 @@ class StoredItemInfoFilter extends Filter
                 });
             }
 
-            if(isset($this->filters['status']))
+            if (isset($this->filters['status']))
                 $query->where('status', $this->filters['status']);
 
 //            if (isset($this->filters['status']) && $this->filters['status'] === 'completed') {
@@ -89,10 +88,13 @@ class StoredItemInfoFilter extends Filter
 
     private function applyTripScope($query)
     {
-        return match ($this->filters['trip']) {
-            'hasTrip' => $query->whereHas('tripHistory'),
-            'doesntHaveTrip' => $query->whereDoesntHave('tripHistory'),
-            default => $query,
-        };
+        switch ($this->filters['trip']) {
+            case 'hasTrip' :
+                return $query->whereHas('tripHistory');
+            case 'doesntHaveTrip' :
+                return $query->whereDoesntHave('tripHistory');
+            default :
+                return $query;
+        }
     }
 }
