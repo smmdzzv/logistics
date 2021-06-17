@@ -61,7 +61,9 @@
 
                         @if($history->deleted_at)
                             <p>Дата выдачи: <b><span v-luxon="{ value: '{{$history->deleted_at}}'}"/></b></p>
-                            <p>Выдал: <b>{{$history->destroyer?->code}} {{$history->destroyer?->name}}</b></p>
+                            @if($history->destroyer)
+                                <p>Выдал: <b>{{$history->destroyer->code}} {{$history->destroyer->name}}</b></p>
+                            @endif
                         @endif
                         @if(!$loop->last)
                             <hr>
