@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property double length
  * @property string number
  * @property double fuelAmount
+ * @property string id
  */
 class Car extends BaseModel
 {
@@ -58,6 +59,27 @@ class Car extends BaseModel
             ->whereHas('destination', function (Builder $query) {
                 $query->where('name', '=', 'Таджикистан');
             });
+    }
+
+    public function storeDefaultConsumptions(){
+        $toChina = new FuelConsumption();
+        $toChina->forEmpty = 0.4;
+        $toChina->forLoaded = 0.42;
+        $toChina->forEmptyTrailer = 0.42;
+        $toChina->forLoadedTrailer = 0.42;
+        $toChina->destination_id = Country::where('name', 'Китай')->first()->id;
+        $toChina->car_id = $this->id;
+        $toChina->save();
+
+
+        $fromChina = new FuelConsumption();
+        $fromChina->forEmpty = 0.39;
+        $fromChina->forLoaded = 0.40;
+        $fromChina->forEmptyTrailer = 0.42;
+        $fromChina->forLoadedTrailer = 0.42;
+        $fromChina->destination_id = Country::where('name', 'Таджикистан')->first()->id;;
+        $fromChina->car_id = $this->id;
+        $fromChina->save();
     }
 
     public function trips()

@@ -8,6 +8,8 @@ namespace App\Models;
  * @property double forLoaded
  * @property double forEmptyTrailer
  * @property double forLoadedTrailer
+ * @property string destination_id
+ * @property string car_id
  */
 class FuelConsumption extends BaseModel
 {

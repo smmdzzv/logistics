@@ -51,6 +51,7 @@ class CarsController extends Controller
     public function store(CarRequest $request)
     {
         $car = Car::create($request->validated());
+        $car->storeDefaultConsumptions();
         return redirect(route('cars.show', $car));
     }
 
