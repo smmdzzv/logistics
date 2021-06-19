@@ -100,22 +100,14 @@ class StoredItemService
      * @return string
      * @throws \Exception
      */
-    protected function generateCode(Client $owner)
+    public function generateCode(): string
     {
         $isUnique = false;
         $code = "";
-        $pattern = '!\d+!';
-
-        preg_match_all($pattern, $owner->code, $cMatches);
-        $ownerTrace = $cMatches[0][array_rand($cMatches[0])] . $cMatches[0][array_rand($cMatches[0])];
-        $ownerMark = substr($ownerTrace, 0, 2);
 
         while (!$isUnique) {
             $date = Carbon::now();
-            preg_match_all($pattern, $date->isoFormat('x'), $dateMatches);
-            $dateString = implode("", $dateMatches[0]);
-            $dateMark = substr($dateString, strlen($dateString) - 7, 6);
-            $code = $date->isoFormat('YY') . $dateMark . $ownerMark . random_int(10000, 99999);
+            $code = $date->isoFormat('YYMMDDHHmmss') . random_int(10000, 99999);
             $isUnique = !(boolean)StoredItem::where('code', $code)->count() && !$this->codes->contains($code);
         }
 
